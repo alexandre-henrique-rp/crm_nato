@@ -11,14 +11,22 @@ import {
 function PrivacyPolicyPage() {
   return (
     <Flex
+      alignItems="center"
+      justifyContent="center"
+      mx={2}
+      borderWidth={0}
+      overflowX="auto"
       flexDir={"column"}
-      textColor={"#FFFFFF"}
-      bg={"#00713D"}
-      minH="100vh" // Definindo a altura mínima como 100vh
-      justifyContent={"center"}
-      alignItems={"center"}
     >
-      <Box w="50%">
+      <Box
+          w="50%"
+          m={5}
+          h="100%"
+          p={10}
+          bg="white"
+          borderRadius={8}
+          boxShadow="lg"
+        >
         <Heading as="h2" size="xl" mb={6} textAlign="center">
           Política de Privacidade
         </Heading>

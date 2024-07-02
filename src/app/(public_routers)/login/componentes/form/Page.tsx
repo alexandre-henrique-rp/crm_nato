@@ -45,6 +45,7 @@ export const FormLogin = () => {
           size={"lg"}
           onChange={(e: any) => setUsername(e.target.value)}
         />
+        <FormLabel> Senha</FormLabel>
         <SenhaComponent
           setvalue={password}
           onvalue={(e: any) => setPassword(e)}

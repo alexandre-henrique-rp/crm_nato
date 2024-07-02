@@ -26,7 +26,7 @@ export default function CpfMask({ setvalue, onvalue }: CpfMaskProps) {
   };
 
   return (
-    <Box w="48%">
+    <Box w="Full">
       <FormLabel>CPF</FormLabel>
       <Input
         type="text"
