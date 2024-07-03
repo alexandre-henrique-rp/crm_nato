@@ -1,9 +1,9 @@
 "use client";
 
 import { Stack, Text, Box, Button, Link } from "@chakra-ui/react";
-import { FormLogin } from "../form/Page";
+import { FormLogin } from "./componentes/form";
 
-export const LoginComponent = () => {
+export default function LoginPage () {
   const handleClick = () => {
     window.open(
       "https://arredebrasilrp.acsoluti.com.br/site/verificar-situacao-de-emissao",

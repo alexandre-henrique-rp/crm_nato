@@ -1,12 +1,20 @@
-'use client'
+"use client";
 
-import { Link } from '@chakra-ui/next-js'
-import { fonts } from "./fonts";
-import { LoginComponent } from './(public_routers)/login/componentes/geral/page';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
+export default function RootPage() {
+  const router = useRouter();
 
-export default function Page() {
-  return (
-    <LoginComponent/>
-  )
+  useEffect(() => {
+    const logado = localStorage.getItem("user");
+
+    if (logado) {
+      router.push("/home");
+    } else {
+      router.push("/login");
+    }
+  }, [router]);
+
+  return null;
 }
