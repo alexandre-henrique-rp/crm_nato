@@ -3,14 +3,16 @@
 import { SenhaComponent } from "@/app/componentes/Senha";
 import { Input, FormControl, FormLabel, Button } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const FormLogin = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   console.log(password);
 
-  (() => localStorage.clear())();
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   const router = useRouter();
 

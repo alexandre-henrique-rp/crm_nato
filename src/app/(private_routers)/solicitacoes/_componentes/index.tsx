@@ -28,19 +28,21 @@ export default function SolicitacaoForm({
 }: RelacionamentoProps) {
   const [Name, setName] = useState("");
   const [cpf, setCpf] = useState("");
+  const [cpfdois, setCpfdois] = useState("");
   const [Empreendimento, setEmpreendimento] = useState("");
   const [Email, setEmail] = useState("");
   const [CnhFile, setCnhFile] = useState<string>("");
   const [RgFile, setRgFile] = useState<string>("");
   const [Relacionamento, setRelacionamento] = useState<string>("nao");
   const [tel, setTel] = useState<string>("");
+  const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
-  const [Nome, setNome] = useState("");
+  const [Whatappdois, setWhatappdois] = useState<string>("");
   const toast = useToast();
   const router = useRouter();
 
   const handlesubmit = async () => {
-    if (!Name || !Email || !Empreendimento || !Relacionamento) {
+    if (!Name || !cpf || !Email || !Empreendimento || !Relacionamento) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos",
@@ -52,6 +54,7 @@ export default function SolicitacaoForm({
       const data = {
         Name: Name,
         whatsapp: Whatapp,
+        cpf: cpf,
         email: Email,
         foto_rg: RgFile,
         foto_cnh: CnhFile,
@@ -87,8 +90,15 @@ export default function SolicitacaoForm({
     setTel(valorLinpo);
     setWhatapp(masked);
   };
+  const WhatsAppMask2 = (e: any) => {
+    const valor = e.target.value;
+    const valorLinpo = unMask(valor);
+    const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
+    SetTeldois(valorLinpo);
+    setWhatappdois(masked);
+  };
 
-  if (Relacionamento === "sim") {
+  if (Relacionamento === "sim" && cpfdois.length === 11) {
     ishidden("sim");
     const data = {
       Name: Name,
@@ -98,29 +108,36 @@ export default function SolicitacaoForm({
       foto_cnh: CnhFile,
       Empreendimento: Empreendimento,
       Relacionamento: Relacionamento,
+      cpfdois: cpfdois,
     };
     onvalue(data);
   }
-  if (Relacionamento === "nao") {
+
+  if (Relacionamento === "nao" || cpfdois.length < 11) {
     ishidden("nao");
   }
 
   return (
     <>
       <Box display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
+        <Box w="33%">
           <FormLabel>Nome Completo</FormLabel>
           <Input type="text" onChange={(e: any) => setName(e.target.value)} />
         </Box>
 
-        <Box w="48%">
+        <Box w="33%">
           <FormLabel>Whatsapp com DDD</FormLabel>
           <Input type="text" onChange={WhatsAppMask} value={Whatapp} />
+        </Box>
+        <Box w="33%">
+          <FormLabel> Whatsapp com DDD 2</FormLabel>
+          <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
         </Box>
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <Box w="33%">
+          <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
         </Box>
         <Box w="33%">
@@ -141,6 +158,17 @@ export default function SolicitacaoForm({
             <option value="sim">Sim</option>
             <option value="nao">Não</option>
           </Select>
+        </Box>
+
+        <Box w="33%">
+          {Relacionamento === "sim" ? (
+            <>
+              <FormLabel>CPF do relacionado</FormLabel>
+              <CpfMask setvalue={cpfdois} onvalue={(e: any) => setCpfdois(e)} />
+            </>
+          ) : (
+            ""
+          )}
         </Box>
       </Box>
 

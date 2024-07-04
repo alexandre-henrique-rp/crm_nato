@@ -11,7 +11,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { mask, unMask } from "remask";
 
@@ -22,16 +22,29 @@ interface RelacionadoProps {
 export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [Name, setName] = useState("");
   const [cpf, setCpf] = useState("");
+  const [cpfdois, setCpfdois] = useState("");
+  const [cpfdoismask, setCpfdoismask] = useState("");
   const [Empreendimento, setEmpreendimento] = useState("");
   const [Corretor, setCorretor] = useState("");
   const [Email, setEmail] = useState("");
   const [CnhFile, setCnhFile] = useState<string>("");
   const [RgFile, setRgFile] = useState<string>("");
   const [tel, setTel] = useState<string>("");
+  const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
-  const [Nome, setNome] = useState("");
+  const [Whatappdois, setWhatappdois] = useState<string>("");
   const toast = useToast();
   const router = useRouter();
+
+  useEffect(() => {
+    (() => {
+      const cpf = SetValue.cpfdois;
+      const masked = mask(cpf, ["999.999.999-99"]);
+      setCpfdoismask(masked);
+      setCpfdois(cpf);
+    })();
+  }, [SetValue.cpfdois]);
+  console.log("teste", SetValue.cpfdois);
 
   const handlesubmit = () => {
     if (!Name || !Email || !Empreendimento) {
@@ -46,6 +59,8 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       const dados = {
         Name: Name,
         whatsapp: Whatapp,
+        tel: tel,
+        cpf: cpf,
         email: Email,
         foto_rg: RgFile,
         foto_cnh: CnhFile,
@@ -70,7 +85,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             duration: 3000,
             isClosable: true,
           });
-          router.push("/");
+          router.push("/home");
         }
       });
     }
@@ -84,23 +99,37 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     setWhatapp(masked);
   };
 
+  const WhatsAppMask2 = (e: any) => {
+    const valor = e.target.value;
+    const valorLinpo = unMask(valor);
+    const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
+    SetTeldois(valorLinpo);
+    setWhatappdois(masked);
+  };
+
   return (
     <>
       <Box display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
+        <Box w="33%">
           <FormLabel>Nome Completo</FormLabel>
           <Input type="text" onChange={(e: any) => setName(e.target.value)} />
         </Box>
 
-        <Box w="48%">
+        <Box w="33%">
           <FormLabel>Whatsapp com DDD</FormLabel>
           <Input type="text" onChange={WhatsAppMask} value={Whatapp} />
+        </Box>
+
+        <Box w="33%">
+          <FormLabel> Whatsapp com DDD 2</FormLabel>
+          <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
         </Box>
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <Box w="33%">
-          <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
+          <FormLabel>CPF </FormLabel>
+          <CpfMask desativado setvalue={cpfdois} onvalue={setCpf} />
         </Box>
       </Box>
 

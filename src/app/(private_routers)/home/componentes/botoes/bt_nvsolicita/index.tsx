@@ -7,9 +7,9 @@ export default function BotaoNovaSolicita() {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push("/register");
+    router.push("/solicitacoes");
   };
-  
+
   return (
     <Flex w={"100%"}>
       <Box
@@ -22,8 +22,10 @@ export default function BotaoNovaSolicita() {
         gap={"20px"}
       >
         <Button
-          colorScheme="green"
-          variant="outline"
+          bg={"#00713D"}
+          textColor={"white"}
+          variant="solid"
+          _hover={{ bg: "#00631B" }}
           size="lg"
           onClick={handleClick}
         >

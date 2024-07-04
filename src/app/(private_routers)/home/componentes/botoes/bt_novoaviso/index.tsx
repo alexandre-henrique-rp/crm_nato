@@ -1,19 +1,19 @@
-"use client";
+"use cliente";
 
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import { Flex, Box, Button } from "@chakra-ui/react";
 
-export default function BotaoProcesso() {
+export default function BotaoCadastro() {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push("/processos");
+    router.push("/avisos");
   };
 
   return (
     <Flex w={"100%"}>
       <Box
-        w={"100%"}
+       w={"100%"}
         h={"100%"}
         borderRadius={"15px"}
         display={"flex"}
@@ -22,12 +22,13 @@ export default function BotaoProcesso() {
         gap={"20px"}
       >
         <Button
-          colorScheme="teal"
-          variant="outline"
-          size="lg"
-          onClick={handleClick}
+           bg={"#00713D"}
+           textColor={"white"}
+           variant="solid"
+           _hover={{ bg: "#00631B" }}           size="lg"
+           onClick={handleClick}
         >
-          Processos
+          Novo Aviso
         </Button>
       </Box>
     </Flex>

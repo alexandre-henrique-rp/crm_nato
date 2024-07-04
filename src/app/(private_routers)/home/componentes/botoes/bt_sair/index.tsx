@@ -23,8 +23,10 @@ export default function BotaoSair() {
         gap={"20px"}
       >
         <Button
-          colorScheme="green"
-          variant="outline"
+          bg={"#00713D"}
+          textColor={"white"}
+          variant="solid"
+          _hover={{ bg: "#00631B" }}
           size="lg"
           onClick={() => sair()}
         >

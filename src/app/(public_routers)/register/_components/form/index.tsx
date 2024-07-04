@@ -88,7 +88,10 @@ export default function FormRegister() {
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
+        <Box w="48%">
+          <FormLabel>CPF</FormLabel>
+          <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
+        </Box>
         <Box w="48%">
           <FormLabel>Construtora</FormLabel>
           <Input

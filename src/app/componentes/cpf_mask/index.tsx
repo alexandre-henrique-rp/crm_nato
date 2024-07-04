@@ -7,11 +7,16 @@ import { mask, unMask } from "remask";
 interface CpfMaskProps {
   setvalue: string;
   onvalue: any;
+  desativado?: boolean;
 }
 
-export default function CpfMask({ setvalue, onvalue }: CpfMaskProps) {
+export default function CpfMask({ setvalue, onvalue, desativado }: CpfMaskProps) {
   const [value, setValue] = useState("");
+  const [Disablee, setDesativado] = useState(false);
   useEffect(() => {
+    if (desativado) {
+      setDesativado(true);
+    }
     CpfMask(setvalue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setvalue]);
@@ -27,8 +32,9 @@ export default function CpfMask({ setvalue, onvalue }: CpfMaskProps) {
 
   return (
     <Box w="Full">
-      <FormLabel>CPF</FormLabel>
+      
       <Input
+        disabled={Disablee}
         type="text"
         onChange={(e) => CpfMask(e.target.value)}
         value={value}

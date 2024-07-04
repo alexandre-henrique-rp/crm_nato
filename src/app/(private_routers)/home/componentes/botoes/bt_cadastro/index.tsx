@@ -13,7 +13,7 @@ export default function BotaoCadastro() {
   return (
     <Flex w={"100%"}>
       <Box
-        w={"100%"}
+       w={"100%"}
         h={"100%"}
         borderRadius={"15px"}
         display={"flex"}
@@ -22,10 +22,11 @@ export default function BotaoCadastro() {
         gap={"20px"}
       >
         <Button
-          colorScheme="green"
-          variant="outline"
-          size="lg"
-          onClick={handleClick}
+           bg={"#00713D"}
+           textColor={"white"}
+           variant="solid"
+           _hover={{ bg: "#00631B" }}           size="lg"
+           onClick={handleClick}
         >
           Cadastrar
         </Button>
