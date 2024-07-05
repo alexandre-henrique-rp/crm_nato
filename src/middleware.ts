@@ -25,15 +25,17 @@ export default function middleware(req: NextRequest) {
 
 export const config = {
     matcher: [
-        "/assinantes/:path*",
-        "/enviar-documentos/:path*",
-        "/verificador/:path*",
-        "/assinar",
+        "/home/:path*",
+        "/notification/:path*",
+        "/perfil-adm/:path*",
+        "/perfil-client/:path*",
+        "/redefinicao",
+        "/solicitacoes",
         "/login",
         "/register",
         "/reset-password",
         "/termos/uso",
         "/termos/privacidade",
-        "/enviar-documentos/:path*",
+        "/enviar-documentos/:path*"
     ]
 };

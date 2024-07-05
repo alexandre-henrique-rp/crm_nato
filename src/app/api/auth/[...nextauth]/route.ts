@@ -119,9 +119,9 @@ const nextAuthOptions: NextAuthOptions = {
         username: token.username as string,
         name: token.name as string,
         email: token.email as string,
-        construtora: token.construtora as string,
+        construtora: token.construtora as string[],
         telefone: token.telefone as string,
-        empreendimento: token.empreendimento as string,
+        empreendimento: token.empreendimento as string[],
         hierarquia: token.hierarquia as string
       };
 
