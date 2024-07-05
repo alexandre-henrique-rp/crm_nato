@@ -42,12 +42,14 @@ export const FormLogin = () => {
         <Input
           type="text"
           size={"lg"}
-          onChange={(e: any) => setUsername(e.target.value)}
+          textTransform={"uppercase"}
+          onChange={(e: any) => setUsername(e.target.value.toUpperCase())}
         />
         <FormLabel> Senha</FormLabel>
         <SenhaComponent
           setvalue={password}
           onvalue={(e: any) => setPassword(e)}
+          envClick={handlesubmit}
         />
       </FormControl>
       <Button

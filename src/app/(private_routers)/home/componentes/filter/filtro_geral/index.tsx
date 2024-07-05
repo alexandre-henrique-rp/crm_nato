@@ -7,14 +7,14 @@ import { DateFilter } from "../Filtro_data";
 import { AndamentoFilter } from "../filtro_andamento";
 
 export const FiltroComponent = () => {
-  const filter = localStorage.getItem("hierarquia");
+ 
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <Box w={"35%"} h={"100%"} bg={"#F8F8F8"}>
         <NomeFilter />
       </Box>
       <Box w={"30%"} h={"100%"} bg={"#F8F8F8"}>
-        {filter !== "USER" && <EmpreendimentoFilter />}
+        {/* {filter !== "USER" && <EmpreendimentoFilter />} */}
       </Box>
       <Box w={"20%"} h={"100%"} bg={"#F8F8F8"}>
         <AndamentoFilter />
