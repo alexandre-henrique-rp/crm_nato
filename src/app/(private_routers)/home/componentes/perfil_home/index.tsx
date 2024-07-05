@@ -1,14 +1,20 @@
 "use client";
 
-import { Flex, Box, useDisclosure } from "@chakra-ui/react";
+import { Flex, Box, useDisclosure, Text } from "@chakra-ui/react";
 import TextHome from "./text";
 import { ModalComponent } from "@/app/(private_routers)/notification/component";
 import { useSession } from "next-auth/react";
-import { use } from "react";
+import { SelectComponent } from "@/app/componentes/select";
+import { useState } from "react";
 
 export default function PerfilHome() {
+  const [IdEmpreedimento, setIdEmpreedimento] = useState(0);
   const { data: session } = useSession();
   const user = session?.user;
+
+  const SetIdEmpreedimento = (id: number) => {
+    setIdEmpreedimento(id);
+  }
   return (
     <>
       {!user && null}
@@ -34,7 +40,17 @@ export default function PerfilHome() {
 
           <Box w={"50%"}>
             <TextHome SetName={"CARGO"} SetValue={user.cargo} />
-            
+            {user.empreendimento && (
+              <>
+                <Text textColor={"#00713D"} fontWeight={"bold"}>
+                  EMPREENDIMENTO{" "}
+                </Text>
+                <SelectComponent
+                  SetValue={user.empreendimento}
+                  onValue={SetIdEmpreedimento}
+                />
+              </>
+            )}
             <TextHome SetName={"EMPREENDIMENTO"} SetValue={"Nome"} />
             <TextHome SetName={"CONSTRUTORA"} SetValue={"Nome"} />
           </Box>

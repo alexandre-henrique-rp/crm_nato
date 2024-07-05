@@ -1,17 +1,15 @@
+'use client';
 import { Flex, Select, Text } from "@chakra-ui/react";
 
-interface DelectProps {
+interface SelectProps {
   SetValue: any;
-  SetName: string;
+  onValue: any;
 }
 
-export const SelectComponent = ({ SetValue, SetName }: DelectProps) => {
+export const SelectComponent = ({ SetValue, onValue }: SelectProps) => {
   return (
-    <Flex alignItems={"center"} w={"full"} gap={"0.6rem"} py={"0.5rem"}>
-      <Text textColor={"#00713D"} fontWeight={"bold"}>
-        {SetName}:
-      </Text>
-      <Select>
+    <Flex w={"full"} py={"0.5rem"} >
+      <Select onChange={(e) => onValue(Number(e.target.value))}>
         {SetValue &&
           SetValue.map((item: any) => (
             <option key={item.id} value={item.id}>
