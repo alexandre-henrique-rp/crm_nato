@@ -1,6 +1,7 @@
 "use client";
 
 import CpfMask from "@/app/componentes/cpf_mask";
+import { SelectComponent } from "@/app/componentes/select";
 import {
   Box,
   Button,
@@ -13,8 +14,9 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { mask, unMask } from "remask";
 
 interface RelacionamentoProps {
@@ -29,7 +31,8 @@ export default function SolicitacaoForm({
   const [Name, setName] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
-  const [Empreendimento, setEmpreendimento] = useState("");
+  const [ConstrutoraID, setConstrutoraID] = useState(0);
+  const [Empreendimento, setEmpreendimento] = useState(0);
   const [Email, setEmail] = useState("");
   const [CnhFile, setCnhFile] = useState<string>("");
   const [RgFile, setRgFile] = useState<string>("");
@@ -38,11 +41,15 @@ export default function SolicitacaoForm({
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
+  // const [base64String, setBase64String] = useState("");
   const toast = useToast();
   const router = useRouter();
+  const { data: session } = useSession();
+  const user = session?.user;
+  console.log(Empreendimento);
 
   const handlesubmit = async () => {
-    if (!Name || !cpf || !Email || !Empreendimento || !Relacionamento) {
+    if (!Name || !cpf || !Email || !Relacionamento) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos",
@@ -55,13 +62,17 @@ export default function SolicitacaoForm({
         Name: Name,
         whatsapp: Whatapp,
         cpf: cpf,
+        tel: tel,
         email: Email,
         foto_rg: RgFile,
         foto_cnh: CnhFile,
-        Empreendimento: Empreendimento,
-        Relacionamento: Relacionamento,
+        construtora: Number(ConstrutoraID),
+        Empreendimento: Number(Empreendimento),
+        Relacionamento: cpfdois ? [cpfdois] : [],
+        token: session?.token,
       };
-      const response = await fetch("", {
+
+      const response = await fetch("/api/solicitacao", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,12 +87,69 @@ export default function SolicitacaoForm({
           duration: 3000,
           isClosable: true,
         });
-        router.push("/");
+        router.push("/home");
       }
     }
   };
 
-  console.log(Relacionamento);
+  if (user?.empreendimento.length === 1 && !Empreendimento) {
+    setEmpreendimento(user.empreendimento[0].id);
+  }
+
+  if (user?.construtora.length === 1 && !ConstrutoraID) {
+    setConstrutoraID(user.construtora[0].id);
+  }
+
+  // Função para converter arquivo em base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        if (reader.result) {
+          const result = reader.result as string;
+          const base64String = result.split(",")[1];
+          resolve(base64String);
+        } else {
+          reject(new Error("O resultado do FileReader é null ou undefined"));
+        }
+      };
+
+      reader.onerror = () => {
+        reject(new Error("Erro ao ler o arquivo"));
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  // Função chamada quando um arquivo RG é selecionado
+  const handleRgChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      try {
+        const base64 = await fileToBase64(file);
+        setRgFile(base64);
+      } catch (error) {
+        console.error("Erro ao processar o arquivo RG:", error);
+      }
+    }
+  };
+
+  // Função chamada quando um arquivo CNH é selecionado
+  const handleCnhChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      try {
+        const base64 = await fileToBase64(file);
+        setCnhFile(base64);
+      } catch (error) {
+        console.error("Erro ao processar o arquivo CNH:", error);
+      }
+    }
+  };
 
   const WhatsAppMask = (e: any) => {
     const valor = e.target.value;
@@ -177,13 +245,28 @@ export default function SolicitacaoForm({
           <FormLabel>Email</FormLabel>
           <Input type="text" onChange={(e: any) => setEmail(e.target.value)} />
         </Box>
-        <Box w="48%">
-          <FormLabel>Empreendimento</FormLabel>
-          <Input
-            type="text"
-            onChange={(e: any) => setEmpreendimento(e.target.value)}
-          />
-        </Box>
+
+        {user?.empreendimento && (
+          <Box w="48%">
+            <FormLabel>Empreendimento</FormLabel>
+            <SelectComponent
+              SetValue={user.empreendimento}
+              onValue={(e: any) => setEmpreendimento(e)}
+            />
+          </Box>
+        )}
+
+        {user?.construtora && (
+          <Box w="48%">
+            <FormLabel>Construtora</FormLabel>
+            <SelectComponent
+              SetValue={user.construtora.map((item: any) => {
+                return { id: item.id, nome: item.razaosocial };
+              })}
+              onValue={(e: any) => setConstrutoraID(e)}
+            />
+          </Box>
+        )}
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
@@ -201,8 +284,7 @@ export default function SolicitacaoForm({
           <Input
             type="File"
             variant="flushed"
-            value={CnhFile}
-            onChange={(e) => setCnhFile(e.target.value)}
+            onChange={(e) => handleRgChange(e)}
           ></Input>
         </FormControl>
 
@@ -220,8 +302,7 @@ export default function SolicitacaoForm({
           <Input
             type="File"
             variant="flushed"
-            value={RgFile}
-            onChange={(e) => setRgFile(e.target.value)}
+            onChange={(e) => handleCnhChange(e)}
           ></Input>
         </FormControl>
       </Box>

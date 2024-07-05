@@ -6,6 +6,7 @@ import { BotoesFunction } from "../botoes/bt_group_function";
 import { useSession } from "next-auth/react";
 
 export const Tabela = () => {
+
   const [Data, setData] = useState([]);
   const { data: session } = useSession();
   const user = session?.user;
