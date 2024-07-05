@@ -16,7 +16,7 @@ import {
     GridItem,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { DadosPessoaisComponent } from "./components/dados-pessoais";
+import { DadosPessoaisAdmComponent, DadosPessoaisComponent } from "./components/dados-pessoais";
 
 export default function perfilPage() {
     
@@ -33,7 +33,7 @@ export default function perfilPage() {
             flexDir={"column"}   
         >
 
-<DadosPessoaisComponent />
+<DadosPessoaisAdmComponent />
 
           
         </Flex>
