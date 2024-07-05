@@ -2,7 +2,7 @@
 
 import { Flex, Box, useDisclosure } from "@chakra-ui/react";
 import TextHome from "./text";
-import { ModalComponent } from "@/app/(private_routers)/modal/component";
+import { ModalComponent } from "@/app/(private_routers)/notification/component";
 
 export default function PerfilHome() {
   return (

@@ -30,8 +30,7 @@ export default function perfilPage() {
             pb={10}
             borderWidth={0}
             overflowX="auto"
-            flexDir={"column"}
-            
+            flexDir={"column"}   
         >
 
 <DadosPessoaisComponent />
