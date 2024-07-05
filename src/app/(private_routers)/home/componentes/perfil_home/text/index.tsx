@@ -3,7 +3,7 @@
 import { Flex, Text } from "@chakra-ui/react";
 
 interface TextProps {
-  SetValue: string;
+  SetValue: any;
   SetName: string;
 }
 
