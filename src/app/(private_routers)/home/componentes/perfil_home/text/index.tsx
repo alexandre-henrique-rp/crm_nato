@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 
 interface TextProps {
   SetValue: string;
@@ -9,11 +9,11 @@ interface TextProps {
 
 export default function TextHome({ SetValue, SetName }: TextProps) {
   return (
-    <Flex>
-      <Text textColor={"#00713D"} p={"10px"} fontWeight={"bold"}>
+    <Flex alignItems={"center"} w={"full"} gap={'0.6rem'} py={'0.5rem'}>
+      <Text textColor={"#00713D"}  fontWeight={"bold"}>
         {SetName}:
       </Text>
-      <Text p={"10px"}>{SetValue}</Text>
+      <Text fontSize={"0.9rem"}>{SetValue}</Text>
     </Flex>
   );
 }

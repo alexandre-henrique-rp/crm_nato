@@ -7,6 +7,13 @@ export default function middleware(req: NextRequest) {
 
   const ispublic = checkIsPublicRoute(pathname);
 
+  if (pathname === "/") {
+    if (session) {
+      return NextResponse.redirect(new URL("/home", req.url));
+    }else{
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+  }
   if (!session) {
     if (ispublic) {
       return NextResponse.next();

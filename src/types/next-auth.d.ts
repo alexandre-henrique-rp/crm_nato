@@ -6,10 +6,12 @@ declare module 'next-auth' {
       id: number;
       name: string;
       email: string;
+      cpf: string;
       construtora: string[];
       telefone: string;
       empreendimento: string[];
-      hierarquia: string
+      hierarquia: string;
+      cargo: string;
     }
   }
 }
