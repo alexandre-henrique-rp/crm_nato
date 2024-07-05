@@ -27,17 +27,17 @@ export const ModalComponent = () => {
 
   const [showButton, setShowButton] = useState(false);
 
-  (async () => {
-    const storage = localStorage.getItem("id");
-    const request = await fetch("/api/alerts", {
-      method: "GET",
-    });
-    if (request.ok) {
-      const response = await request.json();
-      setShowButton(true);
-      setAlerts(response);
-    }
-  })();
+  // (async () => {
+  //   const storage = localStorage.getItem("id");
+  //   const request = await fetch("/api/alerts", {
+  //     method: "GET",
+  //   });
+  //   if (request.ok) {
+  //     const response = await request.json();
+  //     setShowButton(true);
+  //     setAlerts(response);
+  //   }
+  // })();
 
   return (
     <>

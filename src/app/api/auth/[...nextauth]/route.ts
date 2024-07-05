@@ -16,7 +16,7 @@ const nextAuthOptions: NextAuthOptions = {
       async authorize(credentials: any) {
         try {
           const dados = {
-            username: credentials.email,
+            identifier: credentials.email,
             password: credentials.password,
           };
           const res = await axios({
@@ -30,38 +30,38 @@ const nextAuthOptions: NextAuthOptions = {
           });
 
           const retorno = await res.data;
-          const { token, user } = retorno;
+          const { jwt, user } = retorno;
 
           const {
+            blocked,
             username,
             nome,
             id,
-            telefone,
+            whatsapp,
+            uuid,
             email,
-            construtora,
-            empreendimento,
-            hierarquia,
+            avatar
           } = await user;
 
           const response = {
-            jwt: token,
+            jwt: jwt,
             id: id,
             name: nome,
             username: username,
             email: email,
-            telefone: telefone,
-            construtora: construtora,
-            empreendimento: empreendimento,
-            hierarquia: hierarquia,
+            blocked: blocked,
+            whatsapp: whatsapp,
+            uuid: uuid,
+            avatar: avatar
           };
 
-          if (!token || !id || !username || !email) {
+          if (!jwt || !id || !username || !email) {
             throw new Error("Usuário e senha incorreto");
             return null;
           }
           return response;
         } catch (e) {
-          console.log(e);
+          // console.log(e);
           return null;
         }
 
@@ -70,6 +70,18 @@ const nextAuthOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/login",
+    signOut: '/auth/signout',
+    // error: '/auth/error', // Error code passed in query string as ?error=
+    // verifyRequest: '/auth/verify-request', // (used for check email message)
+    // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
+  },
+  jwt: {
+    secret: process.env.JWT_SIGNING_PRIVATE_KEY,
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: "jwt",
+    maxAge: 4 * 60 * 60, // 4 hours
   },
   callbacks: {
     jwt: async ({ token, user }: { token: JWT; user: any }): Promise<any | null> => {
@@ -88,10 +100,10 @@ const nextAuthOptions: NextAuthOptions = {
         token.name = user.name;
         token.username = user.username;
         token.email = user.email;
-        token.construtora = user.construtora;
-        token.telefone = user.telefone;
-        token.empreendimento = user.empreendimento;
-        token.hierarquia = user.hierarquia;
+        token.blocked = user.blocked;
+        token.whatsapp = user.whatsapp;
+        token.uuid = user.uuid;
+        token.avatar = user.avatar;
 
         token.expiration = actualDateInSeconds + tokenExpirationInSeconds;
       } else {
@@ -116,13 +128,13 @@ const nextAuthOptions: NextAuthOptions = {
 
       session.user = {
         id: token.id as number,
-        username: token.username as string,
         name: token.name as string,
         email: token.email as string,
-        construtora: token.construtora as string,
-        telefone: token.telefone as string,
-        empreendimento: token.empreendimento as string,
-        hierarquia: token.hierarquia as string
+        blocked: token.blocked as boolean,
+        username: token.username as string,
+        whatsapp: token.whatsapp as string,
+        uuid: token.uuid as string,
+        avatar: token.avatar as string
       };
 
       session.token = token.jwt as string;
@@ -134,5 +146,3 @@ const nextAuthOptions: NextAuthOptions = {
 const handler = NextAuth(nextAuthOptions)
 
 export { handler as GET, handler as POST, nextAuthOptions }
-
-
