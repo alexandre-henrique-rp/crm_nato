@@ -140,9 +140,9 @@ const nextAuthOptions: NextAuthOptions = {
         name: token.name as string,
         email: token.email as string,
         cpf: token.cpf as string,
-        construtora: token.construtora as string[],
+        construtora: token.construtora as any[],
         telefone: token.telefone as string,
-        empreendimento: token.empreendimento as string[],
+        empreendimento: token.empreendimento as any[],
         hierarquia: token.hierarquia as string,
         cargo: token.cargo as string
       };
