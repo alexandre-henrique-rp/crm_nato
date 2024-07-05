@@ -37,10 +37,12 @@ const nextAuthOptions: NextAuthOptions = {
             username,
             nome,
             email,
+            cpf,
             construtora,
             telefone,
             empreendimento,
-            hierarquia
+            hierarquia,
+            cargo
           } = await user;
 
           const response = {
@@ -49,10 +51,12 @@ const nextAuthOptions: NextAuthOptions = {
             name: nome,
             username: username,
             email: email,
+            cpf: cpf,
             construtora: construtora,
             telefone: telefone,
             empreendimento: empreendimento,
-            hierarquia: hierarquia
+            hierarquia: hierarquia,
+            cargo: cargo
           };
           console.log(response)
 
@@ -101,10 +105,12 @@ const nextAuthOptions: NextAuthOptions = {
         token.name = user.name;
         token.username = user.username;
         token.email = user.email;
+        token.cpf = user.cpf;
         token.construtora = user.construtora;
         token.telefone = user.telefone;
         token.empreendimento = user.empreendimento;
         token.hierarquia = user.hierarquia;
+        token.cargo = user.cargo;
 
 
         token.expiration = actualDateInSeconds + tokenExpirationInSeconds;
@@ -133,10 +139,12 @@ const nextAuthOptions: NextAuthOptions = {
         username: token.username as string,
         name: token.name as string,
         email: token.email as string,
+        cpf: token.cpf as string,
         construtora: token.construtora as string[],
         telefone: token.telefone as string,
         empreendimento: token.empreendimento as string[],
-        hierarquia: token.hierarquia as string
+        hierarquia: token.hierarquia as string,
+        cargo: token.cargo as string
       };
 
       session.token = token.jwt as string;

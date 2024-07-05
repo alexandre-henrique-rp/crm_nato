@@ -15,7 +15,6 @@ import { useState } from "react";
 export const FormLogin = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
-  console.log("🚀 ~ FormLogin ~ username:", username)
   const toast = useToast();
   const router = useRouter();
 
