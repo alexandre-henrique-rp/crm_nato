@@ -16,7 +16,7 @@ const nextAuthOptions: NextAuthOptions = {
       async authorize(credentials: any) {
         try {
           const dados = {
-            identifier: credentials.email,
+            username: credentials.email,
             password: credentials.password,
           };
           const res = await axios({
@@ -30,32 +30,33 @@ const nextAuthOptions: NextAuthOptions = {
           });
 
           const retorno = await res.data;
-          const { jwt, user } = retorno;
+          const { token, user } = retorno;
 
           const {
-            blocked,
+            id,
             username,
             nome,
-            id,
-            whatsapp,
-            uuid,
             email,
-            avatar
+            construtora,
+            telefone,
+            empreendimento,
+            hierarquia
           } = await user;
 
           const response = {
-            jwt: jwt,
+            jwt: token,
             id: id,
             name: nome,
             username: username,
             email: email,
-            blocked: blocked,
-            whatsapp: whatsapp,
-            uuid: uuid,
-            avatar: avatar
+            construtora: construtora,
+            telefone: telefone,
+            empreendimento: empreendimento,
+            hierarquia: hierarquia
           };
+          console.log(response)
 
-          if (!jwt || !id || !username || !email) {
+          if (!token || !id || !username || !email) {
             throw new Error("Usuário e senha incorreto");
             return null;
           }
@@ -100,10 +101,11 @@ const nextAuthOptions: NextAuthOptions = {
         token.name = user.name;
         token.username = user.username;
         token.email = user.email;
-        token.blocked = user.blocked;
-        token.whatsapp = user.whatsapp;
-        token.uuid = user.uuid;
-        token.avatar = user.avatar;
+        token.construtora = user.construtora;
+        token.telefone = user.telefone;
+        token.empreendimento = user.empreendimento;
+        token.hierarquia = user.hierarquia;
+
 
         token.expiration = actualDateInSeconds + tokenExpirationInSeconds;
       } else {
@@ -128,6 +130,7 @@ const nextAuthOptions: NextAuthOptions = {
 
       session.user = {
         id: token.id as number,
+        username: token.username as string,
         name: token.name as string,
         email: token.email as string,
         construtora: token.construtora as string[],
