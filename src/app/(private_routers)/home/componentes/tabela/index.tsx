@@ -15,7 +15,7 @@ export const Tabela = () => {
       alignContent={"center"}
       justifyContent={"space-evenly"}
     >
-      <Table variant="Simple">
+      <Table id="tabelaSolicita" variant="Simple">
         <Thead>
           <Tr>
             <Th>FUNÇÕES</Th>

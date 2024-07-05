@@ -1,6 +1,7 @@
 "use client";
 
 import CpfMask from "@/app/componentes/cpf_mask";
+import { SelectComponent } from "@/app/componentes/select";
 import {
   Box,
   Button,
@@ -13,6 +14,7 @@ import {
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { mask, unMask } from "remask";
@@ -41,6 +43,9 @@ export default function SolicitacaoForm({
   const toast = useToast();
   const router = useRouter();
 
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const handlesubmit = async () => {
     if (!Name || !cpf || !Email || !Empreendimento || !Relacionamento) {
       toast({
@@ -55,9 +60,11 @@ export default function SolicitacaoForm({
         Name: Name,
         whatsapp: Whatapp,
         cpf: cpf,
+        tel: tel,
         email: Email,
         foto_rg: RgFile,
         foto_cnh: CnhFile,
+        construtora: [ID],
         Empreendimento: Empreendimento,
         Relacionamento: Relacionamento,
       };
@@ -177,13 +184,20 @@ export default function SolicitacaoForm({
           <FormLabel>Email</FormLabel>
           <Input type="text" onChange={(e: any) => setEmail(e.target.value)} />
         </Box>
-        <Box w="48%">
-          <FormLabel>Empreendimento</FormLabel>
-          <Input
-            type="text"
-            onChange={(e: any) => setEmpreendimento(e.target.value)}
-          />
-        </Box>
+
+        {user?.empreendimento && (
+          <Box w="48%">
+            <FormLabel>Empreendimento</FormLabel>
+            <SelectComponent SetValue={user.empreendimento} />
+          </Box>
+        )}
+
+        {user?.construtora && (
+          <Box w="48%">
+            <FormLabel>Construtora</FormLabel>
+            <SelectComponent SetValue={user.construtora} />
+          </Box>
+        )}
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
