@@ -12,7 +12,7 @@ export default async function BotaoJuncao() {
     <Flex w={"100%"}>
       <Box h={"100%"} borderRadius={"15px"} display={"flex"} gap={"20px"}>
         <BotaoNovaSolicita />
-        {/* {but !== "USER" && <BotaoCadastro />} */}
+        {but !== "USER" && <BotaoCadastro />}
         <BotaoSair />
       </Box>
     </Flex>
