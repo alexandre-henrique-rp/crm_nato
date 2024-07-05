@@ -48,7 +48,6 @@ export const DadosPessoaisAdmComponent = () => {
         email: Email,
         Construtora: Construtora,
         Empreendimento: Empreendimento,
-
       };
       const rest = await fetch(`/api/User/put/`, {
         method: "PUT",
