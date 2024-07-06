@@ -67,7 +67,7 @@ export default function SolicitacaoForm({
         foto_rg: uploadRg,
         foto_cnh: uploadCnh,
         construtora: Number(ConstrutoraID),
-        rmpreendimento: Number(empreendimento),
+        empreendimento: Number(empreendimento),
         relacionamento: cpfdois ? [cpfdois] : [],
         token: session?.token,
       };
