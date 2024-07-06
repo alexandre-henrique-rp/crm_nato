@@ -1,9 +1,12 @@
 "use client";
-
 import { Flex, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { BotoesFunction } from "../botoes/bt_group_function";
 import { useSession } from "next-auth/react";
+
+interface CompradorProps{
+  
+}
 
 export const Tabela = () => {
   const [Data, setData] = useState([]);
@@ -23,6 +26,7 @@ export const Tabela = () => {
   const tabela =
     Data.length > 0 &&
     Data.map((item: any) => {
+      // const dtAgenda = item.fcweb && new Date(item.fcweb.dt);
       return (
         <Tr key={item.id}>
           <Td>
@@ -33,7 +37,7 @@ export const Tabela = () => {
           <Td>{item.data}</Td>
           <Td>{item.andamento}</Td>
           <Td>{item.assdoc}</Td>
-          <Td>{item.statuspgmnt}</Td>
+          {user?.hierarquia !== "USER" && <Td>{item.statuspgmnt}</Td>}
         </Tr>
       );
     });
@@ -60,22 +64,12 @@ export const Tabela = () => {
                 <Th>AGENDAMENTO</Th>
                 <Th>ANDAMENTO</Th>
                 <Th>ASS.DOC</Th>
-                <Th>STATUSPGMNT</Th>
+                {user?.hierarquia !== "USER" && <Th>STATUS PGMNT</Th>}
               </Tr>
             </Thead>
             <Tbody>
-              {/* 1ª Coluna */}
-              <Tr>
-                <Td>
-                  <BotoesFunction />
-                </Td>
-                <Td>33412</Td>
-                <Td>Matheus</Td>
-                <Td>14/06/2024</Td>
-                <Td>Concluido</Td>
-                <Td>Assinado</Td>
-                <Td>PAGO</Td>
-              </Tr>
+              {Data.length === 0 && null }
+              {Data.length > 0 && tabela }
             </Tbody>
           </Table>
         </Flex>
