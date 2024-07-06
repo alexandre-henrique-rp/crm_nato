@@ -8,9 +8,9 @@ declare module 'next-auth' {
       name: string;
       email: string;
       cpf: string;
-      construtora: string[];
+      construtora: any[];
       telefone: string;
-      empreendimento: string[];
+      empreendimento: any[];
       hierarquia: string;
       cargo: string;
     }
