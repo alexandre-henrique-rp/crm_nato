@@ -9,6 +9,7 @@ interface CompradorProps{
 }
 
 export const Tabela = () => {
+
   const [Data, setData] = useState([]);
   const { data: session } = useSession();
   const user = session?.user;

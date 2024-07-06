@@ -4,13 +4,13 @@ import { checkIsPublicRoute } from "./functions/check-is public-route";
 export default function middleware(req: NextRequest) {
   const session = req.cookies.get("next-auth.session-token")?.value;
   const { pathname } = req.nextUrl;
-
+  console.log(pathname);
   const ispublic = checkIsPublicRoute(pathname);
 
   if (pathname === "/") {
     if (session) {
       return NextResponse.redirect(new URL("/home", req.url));
-    }else{
+    } else {
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }
@@ -24,23 +24,26 @@ export default function middleware(req: NextRequest) {
     if (pathname === "/login") {
       return NextResponse.redirect(new URL("/home", req.url));
     }
+    if (pathname === "/") {
+      return NextResponse.redirect(new URL("/home", req.url));
+    }
     return NextResponse.next();
   }
 }
 
 export const config = {
-    matcher: [
-        "/home/:path*",
-        "/notification/:path*",
-        "/perfil-adm/:path*",
-        "/perfil-client/:path*",
-        "/redefinicao",
-        "/solicitacoes",
-        "/login",
-        "/register",
-        "/reset-password",
-        "/termos/uso",
-        "/termos/privacidade",
-        "/enviar-documentos/:path*"
-    ]
+  matcher: [
+    "/home/:path*",
+    "/notification/:path*",
+    "/perfil-adm/:path*",
+    "/perfil-client/:path*",
+    "/redefinicao",
+    "/solicitacoes",
+    "/login",
+    "/register",
+    "/reset-password",
+    "/termos/uso",
+    "/termos/privacidade",
+    "/enviar-documentos/:path*",
+  ],
 };
