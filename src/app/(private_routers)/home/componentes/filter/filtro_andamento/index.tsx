@@ -1,21 +1,37 @@
 "use client";
 
-import { Box, Button, Flex, Input } from "@chakra-ui/react";
+import { Box, Flex, Select } from "@chakra-ui/react";
+import { useState } from "react";
 
-export const AndamentoFilter = () => {
+interface FiltroAndamentoProps {
+  onAndamento: string | any;
+}
+export const AndamentoFilter = ({onAndamento}: FiltroAndamentoProps) => {
+  const[Andamento, setAndamento] = useState<string>("");
+
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <Box w={"full"} h={"100%"} bg={"#F8F8F8"}>
-        <Input
+        <Select
           textColor={"#00713D"}
           _hover={{ borderColor: "#00613C" }}
           borderColor={"#00713D"}
           placeholder="Andamento"
           size="md"
-          type="text"
-        />
+          value={Andamento}
+          onChange={(e) => {
+            setAndamento(e.target.value);
+            onAndamento(e.target.value);
+          }}
+        >
+          <option value="NOVA FC">NOVA FC</option>
+          <option value="AGENDADO">AGENDADO</option>
+          <option value="APROVADO">APROVADO</option>
+          <option value="CANCELADO">CANCELADO</option>
+          <option value="EMITIDO">EMITIDO</option>
+          <option value="REVOGADO">REVOGADO</option>
+        </Select>
       </Box>
-
     </Flex>
   );
 };

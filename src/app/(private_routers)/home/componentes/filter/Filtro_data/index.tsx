@@ -1,8 +1,11 @@
 "use client";
 
-import { Box, Button, Flex, Input } from "@chakra-ui/react";
+import { Box, Flex, Input } from "@chakra-ui/react";
 
-export const DateFilter = () => {
+interface FiltroDataProps {
+  onData: Date | string | any;
+}
+export const DateFilter = ({ onData }: FiltroDataProps) => {
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <Box w={"full"} h={"100%"} bg={"#F8F8F8"}>
@@ -13,6 +16,9 @@ export const DateFilter = () => {
           placeholder="Data Inicial"
           size="md"
           type="date"
+          onChange={(e) => {
+            onData(e.target.value);
+          }}
         />
       </Box>
 

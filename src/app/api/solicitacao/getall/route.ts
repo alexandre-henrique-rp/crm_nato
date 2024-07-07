@@ -1,11 +1,11 @@
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { nextAuthOptions } from "../../auth/[...nextauth]/route";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string; token: string } }
-) {
+export async function GET(request: Request) {
   try {
-    const { token } = params;
+    const session = await getServerSession(nextAuthOptions)
+    const token  = session?.token;
 
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/solicitacao`,

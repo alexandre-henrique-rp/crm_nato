@@ -80,14 +80,14 @@ const nextAuthOptions: NextAuthOptions = {
     // verifyRequest: '/auth/verify-request', // (used for check email message)
     // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
-  // jwt: {
-  //   secret: process.env.JWT_SIGNING_PRIVATE_KEY,
-  // },
-  // secret: process.env.NEXTAUTH_SECRET,
-  // session: {
-  //   strategy: "jwt",
-  //   maxAge: 4 * 60 * 60, // 4 hours
-  // },
+  jwt: {
+    secret: process.env.JWT_SIGNING_PRIVATE_KEY || "secret",
+  },
+  secret: process.env.NEXTAUTH_SECRET || "123456",
+  session: {
+    strategy: "jwt",
+    maxAge: 4 * 60 * 60, // 4 hours
+  },
   callbacks: {
     jwt: async ({ token, user }: { token: JWT; user: any }): Promise<any | null> => {
       const isSignIn = !!user;
