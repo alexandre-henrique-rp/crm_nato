@@ -1,5 +1,6 @@
 "use client";
 
+import { DownloadDoc } from "@/app/componentes/DowloadDoc";
 import {
   Alert,
   AlertIcon,
@@ -11,12 +12,13 @@ import {
   FormControl,
   FormLabel,
   GridItem,
+  Heading,
   Input,
   Select,
   SimpleGrid,
   Stack,
   Text,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -24,78 +26,120 @@ import { FormEventHandler, useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { mask, unMask } from "remask";
 
-export const DadosPessoaisComponent = () => {
-  // const { data: session } = useSession ();
-  // const User: any = session?.user;
-  // const id = User?.id;
+interface DadosPessoaisProps {
+  SetData: solictacao.SolicitacaoGetType;
+}
+
+export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [Name, setName] = useState<string>("");
   const [Cpf, setCpf] = useState<string>("");
   const [Cnh, setCnh] = useState<string>("");
-  const [Whatapp, setWhatapp] = useState<string>("");
+  const [Whatsapp, setWhatsapp] = useState<string>("");
+  const [Whatsapp2, setWhatsapp2] = useState<string>("");
   const [CnhFile, setCnhFile] = useState<string>("");
   const [RgFile, setRgFile] = useState<string>("");
   const [Email, setEmail] = useState<string>("");
-  const [Construtora, setsetConstrutora] = useState<string>("");
-  const [Empreendimento, setEmpreendimento] = useState<string>("");
-  const [DataNascimento, setDataNascimento] = useState<string>("");
-  const [Relacionamento, setRelacionamento] = useState<string>("");
+  const [LinkDoc, setLinkDoc] = useState<string>("");
+  const [Construtora, setsetConstrutora] = useState<number>(0);
+  const [IdFcweb, setsetIdFcweb] = useState<number | null>(null);
+  const [Empreendimento, setEmpreendimento] = useState<number>(0);
+  const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
+  const [Relacionamento, setRelacionamento] = useState<string[]>([]);
+  const [AssDoc, setAssDoc] = useState<boolean>(false);
+  const [Corretor, setCorretor] = useState<object>({});
+  const [CorretorId, setCorretorId] = useState<number>(0);
+  const [ClientId, setClientId] = useState<number>(0);
+  const [Obs, setObs] = useState<string>("");
+  const [AlertDb, setAlertDb] = useState<any>([]);
   const [Looad, setLooad] = useState<boolean>(false);
   const toast = useToast();
-  // const router = useRouter();
 
-  //   useEffect(() => {
-  //     (async () => {
-  //       // const res = await fetch(`/api/User/get/${id}`);
-  //       // const resp = await res.json();
-  //       // console.log(resp)
+  // Matheus
+  // crira campos faltantes no formulario
+  //      cnh: Cnh,
+  //       cpf: Cpf,
+  //       nome: Name,
+  //       telefone: Whatsapp,
+  //       telefone2: Whatsapp2,
+  //       email: Email,
+  //       uploadRg: RgFile,
+  //       uploadCnh: CnhFile,
+  //       construtora: Construtora,
+  //       empreedimento: Empreendimento,
+  //       relacionamento: Relacionamento,
+  //       corretor: CorretorId,
+  //       dt_nascimento: DataNascimento,
+  //       ass_doc: AssDoc,
+  //       link_doc: LinkDoc,
+  //       id_fcw: IdFcweb,
+  //       obs: Obs,
+  //       alert: AlertDb,
+  // verifique essa liste e acresente o que falta, não esqueça de fazer a verificação da hiearquia do usuario e apresentar o nessesarios campos
+  // não esquer de carregar os dados nos seus inputs
+  // verificar Layout componet DownloadDoc
+  //allertas em 80%
 
-  //       const WhatsAppMask = (data: any) => {
-  //         const valor = data;
-  //         const valorLinpo = unMask(valor);
-  //         const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-  //         return masked;
-  //       };
+  if (
+    SetData &&
+    !Name &&
+    !Cpf &&
+    !Cnh &&
+    !Whatsapp &&
+    !CnhFile &&
+    !RgFile &&
+    !Email &&
+    !Construtora &&
+    !Empreendimento &&
+    !DataNascimento &&
+    !Relacionamento
+  ) {
+    setName(SetData.nome);
+    setCpf(SetData.cpf);
+    setCnh(SetData.cnh);
+    setWhatsapp(SetData.telefone);
+    setCnhFile(SetData.uploadCnh);
+    setRgFile(SetData.uploadRg);
+    setEmail(SetData.email);
+    setsetConstrutora(SetData.construtora);
+    setEmpreendimento(SetData.empreedimento);
+    setDataNascimento(SetData.dt_nascimento);
+    setRelacionamento(SetData.relacionamento);
+    setAssDoc(SetData.ass_doc);
+    setCorretor(SetData.corretor);
+    setObs(SetData.obs);
+    setAlertDb(SetData.alert);
+    setsetIdFcweb(SetData.id_fcw);
+  }
 
-  //       const CpfMask = (data: any) => {
-  //         const valor = data;
-  //         const valorLinpo = unMask(valor);
-  //         const masked = mask(valorLinpo, ["999.999.999-99"]);
-  //         return masked;
-  //       };
-
-  //       setName(resp?.nome);
-  //       setCpf(CpfMask(resp?.Cpf_number));
-  //       setWhatapp(WhatsAppMask(resp?.whatsapp));
-  //       setCnhFile(resp?.fotos_cnh?.url);
-  //       setRgFile(resp?.fotos_rg?.url);
-  //       setEmail(resp?.email);
-  //       setConstrutora(resp?.Relacionamento);
-  //       setEmpreendimento(resp?.escolaridade);
-  //       setDataNascimento(resp?.data_nascimento);
-  //     })();
-  //   }, []);
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     setLooad(true);
     try {
-      const data = {
-        cnh_number: Cnh,
-        Cpf_number: Cpf,
+      const data: solictacao.SolicitacaoPutType = {
+        cnh: Cnh,
+        cpf: Cpf,
         nome: Name,
-        whatsapp: Whatapp,
+        telefone: Whatsapp,
+        telefone2: Whatsapp2,
         email: Email,
-        foto_rg: RgFile,
-        foto_cnh: CnhFile,
-        Construtora: Construtora,
-        Empreendimento: Empreendimento,
-        Relacionamento: Relacionamento,
+        uploadRg: RgFile,
+        uploadCnh: CnhFile,
+        construtora: Construtora,
+        empreedimento: Empreendimento,
+        relacionamento: Relacionamento,
+        corretor: CorretorId,
+        dt_nascimento: DataNascimento,
+        ass_doc: AssDoc,
+        link_doc: LinkDoc,
+        id_fcw: IdFcweb,
+        obs: Obs,
       };
       const rest = await fetch(`/api/User/put/`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
       const response = await rest.json();
       console.log(response);
@@ -109,7 +153,7 @@ export const DadosPessoaisComponent = () => {
     const valor = e.target.value;
     const valorLinpo = unMask(valor);
     const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-    setWhatapp(masked);
+    setWhatsapp(masked);
   };
 
   const CnhMask = (e: any) => {
@@ -148,7 +192,7 @@ export const DadosPessoaisComponent = () => {
             pt={4}
             bg="white"
             _dark={{
-              bg: "#141517",
+              bg: "#141517"
             }}
             spacing={6}
           >
@@ -171,7 +215,7 @@ export const DadosPessoaisComponent = () => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Data de Nascimento
@@ -186,12 +230,11 @@ export const DadosPessoaisComponent = () => {
 
               <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Relacionamento
@@ -205,7 +248,7 @@ export const DadosPessoaisComponent = () => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Telefone Celular
@@ -214,18 +257,17 @@ export const DadosPessoaisComponent = () => {
                   type="text"
                   variant="flushed"
                   onChange={WhatsAppMask}
-                  value={Whatapp}
+                  value={Whatsapp}
                 />
               </FormControl>
 
               <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Numero da CNH
@@ -240,12 +282,11 @@ export const DadosPessoaisComponent = () => {
 
               <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Email
@@ -264,7 +305,7 @@ export const DadosPessoaisComponent = () => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   CNH
@@ -283,7 +324,7 @@ export const DadosPessoaisComponent = () => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   RG
@@ -298,12 +339,11 @@ export const DadosPessoaisComponent = () => {
 
               <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Construtora
@@ -313,17 +353,44 @@ export const DadosPessoaisComponent = () => {
 
               <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Empreendimento
                 </FormLabel>
                 <Input type="text" variant="flushed" />
+              </FormControl>
+
+              <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
+                <FormLabel
+                  fontSize="sm"
+                  fontWeight="md"
+                  color="gray.700"
+                  _dark={{
+                    color: "gray.50"
+                  }}
+                >
+                  Downloads da CNH
+                </FormLabel>
+                <DownloadDoc base64={CnhFile} name="Cnh" />
+              </FormControl>
+
+              <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
+                <FormLabel
+                  fontSize="sm"
+                  fontWeight="md"
+                  color="gray.700"
+                  _dark={{
+                    color: "gray.50"
+                  }}
+                >
+                  Download do Rg
+                </FormLabel>
+                <DownloadDoc base64={RgFile} name="Rg" />
               </FormControl>
 
               <Button
@@ -359,6 +426,22 @@ export const DadosPessoaisComponent = () => {
           <Stack pt={10}>
             <Box>
               <Stack spacing={3}>
+                {AlertDb.length > 0 &&
+                  AlertDb.map((item: solictacao.AlertProps) => {
+                    const status =
+                      item.tipo === "success" ? "success" : "error";
+
+                    return (
+                      <>
+                        <Alert status={status}>
+                          <AlertIcon />
+                          <Heading size="sm">{item.titulo}</Heading>
+                          <Text>{item.texto}</Text>
+                          <Text>{item.tag}</Text>
+                        </Alert>
+                      </>
+                    );
+                  })}
                 <Alert status="error">
                   <AlertIcon />
                   There was an error processing your request

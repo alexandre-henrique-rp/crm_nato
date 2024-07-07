@@ -5,7 +5,7 @@ export const APP_ROUTES = {
       perfil_adm:"/perfil-adm/:path*",
       perfil_client:"/perfil-client/:path*",
       redefinicao: "/redefinicao",
-      solicitacao: "/solicitacoes",
+      solicitacao: "/solicitacoes/:path*",
     },
     public: {
         login: '/login',
