@@ -12,7 +12,6 @@ export default function PerfilHome() {
   const [IdConstrutora, setIdConstrutora] = useState(0);
   const { data: session } = useSession();
   const user = session?.user;
-  console.log("🚀 ~ PerfilHome ~ user:", user)
 
   const SetIdEmpreedimento = (id: number) => {
     setIdEmpreedimento(id);

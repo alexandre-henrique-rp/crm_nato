@@ -4,15 +4,10 @@ import { checkIsPublicRoute } from "./functions/check-is public-route";
 export default function middleware(req: NextRequest) {
   const session = req.cookies.get("next-auth.session-token")?.value;
   const { pathname } = req.nextUrl;
-  console.log(pathname);
   const ispublic = checkIsPublicRoute(pathname);
 
   if (pathname === "/") {
-    if (session) {
       return NextResponse.redirect(new URL("/home", req.url));
-    } else {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
   }
   if (!session) {
     if (ispublic) {
@@ -33,6 +28,7 @@ export default function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",
     "/home/:path*",
     "/notification/:path*",
     "/perfil-adm/:path*",

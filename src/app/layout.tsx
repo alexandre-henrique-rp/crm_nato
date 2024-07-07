@@ -9,13 +9,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const route = useRouter();
-
-  if (pathname === "/") {
-    route.push("/home");
-  };
-
+ 
   return (
     <html lang="pt-br">
       <NextAuSessionProvider>

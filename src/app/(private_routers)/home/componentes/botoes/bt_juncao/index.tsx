@@ -7,7 +7,6 @@ import { useSession } from "next-auth/react";
 
 export default function BotaoJuncao() {
  const {data: session} = useSession()
-  console.log(session?.user);
   const but = session?.user?.hierarquia;
   return (
     <Flex w={"100%"}>
