@@ -1,7 +1,7 @@
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-console.log(body)
+    console.log(body);
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/solicitacao`,
       {
@@ -11,11 +11,13 @@ console.log(body)
           Authorization: `Bearer ${body.token}`,
         },
         body: JSON.stringify({
-          nome: body.name,
+          nome: body.nome,
           email: body.email,
           whatsapp: body.whatsapp,
           cpf: body.cpf,
           tel: body.tel,
+          fotos_rg: body.fotos_rg,
+          fotos_cnh: body.fotos_cnh,
           construtora: body.construtora,
           empreendimento: body.empreendimento,
           Relacionamento: body.Relacionamento,

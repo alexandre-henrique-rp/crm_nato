@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent, useState } from "react";
 import { mask, unMask } from "remask";
 
-interface RelacionamentoProps {
+interface relacionamentoProps {
   onvalue: any;
   ishidden: any;
 }
@@ -27,16 +27,16 @@ interface RelacionamentoProps {
 export default function SolicitacaoForm({
   onvalue,
   ishidden,
-}: RelacionamentoProps) {
-  const [Name, setName] = useState("");
+}: relacionamentoProps) {
+  const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
   const [ConstrutoraID, setConstrutoraID] = useState(0);
-  const [Empreendimento, setEmpreendimento] = useState(0);
-  const [Email, setEmail] = useState("");
-  const [CnhFile, setCnhFile] = useState<string>("");
-  const [RgFile, setRgFile] = useState<string>("");
-  const [Relacionamento, setRelacionamento] = useState<string>("nao");
+  const [empreendimento, setempreendimento] = useState(0);
+  const [email, setemail] = useState("");
+  const [uploadCnh, setCnhFile] = useState<string>("");
+  const [uploadRg, setRgFile] = useState<string>("");
+  const [relacionamento, setrelacionamento] = useState<string>("nao");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
@@ -46,10 +46,10 @@ export default function SolicitacaoForm({
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
-  console.log(Empreendimento);
+  console.log(empreendimento);
 
   const handlesubmit = async () => {
-    if (!Name || !cpf || !Email || !Relacionamento) {
+    if (!nome || !cpf || !email || !relacionamento) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos",
@@ -59,16 +59,16 @@ export default function SolicitacaoForm({
       });
     } else {
       const data = {
-        Name: Name,
+        nome: nome,
         whatsapp: Whatapp,
         cpf: cpf,
         tel: tel,
-        email: Email,
-        foto_rg: RgFile,
-        foto_cnh: CnhFile,
+        email: email,
+        foto_rg: uploadRg,
+        foto_cnh: uploadCnh,
         construtora: Number(ConstrutoraID),
-        Empreendimento: Number(Empreendimento),
-        Relacionamento: cpfdois ? [cpfdois] : [],
+        empreendimento: Number(empreendimento),
+        relacionamento: cpfdois ? [cpfdois] : [],
         token: session?.token,
       };
 
@@ -92,8 +92,8 @@ export default function SolicitacaoForm({
     }
   };
 
-  if (user?.empreendimento.length === 1 && !Empreendimento) {
-    setEmpreendimento(user.empreendimento[0].id);
+  if (user?.empreendimento.length === 1 && !empreendimento) {
+    setempreendimento(user.empreendimento[0].id);
   }
 
   if (user?.construtora.length === 1 && !ConstrutoraID) {
@@ -166,22 +166,22 @@ export default function SolicitacaoForm({
     setWhatappdois(masked);
   };
 
-  if (Relacionamento === "sim" && cpfdois.length === 11) {
+  if (relacionamento === "sim" && cpfdois.length === 11) {
     ishidden("sim");
     const data = {
-      Name: Name,
+      nome: nome,
       whatsapp: Whatapp,
-      email: Email,
-      foto_rg: RgFile,
-      foto_cnh: CnhFile,
-      Empreendimento: Empreendimento,
-      Relacionamento: Relacionamento,
+      email: email,
+      foto_rg: uploadRg,
+      foto_cnh: uploadCnh,
+      empreendimento: empreendimento,
+      relacionamento: relacionamento,
       cpfdois: cpfdois,
     };
     onvalue(data);
   }
 
-  if (Relacionamento === "nao" || cpfdois.length < 11) {
+  if (relacionamento === "nao" || cpfdois.length < 11) {
     ishidden("nao");
   }
 
@@ -190,7 +190,7 @@ export default function SolicitacaoForm({
       <Box display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <Box w="33%">
           <FormLabel>Nome Completo</FormLabel>
-          <Input type="text" onChange={(e: any) => setName(e.target.value)} />
+          <Input type="text" onChange={(e: any) => setnome(e.target.value)} />
         </Box>
 
         <Box w="33%">
@@ -220,8 +220,8 @@ export default function SolicitacaoForm({
           </FormLabel>
 
           <Select
-            onChange={(e: any) => setRelacionamento(e.target.value)}
-            value={Relacionamento}
+            onChange={(e: any) => setrelacionamento(e.target.value)}
+            value={relacionamento}
           >
             <option value="sim">Sim</option>
             <option value="nao">Não</option>
@@ -229,7 +229,7 @@ export default function SolicitacaoForm({
         </Box>
 
         <Box w="33%">
-          {Relacionamento === "sim" ? (
+          {relacionamento === "sim" ? (
             <>
               <FormLabel>CPF do relacionado</FormLabel>
               <CpfMask setvalue={cpfdois} onvalue={(e: any) => setCpfdois(e)} />
@@ -242,8 +242,8 @@ export default function SolicitacaoForm({
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <Box w="48%">
-          <FormLabel>Email</FormLabel>
-          <Input type="text" onChange={(e: any) => setEmail(e.target.value)} />
+          <FormLabel>email</FormLabel>
+          <Input type="text" onChange={(e: any) => setemail(e.target.value)} />
         </Box>
 
         {user?.empreendimento && (
@@ -251,7 +251,7 @@ export default function SolicitacaoForm({
             <FormLabel>Empreendimento</FormLabel>
             <SelectComponent
               SetValue={user.empreendimento}
-              onValue={(e: any) => setEmpreendimento(e)}
+              onValue={(e: any) => setempreendimento(e)}
             />
           </Box>
         )}
@@ -316,7 +316,7 @@ export default function SolicitacaoForm({
         maxWidth="100%"
         textColor={"Black"}
         onClick={handlesubmit}
-        hidden={Relacionamento === "sim" ? true : false}
+        hidden={relacionamento === "sim" ? true : false}
       >
         CRIAR CONTA
       </Button>
