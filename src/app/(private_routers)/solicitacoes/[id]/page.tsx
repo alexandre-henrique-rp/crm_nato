@@ -45,7 +45,7 @@ export default async function perfilPage({
         overflowX="auto"
         flexDir={"column"}
       >
-        {/* <DadosPessoaisComponent /> */}
+        < DadosPessoaisComponent SetData={data}/>
         <pre>{JSON.stringify(data, null, 2)}</pre>
       </Flex>
     </>

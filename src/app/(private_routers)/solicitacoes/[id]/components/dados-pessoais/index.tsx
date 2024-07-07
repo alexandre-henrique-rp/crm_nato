@@ -16,7 +16,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -29,87 +29,136 @@ interface DadosPessoaisProps {
 }
 
 interface SetDataType {
-  {
-    "id": 29,
-    "nome": "Nayara Eloizy de Souza Amaral",
-    "cpf": "08147247109",
-    "email": "nayhelo241@gmail.com ",
-    "dt_solicitacao": "2024-01-01T00:00:00.000Z",
-    "corretor": {
-      "id": 10,
-      "nome": "HIGOR BITENCOURT"
-    },
-    "construtora": 1,
-    "telefone": "67991603005",
-    "dt_nascimento": "2024-01-01T00:00:00.000Z",
-    "ass_doc": false,
-    "link_doc": "",
-    "id_fcw": null,
-    "obs": "",
-    "alert": null,
-    "empreedimento": 1,
-    "cnh": "",
-    "ativo": true,
-    "uploadCnh": null,
-    "relacionamento": "[]",
-    "createdAt": "2024-07-04T16:43:19.000Z",
-    "updatedAt": "2024-07-07T00:28:37.000Z",
-    "telefone2": "",
-    "uploadRg": null
-  }
-    
+  id: number;
+  nome: string;
+  cpf: string;
+  email: string;
+  dt_solicitacao: Date | string | any;
+  corretor: {
+    id: number;
+    nome: string;
+  };
+  construtora: number;
+  telefone: string;
+  dt_nascimento: Date | string | any;
+  ass_doc: boolean;
+  link_doc: string;
+  id_fcw: number;
+  obs: string;
+  alert: string;
+  empreedimento: number;
+  cnh: string;
+  ativo: boolean;
+  uploadCnh: string;
+  relacionamento: string[];
+  createdAt: Date | string | any;
+  updatedAt: Date | string | any;
+  telefone2: string;
+  uploadRg: string;
+}
 
-export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
+interface SetDataTypePost {
+  nome: string;
+  cpf: string;
+  email: string;
+  corretor: number;
+  construtora: number;
+  telefone: string;
+  dt_nascimento: Date | string | any;
+  ass_doc: boolean;
+  link_doc: string;
+  id_fcw: number | null;
+  obs: string;
+  alert: string;
+  empreedimento: number;
+  cnh: string;
+  uploadCnh: string;
+  relacionamento: string[];
+  telefone2: string;
+  uploadRg: string;
+}
+
+export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [Name, setName] = useState<string>("");
   const [Cpf, setCpf] = useState<string>("");
   const [Cnh, setCnh] = useState<string>("");
-  const [Whatapp, setWhatapp] = useState<string>("");
+  const [Whatsapp, setWhatsapp] = useState<string>("");
+  const [Whatsapp2, setWhatsapp2] = useState<string>("");
   const [CnhFile, setCnhFile] = useState<string>("");
   const [RgFile, setRgFile] = useState<string>("");
   const [Email, setEmail] = useState<string>("");
-  const [Construtora, setsetConstrutora] = useState<string>("");
-  const [Empreendimento, setEmpreendimento] = useState<string>("");
-  const [DataNascimento, setDataNascimento] = useState<string>("");
-  const [Relacionamento, setRelacionamento] = useState<string>("");
+  const [LinkDoc, setLinkDoc] = useState<string>("");
+  const [Construtora, setsetConstrutora] = useState<number>(0);
+  const [IdFcweb, setsetIdFcweb] = useState<number | null>(null);
+  const [Empreendimento, setEmpreendimento] = useState<number>(0);
+  const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
+  const [Relacionamento, setRelacionamento] = useState<string[]>([]);
+  const [AssDoc, setAssDoc] = useState<boolean>(false);
+  const [Corretor, setCorretor] = useState<number>(0);
+  const [Obs, setObs] = useState<string>("");
+  const [AlertDb, setAlertDb] = useState<string>("");
   const [Looad, setLooad] = useState<boolean>(false);
   const toast = useToast();
 
-  if(SetData && !Name && !Cpf && !Cnh && !Whatapp && !CnhFile && !RgFile && !Email && !Construtora && !Empreendimento && !DataNascimento && !Relacionamento) {
+  console.log(SetData);
+
+  if (
+    SetData &&
+    !Name &&
+    !Cpf &&
+    !Cnh &&
+    !Whatsapp &&
+    !CnhFile &&
+    !RgFile &&
+    !Email &&
+    !Construtora &&
+    !Empreendimento &&
+    !DataNascimento &&
+    !Relacionamento
+  ) {
     setName(SetData.nome);
-    setCpf(SetData.);
-    setCnh(SetDataCnh);
-    setWhatapp(SetDataWhatsapp);
-    setCnhFile(SetDataCnhFile);
-    setRgFile(SetDataRgFile);
-    setEmail(SetDataEmail);
-    setsetConstrutora(SetDataConstrutora);
-    setEmpreendimento(SetDataEmpreendimento);
-    setDataNascimento(SetDataDataNascimento);
-    setRelacionamento(SetDataRelacionamento);
+    setCpf(SetData.cpf);
+    setCnh(SetData.cnh);
+    setWhatsapp(SetData.telefone);
+    setCnhFile(SetData.uploadCnh);
+    setRgFile(SetData.uploadRg);
+    setEmail(SetData.email);
+    setsetConstrutora(SetData.construtora);
+    setEmpreendimento(SetData.empreedimento);
+    setDataNascimento(SetData.dt_nascimento);
+    setRelacionamento(SetData.relacionamento);
   }
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     setLooad(true);
     try {
-      const data = {
-        cnh_number: Cnh,
-        Cpf_number: Cpf,
+      const data: SetDataTypePost = {
+        cnh: Cnh,
+        cpf: Cpf,
         nome: Name,
-        whatsapp: Whatapp,
+        telefone: Whatsapp,
+        telefone2: "",
         email: Email,
-        foto_rg: RgFile,
-        foto_cnh: CnhFile,
-        Construtora: Construtora,
-        Empreendimento: Empreendimento,
-        Relacionamento: Relacionamento,
+        uploadRg: RgFile,
+        uploadCnh: CnhFile,
+        construtora: Construtora,
+        empreedimento: Empreendimento,
+        relacionamento: Relacionamento,
+        corretor: Corretor,
+        dt_nascimento: DataNascimento,
+        ass_doc: AssDoc,
+        link_doc: LinkDoc,
+        id_fcw: IdFcweb,
+        obs: Obs,
+        alert: AlertDb,
       };
       const rest = await fetch(`/api/User/put/`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
       const response = await rest.json();
       console.log(response);
@@ -123,7 +172,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
     const valor = e.target.value;
     const valorLinpo = unMask(valor);
     const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-    setWhatapp(masked);
+    setWhatsapp(masked);
   };
 
   const CnhMask = (e: any) => {
@@ -162,7 +211,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
             pt={4}
             bg="white"
             _dark={{
-              bg: "#141517",
+              bg: "#141517"
             }}
             spacing={6}
           >
@@ -185,7 +234,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Data de Nascimento
@@ -205,7 +254,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Relacionamento
@@ -219,7 +268,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Telefone Celular
@@ -228,7 +277,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   type="text"
                   variant="flushed"
                   onChange={WhatsAppMask}
-                  value={Whatapp}
+                  value={Whatsapp}
                 />
               </FormControl>
 
@@ -239,7 +288,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Numero da CNH
@@ -259,7 +308,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Email
@@ -278,7 +327,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   CNH
@@ -297,7 +346,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   RG
@@ -317,7 +366,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Construtora
@@ -332,7 +381,7 @@ export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Empreendimento
