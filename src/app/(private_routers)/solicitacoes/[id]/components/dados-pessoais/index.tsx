@@ -1,5 +1,6 @@
 "use client";
 
+import { DownloadDoc } from "@/app/componentes/DowloadDoc";
 import {
   Alert,
   AlertIcon,
@@ -11,6 +12,7 @@ import {
   FormControl,
   FormLabel,
   GridItem,
+  Heading,
   Input,
   Select,
   SimpleGrid,
@@ -25,57 +27,7 @@ import { FaPen } from "react-icons/fa";
 import { mask, unMask } from "remask";
 
 interface DadosPessoaisProps {
-  SetData: any;
-}
-
-interface SetDataType {
-  id: number;
-  nome: string;
-  cpf: string;
-  email: string;
-  dt_solicitacao: Date | string | any;
-  corretor: {
-    id: number;
-    nome: string;
-  };
-  construtora: number;
-  telefone: string;
-  dt_nascimento: Date | string | any;
-  ass_doc: boolean;
-  link_doc: string;
-  id_fcw: number;
-  obs: string;
-  alert: string;
-  empreedimento: number;
-  cnh: string;
-  ativo: boolean;
-  uploadCnh: string;
-  relacionamento: string[];
-  createdAt: Date | string | any;
-  updatedAt: Date | string | any;
-  telefone2: string;
-  uploadRg: string;
-}
-
-interface SetDataTypePost {
-  nome: string;
-  cpf: string;
-  email: string;
-  corretor: number;
-  construtora: number;
-  telefone: string;
-  dt_nascimento: Date | string | any;
-  ass_doc: boolean;
-  link_doc: string;
-  id_fcw: number | null;
-  obs: string;
-  alert: string;
-  empreedimento: number;
-  cnh: string;
-  uploadCnh: string;
-  relacionamento: string[];
-  telefone2: string;
-  uploadRg: string;
+  SetData: solictacao.SolicitacaoGetType;
 }
 
 export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
@@ -94,13 +46,38 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Relacionamento, setRelacionamento] = useState<string[]>([]);
   const [AssDoc, setAssDoc] = useState<boolean>(false);
-  const [Corretor, setCorretor] = useState<number>(0);
+  const [Corretor, setCorretor] = useState<object>({});
+  const [CorretorId, setCorretorId] = useState<number>(0);
+  const [ClientId, setClientId] = useState<number>(0);
   const [Obs, setObs] = useState<string>("");
-  const [AlertDb, setAlertDb] = useState<string>("");
+  const [AlertDb, setAlertDb] = useState<any>([]);
   const [Looad, setLooad] = useState<boolean>(false);
   const toast = useToast();
 
-  console.log(SetData);
+  // Matheus
+  // crira campos faltantes no formulario
+  //      cnh: Cnh,
+  //       cpf: Cpf,
+  //       nome: Name,
+  //       telefone: Whatsapp,
+  //       telefone2: Whatsapp2,
+  //       email: Email,
+  //       uploadRg: RgFile,
+  //       uploadCnh: CnhFile,
+  //       construtora: Construtora,
+  //       empreedimento: Empreendimento,
+  //       relacionamento: Relacionamento,
+  //       corretor: CorretorId,
+  //       dt_nascimento: DataNascimento,
+  //       ass_doc: AssDoc,
+  //       link_doc: LinkDoc,
+  //       id_fcw: IdFcweb,
+  //       obs: Obs,
+  //       alert: AlertDb,
+  // verifique essa liste e acresente o que falta, não esqueça de fazer a verificação da hiearquia do usuario e apresentar o nessesarios campos
+  // não esquer de carregar os dados nos seus inputs
+  // verificar Layout componet DownloadDoc
+  //allertas em 80%
 
   if (
     SetData &&
@@ -127,31 +104,35 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     setEmpreendimento(SetData.empreedimento);
     setDataNascimento(SetData.dt_nascimento);
     setRelacionamento(SetData.relacionamento);
+    setAssDoc(SetData.ass_doc);
+    setCorretor(SetData.corretor);
+    setObs(SetData.obs);
+    setAlertDb(SetData.alert);
+    setsetIdFcweb(SetData.id_fcw);
   }
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     setLooad(true);
     try {
-      const data: SetDataTypePost = {
+      const data: solictacao.SolicitacaoPutType = {
         cnh: Cnh,
         cpf: Cpf,
         nome: Name,
         telefone: Whatsapp,
-        telefone2: "",
+        telefone2: Whatsapp2,
         email: Email,
         uploadRg: RgFile,
         uploadCnh: CnhFile,
         construtora: Construtora,
         empreedimento: Empreendimento,
         relacionamento: Relacionamento,
-        corretor: Corretor,
+        corretor: CorretorId,
         dt_nascimento: DataNascimento,
         ass_doc: AssDoc,
         link_doc: LinkDoc,
         id_fcw: IdFcweb,
         obs: Obs,
-        alert: AlertDb,
       };
       const rest = await fetch(`/api/User/put/`, {
         method: "PUT",
@@ -249,7 +230,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
               <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
@@ -283,7 +263,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
               <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
@@ -303,7 +282,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
               <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
@@ -361,7 +339,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
               <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
@@ -376,7 +353,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
               <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
                 <FormLabel
-                  htmlFor="email_address"
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
@@ -387,6 +363,34 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   Empreendimento
                 </FormLabel>
                 <Input type="text" variant="flushed" />
+              </FormControl>
+
+              <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
+                <FormLabel
+                  fontSize="sm"
+                  fontWeight="md"
+                  color="gray.700"
+                  _dark={{
+                    color: "gray.50"
+                  }}
+                >
+                  Downloads da CNH
+                </FormLabel>
+                <DownloadDoc base64={CnhFile} name="Cnh" />
+              </FormControl>
+
+              <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
+                <FormLabel
+                  fontSize="sm"
+                  fontWeight="md"
+                  color="gray.700"
+                  _dark={{
+                    color: "gray.50"
+                  }}
+                >
+                  Download do Rg
+                </FormLabel>
+                <DownloadDoc base64={RgFile} name="Rg" />
               </FormControl>
 
               <Button
@@ -422,6 +426,22 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
           <Stack pt={10}>
             <Box>
               <Stack spacing={3}>
+                {AlertDb.length > 0 &&
+                  AlertDb.map((item: solictacao.AlertProps) => {
+                    const status =
+                      item.tipo === "success" ? "success" : "error";
+
+                    return (
+                      <>
+                        <Alert status={status}>
+                          <AlertIcon />
+                          <Heading size="sm">{item.titulo}</Heading>
+                          <Text>{item.texto}</Text>
+                          <Text>{item.tag}</Text>
+                        </Alert>
+                      </>
+                    );
+                  })}
                 <Alert status="error">
                   <AlertIcon />
                   There was an error processing your request
