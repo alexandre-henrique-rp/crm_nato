@@ -30,7 +30,7 @@ const nextAuthOptions: NextAuthOptions = {
           });
 
           const retorno = await res.data;
-          const { token, user } = retorno;
+          const { token, expires, user } = retorno;
 
           const {
             id,
@@ -56,7 +56,8 @@ const nextAuthOptions: NextAuthOptions = {
             telefone: telefone,
             empreendimento: empreendimento,
             hierarquia: hierarquia,
-            cargo: cargo
+            cargo: cargo,
+            tokenexpires: expires
           };
           console.log(response)
 
@@ -93,7 +94,7 @@ const nextAuthOptions: NextAuthOptions = {
       const isSignIn = !!user;
 
       const actualDateInSeconds = Math.floor(Date.now() / 1000);
-      const tokenExpirationInSeconds = Math.floor(4 * 60 * 60); // 4 hours
+      const tokenExpirationInSeconds = Math.floor(3 * 60 * 60); // 4 hours
 
       if (isSignIn) {
         if (!user?.jwt || !user?.id || !user?.name || !user?.email) {

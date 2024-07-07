@@ -30,6 +30,7 @@ export const config = {
   matcher: [
     "/",
     "/home/:path*",
+    "/solicitacoes/:path*",
     "/notification/:path*",
     "/perfil-adm/:path*",
     "/perfil-client/:path*",

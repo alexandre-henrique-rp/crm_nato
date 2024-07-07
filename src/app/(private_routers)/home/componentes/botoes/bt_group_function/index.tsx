@@ -57,7 +57,7 @@ export const BotoesFunction = ({ id , onUpdate}: BotoesFunctionProps ) => {
           colorScheme="blue"
           icon={<BsBoxArrowUpRight />}
           aria-label="Up"
-          onClick={() => route.push(`/solicitar/${id}`)}
+          onClick={() => route.push(`/solicitacoes/${id}`)}
         />
         <IconButton
           colorScheme="red"

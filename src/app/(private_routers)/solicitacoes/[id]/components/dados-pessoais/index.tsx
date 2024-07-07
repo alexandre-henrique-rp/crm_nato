@@ -24,10 +24,42 @@ import { FormEventHandler, useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { mask, unMask } from "remask";
 
-export const DadosPessoaisComponent = () => {
-  // const { data: session } = useSession ();
-  // const User: any = session?.user;
-  // const id = User?.id;
+interface DadosPessoaisProps {
+  SetData: any;
+}
+
+interface SetDataType {
+  {
+    "id": 29,
+    "nome": "Nayara Eloizy de Souza Amaral",
+    "cpf": "08147247109",
+    "email": "nayhelo241@gmail.com ",
+    "dt_solicitacao": "2024-01-01T00:00:00.000Z",
+    "corretor": {
+      "id": 10,
+      "nome": "HIGOR BITENCOURT"
+    },
+    "construtora": 1,
+    "telefone": "67991603005",
+    "dt_nascimento": "2024-01-01T00:00:00.000Z",
+    "ass_doc": false,
+    "link_doc": "",
+    "id_fcw": null,
+    "obs": "",
+    "alert": null,
+    "empreedimento": 1,
+    "cnh": "",
+    "ativo": true,
+    "uploadCnh": null,
+    "relacionamento": "[]",
+    "createdAt": "2024-07-04T16:43:19.000Z",
+    "updatedAt": "2024-07-07T00:28:37.000Z",
+    "telefone2": "",
+    "uploadRg": null
+  }
+    
+
+export const DadosPessoaisComponent = ({SetData}: DadosPessoaisProps) => {
   const [Name, setName] = useState<string>("");
   const [Cpf, setCpf] = useState<string>("");
   const [Cnh, setCnh] = useState<string>("");
@@ -41,39 +73,21 @@ export const DadosPessoaisComponent = () => {
   const [Relacionamento, setRelacionamento] = useState<string>("");
   const [Looad, setLooad] = useState<boolean>(false);
   const toast = useToast();
-  // const router = useRouter();
 
-  //   useEffect(() => {
-  //     (async () => {
-  //       // const res = await fetch(`/api/User/get/${id}`);
-  //       // const resp = await res.json();
-  //       // console.log(resp)
+  if(SetData && !Name && !Cpf && !Cnh && !Whatapp && !CnhFile && !RgFile && !Email && !Construtora && !Empreendimento && !DataNascimento && !Relacionamento) {
+    setName(SetData.nome);
+    setCpf(SetData.);
+    setCnh(SetDataCnh);
+    setWhatapp(SetDataWhatsapp);
+    setCnhFile(SetDataCnhFile);
+    setRgFile(SetDataRgFile);
+    setEmail(SetDataEmail);
+    setsetConstrutora(SetDataConstrutora);
+    setEmpreendimento(SetDataEmpreendimento);
+    setDataNascimento(SetDataDataNascimento);
+    setRelacionamento(SetDataRelacionamento);
+  }
 
-  //       const WhatsAppMask = (data: any) => {
-  //         const valor = data;
-  //         const valorLinpo = unMask(valor);
-  //         const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-  //         return masked;
-  //       };
-
-  //       const CpfMask = (data: any) => {
-  //         const valor = data;
-  //         const valorLinpo = unMask(valor);
-  //         const masked = mask(valorLinpo, ["999.999.999-99"]);
-  //         return masked;
-  //       };
-
-  //       setName(resp?.nome);
-  //       setCpf(CpfMask(resp?.Cpf_number));
-  //       setWhatapp(WhatsAppMask(resp?.whatsapp));
-  //       setCnhFile(resp?.fotos_cnh?.url);
-  //       setRgFile(resp?.fotos_rg?.url);
-  //       setEmail(resp?.email);
-  //       setConstrutora(resp?.Relacionamento);
-  //       setEmpreendimento(resp?.escolaridade);
-  //       setDataNascimento(resp?.data_nascimento);
-  //     })();
-  //   }, []);
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     setLooad(true);
