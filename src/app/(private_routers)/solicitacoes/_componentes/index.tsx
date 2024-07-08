@@ -218,11 +218,11 @@ export default function SolicitacaoForm({
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
+        <Box w="33%">
           <FormLabel> Whatsapp com DDD 2</FormLabel>
           <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
         </Box>
-        <Box w="48%">
+        <Box w="33%">
           <FormLabel>email</FormLabel>
           <Input type="text" onChange={(e: any) => setemail(e.target.value)} />
         </Box>
@@ -234,7 +234,7 @@ export default function SolicitacaoForm({
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         {user?.empreendimento && (
-          <Box w="48%">
+          <Box w="33%">
             <FormLabel>Empreendimento</FormLabel>
             <SelectComponent
               SetValue={user.empreendimento}
@@ -244,7 +244,7 @@ export default function SolicitacaoForm({
         )}
 
         {user?.construtora && (
-          <Box w="48%">
+          <Box w="33%">
             <FormLabel>Construtora</FormLabel>
             <SelectComponent
               SetValue={user.construtora.map((item: any) => {
