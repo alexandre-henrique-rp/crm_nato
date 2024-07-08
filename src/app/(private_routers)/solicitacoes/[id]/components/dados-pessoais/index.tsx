@@ -1,5 +1,7 @@
 "use client";
 
+import BotaoSair from "@/app/(private_routers)/home/componentes/botoes/bt_sair";
+import BotaoVoltar from "@/app/(private_routers)/home/componentes/botoes/bt_voltar";
 import { DownloadDoc } from "@/app/componentes/DowloadDoc";
 import { ModalFormComponent } from "@/app/componentes/modal";
 import { Link } from "@chakra-ui/next-js";

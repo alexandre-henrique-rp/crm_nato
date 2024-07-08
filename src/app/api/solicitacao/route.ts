@@ -18,6 +18,7 @@ export async function POST(request: Request) {
           telefone2: body.tel,
           fotos_rg: body.fotos_rg,
           fotos_cnh: body.fotos_cnh,
+          corretor: body.corretor,
           construtora: body.construtora,
           empreendimento: body.empreendimento,
           relacionamento: body.relacionamento,

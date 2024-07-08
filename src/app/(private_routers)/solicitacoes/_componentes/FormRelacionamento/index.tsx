@@ -31,6 +31,8 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
+  const [Corretor, setCorretor] = useState<string>("");
+  const [CorretorId, setCorretorId] = useState<number>(0);
   const [relacionamento, setrelacionamento] = useState<string>("nao");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
@@ -71,6 +73,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         email: email,
         foto_rg: uploadRg,
         foto_cnh: uploadCnh,
+        corretor: CorretorId,
         construtora: Number(ConstrutoraID),
         empreendimento: Number(empreendimento),
         data_nascimento: DataNascimento,
