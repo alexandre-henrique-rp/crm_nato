@@ -45,8 +45,10 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [RgFile, setRgFile] = useState<string>("");
   const [Email, setEmail] = useState<string>("");
   const [LinkDoc, setLinkDoc] = useState<string>("");
-  const [Construtora, setConstrutora] = useState<string>("");
   const [IdFcweb, setsetIdFcweb] = useState<number | null>(null);
+  const [Construtora, setConstrutora] = useState<string>("");
+  const [ConstrutoraId, setConstrutoraId] = useState<number>(0);
+  const [EmpreendimentoId, setEmpreendimentoId] = useState<number>(0);
   const [Empreendimento, setEmpreendimento] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Relacionamento, setRelacionamento] = useState<string[]>([]);
@@ -101,8 +103,10 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setCnhFile(SetData.uploadCnh);
       setRgFile(SetData.uploadRg);
       setEmail(SetData.email);
+      setConstrutoraId(SetData.construtora && SetData.construtora.id);
       setConstrutora(SetData.construtora && SetData.construtora.razaosocial);
       setEmpreendimento(SetData.empreendimento && SetData.empreendimento.nome);
+      setEmpreendimentoId(SetData.empreendimento && SetData.empreendimento.id);
       const date = new Date(SetData.dt_nascimento);
       const formattedDate =
         SetData.dt_nascimento && date.toISOString().split("T")[0];
@@ -131,8 +135,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         email: Email,
         uploadRg: RgFile,
         uploadCnh: CnhFile,
-        construtora: Construtora,
-        empreedimento: Empreendimento,
+        construtoraID: Construtora,
+        empreedimentoID: Empreendimento,
         relacionamento: Relacionamento,
         corretor: CorretorId,
         dt_nascimento: DataNascimento,
