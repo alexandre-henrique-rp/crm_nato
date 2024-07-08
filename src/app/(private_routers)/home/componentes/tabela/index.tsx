@@ -50,7 +50,7 @@ export const Tabela = ({ onDados }: TabelaProps) => {
     const matchData = inputDate && itemDate
       ? itemDate.toLocaleDateString("pt-BR") === inputDate.toLocaleDateString("pt-BR")
       : true;
-    const matchEmpreendimento = empreendimento ? item.empreedimento === empreendimento : true;
+    const matchEmpreendimento = empreendimento ? item.empreendimento.id === empreendimento : true;
 
     return matchNome && matchAndamento && matchData && matchEmpreendimento;
   });
