@@ -25,6 +25,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
+  const [cpfdoismask, setCpfdoismask] = useState("");
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [email, setemail] = useState("");
@@ -78,7 +79,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
 
       const data = [dados, SetValue];
       data.map(async (item: any) => {
-        const response = await fetch("", {
+        const response = await fetch("/api/solicitacao", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -178,17 +179,32 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     <>
       <Box display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <Box w="33%">
-          <FormLabel>nome Completo</FormLabel>
+          <FormLabel>Nome Completo</FormLabel>
           <Input type="text" onChange={(e: any) => setnome(e.target.value)} />
+        </Box>
+
+        <Box w="33%">
+          <FormLabel>Data de Nascimento</FormLabel>
+          <Input
+            type="Date"
+            onChange={(e: any) => setDataNascimento(e.target.value)}
+          />
         </Box>
 
         <Box w="33%">
           <FormLabel>Whatsapp com DDD</FormLabel>
           <Input type="text" onChange={WhatsAppMask} value={Whatapp} />
         </Box>
-        <Box w="33%">
+      </Box>
+
+      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
+        <Box w="48%">
           <FormLabel> Whatsapp com DDD 2</FormLabel>
-          <Input type="text" onChange={setWhatappdois} value={Whatappdois} />
+          <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
+        </Box>
+        <Box w="48%">
+          <FormLabel>email</FormLabel>
+          <Input type="text" onChange={(e: any) => setemail(e.target.value)} />
         </Box>
       </Box>
 
@@ -200,11 +216,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
-          <FormLabel>email</FormLabel>
-          <Input type="text" onChange={(e: any) => setemail(e.target.value)} />
-        </Box>
-
         {user?.empreendimento && (
           <Box w="48%">
             <FormLabel>Empreendimento</FormLabel>

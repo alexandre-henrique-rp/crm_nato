@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { mask, unMask } from "remask";
 
 interface relacionamentoProps {
@@ -31,6 +31,7 @@ export default function SolicitacaoForm({
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
+  const [cpfdoismask, setCpfdoismask] = useState("");
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [email, setemail] = useState("");
@@ -195,7 +196,7 @@ export default function SolicitacaoForm({
           <Input type="text" onChange={(e: any) => setnome(e.target.value)} />
         </Box>
 
-        <Box w="25%">
+        <Box w="33%">
           <FormLabel>Data de Nascimento</FormLabel>
           <Input
             type="Date"
@@ -203,13 +204,20 @@ export default function SolicitacaoForm({
           />
         </Box>
 
-        <Box w="25%">
+        <Box w="33%">
           <FormLabel>Whatsapp com DDD</FormLabel>
           <Input type="text" onChange={WhatsAppMask} value={Whatapp} />
         </Box>
-        <Box w="25%">
+      </Box>
+
+      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
+        <Box w="48%">
           <FormLabel> Whatsapp com DDD 2</FormLabel>
           <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
+        </Box>
+        <Box w="48%">
+          <FormLabel>email</FormLabel>
+          <Input type="text" onChange={(e: any) => setemail(e.target.value)} />
         </Box>
       </Box>
 
@@ -252,11 +260,6 @@ export default function SolicitacaoForm({
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
-          <FormLabel>email</FormLabel>
-          <Input type="text" onChange={(e: any) => setemail(e.target.value)} />
-        </Box>
-
         {user?.empreendimento && (
           <Box w="48%">
             <FormLabel>Empreendimento</FormLabel>

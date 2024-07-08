@@ -11,8 +11,8 @@ const Requestes = async (id: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${session?.token}`
-      }
+        Authorization: `Bearer ${session?.token}`,
+      },
     });
     if (!request.ok) {
       throw new Error("Erro");
@@ -26,13 +26,13 @@ const Requestes = async (id: string) => {
 };
 
 export default async function perfilPage({
-  params
+  params,
 }: {
   params: { id: string };
 }) {
   const { id } = params;
 
-  const data = await Requestes(id );
+  const data = await Requestes(id);
 
   return (
     <>
@@ -45,8 +45,7 @@ export default async function perfilPage({
         overflowX="auto"
         flexDir={"column"}
       >
-        < DadosPessoaisComponent SetData={data}/>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
+        <DadosPessoaisComponent SetData={data} />
       </Flex>
     </>
   );

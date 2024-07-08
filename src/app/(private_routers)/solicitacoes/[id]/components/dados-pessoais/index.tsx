@@ -112,7 +112,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         SetData.dt_nascimento && date.toISOString().split("T")[0];
       setDataNascimento(formattedDate);
       setRelacionamento(SetData.relacionamento);
-      setAssDoc(SetData.ass_doc);
+      // setAssDoc();
       setCorretor(SetData.corretor && SetData.corretor.nome);
       setCorretorId(SetData.corretor && SetData.corretor.id);
       setObs(SetData.obs);

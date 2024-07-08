@@ -4,6 +4,7 @@ import BotaoCadastro from "../bt_cadastro";
 import BotaoNovaSolicita from "../bt_nvsolicita";
 import BotaoSair from "../bt_sair";
 import { useSession } from "next-auth/react";
+import { ModalFormComponent } from "@/app/componentes/modal";
 
 export default function BotaoJuncao() {
  const {data: session} = useSession()
@@ -11,9 +12,11 @@ export default function BotaoJuncao() {
   return (
     <Flex w={"100%"}>
       <Box h={"100%"} borderRadius={"15px"} display={"flex"} gap={"20px"}>
+        <ModalFormComponent />
         <BotaoNovaSolicita />
         {but !== "USER" && <BotaoCadastro />}
         <BotaoSair />
+        
       </Box>
     </Flex>
   );
