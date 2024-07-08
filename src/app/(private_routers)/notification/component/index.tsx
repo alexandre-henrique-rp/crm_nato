@@ -1,5 +1,6 @@
 "use client";
 
+import { AlertComponent } from "@/app/componentes/alerts";
 import {
   Alert,
   AlertIcon,
@@ -15,7 +16,7 @@ import {
   ModalOverlay,
   Stack,
   Text,
-  useDisclosure,
+  useDisclosure
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { BiSolidBellRing } from "react-icons/bi";
@@ -26,18 +27,25 @@ export const ModalComponent = () => {
   const [alerts, setAlerts] = useState([]);
 
   const [showButton, setShowButton] = useState(false);
+  if (alerts.length === 0) {
+    (async () => {
+      const request = await fetch("/api/alerts/geral");
+      if (request.ok) {
+        const response = await request.json();
+        setShowButton(true);
+        setAlerts(response);
+      }
+    })();
+  }
 
-  // (async () => {
-  //   const storage = localStorage.getItem("id");
-  //   const request = await fetch("/api/alerts", {
-  //     method: "GET",
-  //   });
-  //   if (request.ok) {
-  //     const response = await request.json();
-  //     setShowButton(true);
-  //     setAlerts(response);
-  //   }
-  // })();
+  const OverlayTwo = () => (
+    <ModalOverlay
+      bg='none'
+      backdropFilter='auto'
+      backdropInvert='80%'
+      // backdropBlur='2px'
+    />
+  )
 
   return (
     <>
@@ -50,7 +58,8 @@ export const ModalComponent = () => {
           onClick={onOpen}
         ></Button>
       )}
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size={"3xl"}>
+        <OverlayTwo />
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Alertas</ModalHeader>
@@ -61,10 +70,9 @@ export const ModalComponent = () => {
               <Box>
                 <Stack spacing={3}>
                   {alerts.map((alert, index) => (
-                    <Alert key={index} status="error">
-                      <AlertIcon />
-                      {alert}
-                    </Alert>
+                    <>
+                    <AlertComponent />
+                    </>
                   ))}
                 </Stack>
               </Box>
