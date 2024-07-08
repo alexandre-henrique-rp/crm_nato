@@ -16,15 +16,15 @@ declare module AlertsType {
    * @property {Date} updatedAt - Data de atualizacao do alerta
    */
   export interface AlertsProps{
-    id: number;
+    id?: number;
     titulo: string;
     texto: string;
-    solicitacao_id: number;
-    corretor: number;
+    solicitacao_id?: number;
+    corretor?: number;
     tipo: string;
     tag: string;
-    empreendimento: number;
-    createdAt: Date | string |any;
-    updatedAt: Date | string | any | null;
+    empreendimento?: number;
+    createdAt?: Date | string |any;
+    updatedAt?: Date | string | any | null;
   }
 }
