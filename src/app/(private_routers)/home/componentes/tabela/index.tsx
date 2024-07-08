@@ -4,31 +4,6 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { BotoesFunction } from "../botoes/bt_group_function";
 
-interface CompradorProps {
-  id: number;
-  nome: string;
-  obs: string;
-  dt_solicitacao: Date | string;
-  empreedimento: number;
-  construtora: number;
-  corretor: {
-    id: number;
-    nome: string;
-  };
-  id_fcw: number;
-  createdAt: Date | string;
-  updatedAt: Date | string;
-  ass_doc?: string;
-  ativo: boolean;
-  fcweb?: {
-    id: number;
-    andamento: string;
-    dt_agenda: Date | string;
-    hr_agenda: Date | string;
-    valorcd: string;
-    estatos_pgto: string;
-  };
-}
 
 interface TabelaProps {
   onDados: {
@@ -46,7 +21,7 @@ async function handleGetUpdate() {
 }
 
 export const Tabela = ({ onDados }: TabelaProps) => {
-  const [Data, setData] = useState<CompradorProps[]>([]);
+  const [Data, setData] = useState<solictacao.SolicitacaoGetType[]>([]);
   const { data: session } = useSession();
   const user = session?.user;
   const token = session?.token;
@@ -66,7 +41,7 @@ export const Tabela = ({ onDados }: TabelaProps) => {
   const { nome, andamento, data, empreendimento } = onDados;
 
   
-  const Filter = Data.filter((item: CompradorProps) => {
+  const Filter = Data.filter((item: solictacao.SolicitacaoGetType) => {
     const itemDate = item.fcweb?.dt_agenda ? new Date(item.fcweb.dt_agenda) : null;
     const inputDate = data ? new Date(data) : null;
 
@@ -82,7 +57,7 @@ export const Tabela = ({ onDados }: TabelaProps) => {
 
   const tabela =
     Data.length > 0 &&
-    Filter.map((item: CompradorProps) => {
+    Filter.map((item: solictacao.SolicitacaoGetType) => {
       // const dtAgenda = item.fcweb && new Date(item.fcweb.dt_agenda).toLocaleDateString("pt-BR");
       const dtAgenda =
         item.fcweb &&

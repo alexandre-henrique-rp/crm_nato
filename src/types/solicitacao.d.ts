@@ -13,6 +13,7 @@ declare module solictacao {
    * @param {boolean} ass_doc
    * @param {string} link_doc
    * @param {number} id_fcw
+   * @param {object} fcweb { id: number, andamento: string, dt_agenda: Date | string, hr_agenda: Date | string, valorcd: string, estatos_pgto: string }
    * @param {string} obs
    * @param {string} alert
    * @param {number} empreedimento
@@ -42,9 +43,17 @@ declare module solictacao {
     };
     telefone: string;
     dt_nascimento: Date | string | any;
-    ass_doc: boolean;
+    ass_doc?: boolean;
     link_doc: string;
     id_fcw: number;
+    fcweb?: {
+      id: number;
+      andamento: string;
+      dt_agenda: Date | string;
+      hr_agenda: Date | string;
+      valorcd: string;
+      estatos_pgto: string;
+    };
     obs: string;
     alert: AlertProps[];
     empreendimento: {
