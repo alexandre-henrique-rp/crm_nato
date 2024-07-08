@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertComponent } from "@/app/componentes/alerts";
+
 import {
   Alert,
   AlertIcon,
@@ -24,7 +25,7 @@ import { BiSolidBellRing } from "react-icons/bi";
 export const ModalComponent = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [alerts, setAlerts] = useState([]);
+  const [alerts, setAlerts] = useState<AlertsType.AlertsProps[]>([]);
 
   const [showButton, setShowButton] = useState(false);
   if (alerts.length === 0) {
@@ -69,9 +70,9 @@ export const ModalComponent = () => {
             <Stack pt={10} pb={10}>
               <Box>
                 <Stack spacing={3}>
-                  {alerts.map((alert, index) => (
+                  {alerts.map((a) => (
                     <>
-                    <AlertComponent />
+                    <AlertComponent msg={a.texto} titulo={a.titulo} status={a.tag} />
                     </>
                   ))}
                 </Stack>
