@@ -9,7 +9,7 @@ import {
   FormLabel,
   GridItem,
   Input,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 
 interface RelacionadoProps {
-  SetValue: any;
+  SetValue: solictacao.SolicitacaoPost;
 }
 
 export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
@@ -47,10 +47,12 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
 
   useEffect(() => {
     (() => {
-      const cpf = SetValue.cpfdois;
-      const masked = mask(cpf, ["999.999.999-99"]);
-      setCpfdoismask(masked);
-      setCpfdois(cpf);
+      if (SetValue.cpfdois) {
+        const cpf = SetValue.cpfdois;
+        const masked = mask(cpf, ["999.999.999-99"]);
+        setCpfdoismask(masked);
+        setCpfdois(cpf);
+      }
     })();
   }, [SetValue.cpfdois]);
   console.log("teste", SetValue.cpfdois);
@@ -62,32 +64,32 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         description: "Preencha todos os campos",
         status: "error",
         duration: 3000,
-        isClosable: true,
+        isClosable: true
       });
     } else {
-      const dados = {
+      const dados: solictacao.SolicitacaoPost = {
         nome: nome,
-        telefone: Whatapp,
-        cpf: cpf,
-        telefone2: tel,
+        telefone: tel,
+        cpf: cpfdois,
+        telefone2: teldois,
         email: email,
         foto_rg: uploadRg,
         foto_cnh: uploadCnh,
-        corretor: CorretorId,
         construtora: Number(ConstrutoraID),
         empreendimento: Number(empreendimento),
-        data_nascimento: DataNascimento,
-        token: session?.token,
+        dt_nascimento: DataNascimento,
+        relacionamento: SetValue.cpf ? [SetValue.cpf] : [],
+        rela_quest: SetValue.rela_quest
       };
 
       const data = [dados, SetValue];
-      data.map(async (item: any) => {
+      data.map(async (item: any, index: number) => {
         const response = await fetch("/api/solicitacao", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
           },
-          body: JSON.stringify(item),
+          body: JSON.stringify(item)
         });
         if (response.ok) {
           toast({
@@ -95,9 +97,11 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             description: "Solicitações enviadas com sucesso",
             status: "success",
             duration: 3000,
-            isClosable: true,
+            isClosable: true
           });
-          router.push("/home");
+          if (data.length === index + 1) {
+            router.push("/home");
+          }
         }
       });
     }
@@ -223,6 +227,8 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
           <Box w="48%">
             <FormLabel>Empreendimento</FormLabel>
             <SelectComponent
+              hierarquia={user.hierarquia}
+              tag="empreendimento"
               SetValue={user.empreendimento}
               onValue={(e: any) => setempreendimento(e)}
             />
@@ -233,6 +239,22 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
           <Box w="48%">
             <FormLabel>Construtora</FormLabel>
             <SelectComponent
+              hierarquia={user.hierarquia}
+              tag="construtora"
+              SetValue={user.construtora.map((item: any) => {
+                return { id: item.id, nome: item.razaosocial };
+              })}
+              onValue={(e: any) => setConstrutoraID(e)}
+            />
+          </Box>
+        )}
+
+        {user?.hierarquia === "ADM" && (
+          <Box w="48%">
+            <FormLabel>Corretor</FormLabel>
+            <SelectComponent
+              hierarquia={user.hierarquia}
+              tag="corretor"
               SetValue={user.construtora.map((item: any) => {
                 return { id: item.id, nome: item.razaosocial };
               })}
@@ -249,7 +271,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             fontWeight="md"
             color="gray.700"
             _dark={{
-              color: "gray.50",
+              color: "gray.50"
             }}
           >
             CNH
@@ -267,7 +289,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             fontWeight="md"
             color="gray.700"
             _dark={{
-              color: "gray.50",
+              color: "gray.50"
             }}
           >
             RG
