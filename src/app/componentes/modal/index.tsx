@@ -17,39 +17,42 @@ import {
   Select,
   Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { Interface } from "readline";
 
 
 interface ModallPropsFormuulario {
-  rota: any
-
+  rota: any;
+  empreedimento?: number;
+  clienteId?: number;
 }
 
 
-export const ModalFormComponent = ({ rota }: ModallPropsFormuulario ) => {
-  const [formData, setFormData] = useState({
-    status: "",
-    title: "",
-    text: "",
-  });
+export const ModalFormComponent = ({ rota, empreedimento, clienteId }: ModallPropsFormuulario ) => {
+  const [Titulo, setTitulo] = useState("");
+  const [Descricao, setDescricao] = useState("");
+  const [IdEmpreedimento, setIdEmpreedimento] = useState<number>(0);
+ const [StatusAlert, setStatusAlert] = useState("");
+ const [Empreedimeto, setEmpreedimeto] = useState([]);
+ const toast = useToast();
+  const { data: session } = useSession();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [alerts, setAlerts] = useState([]);
-
-  const [showButton, setShowButton] = useState(false);
-  if (alerts.length === 0) {
+  useEffect(() => {
     (async () => {
-      const request = await fetch("/api/alerts/geral");
-      if (request.ok) {
-        const response = await request.json();
-        setShowButton(true);
-        setAlerts(response);
-      }
+     if(rota === "geral") {
+       const request = await fetch("/api/empreendimento/getall");
+       if (request.ok) {
+         const response = await request.json();
+         setEmpreedimeto(response);
+       }
+     }
     })();
-  }
-
+  }, [rota]);
 
 
 
@@ -61,27 +64,56 @@ export const ModalFormComponent = ({ rota }: ModallPropsFormuulario ) => {
       // backdropBlur='2px'
     />
   );
-  const handleChange = (e: { target: { name: any; value: any } }) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
 
-  const handleSubmit = (e: { preventDefault: () => void }) => {
+  const handleSubmit = async(e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const data = {
-      status: formData.status,
-      title: formData.title,
-      text: formData.text,
-      tipo: rota 
+    const data: AlertsType.AlertsProps = rota === "geral" ? {
+      tipo: rota,
+      empreendimento: IdEmpreedimento,
+      tag: "info",
+      texto: Descricao,
+      titulo: Titulo,
+    }
+    : {
+      tipo: "CORRETOR",
+      corretor: session?.user?.id,
+      empreendimento: empreedimento,
+      solicitacao_id: clienteId,
+      tag: StatusAlert,
+      texto: Descricao,
+      titulo: Titulo,
     };
 
-    // Lógica para enviar os dados do formulário
-    console.log(formData);
-    onClose();
+    try {
+      const request = await fetch(`/api/alerts/cerate`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      if (request.ok) {
+        const response = await request.json();
+  
+        toast({
+          title: "Sucesso!",
+          description: "Alerta criado com sucesso!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+      onClose();
+    } catch (error) {
+      toast({
+        title: "Erro!",
+        description: "Erro ao criar alerta!",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      })
+    }
   };
 
   return (
@@ -118,8 +150,8 @@ export const ModalFormComponent = ({ rota }: ModallPropsFormuulario ) => {
               <FormLabel>Status</FormLabel>
               <Select
                 name="status"
-                value={formData.status}
-                onChange={handleChange}
+                value={StatusAlert}
+                onChange={(e) => setStatusAlert(e.target.value)}
               >
                 <option value="info">Info</option>
                 <option value="warning">Warning</option>
@@ -131,22 +163,21 @@ export const ModalFormComponent = ({ rota }: ModallPropsFormuulario ) => {
               <FormControl id="title" isRequired mt={4}>
                 <FormLabel>Título</FormLabel>
                 <Input
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
+                  value={Titulo}
+                  onChange={(e) => setTitulo(e.target.value)}
                   placeholder="Digite o título"
                 />
               </FormControl>
 
               <FormControl id="text" isRequired mt={4}>
-                <FormLabel>Texto</FormLabel>
+                <FormLabel>Descrição</FormLabel>
                 <Textarea
-                  name="text"
-                  value={formData.text}
-                  onChange={handleChange}
+                  value={Descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
                   placeholder="Digite o texto"
                 />
               </FormControl>
+
             </ModalBody>
 
             <ModalFooter>

@@ -1,6 +1,7 @@
 "use client";
 
 import { DownloadDoc } from "@/app/componentes/DowloadDoc";
+import { ModalFormComponent } from "@/app/componentes/modal";
 import { Link } from "@chakra-ui/next-js";
 import {
   Alert,
@@ -19,7 +20,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -87,6 +88,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
   useEffect(() => {
     if (SetData && Name == "") {
+      setClientId(SetData.id);
       setName(SetData.nome);
       setCpf(SetData.cpf);
       setCnh(SetData.cnh);
@@ -143,14 +145,14 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         ass_doc: AssDoc,
         link_doc: LinkDoc,
         id_fcw: IdFcweb,
-        obs: Obs,
+        obs: Obs
       };
       const rest = await fetch(`/api/User/put/`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
       const response = await rest.json();
       console.log(response);
@@ -217,7 +219,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             pt={4}
             bg="white"
             _dark={{
-              bg: "#141517",
+              bg: "#141517"
             }}
             spacing={6}
           >
@@ -240,7 +242,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Data de Nascimento
@@ -259,7 +261,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Relacionamento
@@ -273,7 +275,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Telefone Celular
@@ -292,7 +294,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Telefone 2
@@ -311,7 +313,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Email
@@ -330,7 +332,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Construtora
@@ -349,7 +351,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Empreendimento
@@ -368,14 +370,14 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     fontWeight="md"
                     color="gray.700"
                     _dark={{
-                      color: "gray.50",
+                      color: "gray.50"
                     }}
                   >
                     ID FCWEB
                   </FormLabel>
                   <Input
-                    value={IdFcweb}
-                    onChange={(e) => setIdFcweb(e.target.value)}
+                    value={IdFcweb || ""}
+                    onChange={(e) => setsetIdFcweb(Number(e.target.value))}
                     type="text"
                     variant="flushed"
                   />
@@ -388,7 +390,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Link Contrato
@@ -407,7 +409,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   CNH
@@ -426,7 +428,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   RG
@@ -446,7 +448,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     fontWeight="md"
                     color="gray.700"
                     _dark={{
-                      color: "gray.50",
+                      color: "gray.50"
                     }}
                   >
                     Downloads da CNH
@@ -461,7 +463,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     fontWeight="md"
                     color="gray.700"
                     _dark={{
-                      color: "gray.50",
+                      color: "gray.50"
                     }}
                   >
                     Download do Rg
@@ -476,7 +478,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Observações
@@ -502,6 +504,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               >
                 Salvar e Enviar
               </Button>
+              <ModalFormComponent rota={"CORRETROR"} clienteId={ClientId} empreedimento={EmpreendimentoId} />
             </SimpleGrid>
           </Stack>
         </Box>
