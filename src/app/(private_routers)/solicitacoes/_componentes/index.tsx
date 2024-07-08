@@ -37,6 +37,8 @@ export default function SolicitacaoForm({
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
+  const [Corretor, setCorretor] = useState<string>("");
+  const [CorretorId, setCorretorId] = useState<number>(0);
   const [relacionamento, setrelacionamento] = useState<string>("nao");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
@@ -51,6 +53,7 @@ export default function SolicitacaoForm({
   const user = session?.user;
 
   const handlesubmit = async () => {
+    console.log(handlesubmit);
     if (!nome || !cpf || !email || !relacionamento) {
       toast({
         title: "Erro",
@@ -68,6 +71,7 @@ export default function SolicitacaoForm({
         email: email,
         foto_rg: uploadRg,
         foto_cnh: uploadCnh,
+        corretor: CorretorId,
         construtora: Number(ConstrutoraID),
         empreendimento: Number(empreendimento),
         data_nascimento: DataNascimento,
@@ -173,11 +177,14 @@ export default function SolicitacaoForm({
     ishidden("sim");
     const data = {
       nome: nome,
-      whatsapp: Whatapp,
+      telefone: Whatapp,
+      telefone2: Whatappdois,
+      dt_nascimento: DataNascimento,
       email: email,
       foto_rg: uploadRg,
       foto_cnh: uploadCnh,
       empreendimento: empreendimento,
+      construtora: ConstrutoraID,
       relacionamento: relacionamento,
       cpfdois: cpfdois,
     };
@@ -219,43 +226,9 @@ export default function SolicitacaoForm({
           <FormLabel>email</FormLabel>
           <Input type="text" onChange={(e: any) => setemail(e.target.value)} />
         </Box>
-      </Box>
-
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <Box w="33%">
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
-        </Box>
-
-        <Box w="33%">
-          <FormLabel>
-            Relacionamento
-            <Tooltip
-              label="Preencha este campo caso o Contrato contenha mais de um proprietário"
-              aria-label="A tooltip"
-            >
-              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
-            </Tooltip>
-          </FormLabel>
-
-          <Select
-            onChange={(e: any) => setrelacionamento(e.target.value)}
-            value={relacionamento}
-          >
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option>
-          </Select>
-        </Box>
-
-        <Box w="33%">
-          {relacionamento === "sim" ? (
-            <>
-              <FormLabel>CPF do relacionado</FormLabel>
-              <CpfMask setvalue={cpfdois} onvalue={(e: any) => setCpfdois(e)} />
-            </>
-          ) : (
-            ""
-          )}
         </Box>
       </Box>
 
@@ -282,7 +255,6 @@ export default function SolicitacaoForm({
           </Box>
         )}
       </Box>
-
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <FormControl as={GridItem} colSpan={[6, 2]}>
           <FormLabel
@@ -321,6 +293,38 @@ export default function SolicitacaoForm({
         </FormControl>
       </Box>
 
+      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
+        <Box w="33%">
+          <FormLabel>
+            Relacionamento
+            <Tooltip
+              label="Preencha este campo caso o Contrato contenha mais de um proprietário"
+              aria-label="A tooltip"
+            >
+              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+            </Tooltip>
+          </FormLabel>
+
+          <Select
+            onChange={(e: any) => setrelacionamento(e.target.value)}
+            value={relacionamento}
+          >
+            <option value="sim">Sim</option>
+            <option value="nao">Não</option>
+          </Select>
+        </Box>
+
+        <Box w="33%">
+          {relacionamento === "sim" ? (
+            <>
+              <FormLabel>CPF do relacionado</FormLabel>
+              <CpfMask setvalue={cpfdois} onvalue={(e: any) => setCpfdois(e)} />
+            </>
+          ) : (
+            ""
+          )}
+        </Box>
+      </Box>
       <Button
         mt={5}
         mb={5}
