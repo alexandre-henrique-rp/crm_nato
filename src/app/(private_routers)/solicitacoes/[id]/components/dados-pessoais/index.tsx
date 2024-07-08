@@ -1,6 +1,7 @@
 "use client";
 
 import { DownloadDoc } from "@/app/componentes/DowloadDoc";
+import { Link } from "@chakra-ui/next-js";
 import {
   Alert,
   AlertIcon,
@@ -18,7 +19,7 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -31,22 +32,26 @@ interface DadosPessoaisProps {
 }
 
 export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
+  const { data: session } = useSession();
+  const input = session?.user?.hierarquia;
   const [Name, setName] = useState<string>("");
   const [Cpf, setCpf] = useState<string>("");
   const [Cnh, setCnh] = useState<string>("");
   const [Whatsapp, setWhatsapp] = useState<string>("");
-  const [Whatsapp2, setWhatsapp2] = useState<string>("");
+  const [WhatsAppMask, setWhatsAppMask] = useState<string>("");
+  const [Whatsappdois, setWhatsappdois] = useState<string>("");
+  const [WhatsAppMaskdois, setWhatsAppMaskdois] = useState<string>("");
   const [CnhFile, setCnhFile] = useState<string>("");
   const [RgFile, setRgFile] = useState<string>("");
   const [Email, setEmail] = useState<string>("");
   const [LinkDoc, setLinkDoc] = useState<string>("");
-  const [Construtora, setsetConstrutora] = useState<number>(0);
+  const [Construtora, setConstrutora] = useState<string>("");
   const [IdFcweb, setsetIdFcweb] = useState<number | null>(null);
-  const [Empreendimento, setEmpreendimento] = useState<number>(0);
+  const [Empreendimento, setEmpreendimento] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Relacionamento, setRelacionamento] = useState<string[]>([]);
   const [AssDoc, setAssDoc] = useState<boolean>(false);
-  const [Corretor, setCorretor] = useState<object>({});
+  const [Corretor, setCorretor] = useState<string>("");
   const [CorretorId, setCorretorId] = useState<number>(0);
   const [ClientId, setClientId] = useState<number>(0);
   const [Obs, setObs] = useState<string>("");
@@ -56,7 +61,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
   // Matheus
   // crira campos faltantes no formulario
-  //      cnh: Cnh,
   //       cpf: Cpf,
   //       nome: Name,
   //       telefone: Whatsapp,
@@ -79,37 +83,40 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   // verificar Layout componet DownloadDoc
   //allertas em 80%
 
-  if (
-    SetData &&
-    !Name &&
-    !Cpf &&
-    !Cnh &&
-    !Whatsapp &&
-    !CnhFile &&
-    !RgFile &&
-    !Email &&
-    !Construtora &&
-    !Empreendimento &&
-    !DataNascimento &&
-    !Relacionamento
-  ) {
-    setName(SetData.nome);
-    setCpf(SetData.cpf);
-    setCnh(SetData.cnh);
-    setWhatsapp(SetData.telefone);
-    setCnhFile(SetData.uploadCnh);
-    setRgFile(SetData.uploadRg);
-    setEmail(SetData.email);
-    setsetConstrutora(SetData.construtora);
-    setEmpreendimento(SetData.empreedimento);
-    setDataNascimento(SetData.dt_nascimento);
-    setRelacionamento(SetData.relacionamento);
-    setAssDoc(SetData.ass_doc);
-    setCorretor(SetData.corretor);
-    setObs(SetData.obs);
-    setAlertDb(SetData.alert);
-    setsetIdFcweb(SetData.id_fcw);
-  }
+  useEffect(() => {
+    if (SetData && Name == "") {
+      setName(SetData.nome);
+      setCpf(SetData.cpf);
+      setCnh(SetData.cnh);
+      setWhatsapp(SetData.telefone);
+      setWhatsAppMask(
+        SetData.telefone &&
+          mask(SetData.telefone, ["(99) 9999-9999", "(99) 9 9999-9999"])
+      );
+      setWhatsappdois(SetData.telefone2);
+      setWhatsAppMaskdois(
+        SetData.telefone2 &&
+          mask(SetData.telefone2, ["(99) 9999-9999", "(99) 9 9999-9999"])
+      );
+      setCnhFile(SetData.uploadCnh);
+      setRgFile(SetData.uploadRg);
+      setEmail(SetData.email);
+      setConstrutora(SetData.construtora && SetData.construtora.razaosocial);
+      setEmpreendimento(SetData.empreendimento && SetData.empreendimento.nome);
+      const date = new Date(SetData.dt_nascimento);
+      const formattedDate =
+        SetData.dt_nascimento && date.toISOString().split("T")[0];
+      setDataNascimento(formattedDate);
+      setRelacionamento(SetData.relacionamento);
+      setAssDoc(SetData.ass_doc);
+      setCorretor(SetData.corretor && SetData.corretor.nome);
+      setCorretorId(SetData.corretor && SetData.corretor.id);
+      setObs(SetData.obs);
+      setAlertDb(SetData.alert == null ? [] : SetData.alert);
+      setsetIdFcweb(SetData.id_fcw);
+      console.log(SetData);
+    }
+  }, [Name, SetData]);
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
@@ -120,7 +127,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         cpf: Cpf,
         nome: Name,
         telefone: Whatsapp,
-        telefone2: Whatsapp2,
+        telefone2: Whatsappdois,
         email: Email,
         uploadRg: RgFile,
         uploadCnh: CnhFile,
@@ -137,9 +144,9 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       const rest = await fetch(`/api/User/put/`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       const response = await rest.json();
       console.log(response);
@@ -149,11 +156,20 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       console.log(error);
     }
   };
-  const WhatsAppMask = (e: any) => {
+  const MascaraZap = (e: any) => {
     const valor = e.target.value;
     const valorLinpo = unMask(valor);
     const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-    setWhatsapp(masked);
+    setWhatsapp(valorLinpo);
+    setWhatsAppMask(masked);
+  };
+
+  const MascaraZap2 = (e: any) => {
+    const valor = e.target.value;
+    const valorLinpo = unMask(valor);
+    const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
+    setWhatsappdois(valorLinpo);
+    setWhatsAppMaskdois(masked);
   };
 
   const CnhMask = (e: any) => {
@@ -184,7 +200,12 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
           boxShadow="lg"
         >
           <Box display={"flex"} justifyContent={"space-between"}>
-            <Text fontSize={"2xl"}> Dados Pessoais </Text>
+            <Box alignItems={"center"} gap={2}>
+              <Text fontSize={"2xl"}>Dados Pessoais</Text>
+              {input !== "USER" && (
+                <Text fontSize={"md"}>Corretor: {Corretor} </Text>
+              )}
+            </Box>
             <Button variant={"link"} leftIcon={<FaPen />}></Button>
           </Box>
           <Divider borderColor={"#00713D"} pt={2} />
@@ -192,7 +213,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             pt={4}
             bg="white"
             _dark={{
-              bg: "#141517"
+              bg: "#141517",
             }}
             spacing={6}
           >
@@ -215,7 +236,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50"
+                    color: "gray.50",
                   }}
                 >
                   Data de Nascimento
@@ -234,7 +255,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50"
+                    color: "gray.50",
                   }}
                 >
                   Relacionamento
@@ -248,7 +269,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50"
+                    color: "gray.50",
                   }}
                 >
                   Telefone Celular
@@ -256,27 +277,27 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <Input
                   type="text"
                   variant="flushed"
-                  onChange={WhatsAppMask}
-                  value={Whatsapp}
+                  onChange={MascaraZap}
+                  value={WhatsAppMask}
                 />
               </FormControl>
 
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
+              <FormControl as={GridItem} colSpan={[6, 2]}>
                 <FormLabel
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50"
+                    color: "gray.50",
                   }}
                 >
-                  Numero da CNH
+                  Telefone 2
                 </FormLabel>
                 <Input
                   type="text"
                   variant="flushed"
-                  onChange={CnhMask}
-                  value={Cnh}
+                  onChange={MascaraZap2}
+                  value={WhatsAppMaskdois}
                 />
               </FormControl>
 
@@ -286,7 +307,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50"
+                    color: "gray.50",
                   }}
                 >
                   Email
@@ -299,13 +320,90 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 />
               </FormControl>
 
+              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
+                <FormLabel
+                  fontSize="sm"
+                  fontWeight="md"
+                  color="gray.700"
+                  _dark={{
+                    color: "gray.50",
+                  }}
+                >
+                  Construtora
+                </FormLabel>
+                <Input
+                  value={Construtora}
+                  onChange={(e) => setConstrutora(e.target.value)}
+                  type="text"
+                  variant="flushed"
+                />
+              </FormControl>
+
+              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
+                <FormLabel
+                  fontSize="sm"
+                  fontWeight="md"
+                  color="gray.700"
+                  _dark={{
+                    color: "gray.50",
+                  }}
+                >
+                  Empreendimento
+                </FormLabel>
+                <Input
+                  value={Empreendimento}
+                  onChange={(e) => setEmpreendimento(e.target.value)}
+                  type="text"
+                  variant="flushed"
+                />
+              </FormControl>
+              {input !== "USER" && (
+                <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
+                  <FormLabel
+                    fontSize="sm"
+                    fontWeight="md"
+                    color="gray.700"
+                    _dark={{
+                      color: "gray.50",
+                    }}
+                  >
+                    ID FCWEB
+                  </FormLabel>
+                  <Input
+                    value={IdFcweb}
+                    onChange={(e) => setIdFcweb(e.target.value)}
+                    type="text"
+                    variant="flushed"
+                  />
+                </FormControl>
+              )}
+
+              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
+                <FormLabel
+                  fontSize="sm"
+                  fontWeight="md"
+                  color="gray.700"
+                  _dark={{
+                    color: "gray.50",
+                  }}
+                >
+                  Link Contrato
+                </FormLabel>
+                <Input
+                  value={LinkDoc}
+                  onChange={(e) => setLinkDoc(e.target.value)}
+                  type="text"
+                  variant="flushed"
+                />
+              </FormControl>
+
               <FormControl as={GridItem} colSpan={[6, 3]}>
                 <FormLabel
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50"
+                    color: "gray.50",
                   }}
                 >
                   CNH
@@ -324,7 +422,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50"
+                    color: "gray.50",
                   }}
                 >
                   RG
@@ -337,60 +435,54 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 ></Input>
               </FormControl>
 
-              <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Construtora
-                </FormLabel>
-                <Input type="text" variant="flushed" />
-              </FormControl>
+              {input !== "USER" && (
+                <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
+                  <FormLabel
+                    fontSize="sm"
+                    fontWeight="md"
+                    color="gray.700"
+                    _dark={{
+                      color: "gray.50",
+                    }}
+                  >
+                    Downloads da CNH
+                  </FormLabel>
+                  <DownloadDoc base64={CnhFile} name="Cnh" />
+                </FormControl>
+              )}
+              {input !== "USER" && (
+                <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
+                  <FormLabel
+                    fontSize="sm"
+                    fontWeight="md"
+                    color="gray.700"
+                    _dark={{
+                      color: "gray.50",
+                    }}
+                  >
+                    Download do Rg
+                  </FormLabel>
+                  <DownloadDoc base64={RgFile} name="Rg" />
+                </FormControl>
+              )}
 
-              <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
+              <FormControl isRequired as={GridItem} colSpan={[6, 6]}>
                 <FormLabel
                   fontSize="sm"
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50"
+                    color: "gray.50",
                   }}
                 >
-                  Empreendimento
+                  Observações
                 </FormLabel>
-                <Input type="text" variant="flushed" />
-              </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Downloads da CNH
-                </FormLabel>
-                <DownloadDoc base64={CnhFile} name="Cnh" />
-              </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 3]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Download do Rg
-                </FormLabel>
-                <DownloadDoc base64={RgFile} name="Rg" />
+                <Input
+                  value={Obs}
+                  onChange={(e) => setObs(e.target.value)}
+                  type="text"
+                  variant="flushed"
+                />
               </FormControl>
 
               <Button

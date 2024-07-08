@@ -13,27 +13,24 @@ export async function POST(request: Request) {
         body: JSON.stringify({
           nome: body.nome,
           email: body.email,
-          whatsapp: body.whatsapp,
+          telefone: body.telefone,
           cpf: body.cpf,
-          tel: body.tel,
+          telefone2: body.tel,
           fotos_rg: body.fotos_rg,
           fotos_cnh: body.fotos_cnh,
           construtora: body.construtora,
           empreendimento: body.empreendimento,
-          Relacionamento: body.Relacionamento,
+          relacionamento: body.relacionamento,
         }),
       }
     );
-
     if (!user.ok) {
       return new Response("Invalid credentials", { status: 401 });
     }
 
     const data = await user.json();
-    console.log(data);
     return new Response(JSON.stringify(data), { status: 200 });
   } catch (error) {
-    console.log(error);
     return new Response("Internal Server Error", { status: 500 });
   }
 }

@@ -41,12 +41,13 @@ export default function SolicitacaoForm({
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
+  const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
+
   // const [base64String, setBase64String] = useState("");
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
-  console.log(empreendimento);
 
   const handlesubmit = async () => {
     if (!nome || !cpf || !email || !relacionamento) {
@@ -60,14 +61,15 @@ export default function SolicitacaoForm({
     } else {
       const data = {
         nome: nome,
-        whatsapp: Whatapp,
+        telefone: Whatapp,
         cpf: cpf,
-        tel: tel,
+        telefone2: tel,
         email: email,
         foto_rg: uploadRg,
         foto_cnh: uploadCnh,
         construtora: Number(ConstrutoraID),
         empreendimento: Number(empreendimento),
+        data_nascimento: DataNascimento,
         relacionamento: cpfdois ? [cpfdois] : [],
         token: session?.token,
       };
@@ -193,11 +195,19 @@ export default function SolicitacaoForm({
           <Input type="text" onChange={(e: any) => setnome(e.target.value)} />
         </Box>
 
-        <Box w="33%">
+        <Box w="25%">
+          <FormLabel>Data de Nascimento</FormLabel>
+          <Input
+            type="Date"
+            onChange={(e: any) => setDataNascimento(e.target.value)}
+          />
+        </Box>
+
+        <Box w="25%">
           <FormLabel>Whatsapp com DDD</FormLabel>
           <Input type="text" onChange={WhatsAppMask} value={Whatapp} />
         </Box>
-        <Box w="33%">
+        <Box w="25%">
           <FormLabel> Whatsapp com DDD 2</FormLabel>
           <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
         </Box>
@@ -208,6 +218,7 @@ export default function SolicitacaoForm({
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
         </Box>
+
         <Box w="33%">
           <FormLabel>
             Relacionamento

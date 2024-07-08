@@ -25,22 +25,22 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
-  const [cpfdoismask, setCpfdoismask] = useState("");
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
+  const [relacionamento, setrelacionamento] = useState<string>("nao");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
+  const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   // const [base64String, setBase64String] = useState("");
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
-  console.log(empreendimento);
 
   useEffect(() => {
     (() => {
@@ -64,14 +64,15 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     } else {
       const dados = {
         nome: nome,
-        whatsapp: Whatapp,
+        telefone: Whatapp,
         cpf: cpf,
-        tel: tel,
+        telefone2: tel,
         email: email,
         foto_rg: uploadRg,
         foto_cnh: uploadCnh,
         construtora: Number(ConstrutoraID),
         empreendimento: Number(empreendimento),
+        data_nascimento: DataNascimento,
         token: session?.token,
       };
 
@@ -98,6 +99,14 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     }
   };
 
+  if (user?.empreendimento.length === 1 && !empreendimento) {
+    setempreendimento(user.empreendimento[0].id);
+  }
+
+  if (user?.construtora.length === 1 && !ConstrutoraID) {
+    setConstrutoraID(user.construtora[0].id);
+  }
+
   const WhatsAppMask = (e: any) => {
     const valor = e.target.value;
     const valorLinpo = unMask(valor);
@@ -114,6 +123,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     setWhatappdois(masked);
   };
 
+  // Função para converter arquivo em base64
   const fileToBase64 = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -178,7 +188,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         </Box>
         <Box w="33%">
           <FormLabel> Whatsapp com DDD 2</FormLabel>
-          <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
+          <Input type="text" onChange={setWhatappdois} value={Whatappdois} />
         </Box>
       </Box>
 

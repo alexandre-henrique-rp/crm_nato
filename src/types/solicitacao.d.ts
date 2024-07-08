@@ -36,7 +36,10 @@ declare module solictacao {
       id: number;
       nome: string;
     };
-    construtora: number;
+    construtora: {
+      id: number;
+      razaosocial: string;
+    };
     telefone: string;
     dt_nascimento: Date | string | any;
     ass_doc: boolean;
@@ -44,7 +47,10 @@ declare module solictacao {
     id_fcw: number;
     obs: string;
     alert: AlertProps[];
-    empreedimento: number;
+    empreendimento: {
+      id: number;
+      nome: string;
+    };
     cnh: string;
     ativo: boolean;
     uploadCnh: string;
@@ -96,17 +102,17 @@ declare module solictacao {
     telefone2: string;
     uploadRg: string;
   }
-/**
- * AlertProps
- * @param {number} id
- * @param {string} titulo
- * @param {string} texto
- * @param {number} solicitacao_id
- * @param {number} corretor
- * @param {string} tipo
- * @param {string} tag
- * @param {number} empreendimento
- */
+  /**
+   * AlertProps
+   * @param {number} id
+   * @param {string} titulo
+   * @param {string} texto
+   * @param {number} solicitacao_id
+   * @param {number} corretor
+   * @param {string} tipo
+   * @param {string} tag
+   * @param {number} empreendimento
+   */
   interface AlertProps {
     id: number;
     titulo: string;
