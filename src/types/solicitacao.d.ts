@@ -131,5 +131,22 @@ declare module solictacao {
     tipo: string;
     tag: string;
     empreendimento: number;
+    rela_quest: boolean;
+  }
+
+  interface SolicitacaoPost {
+    nome: string;
+    telefone: string;
+    cpf: string;
+    telefone2: string;
+    dt_nascimento: Date | string | any;
+    email: string;
+    foto_rg: string;
+    foto_cnh: string;
+    empreendimento: number;
+    construtora: number;
+    relacionamento: string[];
+    cpfdois?: string;
+    rela_quest?: boolean;
   }
 }

@@ -65,9 +65,9 @@ export default function SolicitacaoForm({
     } else {
       const data = {
         nome: nome,
-        telefone: Whatapp,
+        telefone: tel,
         cpf: cpf,
-        telefone2: tel,
+        telefone2: teldois,
         email: email,
         foto_rg: uploadRg,
         foto_cnh: uploadCnh,
@@ -175,18 +175,20 @@ export default function SolicitacaoForm({
 
   if (relacionamento === "sim" && cpfdois.length === 11) {
     ishidden("sim");
-    const data = {
+    const data: solictacao.SolicitacaoPost  = {
       nome: nome,
-      telefone: Whatapp,
-      telefone2: Whatappdois,
+      cpf: cpf,
+      telefone: tel,
+      telefone2: teldois,
       dt_nascimento: DataNascimento,
       email: email,
       foto_rg: uploadRg,
       foto_cnh: uploadCnh,
       empreendimento: empreendimento,
       construtora: ConstrutoraID,
-      relacionamento: relacionamento,
+      relacionamento: [cpfdois],
       cpfdois: cpfdois,
+      rela_quest: relacionamento === "sim" ? true : false,
     };
     onvalue(data);
   }
@@ -224,7 +226,7 @@ export default function SolicitacaoForm({
         </Box>
         <Box w="33%">
           <FormLabel>email</FormLabel>
-          <Input type="text" onChange={(e: any) => setemail(e.target.value)} />
+          <Input type="text" onChange={(e: any) => setemail(e.target.value.replace(/\s/g, ''))} value={email}/>
         </Box>
         <Box w="33%">
           <FormLabel>CPF</FormLabel>
@@ -237,6 +239,8 @@ export default function SolicitacaoForm({
           <Box w="33%">
             <FormLabel>Empreendimento</FormLabel>
             <SelectComponent
+              hierarquia={user.hierarquia}
+              tag="empreendimento"
               SetValue={user.empreendimento}
               onValue={(e: any) => setempreendimento(e)}
             />
@@ -247,6 +251,8 @@ export default function SolicitacaoForm({
           <Box w="33%">
             <FormLabel>Construtora</FormLabel>
             <SelectComponent
+              hierarquia={user.hierarquia}
+              tag="construtora"
               SetValue={user.construtora.map((item: any) => {
                 return { id: item.id, nome: item.razaosocial };
               })}
@@ -254,6 +260,7 @@ export default function SolicitacaoForm({
             />
           </Box>
         )}
+        
       </Box>
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <FormControl as={GridItem} colSpan={[6, 2]}>
