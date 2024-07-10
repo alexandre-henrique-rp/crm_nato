@@ -40,6 +40,7 @@ export default function SolicitacaoForm({
   const [Corretor, setCorretor] = useState<string>("");
   const [CorretorId, setCorretorId] = useState<number>(0);
   const [relacionamento, setrelacionamento] = useState<string>("nao");
+  const [Voucher, setVoucher] = useState<string>("");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
@@ -175,7 +176,7 @@ export default function SolicitacaoForm({
 
   if (relacionamento === "sim" && cpfdois.length === 11) {
     ishidden("sim");
-    const data: solictacao.SolicitacaoPost  = {
+    const data: solictacao.SolicitacaoPost = {
       nome: nome,
       cpf: cpf,
       telefone: tel,
@@ -226,7 +227,11 @@ export default function SolicitacaoForm({
         </Box>
         <Box w="33%">
           <FormLabel>email</FormLabel>
-          <Input type="text" onChange={(e: any) => setemail(e.target.value.replace(/\s/g, ''))} value={email}/>
+          <Input
+            type="text"
+            onChange={(e: any) => setemail(e.target.value.replace(/\s/g, ""))}
+            value={email}
+          />
         </Box>
         <Box w="33%">
           <FormLabel>CPF</FormLabel>
@@ -260,7 +265,6 @@ export default function SolicitacaoForm({
             />
           </Box>
         )}
-        
       </Box>
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <FormControl as={GridItem} colSpan={[6, 2]}>
@@ -330,6 +334,22 @@ export default function SolicitacaoForm({
           ) : (
             ""
           )}
+        </Box>
+        <Box w="33%">
+          <FormLabel>
+            Voucher
+            <Tooltip
+              label="Voucher para atendimento em qualquer unidade soluti"
+              aria-label="A tooltip"
+            >
+              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+            </Tooltip>
+          </FormLabel>
+          <Input
+            type="text"
+            value={Voucher}
+            onChange={(e: any) => setVoucher(e.target.value)}
+          />
         </Box>
       </Box>
       <Button
