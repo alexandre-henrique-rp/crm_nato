@@ -4,7 +4,6 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { BotoesFunction } from "../botoes/bt_group_function";
 
-
 interface TabelaProps {
   onDados: {
     nome: string;
@@ -40,17 +39,26 @@ export const Tabela = ({ onDados }: TabelaProps) => {
 
   const { nome, andamento, data, empreendimento } = onDados;
 
-  
   const Filter = Data.filter((item: solictacao.SolicitacaoGetType) => {
-    const itemDate = item.fcweb?.dt_agenda ? new Date(item.fcweb.dt_agenda) : null;
+    const itemDate = item.fcweb?.dt_agenda
+      ? new Date(item.fcweb.dt_agenda)
+      : null;
     const inputDate = data ? new Date(data) : null;
 
-    const matchNome = nome ? item.nome.toLowerCase().includes(nome.toLowerCase()) : true;
-    const matchAndamento = andamento ? item.fcweb?.andamento.toLowerCase().includes(andamento.toLowerCase()) : true;
-    const matchData = inputDate && itemDate
-      ? itemDate.toLocaleDateString("pt-BR") === inputDate.toLocaleDateString("pt-BR")
+    const matchNome = nome
+      ? item.nome.toLowerCase().includes(nome.toLowerCase())
       : true;
-    const matchEmpreendimento = empreendimento ? item.empreendimento.id === empreendimento : true;
+    const matchAndamento = andamento
+      ? item.fcweb?.andamento.toLowerCase().includes(andamento.toLowerCase())
+      : true;
+    const matchData =
+      inputDate && itemDate
+        ? itemDate.toLocaleDateString("pt-BR") ===
+          inputDate.toLocaleDateString("pt-BR")
+        : true;
+    const matchEmpreendimento = empreendimento
+      ? item.empreendimento.id === empreendimento
+      : true;
 
     return matchNome && matchAndamento && matchData && matchEmpreendimento;
   });
@@ -78,7 +86,6 @@ export const Tabela = ({ onDados }: TabelaProps) => {
           <Td>{item.ass_doc && item.ass_doc}</Td>
           {user?.hierarquia !== "USER" && <Td>{statusPg}</Td>}
           {user?.hierarquia !== "USER" && <Td>{item.fcweb?.valorcd}</Td>}
-
         </Tr>
       );
     });
