@@ -314,7 +314,7 @@ export default function SolicitacaoForm({
               label="Preencha este campo caso o Contrato contenha mais de um proprietário"
               aria-label="A tooltip"
             >
-              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+              <Icon ml={2} color="black" cursor="pointer"  boxSize={3} />
             </Tooltip>
           </FormLabel>
 

@@ -208,7 +208,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
           <Input type="text" onChange={(e: any) => setnome(e.target.value)} />
         </Box>
 
-        <Box w="33%">
+        <Box w="34%">
           <FormLabel>Data de Nascimento</FormLabel>
           <Input
             type="Date"
