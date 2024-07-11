@@ -48,6 +48,18 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const { data: session } = useSession();
   const user = session?.user;
 
+
+ 
+
+
+
+
+
+
+
+
+
+
   useEffect(() => {
     (() => {
       if (SetValue.cpfdois) {
@@ -184,6 +196,9 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       }
     }
   };
+
+
+
 
   return (
     <>

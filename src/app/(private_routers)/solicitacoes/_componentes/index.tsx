@@ -32,6 +32,7 @@ export default function SolicitacaoForm({
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
   const [cpfdoismask, setCpfdoismask] = useState("");
+  const [isValid, setIsValid] = useState<boolean | null>(null);
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [email, setemail] = useState("");
@@ -235,7 +236,8 @@ export default function SolicitacaoForm({
         </Box>
         <Box w="33%">
           <FormLabel>CPF</FormLabel>
-          <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
+          <CpfMask setvalue={cpf} onvalue={setCpf} />
+          {/* {!isValid && <p style={{ color: "red" }}>CPF inválido</p>} */}
         </Box>
       </Box>
 
