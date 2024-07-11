@@ -8,12 +8,15 @@ import {
   FormControl,
   FormLabel,
   GridItem,
+  Icon,
   Input,
+  Tooltip,
   useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { IconBase } from "react-icons";
 
 import { mask, unMask } from "remask";
 
@@ -37,6 +40,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
+  const [voucher, setVoucher] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   // const [base64String, setBase64String] = useState("");
@@ -300,6 +304,18 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             onChange={(e) => handleCnhChange(e)}
           ></Input>
         </FormControl>
+
+        <Box w="33%">
+          <FormLabel>Voucher
+          <Tooltip
+              label="Voucher para Atendimento em qualquer unidade Soluti"
+              aria-label="A tooltip"
+            >
+              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+            </Tooltip>
+          </FormLabel>
+          <Input type="text" onChange={(e: any) => setVoucher(e.target.value)} />
+        </Box>
       </Box>
 
       <Button
