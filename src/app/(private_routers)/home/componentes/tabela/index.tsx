@@ -92,18 +92,18 @@ export const Tabela = ({ onDados }: TabelaProps) => {
 
   return (
     <>
-      {!user && null}
       {user && (
         <Flex
           w={"full"}
           bg={"white"}
           shadow={"md"}
           borderRadius={"15px"}
-          p={"20px"}
+          p={{ base: "10px", md: "20px" }}
           alignContent={"center"}
           justifyContent={"space-evenly"}
+          overflowX={{ base: "auto", md: "hidden" }} 
         >
-          <Table variant="simple">
+          <Table variant="simple" size="sm">
             <Thead>
               <Tr>
                 <Th>FUNÇÕES</Th>
@@ -116,10 +116,7 @@ export const Tabela = ({ onDados }: TabelaProps) => {
                 {user?.hierarquia !== "USER" && <Th>VALOR</Th>}
               </Tr>
             </Thead>
-            <Tbody>
-              {Filter.length === 0 && null}
-              {Filter.length > 0 && tabela}
-            </Tbody>
+            <Tbody>{Filter.length > 0 && tabela}</Tbody>
           </Table>
         </Flex>
       )}

@@ -11,8 +11,7 @@ import {
   Icon,
   Input,
   Tooltip,
-  useToast
-
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -41,7 +40,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
-  const [voucher, setVoucher] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
   const [Voucher, setVoucher] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
@@ -50,18 +48,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
-
-
- 
-
-
-
-
-
-
-
-
-
 
   useEffect(() => {
     (() => {
@@ -200,9 +186,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     }
   };
 
-
-
-
   return (
     <>
       <Box display={"Flex"} justifyContent={"space-between"} w={"full"}>
@@ -339,15 +322,19 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         </FormControl>
 
         <Box w="33%">
-          <FormLabel>Voucher
-          <Tooltip
+          <FormLabel>
+            Voucher
+            <Tooltip
               label="Voucher para Atendimento em qualquer unidade Soluti"
               aria-label="A tooltip"
             >
               <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
             </Tooltip>
           </FormLabel>
-          <Input type="text" onChange={(e: any) => setVoucher(e.target.value)} />
+          <Input
+            type="text"
+            onChange={(e: any) => setVoucher(e.target.value)}
+          />
         </Box>
       </Box>
 

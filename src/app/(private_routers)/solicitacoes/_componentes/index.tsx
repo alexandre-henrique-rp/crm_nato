@@ -1,6 +1,6 @@
 "use client";
 
-import { cpf } from 'cpf-cnpj-validator'; 
+import { cpf } from "cpf-cnpj-validator";
 import CpfMask from "@/app/componentes/cpf_mask";
 import { SelectComponent } from "@/app/componentes/select";
 import {
@@ -12,8 +12,9 @@ import {
   Icon,
   Input,
   Select,
+  SimpleGrid,
   Tooltip,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -25,10 +26,9 @@ interface relacionamentoProps {
   ishidden: any;
 }
 
-
 export default function SolicitacaoForm({
   onvalue,
-  ishidden
+  ishidden,
 }: relacionamentoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -48,7 +48,6 @@ export default function SolicitacaoForm({
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
-  const [voucher, setVoucher] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
 
   // const [base64String, setBase64String] = useState("");
@@ -65,7 +64,7 @@ export default function SolicitacaoForm({
         description: "Preencha todos os campos",
         status: "error",
         duration: 3000,
-        isClosable: true
+        isClosable: true,
       });
     } else {
       const data = {
@@ -81,15 +80,15 @@ export default function SolicitacaoForm({
         empreendimento: Number(empreendimento),
         data_nascimento: DataNascimento,
         relacionamento: cpfdois ? [cpfdois] : [],
-        token: session?.token
+        token: session?.token,
       };
 
       const response = await fetch("/api/solicitacao", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       if (response.ok) {
         toast({
@@ -97,7 +96,7 @@ export default function SolicitacaoForm({
           description: "Solicitacao enviada com sucesso",
           status: "success",
           duration: 3000,
-          isClosable: true
+          isClosable: true,
         });
         router.push("/home");
       }
@@ -193,7 +192,7 @@ export default function SolicitacaoForm({
       construtora: ConstrutoraID,
       relacionamento: [cpfdois],
       cpfdois: cpfdois,
-      rela_quest: relacionamento === "sim" ? true : false
+      rela_quest: relacionamento === "sim" ? true : false,
     };
     onvalue(data);
   }
@@ -204,160 +203,142 @@ export default function SolicitacaoForm({
 
   return (
     <>
-      <Box display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="33%">
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} w="full">
+        <Box>
           <FormLabel>Nome Completo</FormLabel>
-          <Input type="text" onChange={(e: any) => setnome(e.target.value)} />
+          <Input type="text" onChange={(e) => setnome(e.target.value)} />
         </Box>
 
-        <Box w="33%">
+        <Box>
           <FormLabel>Data de Nascimento</FormLabel>
           <Input
-            type="Date"
-            onChange={(e: any) => setDataNascimento(e.target.value)}
+            type="date"
+            onChange={(e) => setDataNascimento(e.target.value)}
           />
         </Box>
 
-        <Box w="33%">
+        <Box>
           <FormLabel>Whatsapp com DDD</FormLabel>
           <Input type="text" onChange={WhatsAppMask} value={Whatapp} />
         </Box>
-      </Box>
+      </SimpleGrid>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="33%">
-          <FormLabel> Whatsapp com DDD 2</FormLabel>
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 3 }}
+        spacing={6}
+        w="full"
+        mt={6}
+      >
+        <Box>
+          <FormLabel>Whatsapp com DDD 2</FormLabel>
           <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
         </Box>
-        <Box w="33%">
-          <FormLabel>email</FormLabel>
+        <Box>
+          <FormLabel>Email</FormLabel>
           <Input
             type="text"
-            onChange={(e: any) => setemail(e.target.value.replace(/\s/g, ""))}
+            onChange={(e) => setemail(e.target.value.replace(/\s/g, ""))}
             value={email}
           />
         </Box>
-        <Box w="33%">
+        <Box>
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={setCpf} />
-          {/* {!isValid && <p style={{ color: "red" }}>CPF inválido</p>} */}
         </Box>
-      </Box>
+      </SimpleGrid>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 3 }}
+        spacing={6}
+        w="full"
+        mt={6}
+      >
         {user?.empreendimento && (
-          <Box w="33%">
+          <Box>
             <FormLabel>Empreendimento</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
               tag="empreendimento"
               SetValue={user.empreendimento}
-              onValue={(e: any) => setempreendimento(e)}
+              onValue={(e) => setempreendimento(e)}
             />
           </Box>
         )}
 
         {user?.construtora && (
-          <Box w="33%">
+          <Box>
             <FormLabel>Construtora</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
               tag="construtora"
-              SetValue={user.construtora.map((item: any) => {
-                return { id: item.id, nome: item.razaosocial };
-              })}
-              onValue={(e: any) => setConstrutoraID(e)}
+              SetValue={user.construtora.map((item) => ({
+                id: item.id,
+                nome: item.razaosocial,
+              }))}
+              onValue={(e) => setConstrutoraID(e)}
             />
           </Box>
         )}
-      </Box>
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
+      </SimpleGrid>
+
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} w="full" mt={6}>
         <FormControl as={GridItem} colSpan={[6, 2]}>
-          <FormLabel
-            fontSize="sm"
-            fontWeight="md"
-            color="gray.700"
-            _dark={{
-              color: "gray.50"
-            }}
-          >
-            CNH
-          </FormLabel>
-          <Input
-            type="File"
-            variant="flushed"
-            onChange={(e) => handleRgChange(e)}
-          ></Input>
+          <FormLabel>CNH</FormLabel>
+          <Input type="file" variant="flushed" onChange={handleRgChange} />
         </FormControl>
 
         <FormControl as={GridItem} colSpan={[6, 2]}>
-          <FormLabel
-            fontSize="sm"
-            fontWeight="md"
-            color="gray.700"
-            _dark={{
-              color: "gray.50"
-            }}
-          >
-            RG
-          </FormLabel>
-          <Input
-            type="File"
-            variant="flushed"
-            onChange={(e) => handleCnhChange(e)}
-          ></Input>
+          <FormLabel>RG</FormLabel>
+          <Input type="file" variant="flushed" onChange={handleCnhChange} />
         </FormControl>
-      </Box>
+      </SimpleGrid>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="33%">
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 3 }}
+        spacing={6}
+        w="full"
+        mt={6}
+      >
+        <Box>
           <FormLabel>
             Relacionamento
             <Tooltip
               label="Preencha este campo caso o Contrato contenha mais de um proprietário"
               aria-label="A tooltip"
             >
-              <Icon ml={2} color="black" cursor="pointer"  boxSize={3} />
+              <Icon ml={2} color="black" cursor="pointer" boxSize={3} />
             </Tooltip>
           </FormLabel>
-
           <Select
-            onChange={(e: any) => setrelacionamento(e.target.value)}
+            onChange={(e) => setrelacionamento(e.target.value)}
             value={relacionamento}
           >
             <option value="sim">Sim</option>
-            <option value="nao">Não</option>
+            <option value="nao">Não</option>
           </Select>
         </Box>
 
-        <Box w="33%">
-          {relacionamento === "sim" ? (
-            <>
-              <FormLabel>CPF do relacionado</FormLabel>
-              <CpfMask setvalue={cpfdois} onvalue={(e: any) => setCpfdois(e)} />
-            </>
-          ) : (
-            ""
-          )}
-        </Box>
-        <Box w="33%">
+        {relacionamento === "sim" && (
+          <Box>
+            <FormLabel>CPF do relacionado</FormLabel>
+            <CpfMask setvalue={cpfdois} onvalue={setCpfdois} />
+          </Box>
+        )}
+
+        <Box>
           <FormLabel>
             Voucher
             <Tooltip
-
               label="Voucher para Atendimento em qualquer unidade Soluti"
-
               aria-label="A tooltip"
             >
               <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
             </Tooltip>
           </FormLabel>
-          <Input
-            type="text"
-            onChange={(e: any) => setVoucher(e.target.value)}
-          />
+          <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
         </Box>
-      </Box>
+      </SimpleGrid>
+
       <Button
         mt={5}
         mb={5}
@@ -365,9 +346,9 @@ export default function SolicitacaoForm({
         width="250px"
         height="50px"
         maxWidth="100%"
-        textColor={"Black"}
+        textColor="black"
         onClick={handlesubmit}
-        hidden={relacionamento === "sim" ? true : false}
+        hidden={relacionamento === "sim"}
       >
         CRIAR CONTA
       </Button>

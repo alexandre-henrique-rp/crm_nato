@@ -12,16 +12,13 @@ interface FiltroGeralProps {
   onData: any;
 }
 
-export const FiltroComponent = ({
-  onData
-}: FiltroGeralProps) => {
+export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
   const [FilterNome, setFilterNome] = useState<string>("");
   const [FilterAndamento, setFilterAndamento] = useState<string>("");
   const [FilterData, setFilterData] = useState<Date | string>("");
   const [FilterEmpreendimento, setFilterEmpreendimento] = useState<string>("");
   const { data: session } = useSession();
   const user = session?.user;
-  
 
   const SetNomeEvent = (e: SetStateAction<string>) => {
     if (e !== "") {
@@ -50,13 +47,13 @@ export const FiltroComponent = ({
   };
 
   const HandleFilter = () => {
-    console.log(FilterData)
+    console.log(FilterData);
     const data = {
       nome: FilterNome,
       andamento: FilterAndamento,
       data: FilterData,
-      empreendimento: FilterEmpreendimento
-    }
+      empreendimento: FilterEmpreendimento,
+    };
 
     onData(data);
   };
@@ -73,39 +70,40 @@ export const FiltroComponent = ({
   // };
 
   return (
-    <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
-      <Box w={"35%"} h={"100%"} bg={"#F8F8F8"}>
+    <Flex
+      w="100%"
+      justifyContent="start"
+      alignItems="center"
+      flexDirection={{ base: "column", md: "row" }} // Ajusta a direção da flexbox para diferentes tamanhos de tela
+    >
+      <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
         <NomeFilter onNome={SetNomeEvent} />
       </Box>
-      <Box w={"30%"} h={"100%"} bg={"#F8F8F8"}>
-        {user?.hierarquia !== "USER" && <EmpreendimentoFilter onEmpreendimento={SetEmpreendimentoEvent}/>}
+      <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
+        {user?.hierarquia !== "USER" && (
+          <EmpreendimentoFilter onEmpreendimento={SetEmpreendimentoEvent} />
+        )}
       </Box>
-      <Box w={"20%"} h={"100%"} bg={"#F8F8F8"}>
+      <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
         <AndamentoFilter onAndamento={SetAndamentoEvent} />
       </Box>
-      <Box w={"15%"} h={"100%"} bg={"#F8F8F8"}>
-        <DateFilter onData={SetDataEvent} />
-      </Box>
-      <Button
-        bg={"#00713D"}
-        textColor={"white"}
-        variant="solid"
-        _hover={{ bg: "#00631B" }}
-        size="md"
-        onClick={HandleFilter}
-      >
-        Filtrar
-      </Button>
-      {/* <Button
-        bg={"#00713D"}
-        textColor={"white"}
-        variant="solid"
-        _hover={{ bg: "#00631B" }}
-        size="md"
-        onClick={HandleFilter}
-      >
-        Limpar
-      </Button> */}
+
+      <Flex w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
+        <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
+          <DateFilter onData={SetDataEvent} />
+        </Box>
+        <Button
+          bg="#00713D"
+          w={{ base: "100%", md: "auto" }}
+          textColor="white"
+          variant="solid"
+          _hover={{ bg: "#00631B" }}
+          size="md"
+          onClick={HandleFilter}
+        >
+          Filtrar
+        </Button>
+      </Flex>
     </Flex>
   );
 };

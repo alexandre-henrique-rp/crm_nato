@@ -7,8 +7,8 @@ interface FiltroDataProps {
 }
 export const DateFilter = ({ onData }: FiltroDataProps) => {
   return (
-    <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
-      <Box w={"full"} h={"100%"} bg={"#F8F8F8"}>
+    <Flex w={"full"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
+      <Box h={"100%"} bg={"#F8F8F8"}>
         <Input
           textColor={"#00713D"}
           _hover={{ borderColor: "#00613C" }}
@@ -21,7 +21,6 @@ export const DateFilter = ({ onData }: FiltroDataProps) => {
           }}
         />
       </Box>
-
     </Flex>
   );
 };

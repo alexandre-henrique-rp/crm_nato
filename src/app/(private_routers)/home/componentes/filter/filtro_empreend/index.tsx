@@ -6,22 +6,27 @@ interface FiltroEmpreendimentoProps {
   onEmpreendimento: number | any;
 }
 export const EmpreendimentoFilter = ({
-  onEmpreendimento
+  onEmpreendimento,
 }: FiltroEmpreendimentoProps) => {
   const [Empreendimento, setEmpreendimento] = useState<number>(0);
   const [Data, setData] = useState<any>([]);
 
   useEffect(() => {
-   (async () => {
-     const resq = await fetch(`/api/empreendimento/getall`);
-     const data = await resq.json();
-     setData(data);
-   })()
+    (async () => {
+      const resq = await fetch(`/api/empreendimento/getall`);
+      const data = await resq.json();
+      setData(data);
+    })();
   }, []);
 
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
-      <Box w={"full"} h={"100%"} bg={"#F8F8F8"}>
+      <Box
+        w={"full"}
+        h={"100%"}
+        bg={"#F8F8F8"}
+        pt={{ base: "10px" }}
+      >
         <Select
           textColor={"#00713D"}
           _hover={{ borderColor: "#00613C" }}

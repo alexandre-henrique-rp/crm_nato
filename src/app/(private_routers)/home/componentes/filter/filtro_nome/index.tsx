@@ -7,9 +7,9 @@ interface FiltroNomeProps {
   onNome: string | any;
 }
 
-export const NomeFilter = ({ onNome }: FiltroNomeProps ) => {
+export const NomeFilter = ({ onNome }: FiltroNomeProps) => {
   const [FilterNome, setFilterNome] = useState<string>("");
-  
+
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <Box w={"full"} h={"100%"} bg={"#F8F8F8"}>

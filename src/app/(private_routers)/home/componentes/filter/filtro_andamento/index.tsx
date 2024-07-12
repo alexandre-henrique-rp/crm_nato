@@ -6,16 +6,28 @@ import { useState } from "react";
 interface FiltroAndamentoProps {
   onAndamento: string | any;
 }
-export const AndamentoFilter = ({onAndamento}: FiltroAndamentoProps) => {
-  const[Andamento, setAndamento] = useState<string>("");
+export const AndamentoFilter = ({ onAndamento }: FiltroAndamentoProps) => {
+  const [Andamento, setAndamento] = useState<string>("");
 
   return (
-    <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
-      <Box w={"full"} h={"100%"} bg={"#F8F8F8"}>
+    <Flex
+      w={"100%"}
+      justifyContent="start"
+      alignItems="center"
+      gap="5px"
+      flexDirection={{ base: "column", md: "row" }} // Ajusta a direção da flexbox para diferentes tamanhos de tela
+    >
+      <Box
+        w={"full"}
+        h="100%"
+        bg="#F8F8F8"
+        pt={{ base: "10px" }}
+        pb={{ base: "10px" }} 
+      >
         <Select
-          textColor={"#00713D"}
+          textColor="#00713D"
           _hover={{ borderColor: "#00613C" }}
-          borderColor={"#00713D"}
+          borderColor="#00713D"
           placeholder="Andamento"
           size="md"
           value={Andamento}

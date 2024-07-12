@@ -30,29 +30,28 @@ export default function PerfilHome() {
       {!user && null}
       {user && (
         <Flex
-          w={"full"}
-          bg={"white"}
-          shadow={"md"}
-          borderRadius={"15px"}
-          p={"20px"}
-          alignContent={"center"}
-          justifyContent={"space-evenly"}
+          w="100%"
+          bg="white"
+          shadow="md"
+          borderRadius="15px"
+          p="20px"
+          flexDirection={{ base: "column", md: "row" }} // Ajusta a direção da flexbox para diferentes tamanhos de tela
+          gap={{ base: "20px", md: "10px" }} // Espaçamento entre os elementos
         >
-          <Box w={"5%"}>
+          <Box>
             <ModalComponent />
           </Box>
-          <Box w={"50%"}>
-            <TextHome SetName={"NOME"} SetValue={user.name} />
-            <TextHome SetName={"EMAIL"} SetValue={user.email} />
-            <TextHome SetName={"TELEFONE"} SetValue={user.telefone} />
-            <TextHome SetName={"CPF"} SetValue={user.cpf} />
+          <Box w={{ base: "100%", md: "40%" }}>
+            <TextHome SetName="NOME" SetValue={user.name} />
+            <TextHome SetName="EMAIL" SetValue={user.email} />
+            <TextHome SetName="TELEFONE" SetValue={user.telefone} />
+            <TextHome SetName="CPF" SetValue={user.cpf} />
           </Box>
-
-          <Box w={"50%"}>
-            <TextHome SetName={"CARGO"} SetValue={user.cargo} />
+          <Box w={{ base: "100%", md: "40%" }}>
+            <TextHome SetName="CARGO" SetValue={user.cargo} />
             {user.empreendimento.length > 1 ? (
               <>
-                <Text textColor={"#00713D"} fontWeight={"bold"}>
+                <Text textColor="#00713D" fontWeight="bold">
                   EMPREENDIMENTO
                 </Text>
                 <SelectComponent
@@ -63,7 +62,7 @@ export default function PerfilHome() {
             ) : (
               user.empreendimento.length === 1 && (
                 <TextHome
-                  SetName={"EMPREENDIMENTO"}
+                  SetName="EMPREENDIMENTO"
                   SetValue={user.empreendimento[0].nome}
                 />
               )
@@ -71,19 +70,21 @@ export default function PerfilHome() {
 
             {user.construtora.length > 1 ? (
               <>
-                <Text textColor={"#00713D"} fontWeight={"bold"}>
-                CONSTRUTORA
+                <Text textColor="#00713D" fontWeight="bold">
+                  CONSTRUTORA
                 </Text>
                 <SelectComponent
-                  SetValue={user.construtora.map((item: any) => {
-                    return { id: item.id, nome: item.razaosocial };})}
+                  SetValue={user.construtora.map((item) => ({
+                    id: item.id,
+                    nome: item.razaosocial,
+                  }))}
                   onValue={SetIdConstrutora}
                 />
               </>
             ) : (
               user.construtora.length === 1 && (
                 <TextHome
-                  SetName={"CONSTRUTORA"}
+                  SetName="CONSTRUTORA"
                   SetValue={user.construtora[0].razaosocial}
                 />
               )
