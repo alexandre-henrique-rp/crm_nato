@@ -1,5 +1,6 @@
 "use client";
 
+import { cpf } from 'cpf-cnpj-validator'; 
 import CpfMask from "@/app/componentes/cpf_mask";
 import { SelectComponent } from "@/app/componentes/select";
 import {
@@ -12,7 +13,7 @@ import {
   Input,
   Select,
   Tooltip,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -24,9 +25,10 @@ interface relacionamentoProps {
   ishidden: any;
 }
 
+
 export default function SolicitacaoForm({
   onvalue,
-  ishidden,
+  ishidden
 }: relacionamentoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -46,6 +48,7 @@ export default function SolicitacaoForm({
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
+  const [voucher, setVoucher] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
 
   // const [base64String, setBase64String] = useState("");
@@ -62,7 +65,7 @@ export default function SolicitacaoForm({
         description: "Preencha todos os campos",
         status: "error",
         duration: 3000,
-        isClosable: true,
+        isClosable: true
       });
     } else {
       const data = {
@@ -78,15 +81,15 @@ export default function SolicitacaoForm({
         empreendimento: Number(empreendimento),
         data_nascimento: DataNascimento,
         relacionamento: cpfdois ? [cpfdois] : [],
-        token: session?.token,
+        token: session?.token
       };
 
       const response = await fetch("/api/solicitacao", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
       if (response.ok) {
         toast({
@@ -94,7 +97,7 @@ export default function SolicitacaoForm({
           description: "Solicitacao enviada com sucesso",
           status: "success",
           duration: 3000,
-          isClosable: true,
+          isClosable: true
         });
         router.push("/home");
       }
@@ -190,7 +193,7 @@ export default function SolicitacaoForm({
       construtora: ConstrutoraID,
       relacionamento: [cpfdois],
       cpfdois: cpfdois,
-      rela_quest: relacionamento === "sim" ? true : false,
+      rela_quest: relacionamento === "sim" ? true : false
     };
     onvalue(data);
   }
@@ -275,7 +278,7 @@ export default function SolicitacaoForm({
             fontWeight="md"
             color="gray.700"
             _dark={{
-              color: "gray.50",
+              color: "gray.50"
             }}
           >
             CNH
@@ -293,7 +296,7 @@ export default function SolicitacaoForm({
             fontWeight="md"
             color="gray.700"
             _dark={{
-              color: "gray.50",
+              color: "gray.50"
             }}
           >
             RG
@@ -341,7 +344,9 @@ export default function SolicitacaoForm({
           <FormLabel>
             Voucher
             <Tooltip
-              label="Voucher para atendimento em qualquer unidade soluti"
+
+              label="Voucher para Atendimento em qualquer unidade Soluti"
+
               aria-label="A tooltip"
             >
               <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
@@ -349,7 +354,6 @@ export default function SolicitacaoForm({
           </FormLabel>
           <Input
             type="text"
-            value={Voucher}
             onChange={(e: any) => setVoucher(e.target.value)}
           />
         </Box>
