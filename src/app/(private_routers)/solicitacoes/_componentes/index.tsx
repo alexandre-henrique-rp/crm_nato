@@ -34,6 +34,7 @@ export default function SolicitacaoForm({
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
   const [cpfdoismask, setCpfdoismask] = useState("");
+  const [isValid, setIsValid] = useState<boolean | null>(null);
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [email, setemail] = useState("");
@@ -42,6 +43,7 @@ export default function SolicitacaoForm({
   const [Corretor, setCorretor] = useState<string>("");
   const [CorretorId, setCorretorId] = useState<number>(0);
   const [relacionamento, setrelacionamento] = useState<string>("nao");
+  const [Voucher, setVoucher] = useState<string>("");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatapp, setWhatapp] = useState<string>("");
@@ -223,11 +225,11 @@ export default function SolicitacaoForm({
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
+        <Box w="33%">
           <FormLabel> Whatsapp com DDD 2</FormLabel>
           <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
         </Box>
-        <Box w="48%">
+        <Box w="33%">
           <FormLabel>email</FormLabel>
           <Input
             type="text"
@@ -237,13 +239,14 @@ export default function SolicitacaoForm({
         </Box>
         <Box w="33%">
           <FormLabel>CPF</FormLabel>
-          <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
+          <CpfMask setvalue={cpf} onvalue={setCpf} />
+          {/* {!isValid && <p style={{ color: "red" }}>CPF inválido</p>} */}
         </Box>
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         {user?.empreendimento && (
-          <Box w="48%">
+          <Box w="33%">
             <FormLabel>Empreendimento</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
@@ -255,7 +258,7 @@ export default function SolicitacaoForm({
         )}
 
         {user?.construtora && (
-          <Box w="48%">
+          <Box w="33%">
             <FormLabel>Construtora</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
@@ -314,7 +317,7 @@ export default function SolicitacaoForm({
               label="Preencha este campo caso o Contrato contenha mais de um proprietário"
               aria-label="A tooltip"
             >
-              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+              <Icon ml={2} color="black" cursor="pointer"  boxSize={3} />
             </Tooltip>
           </FormLabel>
 
@@ -341,7 +344,9 @@ export default function SolicitacaoForm({
           <FormLabel>
             Voucher
             <Tooltip
+
               label="Voucher para Atendimento em qualquer unidade Soluti"
+
               aria-label="A tooltip"
             >
               <Icon ml={1} color="black" cursor="pointer" boxSize={3} />

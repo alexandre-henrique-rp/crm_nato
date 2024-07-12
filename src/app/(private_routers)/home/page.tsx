@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Box, Flex } from "@chakra-ui/react";
 import BotaoJuncao from "./componentes/botoes/bt_juncao";
 import PerfilHome from "./componentes/perfil_home";
@@ -9,11 +9,11 @@ import { SetStateAction, useState } from "react";
 export default function HomePage() {
   const [Data, setData] = useState<any>([]);
 
-  const HandleFilter = (e:SetStateAction<any>) => {
+  const HandleFilter = (e: SetStateAction<any>) => {
     if (e) {
-     setData(e);
+      setData(e);
     }
-  }
+  };
 
   return (
     <Flex
@@ -26,11 +26,7 @@ export default function HomePage() {
       py={"2rem"}
     >
       <Box w={"70%"} alignItems={"center"} justifyContent={"spac-between"}>
-        <Box
-          w={"100%"}
-          bg={"#F8F8F8"}
-          padding={"10px"}
-        >
+        <Box w={"100%"} bg={"#F8F8F8"} padding={"10px"}>
           <BotaoJuncao />
         </Box>
         <Box

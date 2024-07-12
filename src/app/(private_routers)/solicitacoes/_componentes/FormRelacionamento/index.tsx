@@ -12,6 +12,7 @@ import {
   Input,
   Tooltip,
   useToast
+
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -42,12 +43,25 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [Whatapp, setWhatapp] = useState<string>("");
   const [voucher, setVoucher] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
+  const [Voucher, setVoucher] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   // const [base64String, setBase64String] = useState("");
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
+
+
+ 
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     (() => {
@@ -68,7 +82,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         description: "Preencha todos os campos",
         status: "error",
         duration: 3000,
-        isClosable: true
+        isClosable: true,
       });
     } else {
       const dados: solictacao.SolicitacaoPost = {
@@ -83,7 +97,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         empreendimento: Number(empreendimento),
         dt_nascimento: DataNascimento,
         relacionamento: SetValue.cpf ? [SetValue.cpf] : [],
-        rela_quest: SetValue.rela_quest
+        rela_quest: SetValue.rela_quest,
       };
 
       const data = [dados, SetValue];
@@ -91,9 +105,9 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         const response = await fetch("/api/solicitacao", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(item)
+          body: JSON.stringify(item),
         });
         if (response.ok) {
           toast({
@@ -101,7 +115,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             description: "Solicitações enviadas com sucesso",
             status: "success",
             duration: 3000,
-            isClosable: true
+            isClosable: true,
           });
           if (data.length === index + 1) {
             router.push("/home");
@@ -186,6 +200,9 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     }
   };
 
+
+
+
   return (
     <>
       <Box display={"Flex"} justifyContent={"space-between"} w={"full"}>
@@ -194,7 +211,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
           <Input type="text" onChange={(e: any) => setnome(e.target.value)} />
         </Box>
 
-        <Box w="33%">
+        <Box w="34%">
           <FormLabel>Data de Nascimento</FormLabel>
           <Input
             type="Date"
@@ -220,9 +237,25 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="33%">
+        <Box w="48%">
           <FormLabel>CPF </FormLabel>
           <CpfMask desativado setvalue={cpfdois} onvalue={setCpf} />
+        </Box>
+        <Box w="48%">
+          <FormLabel>
+            Voucher
+            <Tooltip
+              label="Voucher para atendimento em qualquer unidade soluti"
+              aria-label="A tooltip"
+            >
+              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+            </Tooltip>
+          </FormLabel>
+          <Input
+            type="text"
+            value={Voucher}
+            onChange={(e: any) => setVoucher(e.target.value)}
+          />
         </Box>
       </Box>
 
@@ -275,7 +308,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             fontWeight="md"
             color="gray.700"
             _dark={{
-              color: "gray.50"
+              color: "gray.50",
             }}
           >
             CNH
@@ -293,7 +326,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             fontWeight="md"
             color="gray.700"
             _dark={{
-              color: "gray.50"
+              color: "gray.50",
             }}
           >
             RG
