@@ -72,6 +72,7 @@ export default function LoginPage () {
           width="400px"
           height="50px"
           onClick={handleClick}
+          border={"1px solid #b8b8b8cc"}
           maxWidth="100%"
           textColor={"Black"}
         >

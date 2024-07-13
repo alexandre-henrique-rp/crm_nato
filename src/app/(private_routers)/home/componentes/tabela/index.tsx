@@ -32,9 +32,15 @@ export const Tabela = ({ onDados }: TabelaProps) => {
     })();
   }, [token]);
 
-  const Update = async () => {
-    const data = await handleGetUpdate();
-    setData(data);
+  const Update = async (id: number) => {
+    // const data = await handleGetUpdate();
+    // setData(data);
+
+    const newData = Data.filter((item: any) => {
+      return item.id !== id;
+    });
+    setData(newData);
+
   };
 
   const { nome, andamento, data, empreendimento } = onDados;
@@ -66,7 +72,6 @@ export const Tabela = ({ onDados }: TabelaProps) => {
   const tabela =
     Data.length > 0 &&
     Filter.map((item: solictacao.SolicitacaoGetType) => {
-      // const dtAgenda = item.fcweb && new Date(item.fcweb.dt_agenda).toLocaleDateString("pt-BR");
       const dtAgenda =
         item.fcweb &&
         new Date(
@@ -74,8 +79,9 @@ export const Tabela = ({ onDados }: TabelaProps) => {
         ).toLocaleDateString("pt-BR");
       const andamento = item.fcweb && item.fcweb.andamento;
       const statusPg = item.fcweb && item.fcweb.estatos_pgto;
+      const colors = item.ativo ? "transparent" : "red.400";
       return (
-        <Tr key={item.id}>
+        <Tr key={item.id} bg={colors}>
           <Td>
             <BotoesFunction id={item.id} onUpdate={Update} />
           </Td>

@@ -1,49 +1,35 @@
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-
-interface DataUser {
-  nome: string;
-  username: string;
-  password: string;
-  cpf: string;
-  construtora: string[];
-  empreendimento: string[];
-  email: string;
-}
+import { nextAuthOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(request: Request) {
   try {
-    const data: DataUser = await request.json();
-console.log(data)
-    // const dados: DataUser = {
-    //   nome: data.nome,
-    //   username: data.username,
-    //   email: data.email,
-    //   password: data.password,
-    //   cpf: data.cpf,
-    //   construtora: data.construtora,
-    //   empreendimento: data.empreendimento,
-    // };
+    const data = await request.json();
+    const session = await getServerSession(nextAuthOptions);
+    if (!session) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.token}`,
+      },
+      body: JSON.stringify(data),
+    });
+    
+    if (!response.ok) {
+      throw new Error("Erro ao criar o registro");
+    };
+    const retorno = await response.json();
 
-    // const response = await await fetch(`http://localhost:3000/api/auth/login`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(dados),
-    // });
-    // const retorno = await response.json();
-
-    // if (retorno.error) throw retorno.error;
-
-    // return NextResponse.json(
-    //   {
-    //     message: "Registro criado com sucesso",
-    //     data: { response: retorno.data },
-    //   },
-    //   { status: 200 }
-    // );
-
-    return NextResponse.json({ message: "Registro criado com sucesso" }, { status: 200 });
+    return NextResponse.json(
+      {
+        message: "Registro criado com sucesso",
+        data: { response: retorno.data },
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error(error);
     throw error;

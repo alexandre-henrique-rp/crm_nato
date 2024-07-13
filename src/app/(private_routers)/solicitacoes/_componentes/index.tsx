@@ -179,6 +179,16 @@ export default function SolicitacaoForm({
 
   if (relacionamento === "sim" && cpfdois.length === 11) {
     ishidden("sim");
+    if (!nome || !cpf || !email || !tel || !DataNascimento) {
+      toast({
+        title: "Erro",
+        description: "Preencha todos os campos",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }
     const data: solictacao.SolicitacaoPost = {
       nome: nome,
       cpf: cpf,
@@ -260,7 +270,7 @@ export default function SolicitacaoForm({
               hierarquia={user.hierarquia}
               tag="empreendimento"
               SetValue={user.empreendimento}
-              onValue={(e) => setempreendimento(e)}
+              onValue={(e: any) => setempreendimento(e)}
             />
           </Box>
         )}
@@ -275,7 +285,7 @@ export default function SolicitacaoForm({
                 id: item.id,
                 nome: item.razaosocial,
               }))}
-              onValue={(e) => setConstrutoraID(e)}
+              onValue={(e: any) => setConstrutoraID(e)}
             />
           </Box>
         )}
