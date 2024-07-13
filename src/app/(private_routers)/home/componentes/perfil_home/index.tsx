@@ -57,6 +57,8 @@ export default function PerfilHome() {
                 <SelectComponent
                   SetValue={user.empreendimento}
                   onValue={SetIdEmpreedimento}
+                  hierarquia={session?.user.hierarquia}
+                  tag={''}
                 />
               </>
             ) : (
@@ -76,9 +78,11 @@ export default function PerfilHome() {
                 <SelectComponent
                   SetValue={user.construtora.map((item) => ({
                     id: item.id,
-                    nome: item.razaosocial,
+                    nome: item.razaosocial
                   }))}
                   onValue={SetIdConstrutora}
+                  hierarquia={session?.user.hierarquia}
+                  tag={''}
                 />
               </>
             ) : (

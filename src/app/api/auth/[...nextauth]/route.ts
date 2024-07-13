@@ -42,7 +42,8 @@ const nextAuthOptions: NextAuthOptions = {
             telefone,
             empreendimento,
             hierarquia,
-            cargo
+            cargo,
+            reset_password
           } = await user;
 
           const response = {
@@ -57,11 +58,11 @@ const nextAuthOptions: NextAuthOptions = {
             empreendimento: empreendimento,
             hierarquia: hierarquia,
             cargo: cargo,
-            tokenexpires: expires
+            tokenexpires: expires,
+            reset_password: reset_password
           };
-          console.log(response)
 
-          if (!token || !id || !username || !email) {
+          if (!token || !id || !username) {
             throw new Error("Usuário e senha incorreto");
             return null;
           }
@@ -112,6 +113,7 @@ const nextAuthOptions: NextAuthOptions = {
         token.empreendimento = user.empreendimento;
         token.hierarquia = user.hierarquia;
         token.cargo = user.cargo;
+        token.reset_password = user.reset_password;
 
 
         token.expiration = actualDateInSeconds + tokenExpirationInSeconds;
@@ -145,7 +147,8 @@ const nextAuthOptions: NextAuthOptions = {
         telefone: token.telefone as string,
         empreendimento: token.empreendimento as any[],
         hierarquia: token.hierarquia as string,
-        cargo: token.cargo as string
+        cargo: token.cargo as string,
+        reset_password: token.reset_password as boolean
       };
 
       session.token = token.jwt as string;

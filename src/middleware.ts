@@ -29,7 +29,7 @@ export default function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     "/",
-    "/home/:path*",
+    "/home",
     "/solicitacoes/:path*",
     "/notification/:path*",
     "/perfil-adm/:path*",

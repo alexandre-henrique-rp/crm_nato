@@ -28,7 +28,7 @@ export const BotoesFunction = ({ id , onUpdate}: BotoesFunctionProps ) => {
       });
 
       if (res.ok) {
-        onUpdate();
+        onUpdate(id);
         toast({
           title: "Solicitação deletada",
           description: "Solicitação deletada com sucesso",

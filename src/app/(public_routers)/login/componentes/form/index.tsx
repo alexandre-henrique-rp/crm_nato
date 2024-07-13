@@ -42,6 +42,7 @@ export const FormLogin = () => {
         <Input
           type="text"
           size={"lg"}
+          border={"1px solid #b8b8b8cc"}
           textTransform={"uppercase"}
           onChange={(e: any) => setUsername(e.target.value.toUpperCase())}
         />
@@ -59,6 +60,7 @@ export const FormLogin = () => {
         width="250px"
         height="50px"
         maxWidth="100%"
+        border={"1px solid #b8b8b8cc"}
         textColor={"Black"}
         onClick={handlesubmit}
       >

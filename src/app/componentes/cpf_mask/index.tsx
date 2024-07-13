@@ -1,10 +1,11 @@
 import { Box, Input, useToast } from "@chakra-ui/react";
+import { resolve } from "path";
 import { useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 
 interface CpfMaskProps {
   setvalue: string;
-  onvalue: (value: string, isValid: boolean) => void;
+  onvalue: any;
   desativado?: boolean;
 }
 
@@ -21,6 +22,7 @@ const CpfMask: React.FC<CpfMaskProps> = ({
   useEffect(() => {
     setDesativado(desativado); // Define o estado de desativado
     handleMask(setvalue); // Atualiza a máscara quando o valor do CPF muda
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setvalue, desativado]);
 
   const handleMask = (data: any) => {
@@ -28,29 +30,32 @@ const CpfMask: React.FC<CpfMaskProps> = ({
     const valorLimpo = unMask(valor); // Remove a máscara para obter apenas os dígitos
     const masked = mask(valorLimpo, ["999.999.999-99"]); // Aplica a máscara de CPF
     setValue(masked); // Atualiza o valor exibido no input
-
-    // Validação do CPF
-    const isValid = validaCPF(valorLimpo);
-    setIsInvalid(valor !== "" && !isValid); // Define como inválido se estiver preenchido e for inválido
-
-    // Passa o valor e a validade para o componente pai
-    onvalue(valorLimpo, isValid);
-
-    // Exibe toast apenas quando o CPF estiver preenchido totalmente e for válido
-    if (valor.length === 14 && isValid) {
-      toast({
-        title: "CPF válido!",
-        status: "success",
-        duration: 2000,
-        isClosable: true
-      });
-    } else if (valor.length === 14 && !isValid) {
-      toast({
-        title: "CPF inválido!",
-        status: "error",
-        duration: 2000,
-        isClosable: true
-      });
+    if (valorLimpo.length === 11) {
+      // Validação do CPF
+      Promise.resolve(setTimeout(() => resolve, 1000));
+      const isValid = validaCPF(valorLimpo);
+      setIsInvalid(valor !== "" && !isValid); // Define como inválido se estiver preenchido e for inválido
+      // Exibe toast apenas quando o CPF estiver preenchido totalmente e for válido
+      if (isValid) {
+        // Passa o valor e a validade para o componente pai
+        onvalue(valorLimpo);
+        toast({
+          title: "CPF válido!",
+          status: "success",
+          duration: 2000,
+          isClosable: true
+        });
+      } else if (!isValid) {
+        toast({
+          title: "CPF inválido!",
+          status: "error",
+          duration: 2000,
+          isClosable: true
+        });
+      }
+    }
+    if (valorLimpo.length < 11) {
+      onvalue(valorLimpo);
     }
   };
 
@@ -107,10 +112,11 @@ const CpfMask: React.FC<CpfMaskProps> = ({
       <Input
         disabled={Disablee}
         type="text"
+        border={"1px solid #b8b8b8cc"}
         onChange={(e) => handleMask(e.target.value)}
         value={value}
         borderColor={isInvalid ? "crimson" : undefined}
-        placeholder="Digite seu CPF"
+        placeholder="Digite o CPF"
       />
     </Box>
   );

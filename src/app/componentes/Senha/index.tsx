@@ -12,7 +12,7 @@ import { IoEyeSharp } from "react-icons/io5";
 interface SenhaProps {
   onvalue: any;
   setvalue: string;
-  envClick: any;
+  envClick?: any;
 }
 
 export const SenhaComponent = ({ setvalue, onvalue, envClick }: SenhaProps) => {
@@ -33,6 +33,7 @@ export const SenhaComponent = ({ setvalue, onvalue, envClick }: SenhaProps) => {
           type={show ? "text" : "password"}
           value={setvalue}
           onChange={handleonvalue}
+          border={"1px solid #b8b8b8cc"}
           onKeyDownCapture={(e) => {
             if (e.key === "Enter") {
               envClick();
