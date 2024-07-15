@@ -132,7 +132,7 @@ export const ModalFormComponent = ({ rota, empreedimento, clienteId }: ModallPro
           textColor={"white"}
           variant="solid"
           _hover={{ bg: "#00631B" }}
-          size="lg"
+          // size="lg"
           onClick={onOpen}
         >
           Criar Alerta

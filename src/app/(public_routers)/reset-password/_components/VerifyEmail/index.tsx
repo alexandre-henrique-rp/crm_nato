@@ -1,47 +1,48 @@
 "use client";
 import {
+  Box,
   Button,
   Flex,
   FormControl,
   FormHelperText,
   FormLabel,
   Input,
+  Stack,
   useToast,
-
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export const VerifyEmailComponent = (Props: {reload: any}) => {
+export const VerifyEmailComponent = (Props: { reload: any }) => {
   const [Email, setEmail] = useState<string>("");
   const toast = useToast();
   const router = useRouter();
 
   const HandleVoltar = () => {
-    Props.reload(true)
+    Props.reload(true);
     router.push("/login");
-  }
+  };
 
-  const HandleEmail = async() => {
-    Props.reload(true)
-    console.log(Email)
+  const HandleEmail = async () => {
+    Props.reload(true);
+    console.log(Email);
     try {
       const res = await fetch(`/api/reset-password/email?email=${Email}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-      })
+      });
       const data = await res.json();
 
-      if(data.message === "Email encontrado") {
+      if (data.message === "Email encontrado") {
         toast({
           title: "Email verificado",
           description: "Favor verificar seu email",
           status: "success",
           duration: 5000,
           isClosable: true,
-        })
+        });
         router.push("/login");
       } else {
         toast({
@@ -50,8 +51,8 @@ export const VerifyEmailComponent = (Props: {reload: any}) => {
           status: "error",
           duration: 3000,
           isClosable: true,
-        })
-        Props.reload(false)
+        });
+        Props.reload(false);
       }
     } catch (error: any) {
       toast({
@@ -60,10 +61,10 @@ export const VerifyEmailComponent = (Props: {reload: any}) => {
         status: "error",
         duration: 3000,
         isClosable: true,
-      })
-      Props.reload(false)
+      });
+      Props.reload(false);
     }
-  }
+  };
 
   return (
     <>

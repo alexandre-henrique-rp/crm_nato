@@ -13,6 +13,7 @@ import {
   Input,
   Select,
   SimpleGrid,
+  Stack,
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
@@ -57,7 +58,6 @@ export default function SolicitacaoForm({
   const user = session?.user;
 
   const handlesubmit = async () => {
-    console.log(handlesubmit);
     if (!nome || !cpf || !email || !relacionamento) {
       toast({
         title: "Erro",
@@ -141,9 +141,7 @@ export default function SolicitacaoForm({
       try {
         const base64 = await fileToBase64(file);
         setRgFile(base64);
-      } catch (error) {
-        console.error("Erro ao processar o arquivo RG:", error);
-      }
+      } catch (error) {}
     }
   };
 
@@ -156,9 +154,7 @@ export default function SolicitacaoForm({
       try {
         const base64 = await fileToBase64(file);
         setCnhFile(base64);
-      } catch (error) {
-        console.error("Erro ao processar o arquivo CNH:", error);
-      }
+      } catch (error) {}
     }
   };
 
@@ -212,8 +208,8 @@ export default function SolicitacaoForm({
   }
 
   return (
-    <>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} w="full">
+    <Stack spacing={4} p={4} maxWidth="800px" mx="auto">
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
         <Box>
           <FormLabel>Nome Completo</FormLabel>
           <Input type="text" onChange={(e) => setnome(e.target.value)} />
@@ -229,20 +225,21 @@ export default function SolicitacaoForm({
 
         <Box>
           <FormLabel>Whatsapp com DDD</FormLabel>
-          <Input type="text" onChange={WhatsAppMask} value={Whatapp} />
+          <Input
+            type="text"
+            onChange={WhatsAppMask}
+            value={Whatapp}
+            w={{ base: "full", md: "auto" }} // ajustando largura do input para ocupar toda a tela em telas menores
+          />
         </Box>
       </SimpleGrid>
 
-      <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3 }}
-        spacing={6}
-        w="full"
-        mt={6}
-      >
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
         <Box>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
           <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
         </Box>
+
         <Box>
           <FormLabel>Email</FormLabel>
           <Input
@@ -251,18 +248,14 @@ export default function SolicitacaoForm({
             value={email}
           />
         </Box>
+
         <Box>
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={setCpf} />
         </Box>
       </SimpleGrid>
 
-      <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3 }}
-        spacing={6}
-        w="full"
-        mt={6}
-      >
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
         {user?.empreendimento && (
           <Box>
             <FormLabel>Empreendimento</FormLabel>
@@ -291,7 +284,7 @@ export default function SolicitacaoForm({
         )}
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} w="full" mt={6}>
+      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} mt={6}>
         <FormControl as={GridItem} colSpan={[6, 2]}>
           <FormLabel>CNH</FormLabel>
           <Input type="file" variant="flushed" onChange={handleRgChange} />
@@ -303,12 +296,7 @@ export default function SolicitacaoForm({
         </FormControl>
       </SimpleGrid>
 
-      <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3 }}
-        spacing={6}
-        w="full"
-        mt={6}
-      >
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
         <Box>
           <FormLabel>
             Relacionamento
@@ -350,18 +338,17 @@ export default function SolicitacaoForm({
       </SimpleGrid>
 
       <Button
-        mt={5}
-        mb={5}
+        mt={6}
         variant="outline"
-        width="250px"
+        width="100%"
+        maxWidth="250px"
         height="50px"
-        maxWidth="100%"
-        textColor="black"
         onClick={handlesubmit}
         hidden={relacionamento === "sim"}
       >
         CRIAR CONTA
+        
       </Button>
-    </>
+    </Stack>
   );
 }

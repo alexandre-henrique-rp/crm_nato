@@ -122,7 +122,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setObs(SetData.obs);
       setAlertDb(SetData.alert == null ? [] : SetData.alert);
       setsetIdFcweb(SetData.id_fcw);
-      console.log(SetData);
     }
   }, [Name, SetData]);
 
@@ -157,11 +156,10 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         body: JSON.stringify(data),
       });
       const response = await rest.json();
-      console.log(response);
+
       setLooad(false);
     } catch (error) {
       setLooad(false);
-      console.log(error);
     }
   };
   const MascaraZap = (e: any) => {
@@ -192,21 +190,11 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       <Flex
         alignItems="center"
         justifyContent="center"
-        mx={2}
-        borderWidth={0}
         overflowX="auto"
         flexDir={"column"}
       >
         {/* Dados pessoais */}
-        <Box
-          w="70%"
-          m={5}
-          h="100%"
-          p={10}
-          bg="white"
-          borderRadius={8}
-          boxShadow="lg"
-        >
+        <Box w="80%" h="100%" p={10} bg="white" borderRadius={8} boxShadow="lg">
           <Box display={"flex"} justifyContent={"space-between"}>
             <Box alignItems={"center"} gap={2}>
               <Text fontSize={"2xl"}>Dados Pessoais</Text>
@@ -511,24 +499,25 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 />
               </FormControl>
 
-              <Button
-                onClick={handleSubmit}
-                colorScheme={"green"}
-                mt={5}
-                mb={5}
-                variant="outline"
-                width="250px"
-                height="50px"
-                maxWidth="100%"
-                isLoading={Looad}
-              >
-                Salvar e Enviar
-              </Button>
-              <ModalFormComponent
-                rota={"CORRETROR"}
-                clienteId={ClientId}
-                empreedimento={EmpreendimentoId}
-              />
+              <Box justifyContent={"space-between"} alignItems={"center"}>
+                <Button
+                  onClick={handleSubmit}
+                  colorScheme={"green"}
+                  variant="outline"
+                  height="50px"
+                  isLoading={Looad}
+                >
+                  Salvar e Enviar
+                </Button>
+
+                {input !== "USER" && (
+                  <ModalFormComponent
+                    rota={"CORRETROR"}
+                    clienteId={ClientId}
+                    empreedimento={EmpreendimentoId}
+                  />
+                )}
+              </Box>
             </SimpleGrid>
           </Stack>
         </Box>
@@ -536,8 +525,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
         {/* Inicio Dados de contato */}
         <Box
-          w="70%"
-          m={5}
+          mt={10}
+          w="80%"
           h="100%"
           p={10}
           bg="white"
@@ -553,7 +542,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   AlertDb.map((item: solictacao.AlertProps) => {
                     const status =
                       item.tipo === "success" ? "success" : "error";
-
                     return (
                       <>
                         <Alert status={status}>
