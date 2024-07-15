@@ -1,13 +1,22 @@
 "use client";
 
-import { Stack, Text, Box, Flex } from "@chakra-ui/react";
+import {
+  Stack,
+  Text,
+  Box,
+  Flex,
+  IconButton,
+} from "@chakra-ui/react";
 import SolicitacaoForm from "./_componentes";
 import { useState } from "react";
 import RelacionadoForm from "./_componentes/FormRelacionamento";
+import { IoIosArrowBack } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 export default function Solicitacao() {
   const [onvalue, setOnvalue] = useState<any>();
   const [isHidden, setIsHidden] = useState<Boolean>(true); // Inicialmente, defina como true
+  const route = useRouter();
 
   const handleIshiddenChange = (e: any) => {
     console.log("ishidden", e);
@@ -51,15 +60,31 @@ export default function Solicitacao() {
             w={"60em"}
             textAlign={"center"}
           >
-            <Text
-              fontFamily="Poppins"
-              fontWeight="regular"
-              fontSize="32px"
-              color="#333333"
-              mb={8}
-            >
-              Nova Solicitação
-            </Text>
+            <Flex>
+              <Box zIndex={1} position={"initial"}>
+                <IconButton
+                 variant='outline'
+                 colorScheme='teal'
+                 border={"none"}
+                 onClick={() => route.back()}
+                 aria-label='Call Sage'
+                 fontSize='20px'
+                  icon={<IoIosArrowBack />}
+                />
+              </Box>
+              <Box w={"100%"}>
+                <Text
+                  fontFamily="Poppins"
+                  fontWeight="regular"
+                  fontSize="32px"
+                  color="#333333"
+                  mb={8}
+                >
+                  Nova Solicitação
+                </Text>
+              </Box>
+            </Flex>
+
             <SolicitacaoForm
               onvalue={handleOnvalueChange}
               ishidden={handleIshiddenChange} // Passa a função para atualizar isHidden

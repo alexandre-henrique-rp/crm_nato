@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { IconBase } from "react-icons";
 
 import { mask, unMask } from "remask";
@@ -84,6 +84,8 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         dt_nascimento: DataNascimento,
         relacionamento: SetValue.cpf ? [SetValue.cpf] : [],
         rela_quest: SetValue.rela_quest,
+        voucher: Voucher,
+        corretor: Number(user?.id)
       };
 
       const data = [dados, SetValue];

@@ -6,6 +6,7 @@ import { SelectComponent } from "@/app/componentes/select";
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
   GridItem,
@@ -15,7 +16,7 @@ import {
   SimpleGrid,
   Stack,
   Tooltip,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -29,20 +30,16 @@ interface relacionamentoProps {
 
 export default function SolicitacaoForm({
   onvalue,
-  ishidden,
+  ishidden
 }: relacionamentoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
-  const [cpfdoismask, setCpfdoismask] = useState("");
-  const [isValid, setIsValid] = useState<boolean | null>(null);
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
-  const [Corretor, setCorretor] = useState<string>("");
-  const [CorretorId, setCorretorId] = useState<number>(0);
   const [relacionamento, setrelacionamento] = useState<string>("nao");
   const [Voucher, setVoucher] = useState<string>("");
   const [tel, setTel] = useState<string>("");
@@ -51,7 +48,6 @@ export default function SolicitacaoForm({
   const [Whatappdois, setWhatappdois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
 
-  // const [base64String, setBase64String] = useState("");
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
@@ -64,10 +60,10 @@ export default function SolicitacaoForm({
         description: "Preencha todos os campos",
         status: "error",
         duration: 3000,
-        isClosable: true,
+        isClosable: true
       });
     } else {
-      const data = {
+      const data: solictacao.SolicitacaoPost = {
         nome: nome,
         telefone: tel,
         cpf: cpf,
@@ -75,20 +71,21 @@ export default function SolicitacaoForm({
         email: email,
         foto_rg: uploadRg,
         foto_cnh: uploadCnh,
-        corretor: CorretorId,
+        corretor: Number(user?.id),
         construtora: Number(ConstrutoraID),
         empreendimento: Number(empreendimento),
-        data_nascimento: DataNascimento,
+        dt_nascimento: DataNascimento,
         relacionamento: cpfdois ? [cpfdois] : [],
-        token: session?.token,
+        rela_quest: relacionamento === "sim" ? true : false,
+        voucher: Voucher,
       };
 
       const response = await fetch("/api/solicitacao", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
       if (response.ok) {
         toast({
@@ -96,7 +93,7 @@ export default function SolicitacaoForm({
           description: "Solicitacao enviada com sucesso",
           status: "success",
           duration: 3000,
-          isClosable: true,
+          isClosable: true
         });
         router.push("/home");
       }
@@ -182,7 +179,7 @@ export default function SolicitacaoForm({
         status: "error",
         duration: 3000,
         isClosable: true,
-        position: "top-right",
+        position: "top-right"
       });
     }
     const data: solictacao.SolicitacaoPost = {
@@ -194,11 +191,13 @@ export default function SolicitacaoForm({
       email: email,
       foto_rg: uploadRg,
       foto_cnh: uploadCnh,
-      empreendimento: empreendimento,
-      construtora: ConstrutoraID,
+      corretor: Number(user?.id),
       relacionamento: [cpfdois],
       cpfdois: cpfdois,
+      construtora: Number(ConstrutoraID),
+      empreendimento: Number(empreendimento),
       rela_quest: relacionamento === "sim" ? true : false,
+      voucher: Voucher,
     };
     onvalue(data);
   }
@@ -207,8 +206,49 @@ export default function SolicitacaoForm({
     ishidden("nao");
   }
 
+  const sendEmail = async () => {
+    if (!nome && !email) {
+      toast({
+        title: "Erro",
+        description: "Preencha os campos Nome e Email",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
+      });
+    }
+    const request = await fetch("/api/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nome: nome,
+        email: email
+      })
+    });
+    if (!request.ok) {
+      toast({
+        title: "Erro",
+        description: "Erro ao enviar e-mail",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top-right"
+      });
+    }
+    toast({
+      title: "Sucesso",
+      description: "E-mail enviado com sucesso",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+      position: "top-right"
+    });
+  };
+
   return (
-    <Stack spacing={4} p={4} maxWidth="800px" mx="auto">
+    <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
         <Box>
           <FormLabel>Nome Completo</FormLabel>
@@ -234,7 +274,12 @@ export default function SolicitacaoForm({
         </Box>
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 4 }}
+        spacing={6}
+        mt={6}
+        alignItems={"end"}
+      >
         <Box>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
           <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
@@ -248,7 +293,7 @@ export default function SolicitacaoForm({
             value={email}
           />
         </Box>
-
+        <Button colorScheme={"green"} onClick={sendEmail}>Confirmar Email</Button>
         <Box>
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={setCpf} />
@@ -276,7 +321,7 @@ export default function SolicitacaoForm({
               tag="construtora"
               SetValue={user.construtora.map((item) => ({
                 id: item.id,
-                nome: item.razaosocial,
+                nome: item.razaosocial
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
             />
@@ -347,7 +392,6 @@ export default function SolicitacaoForm({
         hidden={relacionamento === "sim"}
       >
         CRIAR CONTA
-        
       </Button>
     </Stack>
   );
