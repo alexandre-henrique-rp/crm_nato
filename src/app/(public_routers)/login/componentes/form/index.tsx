@@ -25,11 +25,30 @@ export const FormLogin = () => {
       redirect: false
     });
     if (res.status !== 200) {
-      toast({
-        title: "Usuário ou Senha Incorreto",
-        status: "error",
-        duration: 5000,
-      });
+    
+        const request = await fetch("/api/verificador", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: username,
+            password: password,
+          }),
+        });
+        
+        const response = await request.json();
+        console.log(response);
+
+        if (response.error) {
+          toast({
+            title: "Erro!",
+            description: response.mesage,
+            status: "error",
+            duration: 5000,
+          });
+        }
+     
     } else {
       router.replace("/home");
     }
