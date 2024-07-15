@@ -145,8 +145,10 @@ declare module solictacao {
     foto_cnh: string;
     empreendimento: number;
     construtora: number;
+    corretor: number;
     relacionamento: string[];
     cpfdois?: string;
     rela_quest?: boolean;
+    voucher?: string;
   }
 }
