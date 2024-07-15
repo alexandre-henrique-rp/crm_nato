@@ -105,7 +105,7 @@ export const ModalPrimeAsses = () => {
         {OverlayTwo()}
         <ModalOverlay />
         <ModalContent bg={"gray.100"}>
-          <ModalHeader>Atualizção de senha</ModalHeader>
+          <ModalHeader>Atualização de senha</ModalHeader>
           <FormControl onSubmit={handleSubmit}>
             <ModalBody >
               <Box>

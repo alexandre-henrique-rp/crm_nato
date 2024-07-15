@@ -35,8 +35,6 @@ export default function SolicitacaoForm({
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
-  const [cpfdoismask, setCpfdoismask] = useState("");
-  const [isValid, setIsValid] = useState<boolean | null>(null);
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [email, setemail] = useState("");
@@ -50,7 +48,6 @@ export default function SolicitacaoForm({
   const [Whatappdois, setWhatappdois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
 
-  // const [base64String, setBase64String] = useState("");
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
@@ -66,7 +63,7 @@ export default function SolicitacaoForm({
         isClosable: true
       });
     } else {
-      const data = {
+      const data: solictacao.SolicitacaoPost = {
         nome: nome,
         telefone: tel,
         cpf: cpf,
