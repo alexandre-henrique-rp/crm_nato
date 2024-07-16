@@ -30,14 +30,20 @@ export const ModalPrimeAsses = () => {
   const { data: session } = useSession();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const primeiro_asseso = session?.user?.reset_password;
-  const primeiro_asseso = true;
+  const primeiro_asseso = session?.user?.reset_password;
+  const ID = session?.user?.id;
 
   useEffect(() => {
-    if (primeiro_asseso){
-      onOpen();
+    if (primeiro_asseso) {
+      (async () => {
+        const request = await fetch(`/api/usuario/getId/${ID}`);
+        const data = await request.json();
+        if (data.reset_password) {
+          onOpen();
+        }
+      })();
     }
-  }, [onOpen, primeiro_asseso]);
+  }, [ID, onOpen, primeiro_asseso]);
 
 
 
@@ -52,6 +58,7 @@ export const ModalPrimeAsses = () => {
 
   const handleSubmit = async(e: { preventDefault: () => void }) => {
     e.preventDefault();
+    console.log(Senha, ConfirmeSenha);
 
     if (Senha !== ConfirmeSenha) {
       toast({
@@ -69,7 +76,7 @@ export const ModalPrimeAsses = () => {
 
     const ID = session?.user?.id;
     try {
-      const request = await fetch(`src/app/api/reset_password/${ID}`, {
+      const request = await fetch(`/api/reset_password/${ID}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -119,7 +126,7 @@ export const ModalPrimeAsses = () => {
              
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme="green" mr={3} type="submit">
+              <Button colorScheme="green" mr={3}  onClick={handleSubmit}>
                 Enviar
               </Button>
               <Button variant="ghost" onClick={onClose}>

@@ -14,6 +14,7 @@ declare module 'next-auth' {
       empreendimento: empreendimento[];
       hierarquia: string;
       cargo: string;
+      reset_password: boolean;
     }
   }
 

@@ -8,13 +8,16 @@ import { nextAuthOptions } from "../../auth/[...nextauth]/route";
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
     const data = await request.json();
+    console.log("🚀 ~ PUT ~ data:", data)
     const { id } = params;
+    console.log("🚀 ~ PUT ~ id:", id)
     const session = await getServerSession(nextAuthOptions);
+    console.log("🚀 ~ PUT ~ session:", session)
 
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/reset_password/${id}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/user/reset_password/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

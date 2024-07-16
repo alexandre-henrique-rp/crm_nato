@@ -22,7 +22,6 @@ export async function GET() {
         { status: 404 }
       );
     const data = await request.json();
-    console.log("🚀 ~ GET ~ data:", data)
     
     return NextResponse.json(data, { status: 200 });
   } catch (error) {

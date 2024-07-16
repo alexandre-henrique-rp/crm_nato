@@ -1,5 +1,6 @@
 "use client";
 
+import CheckEmail from "@/app/componentes/checkEmail";
 import CpfMask from "@/app/componentes/cpf_mask";
 import { SenhaComponent } from "@/app/componentes/Senha";
 import {
@@ -131,24 +132,12 @@ export default function FormRegister() {
         </Box>
       </Box>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
+      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"} alignItems={"end"}>
+        <Box w="40%">
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
         </Box>
-
-        <Box w="48%">
-          <FormLabel>Construtora</FormLabel>
-          <Input
-            type="text"
-            border={"1px solid #b8b8b8cc"}
-            onChange={(e: any) => setConstrutora(e.target.value)}
-          />
-        </Box>
-      </Box>
-
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
+        <Box w="40%">
           <FormLabel>Email</FormLabel>
           <Input
             type="text"
@@ -156,6 +145,10 @@ export default function FormRegister() {
             onChange={(e: any) => setEmail(e.target.value)}
           />
         </Box>
+        <CheckEmail email={Email} nome={Nome}  />        
+      </Box>
+
+      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
         <Box w="48%">
           <FormLabel>telefone</FormLabel>
           <Input
@@ -164,6 +157,14 @@ export default function FormRegister() {
             onChange={(e: any) => setTelefone(e.target.value)}
           />
         </Box>
+        {/* <Box w="48%">
+          <FormLabel>Construtora</FormLabel>
+          <Input
+            type="text"
+            border={"1px solid #b8b8b8cc"}
+            onChange={(e: any) => setConstrutora(e.target.value)}
+          />
+        </Box> */}
       </Box>
 
       <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
