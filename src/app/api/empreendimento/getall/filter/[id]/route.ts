@@ -2,13 +2,17 @@ import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
   try {
-    const session = await getServerSession(nextAuthOptions);
+    const session = await getServerSession(nextAuthOptions)
     const { id } = params;
 
-    if (!session) {
-      return new NextResponse("Unauthorized", { status: 401 });
+    if (!session?.token) {
+      console.log("Unauthorized");
+      return new NextResponse("Unauthorized2", { status: 401 });
     }
 
     const reqest = await fetch(
@@ -21,7 +25,6 @@ export async function GET({ params }: { params: { id: string } }) {
         }
       }
     );
-
     if (!reqest.ok) {
       return new NextResponse("Invalid credentials", { status: 401 });
     }

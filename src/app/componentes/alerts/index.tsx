@@ -1,36 +1,28 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle } from "@chakra-ui/react";
-
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle
+} from "@chakra-ui/react";
 
 interface AlertProps {
-  msg: string
-  titulo: string
-  // status: "success" | "error" | "info" | "warning" | "loading"
-  status: any
+  msg: string;
+  titulo: string;
+  status: any;
 }
 
-
-
-export const AlertComponent = ({msg, titulo, status}: AlertProps) => {
+export const AlertComponent = ({ msg, titulo, status }: AlertProps) => {
   return (
-    <> 
-    {status && (
-      <>
-       <Alert
-      status={status}
-      variant="subtle"
-      w={"full"}
-      justifyContent={"space-between"}
-    >
-      <AlertIcon boxSize="40px" mr={0}/>
-      <AlertTitle fontSize="lg">
-        {titulo}
-      </AlertTitle>
-      <AlertDescription maxWidth="sm">
-        {msg}
-      </AlertDescription>
-    </Alert>
-      </>
+    <>
+      {status && (
+        <>
+          <Alert status={status} variant="subtle" w={"full"} gap={"1rem"}>
+            <AlertIcon boxSize="2rem" />
+            <AlertTitle fontSize="lg">{titulo}</AlertTitle>
+            <AlertDescription maxWidth="sm">{msg}</AlertDescription>
+          </Alert>
+        </>
       )}
-    </> 
+    </>
   );
-}
+};

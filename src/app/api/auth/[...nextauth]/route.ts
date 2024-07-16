@@ -1,10 +1,9 @@
 import axios from "axios";
-import { error } from "console";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const nextAuthOptions: NextAuthOptions = {
+const nextAuthOptions: any = {
   providers: [
     CredentialsProvider({
       name: "Credentials",

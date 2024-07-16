@@ -56,7 +56,7 @@ declare module solictacao {
     };
     obs: string;
     alert: AlertProps[];
-    empreendimento: {
+    empreedimento: {
       id: number;
       nome: string;
     };

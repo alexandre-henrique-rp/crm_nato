@@ -5,11 +5,12 @@ import { nextAuthOptions } from "../auth/[...nextauth]/route";
 export async function POST(request: Request) {
   try {
     const data = await request.json();
+    console.log("🚀 ~ POST ~ data:", data)
     const session = await getServerSession(nextAuthOptions);
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/user/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

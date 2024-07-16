@@ -1,6 +1,5 @@
 "use client"
 
-import { AlertForm } from "./alerta"
 
 
 export default function Modal() {
@@ -9,7 +8,7 @@ export default function Modal() {
 
         <>
         
-        <AlertForm />
+        {/* <AlertForm /> */}
         
         </>
 
