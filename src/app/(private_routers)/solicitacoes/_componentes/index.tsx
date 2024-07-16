@@ -22,6 +22,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { mask, unMask } from "remask";
+import CheckEmail from "@/app/componentes/checkEmail";
 
 interface relacionamentoProps {
   onvalue: any;
@@ -47,6 +48,10 @@ export default function SolicitacaoForm({
   const [Whatapp, setWhatapp] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
+  const [whatsChek1, setwhatsChek1] = useState<boolean>(tel ? false : true);
+  const [whatsChek2, setwhatsChek2] = useState<boolean>(
+    teldois ? false : true
+  );
 
   const toast = useToast();
   const router = useRouter();
@@ -54,6 +59,28 @@ export default function SolicitacaoForm({
   const user = session?.user;
 
   const handlesubmit = async () => {
+    if (tel){
+      if(!whatsChek1){
+        toast({
+          title: "Erro",
+          description: "O telefone é obrigatório ser um whasapp",
+          status: "error",
+          duration: 3000,
+          isClosable: true
+        });
+      }
+    }
+    if (teldois){
+      if(!whatsChek2){
+        toast({
+          title: "Erro",
+          description: "O telefone 2 é obrigatório ser um whasapp",
+          status: "error",
+          duration: 3000,
+          isClosable: true
+        });
+      }
+    }
     if (!nome || !cpf || !email || !relacionamento) {
       toast({
         title: "Erro",
@@ -77,7 +104,7 @@ export default function SolicitacaoForm({
         dt_nascimento: DataNascimento,
         relacionamento: cpfdois ? [cpfdois] : [],
         rela_quest: relacionamento === "sim" ? true : false,
-        voucher: Voucher,
+        voucher: Voucher
       };
 
       const response = await fetch("/api/solicitacao", {
@@ -182,6 +209,28 @@ export default function SolicitacaoForm({
         position: "top-right"
       });
     }
+    if (tel){
+      if(!whatsChek1){
+        toast({
+          title: "Erro",
+          description: "O telefone é obrigatório ser um whasapp",
+          status: "error",
+          duration: 3000,
+          isClosable: true
+        });
+      }
+    }
+    if (teldois){
+      if(!whatsChek2){
+        toast({
+          title: "Erro",
+          description: "O telefone 2 é obrigatório ser um whasapp",
+          status: "error",
+          duration: 3000,
+          isClosable: true
+        });
+      }
+    }
     const data: solictacao.SolicitacaoPost = {
       nome: nome,
       cpf: cpf,
@@ -197,7 +246,7 @@ export default function SolicitacaoForm({
       construtora: Number(ConstrutoraID),
       empreendimento: Number(empreendimento),
       rela_quest: relacionamento === "sim" ? true : false,
-      voucher: Voucher,
+      voucher: Voucher
     };
     onvalue(data);
   }
@@ -206,45 +255,28 @@ export default function SolicitacaoForm({
     ishidden("nao");
   }
 
-  const sendEmail = async () => {
-    if (!nome && !email) {
-      toast({
-        title: "Erro",
-        description: "Preencha os campos Nome e Email",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "top-right"
-      });
-    }
-    const request = await fetch("/api/email", {
+  const checkwhatsapp = async (whatsapp: string) : Promise<boolean> => {
+    const request = await fetch("/api/verificador/whatsapp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        nome: nome,
-        email: email
+        telefone: whatsapp
       })
     });
     if (!request.ok) {
       toast({
         title: "Erro",
-        description: "Erro ao enviar e-mail",
+        description: "Esse numero não tem whatsapp",
         status: "error",
         duration: 3000,
         isClosable: true,
         position: "top-right"
       });
+      return false;
     }
-    toast({
-      title: "Sucesso",
-      description: "E-mail enviado com sucesso",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-      position: "top-right"
-    });
+    return true;
   };
 
   return (
@@ -269,6 +301,10 @@ export default function SolicitacaoForm({
             type="text"
             onChange={WhatsAppMask}
             value={Whatapp}
+            onBlur={async (e) => {
+              const check = checkwhatsapp(e.target.value);
+              setwhatsChek1(await check);
+            }}
             w={{ base: "full", md: "auto" }} // ajustando largura do input para ocupar toda a tela em telas menores
           />
         </Box>
@@ -282,7 +318,15 @@ export default function SolicitacaoForm({
       >
         <Box>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
-          <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
+          <Input
+            type="text"
+            onChange={WhatsAppMask2}
+            value={Whatappdois}
+            onBlur={async (e) => {
+              const check = checkwhatsapp(e.target.value);
+              setwhatsChek2(await check);
+            }}
+          />
         </Box>
 
         <Box>
@@ -293,7 +337,7 @@ export default function SolicitacaoForm({
             value={email}
           />
         </Box>
-        <Button colorScheme={"green"} onClick={sendEmail}>Confirmar Email</Button>
+        <CheckEmail email={email} nome={nome}  /> 
         <Box>
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={setCpf} />

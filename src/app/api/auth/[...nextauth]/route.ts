@@ -1,9 +1,8 @@
 import axios from "axios";
-import NextAuth, { NextAuthOptions } from "next-auth"
+import { error } from "console";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
-import CredentialsProvider from "next-auth/providers/credentials"
-
-
+import CredentialsProvider from "next-auth/providers/credentials";
 
 const nextAuthOptions: NextAuthOptions = {
   providers: [
@@ -11,20 +10,20 @@ const nextAuthOptions: NextAuthOptions = {
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text", placeholder: "test@test.com" },
-        password: { label: "Password", type: "password" },
+        password: { label: "Password", type: "password" }
       },
       async authorize(credentials: any) {
         try {
           const dados = {
             username: credentials.email,
-            password: credentials.password,
+            password: credentials.password
           };
           const res = await axios({
             url: `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/auth`,
-            method: "POST", 
+            method: "POST",
             data: dados,
             headers: {
-              "Content-Type": "application/json",
+              "Content-Type": "application/json"
             },
             timeout: 5000
           });
@@ -67,31 +66,35 @@ const nextAuthOptions: NextAuthOptions = {
             return null;
           }
           return response;
-        } catch (e) {
-          // console.log(e);
+        } catch (e: any) {
           return null;
         }
-
-      },
-    }),
+      }
+    })
   ],
   pages: {
     signIn: "/login",
-    signOut: '/auth/signout',
+    signOut: "/auth/signout"
     // error: '/auth/error', // Error code passed in query string as ?error=
     // verifyRequest: '/auth/verify-request', // (used for check email message)
     // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
   jwt: {
-    secret: process.env.JWT_SIGNING_PRIVATE_KEY || "secret",
+    secret: process.env.JWT_SIGNING_PRIVATE_KEY || "secret"
   },
   secret: process.env.NEXTAUTH_SECRET || "123456",
   session: {
     strategy: "jwt",
-    maxAge: 4 * 60 * 60, // 4 hours
+    maxAge: 4 * 60 * 60 // 4 hours
   },
   callbacks: {
-    jwt: async ({ token, user }: { token: JWT; user: any }): Promise<any | null> => {
+    jwt: async ({
+      token,
+      user
+    }: {
+      token: JWT;
+      user: any;
+    }): Promise<any | null> => {
       const isSignIn = !!user;
 
       const actualDateInSeconds = Math.floor(Date.now() / 1000);
@@ -115,7 +118,6 @@ const nextAuthOptions: NextAuthOptions = {
         token.cargo = user.cargo;
         token.reset_password = user.reset_password;
 
-
         token.expiration = actualDateInSeconds + tokenExpirationInSeconds;
       } else {
         if (!token?.expiration) {
@@ -125,9 +127,14 @@ const nextAuthOptions: NextAuthOptions = {
 
       return token as unknown as JWT;
     },
-    session: async ({ session, token }: { session: any; token: JWT }): Promise<any | null> => {
+    session: async ({
+      session,
+      token
+    }: {
+      session: any;
+      token: JWT;
+    }): Promise<any | null> => {
       if (
-          
         !token?.jwt ||
         !token?.id ||
         !token?.name ||
@@ -153,10 +160,10 @@ const nextAuthOptions: NextAuthOptions = {
 
       session.token = token.jwt as string;
       return session;
-    },
-  },
-}
+    }
+  }
+};
 
-const handler = NextAuth(nextAuthOptions)
+const handler = NextAuth(nextAuthOptions);
 
-export { handler as GET, handler as POST, nextAuthOptions }
+export { handler as GET, handler as POST, nextAuthOptions };
