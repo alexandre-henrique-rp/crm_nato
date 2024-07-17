@@ -31,7 +31,6 @@ export default function LoginPage() {
         boxShadow="lg"
       >
         <Text
-          fontFamily="Poppins"
           fontWeight="regular"
           fontSize={{ base: "24px", sm: "28px", md: "32px" }} // Tamanho de fonte responsivo
           color="#333333"
@@ -44,7 +43,6 @@ export default function LoginPage() {
         </Box>
         <Box>
           {/* <Text
-            fontFamily="Poppins"
             fontWeight="regular"
             fontSize={{ base: "12px", sm: "14px", md: "15px" }} // Tamanho de fonte responsivo
             textDecoration="underline"
@@ -56,7 +54,6 @@ export default function LoginPage() {
           </Text> */}
 
           <Text
-            fontFamily="Poppins"
             fontWeight="regular"
             fontSize={{ base: "10px", sm: "12px", md: "13px" }} // Tamanho de fonte responsivo
             color="#333333"
