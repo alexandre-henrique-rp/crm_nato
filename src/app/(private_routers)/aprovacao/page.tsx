@@ -9,53 +9,52 @@ import {
   Table,
   Tbody,
   Td,
+  Text,
   Th,
   Thead,
   Tr,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { METHODS } from "http";
-import { useEffect, useState } from "react";
+import {
+  AwaitedReactNode,
+  JSXElementConstructor,
+  Key,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useEffect,
+  useState,
+} from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
 
 export default function Aprovacao({ onDados }: any) {
-  const [Data, setData] = useState<any>([]);
+  const [Aprovacao, setAprovacao] = useState<any>([]);
+  // const [Data, setData] = useState([]);
+  // const [id, setid] = useState([]);
+  const [Name, setName] = useState<string>("");
+  const [Construtora, setConstrutora] = useState<string>("");
+  const [ConstrutoraId, setConstrutoraId] = useState<number>(0);
+  const [Id, setId] = useState<number>(0);
 
-  const solicitacoes = [
-    {
-      id: 1,
-      Criador: "John Doe",
-      Função: "Developer",
-      status: "Pending",
-      Construtora: "Construtora 1",
-    },
-  ];
+  // const aprovacao = [
+  //   {
+  //     id: 1,
+  //     Criador: "John Doe",
+  //     Função: "Developer",
+  //     status: "Pending",
+  //     Construtora: "Construtora 1",
+  //   },
+  // ];
 
   useEffect(() => {
     (async () => {
       const response = await fetch(`/api/usuario/getall`);
       const data = await response.json();
       console.log("🚀 ~ file: page.tsx:useEffect ~ data:", data);
+      setAprovacao(data);
     })();
   }, []);
-
-  const Update = async (id: number) => {
-    const newData = Data.filter((item: any) => {
-      return item.id !== id;
-    });
-    setData(newData);
-  };
-
-  const { id, nome, cargo, status, construtora } = onDados;
-
-  const Filter = Data.filter((item: solictacao.SolicitacaoGetType) => {
-    const itemid = item.id;
-    const nome = nome;
-    const cargo = cargo;
-    const construtora = construtora;
-    const status = status;
-    return itemid, nome, cargo, construtora;
-  });
 
   return (
     <Container maxW="container.lg" py={8}>
@@ -63,7 +62,7 @@ export default function Aprovacao({ onDados }: any) {
         Aprovação de Solicitações
       </Heading>
       <Stack spacing={4}>
-        {solicitacoes.map((solicitacao) => (
+        {Aprovacao.map((solicitacao: any) => (
           <Box
             key={solicitacao.id}
             p={5}
@@ -71,6 +70,24 @@ export default function Aprovacao({ onDados }: any) {
             borderWidth="1px"
             borderRadius="md"
           >
+            <Box display="flex" justifyContent="space-between">
+              <Box>
+                <Text>CRIADOR: {solicitacao.Criador}</Text>
+              </Box>
+              <Box>
+                <Text>CRIADOR: {solicitacao.Criador}</Text>
+              </Box>
+              <Box>
+                <Text>CRIADOR: {solicitacao.Criador}</Text>
+              </Box>
+              <Box>
+                <Text>CRIADOR: {solicitacao.Criador}</Text>
+              </Box>
+              <Box>
+                <Text>CRIADOR: {solicitacao.Criador}</Text>
+              </Box>
+            </Box>
+
             <Table variant="simple">
               <Thead>
                 <Tr>
