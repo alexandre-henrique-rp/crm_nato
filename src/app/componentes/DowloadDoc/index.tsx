@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Button } from "@chakra-ui/react";
 
 interface DownloadDocProps {
@@ -7,9 +7,8 @@ interface DownloadDocProps {
 }
 
 export const DownloadDoc = ({ base64, name }: DownloadDocProps) => {
-
   const handleDownload = () => {
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = base64;
     link.download = `${name}.png`;
     document.body.appendChild(link);
@@ -19,7 +18,7 @@ export const DownloadDoc = ({ base64, name }: DownloadDocProps) => {
 
   return (
     <>
-      {base64 && (
+      {base64 ? (
         <Button
           bg={"#00713D"}
           textColor={"white"}
@@ -30,17 +29,7 @@ export const DownloadDoc = ({ base64, name }: DownloadDocProps) => {
         >
           Download {name}
         </Button>
-      )}
-      <Button
-          bg={"#00713D"}
-          textColor={"white"}
-          variant="solid"
-          _hover={{ bg: "#00631B" }}
-          size="lg"
-          onClick={handleDownload}
-        >
-          Download {name}
-        </Button>
+      ) : null}
     </>
   );
-}
+};

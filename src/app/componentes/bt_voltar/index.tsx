@@ -1,7 +1,6 @@
 "use client";
 
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 export default function BotaoVoltar() {
   const router = useRouter();
@@ -22,7 +21,7 @@ export default function BotaoVoltar() {
           variant="solid"
           _hover={{ bg: "#00631B" }}
           size="lg"
-          onClick={() => router.push("/home")}
+          onClick={() => router.back()}
         >
           Voltar
         </Button>

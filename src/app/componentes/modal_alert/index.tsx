@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertComponent } from "@/app/componentes/alerts";
+import { Link } from "@chakra-ui/next-js";
 
 import {
   Alert,
@@ -41,12 +42,12 @@ export const ModalComponent = () => {
 
   const OverlayTwo = () => (
     <ModalOverlay
-      bg='none'
-      backdropFilter='auto'
-      backdropInvert='80%'
+      bg="none"
+      backdropFilter="auto"
+      backdropInvert="80%"
       // backdropBlur='2px'
     />
-  )
+  );
 
   return (
     <>
@@ -70,11 +71,33 @@ export const ModalComponent = () => {
             <Stack pt={10} pb={10}>
               <Box>
                 <Stack spacing={3}>
-                  {alerts.map((a) => (
-                    <>
-                    <AlertComponent msg={a.texto} titulo={a.titulo} status={a.tag} />
-                    </>
-                  ))}
+                  {alerts.map((a) => {
+                    if (a.solicitacao_id) {
+                      return (
+                        <>
+                          <Link href={`/solicitacoes/${a.solicitacao_id}`}>
+                            <AlertComponent
+                              msg={a.texto}
+                              titulo={a.titulo}
+                              status={a.tag}
+                              ID={a.id}
+                              DeleteAlertStatus={a.status}
+                            />
+                          </Link>
+                        </>
+                      );
+                    } else {
+                      return (
+                        <>
+                          <AlertComponent
+                            msg={a.texto}
+                            titulo={a.titulo}
+                            status={a.tag}
+                          />
+                        </>
+                      );
+                    }
+                  })}
                 </Stack>
               </Box>
             </Stack>

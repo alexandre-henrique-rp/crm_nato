@@ -13,6 +13,7 @@ const Requestes = async (id: string) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${session?.token}`,
       },
+      cache: "no-store",
     });
     if (!request.ok) {
       throw new Error("Erro");

@@ -41,7 +41,7 @@ export default function LoginPage() {
           <FormLogin />
         </Box>
         <Box>
-          <Text
+          {/* <Text
             fontFamily="Poppins"
             fontWeight="regular"
             fontSize={{ base: "12px", sm: "14px", md: "15px" }} // Tamanho de fonte responsivo
@@ -51,7 +51,7 @@ export default function LoginPage() {
             marginTop={{ base: -2, sm: -1 }} // Margem superior responsiva
           >
             <Link href="/reset-password">Esqueci a Senha</Link>
-          </Text>
+          </Text> */}
 
           <Text
             fontFamily="Poppins"

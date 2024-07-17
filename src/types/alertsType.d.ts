@@ -11,6 +11,7 @@ declare module AlertsType {
    * @property {number} corretor - Id do corretor
    * @property {string} tipo - Tipo do alerta
    * @property {string} tag - Tag do alerta (Ex: "info" | "warning" | "success" | "error" | "loading")
+   * @property {boolean} status - Status do alerta
    * @property {number} empreendimento - Id do empreendimento
    * @property {Date} createdAt - Data de criacao do alerta
    * @property {Date} updatedAt - Data de atualizacao do alerta
@@ -23,6 +24,7 @@ declare module AlertsType {
     corretor?: number;
     tipo: string;
     tag: string;
+    status?: boolean;
     empreendimento?: number;
     createdAt?: Date | string |any;
     updatedAt?: Date | string | any | null;

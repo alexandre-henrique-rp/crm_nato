@@ -12,6 +12,7 @@ import { useState } from "react";
 import RelacionadoForm from "./_componentes/FormRelacionamento";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 
 export default function Solicitacao() {
   const [onvalue, setOnvalue] = useState<any>();
@@ -62,15 +63,7 @@ export default function Solicitacao() {
           >
             <Flex>
               <Box zIndex={1} position={"initial"}>
-                <IconButton
-                 variant='outline'
-                 colorScheme='teal'
-                 border={"none"}
-                 onClick={() => route.back()}
-                 aria-label='Call Sage'
-                 fontSize='20px'
-                  icon={<IoIosArrowBack />}
-                />
+                <BotaoRetorno />
               </Box>
               <Box w={"100%"}>
                 <Text

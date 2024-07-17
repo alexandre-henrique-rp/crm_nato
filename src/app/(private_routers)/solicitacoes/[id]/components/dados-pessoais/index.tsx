@@ -1,7 +1,7 @@
 "use client";
 
 import BotaoSair from "@/app/(private_routers)/home/componentes/botoes/bt_sair";
-import BotaoVoltar from "@/app/(private_routers)/home/componentes/botoes/bt_voltar";
+import BotaoVoltar from "@/app/componentes/bt_voltar";
 import { DownloadDoc } from "@/app/componentes/DowloadDoc";
 import { AlertComponent } from "@/app/componentes/alerts";
 import { ModalFormComponent } from "@/app/componentes/modal";
@@ -30,6 +30,7 @@ import { useRouter } from "next/navigation";
 import { FormEventHandler, useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { mask, unMask } from "remask";
+import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 
 interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
@@ -181,14 +182,20 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       >
         {/* Dados pessoais */}
         <Box w="80%" h="100%" p={10} bg="white" borderRadius={8} boxShadow="lg">
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box alignItems={"center"} gap={2}>
+          <Box 
+          display={"flex"} 
+          // justifyContent={"space-between"}
+          >
+            <Box zIndex={1} position={"initial"}>
+              <BotaoRetorno />
+            </Box>
+            <Box alignItems={"center"} gap={2} ms={2}>
               <Text fontSize={"2xl"}>Dados Pessoais</Text>
               {input !== "USER" && (
                 <Text fontSize={"md"}>Corretor: {Corretor} </Text>
               )}
             </Box>
-            <Button variant={"link"} leftIcon={<FaPen />}></Button>
+            {/* <Button variant={"link"} leftIcon={<FaPen />}></Button> */}
           </Box>
           <Divider borderColor={"#00713D"} pt={2} />
           <Stack
@@ -493,17 +500,20 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 />
               </FormControl>
 
-              <Box justifyContent={"space-between"} alignItems={"center"}>
+              <FormControl isRequired as={GridItem} colSpan={[6, 1]}>
                 <Button
                   onClick={handleSubmit}
                   colorScheme={"green"}
                   variant="outline"
                   height="50px"
+                  px={1}
                   isLoading={Looad}
                 >
                   Salvar e Enviar
                 </Button>
+              </FormControl>
 
+              <FormControl isRequired as={GridItem} colSpan={[6, 1]}>
                 {input !== "USER" && (
                   <ModalFormComponent
                     rota={"CORRETROR"}
@@ -514,7 +524,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     CorretorId={CorretorId}
                   />
                 )}
-              </Box>
+              </FormControl>
             </SimpleGrid>
           </Stack>
         </Box>
@@ -539,12 +549,17 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   AlertDb.map((item: solictacao.AlertProps) => {
                     const status =
                       item.tipo === "success" ? "success" : "error";
+
+                    console.log("status", item.status);
+                    console.log("id", item.id);
                     return (
                       <>
                         <AlertComponent
                           msg={item.texto}
                           titulo={item.titulo}
                           status={item.tag}
+                          ID={item.id}
+                          DeleteAlertStatus={item.status}
                         />
                       </>
                     );

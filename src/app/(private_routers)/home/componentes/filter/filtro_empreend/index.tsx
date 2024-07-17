@@ -22,10 +22,10 @@ export const EmpreendimentoFilter = ({
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <Box
-        w={"full"}
+        w={"100%"}
         h={"100%"}
         bg={"#F8F8F8"}
-        pt={{ base: "10px" }}
+        pt={{ base: "10px", md: '0px' }}
       >
         <Select
           textColor={"#00713D"}

@@ -123,6 +123,7 @@ declare module solictacao {
    * @param {number} empreendimento
    */
   interface AlertProps {
+    status: boolean | null | undefined;
     id: number;
     titulo: string;
     texto: string;

@@ -3,7 +3,7 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const nextAuthOptions: any = {
+const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",

@@ -2,10 +2,12 @@
 
 import { Flex, Box, useDisclosure, Text } from "@chakra-ui/react";
 import TextHome from "./text";
-import { ModalComponent } from "@/app/(private_routers)/notification/component";
+
 import { useSession } from "next-auth/react";
 import { SelectComponent } from "@/app/componentes/select";
 import { useState } from "react";
+import { ModalFormComponent } from "@/app/componentes/modal";
+import { ModalComponent } from "@/app/componentes/modal_alert";
 
 export default function PerfilHome() {
   const [IdEmpreedimento, setIdEmpreedimento] = useState(0);
@@ -40,6 +42,7 @@ export default function PerfilHome() {
         >
           <Box>
             <ModalComponent />
+            {/* <ModalFormComponent rota={"local"} /> */}
           </Box>
           <Box w={{ base: "100%", md: "40%" }}>
             <TextHome SetName="NOME" SetValue={user.name} />

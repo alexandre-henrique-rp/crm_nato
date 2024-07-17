@@ -82,7 +82,9 @@ export const ModalFormComponent = ({
             empreendimento: IdEmpreedimento,
             tag: "info",
             texto: Descricao,
-            titulo: Titulo
+            titulo: `${PostName?.split(" ")[0]} ${
+              PostName?.split(" ")[1]
+            } - ${Titulo}`
           }
         : {
             tipo: "CORRETOR",
@@ -91,10 +93,10 @@ export const ModalFormComponent = ({
             solicitacao_id: clienteId,
             tag: StatusAlert,
             texto: Descricao,
-            titulo: Titulo
+            titulo: `${PostName?.split(" ")[0]} ${
+              PostName?.split(" ")[1]
+            } - ${Titulo}`
           };
-
-    console.log(data);
 
     try {
       const request = await fetch(`/api/alerts/create`, {
@@ -107,7 +109,6 @@ export const ModalFormComponent = ({
       const response = await request.json();
       console.log(response);
       if (request.ok) {
-
         toast({
           title: "Sucesso!",
           description: "Alerta criado com sucesso!",
@@ -115,7 +116,7 @@ export const ModalFormComponent = ({
           duration: 3000,
           isClosable: true
         });
-        route.refresh(); 
+        route.refresh();
       }
       onClose();
     } catch (error) {
@@ -145,7 +146,7 @@ export const ModalFormComponent = ({
           textColor={"white"}
           variant="solid"
           _hover={{ bg: "#00631B" }}
-          // size="lg"
+          height="50px"
           onClick={onOpen}
         >
           Criar Alerta
@@ -171,11 +172,11 @@ export const ModalFormComponent = ({
                 onChange={(e) => setStatusAlert(e.target.value)}
                 placeholder="Selecione o status"
               >
-                <option value="info">Info</option>
-                <option value="warning">Warning</option>
-                <option value="success">Success</option>
-                <option value="error">Error</option>
-                <option value="loading">Loading</option>
+                <option value="info">Informação</option>
+                <option value="warning">Atenção</option>
+                {/* <option value="success">Success</option> */}
+                <option value="error">Erro</option>
+                {/* <option value="loading">Loading</option> */}
               </Select>
 
               <FormControl id="title" isRequired mt={4}>
@@ -195,11 +196,12 @@ export const ModalFormComponent = ({
                     value={IdEmpreedimento}
                     onChange={(e) => setIdEmpreedimento(Number(e.target.value))}
                   >
-                    {Empreedimeto.length > 0 && Empreedimeto.map((empreedimento: any) => (
-                      <option key={empreedimento.id} value={empreedimento.id}>
-                        {empreedimento.nome}
-                      </option>
-                    ))}
+                    {Empreedimeto.length > 0 &&
+                      Empreedimeto.map((empreedimento: any) => (
+                        <option key={empreedimento.id} value={empreedimento.id}>
+                          {empreedimento.nome}
+                        </option>
+                      ))}
                   </Select>
                 </FormControl>
               )}

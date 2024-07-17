@@ -4,7 +4,7 @@ export default function Loading() {
   
 
   return (
-    <Flex w={'100%'} h={'100vh'} flexDir="column" justifyContent={'center'} alignItems={'center'}>
+    <Flex w={'100%'} h={'100vh'} flexDir="column" justifyContent={'center'} alignItems={'center'} bg={"#f3f3f3"}>
       <Box>
       <Center>
         <CircularProgress color="green.500" isIndeterminate size="250px" />

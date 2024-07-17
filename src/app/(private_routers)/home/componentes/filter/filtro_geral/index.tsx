@@ -58,16 +58,16 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
     onData(data);
   };
 
-  // const HandleFilterBlank = () => {
-  //   const data = {
-  //     nome: FilterNome,
-  //     andamento: FilterAndamento,
-  //     data: FilterData,
-  //     empreendimento: FilterEmpreendimento
-  //   }
+  const HandleFilterBlank = () => {
+    const data = {
+      nome: undefined,
+      andamento: undefined,
+      data: undefined,
+      empreendimento: undefined
+    }
 
-  //   onData(data);
-  // };
+    onData(data);
+  };
 
   return (
     <Flex
@@ -92,7 +92,10 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
         <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
           <DateFilter onData={SetDataEvent} />
         </Box>
-        <Button
+       
+      </Flex>
+      <Flex w="full" h="100%" bg="#F8F8F8" gap={"1rem"} mr={{ base: "0", md: "10px" }}>
+      <Button
           bg="#00713D"
           w={{ base: "100%", md: "auto" }}
           textColor="white"
@@ -102,6 +105,17 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
           onClick={HandleFilter}
         >
           Filtrar
+        </Button>
+        <Button
+          bg="#00713D"
+          w={{ base: "100%", md: "auto" }}
+          textColor="white"
+          variant="solid"
+          _hover={{ bg: "#00631B" }}
+          size="md"
+          onClick={HandleFilterBlank}
+        >
+          Limpar
         </Button>
       </Flex>
     </Flex>
