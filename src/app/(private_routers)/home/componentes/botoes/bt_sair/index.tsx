@@ -22,7 +22,7 @@ export default function BotaoSair() {
           variant="solid"
           _hover={{ bg: "#00631B" }}
           size="lg"
-          onClick={() => signOut()}
+          onClick={() => signOut({ callbackUrl: "/login" })}
         >
           Sair
         </Button>

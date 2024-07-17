@@ -1,11 +1,23 @@
 "use client";
 
 import { Box, Flex, Input } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 interface FiltroDataProps {
   onData: Date | string | any;
+  setBlank: any;
 }
-export const DateFilter = ({ onData }: FiltroDataProps) => {
+export const DateFilter = ({ onData, setBlank }: FiltroDataProps) => {
+  const [Date, setDate] = useState<string>("");
+  console.log(Date);
+
+  useEffect(() => {
+    if (setBlank === true && Date) {
+      setDate("");
+    }
+    onData(Date);
+  }, [Date, onData, setBlank]);
+
   return (
     <Flex w={"full"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <Box h={"100%"} bg={"#F8F8F8"}>
@@ -16,8 +28,9 @@ export const DateFilter = ({ onData }: FiltroDataProps) => {
           placeholder="Data Inicial"
           size="md"
           type="date"
+          value={Date}
           onChange={(e) => {
-            onData(e.target.value);
+            setDate(e.target.value);
           }}
         />
       </Box>
