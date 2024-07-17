@@ -11,7 +11,7 @@ export default function Loading() {
       </Center>
 
       <Center mt="30px">
-        <Heading color="white" variant="H1">
+        <Heading color="green.500" variant="H1">
           CARREGANDO ....
         </Heading>
       </Center>
