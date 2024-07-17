@@ -16,7 +16,7 @@ export const EmpreendimentoFilter = ({
   useEffect(() => {
     (async () => {
       const resq = await fetch(`/api/empreendimento/getall`);
-      const data = await resq.json();
+      const data = await resq.json();      
       setData(data);
     })();
   }, []);
