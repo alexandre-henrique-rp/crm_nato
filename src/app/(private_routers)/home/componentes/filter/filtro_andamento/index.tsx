@@ -5,7 +5,9 @@ import { useState } from "react";
 
 interface FiltroAndamentoProps {
   onAndamento: string | any;
+  setBlank: any;
 }
+
 export const AndamentoFilter = ({ onAndamento }: FiltroAndamentoProps) => {
   const [Andamento, setAndamento] = useState<string>("");
 

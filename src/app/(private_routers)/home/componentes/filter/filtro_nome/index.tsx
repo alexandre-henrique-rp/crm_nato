@@ -5,6 +5,7 @@ import { useState } from "react";
 
 interface FiltroNomeProps {
   onNome: string | any;
+  setBlank: any;
 }
 
 export const NomeFilter = ({ onNome }: FiltroNomeProps) => {

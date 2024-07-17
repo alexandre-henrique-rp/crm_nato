@@ -17,6 +17,11 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
   const [FilterAndamento, setFilterAndamento] = useState<string>("");
   const [FilterData, setFilterData] = useState<Date | string>("");
   const [FilterEmpreendimento, setFilterEmpreendimento] = useState<string>("");
+  const [StatusNome, setStatusNome] = useState<boolean>(false);
+  const [StatusAndamento, setStatusAndamento] = useState<boolean>(false);
+  const [StatusData, setStatusData] = useState<boolean>(false);
+  const [StatusEmpreendimento, setStatusEmpreendimento] =
+    useState<boolean>(false);
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -52,7 +57,7 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
       nome: FilterNome,
       andamento: FilterAndamento,
       data: FilterData,
-      empreendimento: FilterEmpreendimento,
+      empreendimento: FilterEmpreendimento
     };
 
     onData(data);
@@ -64,7 +69,17 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
       andamento: undefined,
       data: undefined,
       empreendimento: undefined
-    }
+    };
+    setStatusData(true);
+    setStatusAndamento(true);
+    setStatusNome(true);
+    setStatusEmpreendimento(true);
+    setTimeout(() => {
+      setStatusData(false);
+      setStatusAndamento(false);
+      setStatusNome(false);
+      setStatusEmpreendimento(false);
+    }, 50);
 
     onData(data);
   };
@@ -77,25 +92,36 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
       flexDirection={{ base: "column", md: "row" }} // Ajusta a direção da flexbox para diferentes tamanhos de tela
     >
       <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
-        <NomeFilter onNome={SetNomeEvent} />
+        <NomeFilter onNome={SetNomeEvent} setBlank={StatusNome} />
       </Box>
       <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
         {user?.hierarquia !== "USER" && (
-          <EmpreendimentoFilter onEmpreendimento={SetEmpreendimentoEvent} />
+          <EmpreendimentoFilter
+            onEmpreendimento={SetEmpreendimentoEvent}
+            setBlank={StatusEmpreendimento}
+          />
         )}
       </Box>
       <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
-        <AndamentoFilter onAndamento={SetAndamentoEvent} />
+        <AndamentoFilter
+          onAndamento={SetAndamentoEvent}
+          setBlank={StatusAndamento}
+        />
       </Box>
 
       <Flex w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
         <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
-          <DateFilter onData={SetDataEvent} />
+          <DateFilter onData={SetDataEvent} setBlank={StatusData} />
         </Box>
-       
       </Flex>
-      <Flex w="full" h="100%" bg="#F8F8F8" gap={"1rem"} mr={{ base: "0", md: "10px" }}>
-      <Button
+      <Flex
+        w="full"
+        h="100%"
+        bg="#F8F8F8"
+        gap={"1rem"}
+        mr={{ base: "0", md: "10px" }}
+      >
+        <Button
           bg="#00713D"
           w={{ base: "100%", md: "auto" }}
           textColor="white"

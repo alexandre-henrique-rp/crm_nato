@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 
 interface FiltroEmpreendimentoProps {
   onEmpreendimento: number | any;
+  setBlank: any;
 }
+
 export const EmpreendimentoFilter = ({
   onEmpreendimento,
 }: FiltroEmpreendimentoProps) => {
