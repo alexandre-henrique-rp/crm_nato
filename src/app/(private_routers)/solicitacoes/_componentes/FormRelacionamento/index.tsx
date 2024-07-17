@@ -59,7 +59,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       }
     })();
   }, [SetValue.cpfdois]);
-  console.log("teste", SetValue.cpfdois);
 
   const handlesubmit = () => {
     if (!nome || !cpf || !email) {

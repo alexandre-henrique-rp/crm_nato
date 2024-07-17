@@ -30,7 +30,6 @@ interface ModallPropsFormuulario {
   PostName?: string;
   CorretorName?: string;
   CorretorId?: number;
-  objAlert: any;
 }
 
 export const ModalFormComponent = ({
@@ -40,7 +39,6 @@ export const ModalFormComponent = ({
   PostName,
   CorretorName,
   CorretorId,
-  objAlert
 }: ModallPropsFormuulario) => {
   const [Titulo, setTitulo] = useState("");
   const [Descricao, setDescricao] = useState("");
