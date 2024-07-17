@@ -6,10 +6,10 @@ export const APP_ROUTES = {
       perfil_client:"/perfil-client/:path*",
       redefinicao: "/redefinicao",
       solicitacao: "/solicitacoes/:path*",
+      register: '/register',
     },
     public: {
         login: '/login',
-        register: '/register',
         reset_password: '/reset-password',
         termos_uso: '/termos/uso',
     }

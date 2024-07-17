@@ -1,6 +1,5 @@
 "use client";
 
-
 import {
   Box,
   Button,
@@ -17,44 +16,52 @@ import {
   Select,
   Textarea,
   useDisclosure,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Interface } from "readline";
-
 
 interface ModallPropsFormuulario {
   rota: any;
   empreedimento?: number;
   clienteId?: number;
+  PostName?: string;
+  CorretorName?: string;
+  CorretorId?: number;
 }
 
-
-export const ModalFormComponent = ({ rota, empreedimento, clienteId }: ModallPropsFormuulario ) => {
+export const ModalFormComponent = ({
+  rota,
+  empreedimento,
+  clienteId,
+  PostName,
+  CorretorName,
+  CorretorId
+}: ModallPropsFormuulario) => {
   const [Titulo, setTitulo] = useState("");
   const [Descricao, setDescricao] = useState("");
   const [IdEmpreedimento, setIdEmpreedimento] = useState<number>(0);
- const [StatusAlert, setStatusAlert] = useState("");
- const [Empreedimeto, setEmpreedimeto] = useState([]);
- const toast = useToast();
+  const [StatusAlert, setStatusAlert] = useState("");
+  const [Empreedimeto, setEmpreedimeto] = useState([]);
+  const toast = useToast();
   const { data: session } = useSession();
+  const route = useRouter();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     (async () => {
-     if(rota === "geral") {
-       const request = await fetch("/api/empreendimento/getall");
-       if (request.ok) {
-         const response = await request.json();
-         setEmpreedimeto(response);
-       }
-     }
+      if (rota === "geral") {
+        const request = await fetch("/api/empreendimento/getall");
+        if (request.ok) {
+          const response = await request.json();
+          setEmpreedimeto(response);
+        }
+      }
     })();
   }, [rota]);
-
-
 
   const OverlayTwo = () => (
     <ModalOverlay
@@ -65,44 +72,51 @@ export const ModalFormComponent = ({ rota, empreedimento, clienteId }: ModallPro
     />
   );
 
-  const handleSubmit = async(e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
-    const data: AlertsType.AlertsProps = rota === "geral" ? {
-      tipo: rota,
-      empreendimento: IdEmpreedimento,
-      tag: "info",
-      texto: Descricao,
-      titulo: Titulo,
-    }
-    : {
-      tipo: "CORRETOR",
-      corretor: session?.user?.id,
-      empreendimento: empreedimento,
-      solicitacao_id: clienteId,
-      tag: StatusAlert,
-      texto: Descricao,
-      titulo: Titulo,
-    };
+    const data: AlertsType.AlertsProps =
+      rota === "geral"
+        ? {
+            tipo: rota,
+            empreendimento: IdEmpreedimento,
+            tag: "info",
+            texto: Descricao,
+            titulo: `${PostName?.split(" ")[0]} ${
+              PostName?.split(" ")[1]
+            } - ${Titulo}`
+          }
+        : {
+            tipo: "CORRETOR",
+            corretor: CorretorId,
+            empreendimento: empreedimento,
+            solicitacao_id: clienteId,
+            tag: StatusAlert,
+            texto: Descricao,
+            titulo: `${PostName?.split(" ")[0]} ${
+              PostName?.split(" ")[1]
+            } - ${Titulo}`
+          };
 
     try {
-      const request = await fetch(`/api/alerts/cerate`, {
+      const request = await fetch(`/api/alerts/create`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
+      const response = await request.json();
+      console.log(response);
       if (request.ok) {
-        const response = await request.json();
-  
         toast({
           title: "Sucesso!",
           description: "Alerta criado com sucesso!",
           status: "success",
           duration: 3000,
-          isClosable: true,
+          isClosable: true
         });
+        route.refresh();
       }
       onClose();
     } catch (error) {
@@ -111,8 +125,8 @@ export const ModalFormComponent = ({ rota, empreedimento, clienteId }: ModallPro
         description: "Erro ao criar alerta!",
         status: "error",
         duration: 3000,
-        isClosable: true,
-      })
+        isClosable: true
+      });
     }
   };
 
@@ -132,7 +146,7 @@ export const ModalFormComponent = ({ rota, empreedimento, clienteId }: ModallPro
           textColor={"white"}
           variant="solid"
           _hover={{ bg: "#00631B" }}
-          // size="lg"
+          height="50px"
           onClick={onOpen}
         >
           Criar Alerta
@@ -143,21 +157,26 @@ export const ModalFormComponent = ({ rota, empreedimento, clienteId }: ModallPro
         {OverlayTwo()}
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Formulário de Acesso</ModalHeader>
+          <ModalHeader>
+            {PostName
+              ? "Criar Alerta para " + PostName + " vendedor " + CorretorName
+              : "Alerta Geral"}
+          </ModalHeader>
           <ModalCloseButton />
-          <FormControl onSubmit={handleSubmit}>
+          <FormControl>
             <ModalBody>
               <FormLabel>Status</FormLabel>
               <Select
                 name="status"
                 value={StatusAlert}
                 onChange={(e) => setStatusAlert(e.target.value)}
+                placeholder="Selecione o status"
               >
-                <option value="info">Info</option>
-                <option value="warning">Warning</option>
-                <option value="success">Success</option>
-                <option value="error">Error</option>
-                <option value="loading">Loading</option>
+                <option value="info">Informação</option>
+                <option value="warning">Atenção</option>
+                {/* <option value="success">Success</option> */}
+                <option value="error">Erro</option>
+                {/* <option value="loading">Loading</option> */}
               </Select>
 
               <FormControl id="title" isRequired mt={4}>
@@ -169,6 +188,24 @@ export const ModalFormComponent = ({ rota, empreedimento, clienteId }: ModallPro
                 />
               </FormControl>
 
+              {rota === "geral" && (
+                <FormControl id="idEmpreedimento" isRequired mt={4}>
+                  <FormLabel>Empreedimento</FormLabel>
+                  <Select
+                    name="idEmpreedimento"
+                    value={IdEmpreedimento}
+                    onChange={(e) => setIdEmpreedimento(Number(e.target.value))}
+                  >
+                    {Empreedimeto.length > 0 &&
+                      Empreedimeto.map((empreedimento: any) => (
+                        <option key={empreedimento.id} value={empreedimento.id}>
+                          {empreedimento.nome}
+                        </option>
+                      ))}
+                  </Select>
+                </FormControl>
+              )}
+
               <FormControl id="text" isRequired mt={4}>
                 <FormLabel>Descrição</FormLabel>
                 <Textarea
@@ -177,11 +214,10 @@ export const ModalFormComponent = ({ rota, empreedimento, clienteId }: ModallPro
                   placeholder="Digite o texto"
                 />
               </FormControl>
-
             </ModalBody>
 
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} type="submit">
+              <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
                 Enviar
               </Button>
               <Button variant="ghost" onClick={onClose}>

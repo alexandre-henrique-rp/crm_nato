@@ -57,7 +57,7 @@ declare module solictacao {
     };
     obs: string;
     alert: AlertProps[];
-    empreendimento: {
+    empreedimento: {
       id: number;
       nome: string;
     };
@@ -124,6 +124,7 @@ declare module solictacao {
    * @param {number} empreendimento
    */
   interface AlertProps {
+    status: boolean | null | undefined;
     id: number;
     titulo: string;
     texto: string;

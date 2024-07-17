@@ -1,9 +1,9 @@
 import axios from "axios";
-import { error } from "console";
 import NextAuth, { NextAuthOptions } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 
+// @ts-ignore
 const nextAuthOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -80,12 +80,12 @@ const nextAuthOptions: NextAuthOptions = {
     // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
   jwt: {
-    secret: process.env.JWT_SIGNING_PRIVATE_KEY || "secret"
+    secret: process.env.NEXT_PUBLIC_JWT_SECRET || "secret"
   },
-  secret: process.env.NEXTAUTH_SECRET || "123456",
+  secret: process.env.NEXT_PUBLIC_JWT_SECRET || "123456",
   session: {
     strategy: "jwt",
-    maxAge: 4 * 60 * 60 // 4 hours
+    maxAge: 3 * 60 * 60 // 4 hours
   },
   callbacks: {
     jwt: async ({
@@ -164,6 +164,6 @@ const nextAuthOptions: NextAuthOptions = {
   }
 };
 
+// @ts-ignore
 const handler = NextAuth(nextAuthOptions);
-
 export { handler as GET, handler as POST, nextAuthOptions };

@@ -13,7 +13,7 @@ export default function LoginPage() {
   return (
     <Stack
       height="100vh"
-      background="#F8F8F8"
+      bg={"#dfdfdf"}
       justifyContent="center"
       alignItems="center"
       spacing={8} // Espaçamento entre os elementos dentro do Stack
@@ -21,12 +21,14 @@ export default function LoginPage() {
     >
       {/* Bloco de Login */}
       <Box
-        border="3px solid #E8E8E8"
+        border="3px solid #f1f1f1"
         borderRadius="8px"
         padding="32px"
         width={{ base: "90%", sm: "80%", md: "70%", lg: "50%", xl: "35em" }} // Largura responsiva
         textAlign="center"
         maxWidth="100%"
+        bg={"#ffffff"}
+        boxShadow="lg"
       >
         <Text
           fontFamily="Poppins"
@@ -41,7 +43,7 @@ export default function LoginPage() {
           <FormLogin />
         </Box>
         <Box>
-          <Text
+          {/* <Text
             fontFamily="Poppins"
             fontWeight="regular"
             fontSize={{ base: "12px", sm: "14px", md: "15px" }} // Tamanho de fonte responsivo
@@ -51,7 +53,7 @@ export default function LoginPage() {
             marginTop={{ base: -2, sm: -1 }} // Margem superior responsiva
           >
             <Link href="/reset-password">Esqueci a Senha</Link>
-          </Text>
+          </Text> */}
 
           <Text
             fontFamily="Poppins"
@@ -74,6 +76,8 @@ export default function LoginPage() {
         width={{ base: "90%", sm: "80%", md: "70%", lg: "50%", xl: "35em" }} // Largura responsiva
         textAlign="center"
         maxWidth="100%"
+          bg={"#ffffff"}
+        boxShadow="lg"
       >
         <Button
           variant="outline"

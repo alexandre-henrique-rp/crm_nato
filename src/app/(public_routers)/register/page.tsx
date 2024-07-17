@@ -1,5 +1,6 @@
-import { Stack, Text, Box, Button } from "@chakra-ui/react";
+import { Stack, Text, Box, Button, Flex } from "@chakra-ui/react";
 import FormRegister from "./_components/form";
+import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 
 export default function Register() {
   return (
@@ -16,14 +17,21 @@ export default function Register() {
         w={"60em"}
         textAlign={"center"}
       >
-        <Text
-          fontFamily="Poppins"
-          fontWeight="regular"
-          fontSize="32px"
-          color="#333333"
-        >
-          Cadastro de Usuarios
-        </Text>
+        <Flex w={"100%"} justifyContent={"center"} mb={5}>
+          <Box zIndex={1} position={"initial"}>
+            <BotaoRetorno />
+          </Box>
+          <Box width={"100%"}>
+            <Text
+              fontWeight="regular"
+              fontSize="32px"
+              color="#333333"
+            >
+              Cadastro de Usuarios
+            </Text>
+          </Box>
+        </Flex>
+
         <FormRegister />
       </Box>
     </Stack>

@@ -1,8 +1,9 @@
 "use client";
 
 import BotaoSair from "@/app/(private_routers)/home/componentes/botoes/bt_sair";
-import BotaoVoltar from "@/app/(private_routers)/home/componentes/botoes/bt_voltar";
+import BotaoVoltar from "@/app/componentes/bt_voltar";
 import { DownloadDoc } from "@/app/componentes/DowloadDoc";
+import { AlertComponent } from "@/app/componentes/alerts";
 import { ModalFormComponent } from "@/app/componentes/modal";
 import { Link } from "@chakra-ui/next-js";
 import {
@@ -22,13 +23,14 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { FormEventHandler, useEffect, useState } from "react";
 import { FaPen } from "react-icons/fa";
 import { mask, unMask } from "remask";
+import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 
 interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
@@ -63,30 +65,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [AlertDb, setAlertDb] = useState<any>([]);
   const [Looad, setLooad] = useState<boolean>(false);
   const toast = useToast();
-
-  // Matheus
-  // crira campos faltantes no formulario
-  //       cpf: Cpf,
-  //       nome: Name,
-  //       telefone: Whatsapp,
-  //       telefone2: Whatsapp2,
-  //       email: Email,
-  //       uploadRg: RgFile,
-  //       uploadCnh: CnhFile,
-  //       construtora: Construtora,
-  //       empreedimento: Empreendimento,
-  //       relacionamento: Relacionamento,
-  //       corretor: CorretorId,
-  //       dt_nascimento: DataNascimento,
-  //       ass_doc: AssDoc,
-  //       link_doc: LinkDoc,
-  //       id_fcw: IdFcweb,
-  //       obs: Obs,
-  //       alert: AlertDb,
-  // verifique essa liste e acresente o que falta, não esqueça de fazer a verificação da hiearquia do usuario e apresentar o nessesarios campos
-  // não esquer de carregar os dados nos seus inputs
-  // verificar Layout componet DownloadDoc
-  //allertas em 80%
+  const router = useRouter();
 
   useEffect(() => {
     if (SetData && Name == "") {
@@ -109,8 +88,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setEmail(SetData.email);
       setConstrutoraId(SetData.construtora && SetData.construtora.id);
       setConstrutora(SetData.construtora && SetData.construtora.razaosocial);
-      setEmpreendimento(SetData.empreendimento && SetData.empreendimento.nome);
-      setEmpreendimentoId(SetData.empreendimento && SetData.empreendimento.id);
+      setEmpreendimento(SetData.empreedimento && SetData.empreedimento.nome);
+      setEmpreendimentoId(SetData.empreedimento && SetData.empreedimento.id);
       const date = new Date(SetData.dt_nascimento);
       const formattedDate =
         SetData.dt_nascimento && date.toISOString().split("T")[0];
@@ -122,6 +101,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setObs(SetData.obs);
       setAlertDb(SetData.alert == null ? [] : SetData.alert);
       setsetIdFcweb(SetData.id_fcw);
+      console.log(SetData);
     }
   }, [Name, SetData]);
 
@@ -146,17 +126,24 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         ass_doc: AssDoc,
         link_doc: LinkDoc,
         id_fcw: IdFcweb,
-        obs: Obs,
+        obs: Obs
       };
-      const rest = await fetch(`/api/User/put/`, {
+      const rest = await fetch(`/api/solicitacao/update/${ClientId}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(data)
       });
       const response = await rest.json();
 
+      toast({
+        title: "Cliente Atualizado Com Sucesso",
+        status: "success",
+        duration: 9000,
+        isClosable: true
+      });
+      router.refresh();
       setLooad(false);
     } catch (error) {
       setLooad(false);
@@ -195,21 +182,27 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       >
         {/* Dados pessoais */}
         <Box w="80%" h="100%" p={10} bg="white" borderRadius={8} boxShadow="lg">
-          <Box display={"flex"} justifyContent={"space-between"}>
-            <Box alignItems={"center"} gap={2}>
+          <Box 
+          display={"flex"} 
+          // justifyContent={"space-between"}
+          >
+            <Box zIndex={1} position={"initial"}>
+              <BotaoRetorno />
+            </Box>
+            <Box alignItems={"center"} gap={2} ms={2}>
               <Text fontSize={"2xl"}>Dados Pessoais</Text>
               {input !== "USER" && (
                 <Text fontSize={"md"}>Corretor: {Corretor} </Text>
               )}
             </Box>
-            <Button variant={"link"} leftIcon={<FaPen />}></Button>
+            {/* <Button variant={"link"} leftIcon={<FaPen />}></Button> */}
           </Box>
           <Divider borderColor={"#00713D"} pt={2} />
           <Stack
             pt={4}
             bg="white"
             _dark={{
-              bg: "#141517",
+              bg: "#141517"
             }}
             spacing={6}
           >
@@ -232,7 +225,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Data de Nascimento
@@ -251,12 +244,17 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Relacionamento
                 </FormLabel>
-                <Input type="text" variant="flushed" value={Relacionamento} />
+                <Input
+                  type="text"
+                  variant="flushed"
+                  value={Relacionamento}
+                  disabled={true}
+                />
               </FormControl>
 
               <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
@@ -265,7 +263,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Telefone Celular
@@ -284,7 +282,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Telefone 2
@@ -303,7 +301,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Email
@@ -322,7 +320,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Construtora
@@ -332,6 +330,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   onChange={(e) => setConstrutora(e.target.value)}
                   type="text"
                   variant="flushed"
+                  disabled={true}
                 />
               </FormControl>
 
@@ -341,7 +340,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Empreendimento
@@ -351,6 +350,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   onChange={(e) => setEmpreendimento(e.target.value)}
                   type="text"
                   variant="flushed"
+                  disabled={true}
                 />
               </FormControl>
               {input !== "USER" && (
@@ -360,7 +360,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     fontWeight="md"
                     color="gray.700"
                     _dark={{
-                      color: "gray.50",
+                      color: "gray.50"
                     }}
                   >
                     ID FCWEB
@@ -370,6 +370,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     onChange={(e) => setsetIdFcweb(Number(e.target.value))}
                     type="text"
                     variant="flushed"
+                    disabled={true}
                   />
                 </FormControl>
               )}
@@ -380,7 +381,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Link Contrato
@@ -398,7 +399,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Link Planilha
@@ -417,7 +418,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   CNH
@@ -436,7 +437,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   RG
@@ -456,7 +457,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     fontWeight="md"
                     color="gray.700"
                     _dark={{
-                      color: "gray.50",
+                      color: "gray.50"
                     }}
                   >
                     Downloads da CNH
@@ -471,7 +472,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     fontWeight="md"
                     color="gray.700"
                     _dark={{
-                      color: "gray.50",
+                      color: "gray.50"
                     }}
                   >
                     Download do Rg
@@ -486,7 +487,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   fontWeight="md"
                   color="gray.700"
                   _dark={{
-                    color: "gray.50",
+                    color: "gray.50"
                   }}
                 >
                   Observações
@@ -499,25 +500,31 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 />
               </FormControl>
 
-              <Box justifyContent={"space-between"} alignItems={"center"}>
+              <FormControl isRequired as={GridItem} colSpan={[6, 1]}>
                 <Button
                   onClick={handleSubmit}
                   colorScheme={"green"}
                   variant="outline"
                   height="50px"
+                  px={1}
                   isLoading={Looad}
                 >
                   Salvar e Enviar
                 </Button>
+              </FormControl>
 
+              <FormControl isRequired as={GridItem} colSpan={[6, 1]}>
                 {input !== "USER" && (
                   <ModalFormComponent
                     rota={"CORRETROR"}
                     clienteId={ClientId}
                     empreedimento={EmpreendimentoId}
+                    PostName={Name}
+                    CorretorName={Corretor}
+                    CorretorId={CorretorId}
                   />
                 )}
-              </Box>
+              </FormControl>
             </SimpleGrid>
           </Stack>
         </Box>
@@ -542,14 +549,18 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   AlertDb.map((item: solictacao.AlertProps) => {
                     const status =
                       item.tipo === "success" ? "success" : "error";
+
+                    console.log("status", item.status);
+                    console.log("id", item.id);
                     return (
                       <>
-                        <Alert status={status}>
-                          <AlertIcon />
-                          <Heading size="sm">{item.titulo}</Heading>
-                          <Text>{item.texto}</Text>
-                          <Text>{item.tag}</Text>
-                        </Alert>
+                        <AlertComponent
+                          msg={item.texto}
+                          titulo={item.titulo}
+                          status={item.tag}
+                          ID={item.id}
+                          DeleteAlertStatus={item.status}
+                        />
                       </>
                     );
                   })}
