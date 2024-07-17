@@ -84,6 +84,8 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
     onData(data);
   };
 
+    
+
   return (
     <Flex
       w="100%"
