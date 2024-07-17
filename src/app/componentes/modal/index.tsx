@@ -30,6 +30,7 @@ interface ModallPropsFormuulario {
   PostName?: string;
   CorretorName?: string;
   CorretorId?: number;
+  objAlert: any;
 }
 
 export const ModalFormComponent = ({
@@ -38,7 +39,8 @@ export const ModalFormComponent = ({
   clienteId,
   PostName,
   CorretorName,
-  CorretorId
+  CorretorId,
+  objAlert
 }: ModallPropsFormuulario) => {
   const [Titulo, setTitulo] = useState("");
   const [Descricao, setDescricao] = useState("");
@@ -91,7 +93,7 @@ export const ModalFormComponent = ({
             corretor: CorretorId,
             empreendimento: empreedimento,
             solicitacao_id: clienteId,
-            tag: StatusAlert,
+            tag: !StatusAlert ? "warning" : StatusAlert,
             texto: Descricao,
             titulo: `${PostName?.split(" ")[0]} ${
               PostName?.split(" ")[1]
@@ -116,7 +118,7 @@ export const ModalFormComponent = ({
           duration: 3000,
           isClosable: true
         });
-        route.refresh();
+        window.location.reload();
       }
       onClose();
     } catch (error) {

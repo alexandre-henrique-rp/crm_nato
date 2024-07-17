@@ -6,7 +6,6 @@ import { nextAuthOptions } from "../../auth/[...nextauth]/route";
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    console.log(data);
     const session = await getServerSession(nextAuthOptions)
 
     if (!session) {

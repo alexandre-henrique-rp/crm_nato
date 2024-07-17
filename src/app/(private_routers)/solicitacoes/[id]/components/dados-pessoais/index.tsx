@@ -370,7 +370,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     onChange={(e) => setsetIdFcweb(Number(e.target.value))}
                     type="text"
                     variant="flushed"
-                    disabled={true}
+                    // disabled={IdFcweb ? true : false}
                   />
                 </FormControl>
               )}
@@ -521,8 +521,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     empreedimento={EmpreendimentoId}
                     PostName={Name}
                     CorretorName={Corretor}
-                    CorretorId={CorretorId}
-                  />
+                    CorretorId={CorretorId} objAlert={undefined}                  />
                 )}
               </FormControl>
             </SimpleGrid>
