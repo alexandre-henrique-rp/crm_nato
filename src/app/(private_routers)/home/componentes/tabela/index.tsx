@@ -40,7 +40,6 @@ export const Tabela = ({ onDados }: TabelaProps) => {
       return item.id !== id;
     });
     setData(newData);
-
   };
 
   const { nome, andamento, data, empreendimento } = onDados;

@@ -25,6 +25,7 @@ export async function GET() {
       return new NextResponse("Invalid credentials", { status: 401 });
     }
     const data = await reqest.json();
+    console.log("🚀 ~ GET ~ data:", data)
     const users = data.filter((user: any) => user.hierarquia !== "ADM");
 
     return NextResponse.json(users, { status: 200 });    

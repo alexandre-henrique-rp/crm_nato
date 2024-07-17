@@ -28,6 +28,7 @@ declare module solictacao {
    *
    */
   interface SolicitacaoGetType {
+    nato_user: any;
     id: number;
     nome: string;
     cpf: string;
