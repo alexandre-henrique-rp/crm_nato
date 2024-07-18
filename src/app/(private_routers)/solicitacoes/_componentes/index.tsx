@@ -18,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import CheckEmail from "@/app/componentes/checkEmail";
 import { Whatsapp } from "@/app/componentes/whatsapp";
 import { SelectCorretor } from "@/app/componentes/select_user";
@@ -31,7 +31,7 @@ interface relacionamentoProps {
 
 export default function SolicitacaoForm({
   onvalue,
-  ishidden
+  ishidden,
 }: relacionamentoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -39,7 +39,6 @@ export default function SolicitacaoForm({
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [CorretorId, setCorretorId] = useState(0);
-
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
@@ -49,7 +48,6 @@ export default function SolicitacaoForm({
   const [teldois, SetTeldois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
-
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
@@ -62,7 +60,7 @@ export default function SolicitacaoForm({
         description: "Preencha todos os campos",
         status: "error",
         duration: 3000,
-        isClosable: true
+        isClosable: true,
       });
     } else {
       const data: solictacao.SolicitacaoPost = {
@@ -79,7 +77,7 @@ export default function SolicitacaoForm({
         dt_nascimento: DataNascimento,
         relacionamento: cpfdois ? [cpfdois] : [],
         rela_quest: relacionamento === "sim" ? true : false,
-        voucher: Voucher
+        voucher: Voucher,
       };
 
       try {
@@ -87,9 +85,9 @@ export default function SolicitacaoForm({
         const response = await fetch("/api/solicitacao", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
         });
         if (response.ok) {
           toast({
@@ -97,14 +95,16 @@ export default function SolicitacaoForm({
             description: "Solicitacao enviada com sucesso",
             status: "success",
             duration: 3000,
-            isClosable: true
+            isClosable: true,
           });
           setLoad(false);
           router.push("/home");
         }
+
       } catch (error) {
         console.log(error);
       }
+
     }
   };
 
@@ -156,8 +156,6 @@ export default function SolicitacaoForm({
   ) => {
     const file = event.target.files?.[0];
 
-    console.log("🚀 ~ file:", file);
-
     if (file) {
       try {
         const base64 = await fileToBase64(file);
@@ -194,6 +192,7 @@ export default function SolicitacaoForm({
       empreedimento: Number(empreendimento),
       rela_quest: relacionamento === "sim" ? true : false,
       voucher: Voucher
+
     };
     onvalue(data);
   }
@@ -208,7 +207,7 @@ export default function SolicitacaoForm({
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6}>
         <Box>
           <FormLabel>Nome Completo</FormLabel>
           <Input type="text" onChange={(e) => setnome(e.target.value)} />
@@ -227,6 +226,7 @@ export default function SolicitacaoForm({
 
           <Whatsapp setValue={tel} onValue={setTel} />
         </Box>
+
       </SimpleGrid>
 
       <SimpleGrid
@@ -249,6 +249,7 @@ export default function SolicitacaoForm({
           />
         </Box>
         <CheckEmail email={email} nome={nome} />
+
         <Box>
           <CheckEmail email={email} nome={nome} />
         </Box>
@@ -289,8 +290,8 @@ export default function SolicitacaoForm({
               tag="construtora"
               SetValue={user.construtora.map((item) => ({
                 id: item.id,
-
                 nome: item.razaosocial
+
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
             />
@@ -298,13 +299,13 @@ export default function SolicitacaoForm({
         )}
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} mt={6}>
-        <FormControl as={GridItem} colSpan={[6, 2]}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} mt={6}>
+        <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
           <Input type="file" variant="flushed" onChange={handleRgChange} />
         </FormControl>
 
-        <FormControl as={GridItem} colSpan={[6, 2]}>
+        <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
           <Input type="file" variant="flushed" onChange={handleCnhChange} />
         </FormControl>
