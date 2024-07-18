@@ -57,7 +57,7 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
       nome: FilterNome,
       andamento: FilterAndamento,
       data: FilterData,
-      empreendimento: FilterEmpreendimento
+      empreendimento: FilterEmpreendimento,
     };
 
     onData(data);
@@ -68,7 +68,7 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
       nome: undefined,
       andamento: undefined,
       data: undefined,
-      empreendimento: undefined
+      empreendimento: undefined,
     };
     setStatusData(true);
     setStatusAndamento(true);
@@ -84,8 +84,6 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
     onData(data);
   };
 
-    
-
   return (
     <Flex
       w="100%"
@@ -97,18 +95,18 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
         <NomeFilter onNome={SetNomeEvent} setBlank={StatusNome} />
       </Box>
       <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
+        <AndamentoFilter
+          onAndamento={SetAndamentoEvent}
+          setBlank={StatusAndamento}
+        />
+      </Box>
+      <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
         {user?.hierarquia !== "USER" && (
           <EmpreendimentoFilter
             onEmpreendimento={SetEmpreendimentoEvent}
             setBlank={StatusEmpreendimento}
           />
         )}
-      </Box>
-      <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
-        <AndamentoFilter
-          onAndamento={SetAndamentoEvent}
-          setBlank={StatusAndamento}
-        />
       </Box>
 
       <Flex w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>

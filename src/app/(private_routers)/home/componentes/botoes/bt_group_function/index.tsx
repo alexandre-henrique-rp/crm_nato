@@ -21,6 +21,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
+import { IoIosArrowBack } from "react-icons/io";
 
 interface BotoesFunctionProps {
   id: number;
@@ -84,18 +85,22 @@ export const BotoesFunction = ({ id, onUpdate }: BotoesFunctionProps) => {
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
+
         <ModalContent>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>
+          <ModalBody p={10}>
+            <Text fontWeight={"bold"} fontSize={"20px"} textAlign={"center"}>
               Você tem certeza de que deseja deletar esta solicitação?
             </Text>
           </ModalBody>
 
           <ModalFooter>
-            <BotaoRetorno />
+            <Button leftIcon={<IoIosArrowBack />} onClick={onClose} />
 
-            <Button onClick={(e) => HandleDelet(e)} colorScheme="red">
+            <Button
+              leftIcon={<BsFillTrashFill />}
+              onClick={(e) => HandleDelet(e)}
+              colorScheme="red"
+            >
               Confirmar Exclusão
             </Button>
           </ModalFooter>

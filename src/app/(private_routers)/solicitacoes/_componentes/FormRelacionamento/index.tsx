@@ -1,7 +1,12 @@
 "use client";
 
+import CheckEmail from "@/app/componentes/checkEmail";
 import CpfMask from "@/app/componentes/cpf_mask";
+import VerificadorFileComponent from "@/app/componentes/file";
 import { SelectComponent } from "@/app/componentes/select";
+import { SelectCorretor } from "@/app/componentes/select_user";
+import { Whatsapp } from "@/app/componentes/whatsapp";
+import Loading from "@/app/loading";
 import {
   Box,
   Button,
@@ -11,6 +16,11 @@ import {
   GridItem,
   Icon,
   Input,
+  InputGroup,
+  InputLeftAddon,
+  Select,
+  SimpleGrid,
+  Stack,
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
@@ -44,6 +54,9 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [Whatappdois, setWhatappdois] = useState<string>("");
   const [Voucher, setVoucher] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
+  const [Load, setLoad] = useState<boolean>(false);
+  const [checkEmail, setcheckEmail] = useState<string>("");
+  const [codigo, setcodigo] = useState<boolean>(false);
   // const [base64String, setBase64String] = useState("");
   const toast = useToast();
   const router = useRouter();
@@ -62,7 +75,15 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   }, [SetValue.cpfdois]);
 
   const handlesubmit = () => {
-    if (!nome || !cpf || !email) {
+    if (!codigo) {
+      toast({
+        title: "Erro",
+        description: "Falha na verificação de Email",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else if (!nome || !email) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos",
@@ -71,24 +92,40 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         isClosable: true,
       });
     } else {
+      const dadossuperior: solictacao.SolicitacaoPost = {
+        nome: SetValue.nome,
+        telefone: SetValue.telefone,
+        cpf: SetValue.cpf,
+        telefone2: SetValue.telefone2,
+        email: SetValue.email,
+        uploadRg: SetValue.uploadRg,
+        uploadCnh: SetValue.uploadCnh,
+        corretor: SetValue.corretor,
+        construtora: SetValue.construtora,
+        empreedimento: SetValue.empreedimento,
+        dt_nascimento: SetValue.dt_nascimento,
+        relacionamento: SetValue.relacionamento ,
+        rela_quest: SetValue.rela_quest,
+        voucher: SetValue.voucher,
+      }
       const dados: solictacao.SolicitacaoPost = {
         nome: nome,
         telefone: tel,
-        cpf: cpfdois,
+        cpf: SetValue.cpfdois ? SetValue.cpfdois : "",
         telefone2: teldois,
         email: email,
-        foto_rg: uploadRg,
-        foto_cnh: uploadCnh,
+        uploadRg: uploadRg,
+        uploadCnh: uploadCnh,
+        corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
         construtora: Number(ConstrutoraID),
-        empreendimento: Number(empreendimento),
+        empreedimento: Number(empreendimento),
         dt_nascimento: DataNascimento,
         relacionamento: SetValue.cpf ? [SetValue.cpf] : [],
-        rela_quest: SetValue.rela_quest,
+        rela_quest: SetValue.rela_quest ? true : false,
         voucher: Voucher,
-        corretor: Number(user?.id),
       };
 
-      const data = [dados, SetValue];
+      const data = [dados, dadossuperior];
       data.map(async (item: any, index: number) => {
         const response = await fetch("/api/solicitacao", {
           method: "POST",
@@ -121,150 +158,117 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     setConstrutoraID(user.construtora[0].id);
   }
 
-  const WhatsAppMask = (e: any) => {
-    const valor = e.target.value;
-    const valorLinpo = unMask(valor);
-    const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-    setTel(valorLinpo);
-    setWhatapp(masked);
-  };
-
-  const WhatsAppMask2 = (e: any) => {
-    const valor = e.target.value;
-    const valorLinpo = unMask(valor);
-    const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-    SetTeldois(valorLinpo);
-    setWhatappdois(masked);
-  };
-
-  // Função para converter arquivo em base64
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onloadend = () => {
-        if (reader.result) {
-          const result = reader.result as string;
-          const base64String = result.split(",")[1];
-          resolve(base64String);
-        } else {
-          reject(new Error("O resultado do FileReader é null ou undefined"));
-        }
-      };
-
-      reader.onerror = () => {
-        reject(new Error("Erro ao ler o arquivo"));
-      };
-
-      reader.readAsDataURL(file);
-    });
-  };
-
-  // Função chamada quando um arquivo RG é selecionado
-  const handleRgChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      try {
-        const base64 = await fileToBase64(file);
-        setRgFile(base64);
-      } catch (error) {
-        console.error("Erro ao processar o arquivo RG:", error);
-      }
+  const VerificadorEmail = (e: any) => {
+    const value = e.target.value;
+    if ("NT-" + value === checkEmail) {
+      setcheckEmail("");
+      setcodigo(true);
+    } else {
+      setcheckEmail(value);
+      setcodigo(false);
     }
   };
 
-  // Função chamada quando um arquivo CNH é selecionado
-  const handleCnhChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      try {
-        const base64 = await fileToBase64(file);
-        setCnhFile(base64);
-      } catch (error) {
-        console.error("Erro ao processar o arquivo CNH:", error);
-      }
-    }
-  };
+  if (Load) {
+    return <Loading />;
+  }
 
   return (
-    <>
-      <Grid
-        templateColumns={["1fr", "1fr 1fr", "repeat(3, 1fr)"]}
-        gap={4}
-        w="full"
-      >
-        <GridItem colSpan={1}>
+    <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6}>
+        <Box>
           <FormLabel>Nome Completo</FormLabel>
           <Input type="text" onChange={(e) => setnome(e.target.value)} />
-        </GridItem>
+        </Box>
 
-        <GridItem colSpan={1}>
+        <Box>
           <FormLabel>Data de Nascimento</FormLabel>
           <Input
             type="date"
             onChange={(e) => setDataNascimento(e.target.value)}
           />
-        </GridItem>
+        </Box>
+      </SimpleGrid>
 
-        <GridItem colSpan={1}>
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 4 }}
+        spacing={6}
+        mt={6}
+        alignItems={"end"}
+      >
+        <GridItem>
           <FormLabel>Whatsapp com DDD</FormLabel>
-          <Input type="text" onChange={WhatsAppMask} value={Whatapp} />
+          <Whatsapp setValue={tel} onValue={setTel} />
         </GridItem>
-      </Grid>
-
-      <Grid templateColumns={["1fr", "1fr 1fr"]} gap={4} w="full" mt={6}>
-        <GridItem colSpan={1}>
+        <GridItem>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
-          <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
+          <Whatsapp setValue={teldois} onValue={SetTeldois} />
         </GridItem>
 
-        <GridItem colSpan={1}>
+        <GridItem>
           <FormLabel>Email</FormLabel>
-          <Input type="text" onChange={(e) => setemail(e.target.value)} />
-        </GridItem>
-      </Grid>
-
-      <Grid templateColumns={["1fr", "1fr 1fr"]} gap={4} w="full" mt={6}>
-        <GridItem colSpan={1}>
-          <FormLabel>CPF</FormLabel>
-          <CpfMask desativado setvalue={cpfdois} onvalue={setCpf} />
-        </GridItem>
-
-        <GridItem colSpan={1}>
-          <FormLabel>
-            Voucher
-            <Tooltip
-              label="Voucher para atendimento em qualquer unidade Soluti"
-              aria-label="A tooltip"
-            >
-              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
-            </Tooltip>
-          </FormLabel>
           <Input
             type="text"
-            value={Voucher}
-            onChange={(e) => setVoucher(e.target.value)}
+            onChange={(e) => setemail(e.target.value.replace(/\s/g, ""))}
+            value={email}
           />
         </GridItem>
-      </Grid>
 
-      <Grid templateColumns={["1fr", "1fr 1fr"]} gap={4} w="full" mt={6}>
+        <GridItem>
+          <CheckEmail onvalue={setcheckEmail} email={email} nome={nome} />
+        </GridItem>
+
+        <GridItem>
+          <FormLabel>Codigo</FormLabel>
+          <InputGroup>
+            <InputLeftAddon>NT-</InputLeftAddon>
+            <Input type="text" onChange={VerificadorEmail} />
+          </InputGroup>
+        </GridItem>
+
+        {user?.hierarquia === "ADM" && (
+          <Box>
+            <FormLabel>Corretor</FormLabel>
+            <SelectCorretor idcorretor={setCorretorId} />
+          </Box>
+        )}
+
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
+          {user?.hierarquia === "ADM" && (
+            <Box>
+              <FormLabel>
+                Voucher
+                <Tooltip
+                  label="Voucher para Atendimento em qualquer unidade Soluti"
+                  aria-label="A tooltip"
+                >
+                  <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+                </Tooltip>
+              </FormLabel>
+              <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
+            </Box>
+          )}
+        </SimpleGrid>
+      </SimpleGrid>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
+        <Box>
+          <FormLabel>CPF</FormLabel>
+          <CpfMask desativado setvalue={cpfdois} onvalue={setCpf} />
+        </Box>
         {user?.empreendimento && (
-          <GridItem colSpan={1}>
+          <Box>
             <FormLabel>Empreendimento</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
               tag="empreendimento"
               SetValue={user.empreendimento}
-              onValue={(e: SetStateAction<number>) => setempreendimento(e)}
+              onValue={(e: any) => setempreendimento(e)}
             />
-          </GridItem>
+          </Box>
         )}
 
         {user?.construtora && (
-          <GridItem colSpan={1}>
+          <Box>
             <FormLabel>Construtora</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
@@ -273,80 +277,35 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
                 id: item.id,
                 nome: item.razaosocial,
               }))}
-              onValue={(e: SetStateAction<number>) => setConstrutoraID(e)}
+              onValue={(e: any) => setConstrutoraID(e)}
             />
-          </GridItem>
-        )}
-
-        {user?.hierarquia === "ADM" && (
-          <GridItem colSpan={1}>
-            <FormLabel>Corretor</FormLabel>
-            <SelectComponent
-              hierarquia={user.hierarquia}
-              tag="corretor"
-              SetValue={user.construtora.map((item) => ({
-                id: item.id,
-                nome: item.razaosocial,
-              }))}
-              onValue={(e: SetStateAction<number>) => setConstrutoraID(e)}
-            />
-          </GridItem>
-        )}
-      </Grid>
-
-      <Grid templateColumns={["1fr", "1fr 1fr 1fr"]} gap={4} w="full" mt={6}>
-        <FormControl as={GridItem} colSpan={1}>
-          <FormLabel
-            fontSize="sm"
-            fontWeight="md"
-            color="gray.700"
-            _dark={{ color: "gray.50" }}
-          >
-            CNH
-          </FormLabel>
-          <Input type="file" variant="flushed" onChange={handleRgChange} />
-        </FormControl>
-
-        <FormControl as={GridItem} colSpan={1}>
-          <FormLabel
-            fontSize="sm"
-            fontWeight="md"
-            color="gray.700"
-            _dark={{ color: "gray.50" }}
-          >
-            RG
-          </FormLabel>
-          <Input type="file" variant="flushed" onChange={handleCnhChange} />
-        </FormControl>
-
-        {user?.hierarquia === "ADM" && (
-          <Box>
-            <FormLabel>
-              Voucher
-              <Tooltip
-                label="Voucher para Atendimento em qualquer unidade Soluti"
-                aria-label="A tooltip"
-              >
-                <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
-              </Tooltip>
-            </FormLabel>
-            <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
           </Box>
         )}
-      </Grid>
+      </SimpleGrid>
+
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} mt={6}>
+        <FormControl as={GridItem}>
+          <FormLabel>CNH</FormLabel>
+          <VerificadorFileComponent />
+        </FormControl>
+
+        <FormControl as={GridItem}>
+          <FormLabel>RG</FormLabel>
+          <VerificadorFileComponent />
+        </FormControl>
+      </SimpleGrid>
 
       <Button
-        mt={5}
-        mb={5}
+        mt={6}
         variant="outline"
-        width="250px"
+        width="100%"
+        maxWidth="250px"
         height="50px"
-        maxWidth="100%"
-        textColor="Black"
         onClick={handlesubmit}
+        hidden={relacionamento === "sim"}
       >
         CRIAR CONTA
       </Button>
-    </>
+    </Stack>
   );
 }
