@@ -113,7 +113,7 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
 
       <Flex w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
         <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
-          <DateFilter onData={SetDataEvent} setBlank={StatusData} />
+          {/* <DateFilter onData={SetDataEvent} setBlank={StatusData} /> */}
         </Box>
       </Flex>
       <Flex
