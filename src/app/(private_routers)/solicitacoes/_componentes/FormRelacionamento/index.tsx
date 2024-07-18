@@ -48,6 +48,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
+  console.log(user?.hierarquia);
 
   useEffect(() => {
     (() => {
@@ -59,7 +60,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       }
     })();
   }, [SetValue.cpfdois]);
-  console.log("teste", SetValue.cpfdois);
 
   const handlesubmit = () => {
     if (!nome || !cpf || !email) {

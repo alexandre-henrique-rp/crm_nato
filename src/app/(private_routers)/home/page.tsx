@@ -12,6 +12,7 @@ export default function HomePage() {
 
   const HandleFilter = (e: SetStateAction<any>) => {
     if (e) {
+      console.log(e);
       setData(e);
     }
   };

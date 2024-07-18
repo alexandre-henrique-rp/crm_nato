@@ -24,6 +24,7 @@ export default function BotaoJuncao() {
   return (
     <Flex w={"100%"}>
       <Box h={"100%"} borderRadius={"15px"} display={"flex"} gap={"20px"}>
+
         {isLargerThanTablet ? (
           <>
             {but === "ADM" && <ModalFormComponent rota={"geral"} />}
@@ -56,6 +57,7 @@ export default function BotaoJuncao() {
             </MenuList>
           </Menu>
         )}
+
       </Box>
     </Flex>
   );

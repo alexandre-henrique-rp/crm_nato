@@ -3,6 +3,7 @@ import { checkIsPublicRoute } from "./functions/check-is public-route";
 
 export default function middleware(req: NextRequest) {
   const session = req.cookies.get("next-auth.session-token")?.value;
+
   const { pathname } = req.nextUrl;
   const ispublic = checkIsPublicRoute(pathname);
 

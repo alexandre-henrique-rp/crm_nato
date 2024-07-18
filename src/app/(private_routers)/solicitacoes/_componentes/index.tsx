@@ -1,6 +1,4 @@
 "use client";
-
-import { cpf } from "cpf-cnpj-validator";
 import CpfMask from "@/app/componentes/cpf_mask";
 import { SelectComponent } from "@/app/componentes/select";
 import {
@@ -16,13 +14,17 @@ import {
   SimpleGrid,
   Stack,
   Tooltip,
-  useToast,
+  useToast
+
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { mask, unMask } from "remask";
 import CheckEmail from "@/app/componentes/checkEmail";
+import { Whatsapp } from "@/app/componentes/whatsapp";
+import { SelectCorretor } from "@/app/componentes/select_user";
+import Loading from "@/app/loading";
+
 
 interface relacionamentoProps {
   onvalue: any;
@@ -31,13 +33,15 @@ interface relacionamentoProps {
 
 export default function SolicitacaoForm({
   onvalue,
-  ishidden,
+  ishidden
 }: relacionamentoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
+  const [CorretorId, setCorretorId] = useState(0);
+
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
@@ -45,47 +49,24 @@ export default function SolicitacaoForm({
   const [Voucher, setVoucher] = useState<string>("");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
-  const [Whatapp, setWhatapp] = useState<string>("");
-  const [Whatappdois, setWhatappdois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
-  const [whatsChek1, setwhatsChek1] = useState<boolean>(tel ? false : true);
-  const [whatsChek2, setwhatsChek2] = useState<boolean>(teldois ? false : true);
+  const [Load, setLoad] = useState<boolean>(false);
+
 
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
-
+ 
   const handlesubmit = async () => {
-    if (tel) {
-      if (!whatsChek1) {
-        toast({
-          title: "Erro",
-          description: "O telefone é obrigatório ser um whasapp",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    }
-    if (teldois) {
-      if (!whatsChek2) {
-        toast({
-          title: "Erro",
-          description: "O telefone 2 é obrigatório ser um whasapp",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    }
+
     if (!nome || !cpf || !email || !relacionamento) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos",
         status: "error",
         duration: 3000,
-        isClosable: true,
+        isClosable: true
       });
     } else {
       const data: solictacao.SolicitacaoPost = {
@@ -94,34 +75,43 @@ export default function SolicitacaoForm({
         cpf: cpf,
         telefone2: teldois,
         email: email,
-        foto_rg: uploadRg,
-        foto_cnh: uploadCnh,
-        corretor: Number(user?.id),
+        uploadRg: uploadRg,
+        uploadCnh: uploadCnh,
+        corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
         construtora: Number(ConstrutoraID),
-        empreendimento: Number(empreendimento),
+        empreedimento: Number(empreendimento),
         dt_nascimento: DataNascimento,
         relacionamento: cpfdois ? [cpfdois] : [],
         rela_quest: relacionamento === "sim" ? true : false,
-        voucher: Voucher,
+        voucher: Voucher
       };
 
-      const response = await fetch("/api/solicitacao", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      if (response.ok) {
-        toast({
-          title: "Sucesso",
-          description: "Solicitacao enviada com sucesso",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
+      try {
+        setLoad(true);
+        const response = await fetch("/api/solicitacao", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
         });
-        router.push("/home");
+        if (response.ok) {
+          toast({
+            title: "Sucesso",
+            description: "Solicitacao enviada com sucesso",
+            status: "success",
+            duration: 3000,
+            isClosable: true
+          });
+          setLoad(false);
+          router.push("/home");
+        }
+        
+      } catch (error) {
+        console.log(error);
       }
+     
+
     }
   };
 
@@ -172,6 +162,10 @@ export default function SolicitacaoForm({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
+
+    console.log("🚀 ~ file:", file)
+    
+
     if (file) {
       try {
         const base64 = await fileToBase64(file);
@@ -180,55 +174,18 @@ export default function SolicitacaoForm({
     }
   };
 
-  const WhatsAppMask = (e: any) => {
-    const valor = e.target.value;
-    const valorLinpo = unMask(valor);
-    const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-    setTel(valorLinpo);
-    setWhatapp(masked);
-  };
-  const WhatsAppMask2 = (e: any) => {
-    const valor = e.target.value;
-    const valorLinpo = unMask(valor);
-    const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-    SetTeldois(valorLinpo);
-    setWhatappdois(masked);
-  };
 
-  if (relacionamento === "sim" && cpfdois.length === 11) {
+  if (
+    relacionamento === "sim" &&
+    cpfdois.length === 11 &&
+    nome &&
+    cpf &&
+    email &&
+    tel &&
+    DataNascimento
+  ) {
     ishidden("sim");
-    if (!nome || !cpf || !email || !tel || !DataNascimento) {
-      toast({
-        title: "Erro",
-        description: "Preencha todos os campos",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "top-right",
-      });
-    }
-    if (tel) {
-      if (!whatsChek1) {
-        toast({
-          title: "Erro",
-          description: "O telefone é obrigatório ser um whasapp",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    }
-    if (teldois) {
-      if (!whatsChek2) {
-        toast({
-          title: "Erro",
-          description: "O telefone 2 é obrigatório ser um whasapp",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    }
+
     const data: solictacao.SolicitacaoPost = {
       nome: nome,
       cpf: cpf,
@@ -236,15 +193,17 @@ export default function SolicitacaoForm({
       telefone2: teldois,
       dt_nascimento: DataNascimento,
       email: email,
-      foto_rg: uploadRg,
-      foto_cnh: uploadCnh,
-      corretor: Number(user?.id),
+
+      uploadRg: uploadRg,
+      uploadCnh: uploadCnh,
+      corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
       relacionamento: [cpfdois],
       cpfdois: cpfdois,
       construtora: Number(ConstrutoraID),
-      empreendimento: Number(empreendimento),
+      empreedimento: Number(empreendimento),
       rela_quest: relacionamento === "sim" ? true : false,
-      voucher: Voucher,
+      voucher: Voucher
+
     };
     onvalue(data);
   }
@@ -253,29 +212,11 @@ export default function SolicitacaoForm({
     ishidden("nao");
   }
 
-  const checkwhatsapp = async (whatsapp: string): Promise<boolean> => {
-    const request = await fetch("/api/verificador/whatsapp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        telefone: whatsapp,
-      }),
-    });
-    if (!request.ok) {
-      toast({
-        title: "Erro",
-        description: "Esse numero não tem whatsapp",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "top-right",
-      });
-      return false;
-    }
-    return true;
-  };
+
+  if (Load) {
+    return <Loading />;
+  }
+
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
@@ -295,16 +236,9 @@ export default function SolicitacaoForm({
 
         <Box>
           <FormLabel>Whatsapp com DDD</FormLabel>
-          <Input
-            type="text"
-            onChange={WhatsAppMask}
-            value={Whatapp}
-            onBlur={async (e) => {
-              const check = checkwhatsapp(e.target.value);
-              setwhatsChek1(await check);
-            }}
-            w={{ base: "full", md: "auto" }} // ajustando largura do input para ocupar toda a tela em telas menores
-          />
+
+          <Whatsapp setValue={tel} onValue={setTel} />
+
         </Box>
       </SimpleGrid>
 
@@ -316,6 +250,7 @@ export default function SolicitacaoForm({
       >
         <Box>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
+
           <Input
             type="text"
             onChange={WhatsAppMask2}
@@ -325,6 +260,7 @@ export default function SolicitacaoForm({
               setwhatsChek2(await check);
             }}
           />
+
         </Box>
 
         <Box>
@@ -337,12 +273,25 @@ export default function SolicitacaoForm({
         </Box>
         <CheckEmail email={email} nome={nome} />
         <Box>
-          <FormLabel>CPF</FormLabel>
-          <CpfMask setvalue={cpf} onvalue={setCpf} />
+
+          <CheckEmail email={email} nome={nome} />
+
         </Box>
+        {user?.hierarquia === "ADM" && (
+          <Box>
+            <FormLabel>Corretor</FormLabel>
+            <SelectCorretor idcorretor={setCorretorId} />
+          </Box>
+        )}
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
+
+        <Box>
+          <FormLabel>CPF</FormLabel>
+          <CpfMask setvalue={cpf} onvalue={setCpf} />
+        </Box>
+
         {user?.empreendimento && (
           <Box>
             <FormLabel>Empreendimento</FormLabel>
@@ -363,7 +312,9 @@ export default function SolicitacaoForm({
               tag="construtora"
               SetValue={user.construtora.map((item) => ({
                 id: item.id,
-                nome: item.razaosocial,
+
+                nome: item.razaosocial
+
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
             />

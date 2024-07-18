@@ -6,7 +6,11 @@ import { getServerSession } from "next-auth";
  *
  * @return {Promise<boolean>} A boolean indicating whether a session was found.
  */
-export default async function SeaaionProviderFunction(): Promise<boolean> {
-  const session = await getServerSession(nextAuthOptions);
-  return !!session ? true : false;
+export default function SeaaionProviderFunction(): boolean {
+  let session ;
+  (async () => {
+    const session = await getServerSession(nextAuthOptions)
+    
+  })()
+  return true;
 }

@@ -143,9 +143,9 @@ declare module solictacao {
     telefone2: string;
     dt_nascimento: Date | string | any;
     email: string;
-    foto_rg: string;
-    foto_cnh: string;
-    empreendimento: number;
+    uploadRg?: string;
+    uploadCnh?: string;
+    empreedimento: number;
     construtora: number;
     corretor: number;
     relacionamento: string[];
