@@ -14,17 +14,15 @@ import {
   SimpleGrid,
   Stack,
   Tooltip,
-  useToast
-
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import CheckEmail from "@/app/componentes/checkEmail";
 import { Whatsapp } from "@/app/componentes/whatsapp";
 import { SelectCorretor } from "@/app/componentes/select_user";
 import Loading from "@/app/loading";
-
 
 interface relacionamentoProps {
   onvalue: any;
@@ -33,7 +31,7 @@ interface relacionamentoProps {
 
 export default function SolicitacaoForm({
   onvalue,
-  ishidden
+  ishidden,
 }: relacionamentoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -41,7 +39,6 @@ export default function SolicitacaoForm({
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [CorretorId, setCorretorId] = useState(0);
-
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
@@ -51,22 +48,19 @@ export default function SolicitacaoForm({
   const [teldois, SetTeldois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
-
-
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
- 
-  const handlesubmit = async () => {
 
+  const handlesubmit = async () => {
     if (!nome || !cpf || !email || !relacionamento) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos",
         status: "error",
         duration: 3000,
-        isClosable: true
+        isClosable: true,
       });
     } else {
       const data: solictacao.SolicitacaoPost = {
@@ -83,7 +77,7 @@ export default function SolicitacaoForm({
         dt_nascimento: DataNascimento,
         relacionamento: cpfdois ? [cpfdois] : [],
         rela_quest: relacionamento === "sim" ? true : false,
-        voucher: Voucher
+        voucher: Voucher,
       };
 
       try {
@@ -91,9 +85,9 @@ export default function SolicitacaoForm({
         const response = await fetch("/api/solicitacao", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
         });
         if (response.ok) {
           toast({
@@ -101,17 +95,12 @@ export default function SolicitacaoForm({
             description: "Solicitacao enviada com sucesso",
             status: "success",
             duration: 3000,
-            isClosable: true
+            isClosable: true,
           });
           setLoad(false);
           router.push("/home");
         }
-        
-      } catch (error) {
-        console.log(error);
-      }
-     
-
+      } catch (error) {}
     }
   };
 
@@ -163,9 +152,6 @@ export default function SolicitacaoForm({
   ) => {
     const file = event.target.files?.[0];
 
-    console.log("🚀 ~ file:", file)
-    
-
     if (file) {
       try {
         const base64 = await fileToBase64(file);
@@ -173,7 +159,6 @@ export default function SolicitacaoForm({
       } catch (error) {}
     }
   };
-
 
   if (
     relacionamento === "sim" &&
@@ -202,8 +187,7 @@ export default function SolicitacaoForm({
       construtora: Number(ConstrutoraID),
       empreedimento: Number(empreendimento),
       rela_quest: relacionamento === "sim" ? true : false,
-      voucher: Voucher
-
+      voucher: Voucher,
     };
     onvalue(data);
   }
@@ -212,15 +196,25 @@ export default function SolicitacaoForm({
     ishidden("nao");
   }
 
-
   if (Load) {
     return <Loading />;
   }
 
+  function WhatsAppMask2(event: ChangeEvent<HTMLInputElement>): void {
+    throw new Error("Function not implemented.");
+  }
+
+  function checkwhatsapp(value: string) {
+    throw new Error("Function not implemented.");
+  }
+
+  function setwhatsChek2(arg0: void) {
+    throw new Error("Function not implemented.");
+  }
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6}>
         <Box>
           <FormLabel>Nome Completo</FormLabel>
           <Input type="text" onChange={(e) => setnome(e.target.value)} />
@@ -233,13 +227,6 @@ export default function SolicitacaoForm({
             onChange={(e) => setDataNascimento(e.target.value)}
           />
         </Box>
-
-        <Box>
-          <FormLabel>Whatsapp com DDD</FormLabel>
-
-          <Whatsapp setValue={tel} onValue={setTel} />
-
-        </Box>
       </SimpleGrid>
 
       <SimpleGrid
@@ -249,18 +236,14 @@ export default function SolicitacaoForm({
         alignItems={"end"}
       >
         <Box>
+          <FormLabel>Whatsapp com DDD</FormLabel>
+
+          <Whatsapp setValue={tel} onValue={setTel} />
+        </Box>
+        <Box>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
 
-          <Input
-            type="text"
-            onChange={WhatsAppMask2}
-            value={Whatappdois}
-            onBlur={async (e) => {
-              const check = checkwhatsapp(e.target.value);
-              setwhatsChek2(await check);
-            }}
-          />
-
+          <Whatsapp setValue={teldois} onValue={SetTeldois} />
         </Box>
 
         <Box>
@@ -271,11 +254,9 @@ export default function SolicitacaoForm({
             value={email}
           />
         </Box>
-        <CheckEmail email={email} nome={nome} />
+
         <Box>
-
           <CheckEmail email={email} nome={nome} />
-
         </Box>
         {user?.hierarquia === "ADM" && (
           <Box>
@@ -286,7 +267,6 @@ export default function SolicitacaoForm({
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
-
         <Box>
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={setCpf} />
@@ -313,8 +293,7 @@ export default function SolicitacaoForm({
               SetValue={user.construtora.map((item) => ({
                 id: item.id,
 
-                nome: item.razaosocial
-
+                nome: item.razaosocial,
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
             />
@@ -322,13 +301,13 @@ export default function SolicitacaoForm({
         )}
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6} mt={6}>
-        <FormControl as={GridItem} colSpan={[6, 2]}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} mt={6}>
+        <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
           <Input type="file" variant="flushed" onChange={handleRgChange} />
         </FormControl>
 
-        <FormControl as={GridItem} colSpan={[6, 2]}>
+        <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
           <Input type="file" variant="flushed" onChange={handleCnhChange} />
         </FormControl>

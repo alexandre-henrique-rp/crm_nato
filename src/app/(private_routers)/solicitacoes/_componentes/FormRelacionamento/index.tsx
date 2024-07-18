@@ -7,6 +7,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  Grid,
   GridItem,
   Icon,
   Input,
@@ -15,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { use, useEffect, useState } from "react";
+import { SetStateAction, use, useEffect, useState } from "react";
 import { IconBase } from "react-icons";
 
 import { mask, unMask } from "remask";
@@ -48,7 +49,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
-  console.log(user?.hierarquia);
 
   useEffect(() => {
     (() => {
@@ -85,7 +85,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         relacionamento: SetValue.cpf ? [SetValue.cpf] : [],
         rela_quest: SetValue.rela_quest,
         voucher: Voucher,
-        corretor: Number(user?.id)
+        corretor: Number(user?.id),
       };
 
       const data = [dados, SetValue];
@@ -190,47 +190,53 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
 
   return (
     <>
-      <Box display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="33%">
+      <Grid
+        templateColumns={["1fr", "1fr 1fr", "repeat(3, 1fr)"]}
+        gap={4}
+        w="full"
+      >
+        <GridItem colSpan={1}>
           <FormLabel>Nome Completo</FormLabel>
-          <Input type="text" onChange={(e: any) => setnome(e.target.value)} />
-        </Box>
+          <Input type="text" onChange={(e) => setnome(e.target.value)} />
+        </GridItem>
 
-        <Box w="34%">
+        <GridItem colSpan={1}>
           <FormLabel>Data de Nascimento</FormLabel>
           <Input
-            type="Date"
-            onChange={(e: any) => setDataNascimento(e.target.value)}
+            type="date"
+            onChange={(e) => setDataNascimento(e.target.value)}
           />
-        </Box>
+        </GridItem>
 
-        <Box w="33%">
+        <GridItem colSpan={1}>
           <FormLabel>Whatsapp com DDD</FormLabel>
           <Input type="text" onChange={WhatsAppMask} value={Whatapp} />
-        </Box>
-      </Box>
+        </GridItem>
+      </Grid>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
-          <FormLabel> Whatsapp com DDD 2</FormLabel>
+      <Grid templateColumns={["1fr", "1fr 1fr"]} gap={4} w="full" mt={6}>
+        <GridItem colSpan={1}>
+          <FormLabel>Whatsapp com DDD 2</FormLabel>
           <Input type="text" onChange={WhatsAppMask2} value={Whatappdois} />
-        </Box>
-        <Box w="48%">
-          <FormLabel>email</FormLabel>
-          <Input type="text" onChange={(e: any) => setemail(e.target.value)} />
-        </Box>
-      </Box>
+        </GridItem>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
-          <FormLabel>CPF </FormLabel>
+        <GridItem colSpan={1}>
+          <FormLabel>Email</FormLabel>
+          <Input type="text" onChange={(e) => setemail(e.target.value)} />
+        </GridItem>
+      </Grid>
+
+      <Grid templateColumns={["1fr", "1fr 1fr"]} gap={4} w="full" mt={6}>
+        <GridItem colSpan={1}>
+          <FormLabel>CPF</FormLabel>
           <CpfMask desativado setvalue={cpfdois} onvalue={setCpf} />
-        </Box>
-        <Box w="48%">
+        </GridItem>
+
+        <GridItem colSpan={1}>
           <FormLabel>
             Voucher
             <Tooltip
-              label="Voucher para atendimento em qualquer unidade soluti"
+              label="Voucher para atendimento em qualquer unidade Soluti"
               aria-label="A tooltip"
             >
               <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
@@ -239,91 +245,81 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
           <Input
             type="text"
             value={Voucher}
-            onChange={(e: any) => setVoucher(e.target.value)}
+            onChange={(e) => setVoucher(e.target.value)}
           />
-        </Box>
-      </Box>
+        </GridItem>
+      </Grid>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
+      <Grid templateColumns={["1fr", "1fr 1fr"]} gap={4} w="full" mt={6}>
         {user?.empreendimento && (
-          <Box w="48%">
+          <GridItem colSpan={1}>
             <FormLabel>Empreendimento</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
               tag="empreendimento"
               SetValue={user.empreendimento}
-              onValue={(e: any) => setempreendimento(e)}
+              onValue={(e: SetStateAction<number>) => setempreendimento(e)}
             />
-          </Box>
+          </GridItem>
         )}
 
         {user?.construtora && (
-          <Box w="48%">
+          <GridItem colSpan={1}>
             <FormLabel>Construtora</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
               tag="construtora"
-              SetValue={user.construtora.map((item: any) => {
-                return { id: item.id, nome: item.razaosocial };
-              })}
-              onValue={(e: any) => setConstrutoraID(e)}
+              SetValue={user.construtora.map((item) => ({
+                id: item.id,
+                nome: item.razaosocial,
+              }))}
+              onValue={(e: SetStateAction<number>) => setConstrutoraID(e)}
             />
-          </Box>
+          </GridItem>
         )}
 
         {user?.hierarquia === "ADM" && (
-          <Box w="48%">
+          <GridItem colSpan={1}>
             <FormLabel>Corretor</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
               tag="corretor"
-              SetValue={user.construtora.map((item: any) => {
-                return { id: item.id, nome: item.razaosocial };
-              })}
-              onValue={(e: any) => setConstrutoraID(e)}
+              SetValue={user.construtora.map((item) => ({
+                id: item.id,
+                nome: item.razaosocial,
+              }))}
+              onValue={(e: SetStateAction<number>) => setConstrutoraID(e)}
             />
-          </Box>
+          </GridItem>
         )}
-      </Box>
+      </Grid>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <FormControl as={GridItem} colSpan={[6, 2]}>
+      <Grid templateColumns={["1fr", "1fr 1fr 1fr"]} gap={4} w="full" mt={6}>
+        <FormControl as={GridItem} colSpan={1}>
           <FormLabel
             fontSize="sm"
             fontWeight="md"
             color="gray.700"
-            _dark={{
-              color: "gray.50",
-            }}
+            _dark={{ color: "gray.50" }}
           >
             CNH
           </FormLabel>
-          <Input
-            type="File"
-            variant="flushed"
-            onChange={(e) => handleRgChange(e)}
-          ></Input>
+          <Input type="file" variant="flushed" onChange={handleRgChange} />
         </FormControl>
 
-        <FormControl as={GridItem} colSpan={[6, 2]}>
+        <FormControl as={GridItem} colSpan={1}>
           <FormLabel
             fontSize="sm"
             fontWeight="md"
             color="gray.700"
-            _dark={{
-              color: "gray.50",
-            }}
+            _dark={{ color: "gray.50" }}
           >
             RG
           </FormLabel>
-          <Input
-            type="File"
-            variant="flushed"
-            onChange={(e) => handleCnhChange(e)}
-          ></Input>
+          <Input type="file" variant="flushed" onChange={handleCnhChange} />
         </FormControl>
 
-        <Box w="33%">
+        <GridItem colSpan={1}>
           <FormLabel>
             Voucher
             <Tooltip
@@ -333,12 +329,9 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
               <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
             </Tooltip>
           </FormLabel>
-          <Input
-            type="text"
-            onChange={(e: any) => setVoucher(e.target.value)}
-          />
-        </Box>
-      </Box>
+          <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
+        </GridItem>
+      </Grid>
 
       <Button
         mt={5}
@@ -347,7 +340,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         width="250px"
         height="50px"
         maxWidth="100%"
-        textColor={"Black"}
+        textColor="Black"
         onClick={handlesubmit}
       >
         CRIAR CONTA
