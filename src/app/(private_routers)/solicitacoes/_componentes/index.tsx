@@ -14,7 +14,7 @@ import {
   SimpleGrid,
   Stack,
   Tooltip,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -100,7 +100,11 @@ export default function SolicitacaoForm({
           setLoad(false);
           router.push("/home");
         }
-      } catch (error) {}
+
+      } catch (error) {
+        console.log(error);
+      }
+
     }
   };
 
@@ -187,7 +191,8 @@ export default function SolicitacaoForm({
       construtora: Number(ConstrutoraID),
       empreedimento: Number(empreendimento),
       rela_quest: relacionamento === "sim" ? true : false,
-      voucher: Voucher,
+      voucher: Voucher
+
     };
     onvalue(data);
   }
@@ -198,18 +203,6 @@ export default function SolicitacaoForm({
 
   if (Load) {
     return <Loading />;
-  }
-
-  function WhatsAppMask2(event: ChangeEvent<HTMLInputElement>): void {
-    throw new Error("Function not implemented.");
-  }
-
-  function checkwhatsapp(value: string) {
-    throw new Error("Function not implemented.");
-  }
-
-  function setwhatsChek2(arg0: void) {
-    throw new Error("Function not implemented.");
   }
 
   return (
@@ -227,6 +220,13 @@ export default function SolicitacaoForm({
             onChange={(e) => setDataNascimento(e.target.value)}
           />
         </Box>
+
+        <Box>
+          <FormLabel>Whatsapp com DDD</FormLabel>
+
+          <Whatsapp setValue={tel} onValue={setTel} />
+        </Box>
+
       </SimpleGrid>
 
       <SimpleGrid
@@ -236,13 +236,7 @@ export default function SolicitacaoForm({
         alignItems={"end"}
       >
         <Box>
-          <FormLabel>Whatsapp com DDD</FormLabel>
-
-          <Whatsapp setValue={tel} onValue={setTel} />
-        </Box>
-        <Box>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
-
           <Whatsapp setValue={teldois} onValue={SetTeldois} />
         </Box>
 
@@ -254,6 +248,7 @@ export default function SolicitacaoForm({
             value={email}
           />
         </Box>
+        <CheckEmail email={email} nome={nome} />
 
         <Box>
           <CheckEmail email={email} nome={nome} />
@@ -295,8 +290,8 @@ export default function SolicitacaoForm({
               tag="construtora"
               SetValue={user.construtora.map((item) => ({
                 id: item.id,
+                nome: item.razaosocial
 
-                nome: item.razaosocial,
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
             />
