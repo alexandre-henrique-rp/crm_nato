@@ -4,6 +4,7 @@ import { SelectComponent } from "@/app/componentes/select";
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
   GridItem,
@@ -14,6 +15,7 @@ import {
   Stack,
   Tooltip,
   useToast
+
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -22,6 +24,7 @@ import CheckEmail from "@/app/componentes/checkEmail";
 import { Whatsapp } from "@/app/componentes/whatsapp";
 import { SelectCorretor } from "@/app/componentes/select_user";
 import Loading from "@/app/loading";
+
 
 interface relacionamentoProps {
   onvalue: any;
@@ -38,6 +41,7 @@ export default function SolicitacaoForm({
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [CorretorId, setCorretorId] = useState(0);
+
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
@@ -48,12 +52,14 @@ export default function SolicitacaoForm({
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
 
+
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
  
   const handlesubmit = async () => {
+
     if (!nome || !cpf || !email || !relacionamento) {
       toast({
         title: "Erro",
@@ -105,6 +111,7 @@ export default function SolicitacaoForm({
         console.log(error);
       }
      
+
     }
   };
 
@@ -155,8 +162,10 @@ export default function SolicitacaoForm({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
+
     console.log("🚀 ~ file:", file)
     
+
     if (file) {
       try {
         const base64 = await fileToBase64(file);
@@ -164,6 +173,7 @@ export default function SolicitacaoForm({
       } catch (error) {}
     }
   };
+
 
   if (
     relacionamento === "sim" &&
@@ -175,6 +185,7 @@ export default function SolicitacaoForm({
     DataNascimento
   ) {
     ishidden("sim");
+
     const data: solictacao.SolicitacaoPost = {
       nome: nome,
       cpf: cpf,
@@ -182,6 +193,7 @@ export default function SolicitacaoForm({
       telefone2: teldois,
       dt_nascimento: DataNascimento,
       email: email,
+
       uploadRg: uploadRg,
       uploadCnh: uploadCnh,
       corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
@@ -191,6 +203,7 @@ export default function SolicitacaoForm({
       empreedimento: Number(empreendimento),
       rela_quest: relacionamento === "sim" ? true : false,
       voucher: Voucher
+
     };
     onvalue(data);
   }
@@ -199,9 +212,11 @@ export default function SolicitacaoForm({
     ishidden("nao");
   }
 
+
   if (Load) {
     return <Loading />;
   }
+
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
@@ -221,7 +236,9 @@ export default function SolicitacaoForm({
 
         <Box>
           <FormLabel>Whatsapp com DDD</FormLabel>
+
           <Whatsapp setValue={tel} onValue={setTel} />
+
         </Box>
       </SimpleGrid>
 
@@ -233,7 +250,17 @@ export default function SolicitacaoForm({
       >
         <Box>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
-          <Whatsapp setValue={teldois} onValue={SetTeldois} />
+
+          <Input
+            type="text"
+            onChange={WhatsAppMask2}
+            value={Whatappdois}
+            onBlur={async (e) => {
+              const check = checkwhatsapp(e.target.value);
+              setwhatsChek2(await check);
+            }}
+          />
+
         </Box>
 
         <Box>
@@ -244,8 +271,11 @@ export default function SolicitacaoForm({
             value={email}
           />
         </Box>
+        <CheckEmail email={email} nome={nome} />
         <Box>
+
           <CheckEmail email={email} nome={nome} />
+
         </Box>
         <Box>
           <CheckEmail email={email} nome={nome} />
@@ -259,10 +289,12 @@ export default function SolicitacaoForm({
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
+
         <Box>
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={setCpf} />
         </Box>
+
         {user?.empreendimento && (
           <Box>
             <FormLabel>Empreendimento</FormLabel>
@@ -283,7 +315,9 @@ export default function SolicitacaoForm({
               tag="construtora"
               SetValue={user.construtora.map((item) => ({
                 id: item.id,
+
                 nome: item.razaosocial
+
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
             />

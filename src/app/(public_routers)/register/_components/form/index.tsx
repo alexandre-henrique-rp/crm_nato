@@ -9,7 +9,7 @@ import {
   FormLabel,
   Input,
   Select,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -56,7 +56,7 @@ export default function FormRegister() {
         description: "Preencha todos os campos",
         status: "error",
         duration: 3000,
-        isClosable: true
+        isClosable: true,
       });
     } else if (password !== confirmPassword) {
       toast({
@@ -64,7 +64,7 @@ export default function FormRegister() {
         description: "Senhas diferentes",
         status: "error",
         duration: 3000,
-        isClosable: true
+        isClosable: true,
       });
     } else {
       const data = {
@@ -77,15 +77,15 @@ export default function FormRegister() {
         cargo: Cargo,
         construtora: Construtora ? [Number(Construtora)] : [],
         empreendimento: Empreendimento ? [Number(Empreendimento)] : [],
-        hierarquia: Hierarquia
+        hierarquia: Hierarquia,
       };
       try {
         const response = await fetch("/api/register", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
         });
         const dados = await response.json();
         toast({
@@ -93,7 +93,7 @@ export default function FormRegister() {
           description: "Cadastrado com sucesso",
           status: "success",
           duration: 3000,
-          isClosable: true
+          isClosable: true,
         });
         route.back();
       } catch (error: any) {
@@ -102,7 +102,7 @@ export default function FormRegister() {
           description: error,
           status: "error",
           duration: 3000,
-          isClosable: true
+          isClosable: true,
         });
       }
     }
@@ -122,21 +122,26 @@ export default function FormRegister() {
 
   return (
     <>
-      <Box display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
+      <Box
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        justifyContent="space-between"
+        w="full"
+      >
+        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
           <FormLabel>Nome Completo</FormLabel>
           <Input
             type="text"
-            border={"1px solid #b8b8b8cc"}
+            border="1px solid #b8b8b8cc"
             onChange={(e: any) => setNome(e.target.value)}
           />
         </Box>
 
-        <Box w="48%">
+        <Box w={{ base: "100%", md: "48%" }}>
           <FormLabel>Usuario</FormLabel>
           <Input
             type="text"
-            border={"1px solid #b8b8b8cc"}
+            border="1px solid #b8b8b8cc"
             onChange={(e: any) => setUsername(e.target.value)}
           />
         </Box>
@@ -144,91 +149,98 @@ export default function FormRegister() {
 
       <Box
         mt={6}
-        display={"Flex"}
-        justifyContent={"space-between"}
-        w={"full"}
-        alignItems={"end"}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        justifyContent="space-between"
+        w="full"
+        alignItems="end"
       >
-        <Box w="40%">
+        <Box w={{ base: "100%", md: "40%" }} mb={{ base: 4, md: 0 }}>
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
         </Box>
-        <Box w="40%">
+        <Box w={{ base: "100%", md: "40%" }}>
           <FormLabel>Email</FormLabel>
           <Input
             type="text"
-            border={"1px solid #b8b8b8cc"}
+            border="1px solid #b8b8b8cc"
             onChange={(e: any) => setEmail(e.target.value)}
           />
         </Box>
         <CheckEmail email={Email} nome={Nome} />
       </Box>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
-          <FormLabel>telefone</FormLabel>
+      <Box
+        mt={6}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        justifyContent="space-between"
+        w="full"
+      >
+        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
+          <FormLabel>Telefone</FormLabel>
           <Input
             type="text"
-            border={"1px solid #b8b8b8cc"}
+            border="1px solid #b8b8b8cc"
             onChange={(e: any) => setTelefone(e.target.value)}
           />
         </Box>
-        {/* <Box w="48%">
-          <FormLabel>Construtora</FormLabel>
-          <Input
-            type="text"
-            border={"1px solid #b8b8b8cc"}
-            onChange={(e: any) => setConstrutora(e.target.value)}
-          />
-        </Box> */}
       </Box>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
+      <Box
+        mt={6}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        justifyContent="space-between"
+        w="full"
+      >
+        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
           <FormLabel>Construtora</FormLabel>
           <Select
             placeholder="Selecione uma construtora"
-            border={"1px solid #b8b8b8cc"}
+            border="1px solid #b8b8b8cc"
             onChange={GetConstrutora}
             value={Construtora}
           >
             {ConstrutoraData.length > 0 &&
-              ConstrutoraData.map((construtora: any) => {
-                return (
-                  <option key={construtora.id} value={construtora.id}>
-                    {construtora.razaosocial}
-                  </option>
-                );
-              })}
+              ConstrutoraData.map((construtora: any) => (
+                <option key={construtora.id} value={construtora.id}>
+                  {construtora.razaosocial}
+                </option>
+              ))}
           </Select>
         </Box>
-        <Box w="48%">
+        <Box w={{ base: "100%", md: "48%" }}>
           <FormLabel>Empreendimento</FormLabel>
           <Select
             placeholder="Selecione uma construtora"
-            border={"1px solid #b8b8b8cc"}
-            isDisabled={Construtora ? false : true}
+            border="1px solid #b8b8b8cc"
+            isDisabled={!Construtora}
             onChange={(e: any) => setEmpreendimento(e.target.value)}
             value={Empreendimento}
           >
             {EmpreendimentoData.length > 0 &&
-              EmpreendimentoData.map((empreedimento: any) => {
-                return (
-                  <option key={empreedimento.id} value={empreedimento.id}>
-                    {empreedimento.nome}
-                  </option>
-                );
-              })}
+              EmpreendimentoData.map((empreedimento: any) => (
+                <option key={empreedimento.id} value={empreedimento.id}>
+                  {empreedimento.nome}
+                </option>
+              ))}
           </Select>
         </Box>
       </Box>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w="48%">
+      <Box
+        mt={6}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        justifyContent="space-between"
+        w="full"
+      >
+        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
           <FormLabel>Cargo</FormLabel>
           <Select
             placeholder="Selecione um Cargo"
-            border={"1px solid #b8b8b8cc"}
+            border="1px solid #b8b8b8cc"
             onChange={(e: any) => setCargo(e.target.value)}
           >
             <option value="vendedor">Vendedor</option>
@@ -238,11 +250,11 @@ export default function FormRegister() {
             <option value="admin">Admin</option>
           </Select>
         </Box>
-        <Box w="48%">
+        <Box w={{ base: "100%", md: "48%" }}>
           <FormLabel>Hierarquia</FormLabel>
           <Select
             placeholder="Selecione uma Hierarquia"
-            border={"1px solid #b8b8b8cc"}
+            border="1px solid #b8b8b8cc"
             onChange={(e: any) => setHierarquia(e.target.value)}
           >
             <option value="USER">Vendedor</option>
@@ -253,15 +265,21 @@ export default function FormRegister() {
         </Box>
       </Box>
 
-      <Box mt={6} display={"Flex"} justifyContent={"space-between"} w={"full"}>
-        <Box w={"48%"}>
+      <Box
+        mt={6}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        justifyContent="space-between"
+        w="full"
+      >
+        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
           <FormLabel>Senha</FormLabel>
           <SenhaComponent
             setvalue={password}
             onvalue={(e: any) => setPassword(e)}
           />
         </Box>
-        <Box w={"48%"}>
+        <Box w={{ base: "100%", md: "48%" }}>
           <FormLabel>Confirme Sua Senha</FormLabel>
           <SenhaComponent
             setvalue={confirmPassword}
@@ -275,9 +293,9 @@ export default function FormRegister() {
         variant="outline"
         width="250px"
         height="50px"
-        border={"1px solid #b8b8b8cc"}
+        border="1px solid #b8b8b8cc"
         maxWidth="100%"
-        textColor={"Black"}
+        textColor="Black"
         onClick={handlesubmit}
       >
         CRIAR CONTA

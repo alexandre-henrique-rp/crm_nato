@@ -73,7 +73,7 @@ export default function LoginPage() {
         width={{ base: "90%", sm: "80%", md: "70%", lg: "50%", xl: "35em" }} // Largura responsiva
         textAlign="center"
         maxWidth="100%"
-          bg={"#ffffff"}
+        bg={"#ffffff"}
         boxShadow="lg"
       >
         <Button
@@ -84,6 +84,8 @@ export default function LoginPage() {
           border="1px solid #b8b8b8cc"
           maxWidth="100%"
           color="black"
+          whiteSpace="normal" // Permite quebra de linha
+          textAlign="center" // Centraliza o texto
         >
           VERIFICAR STATUS DO CERTIFICADO
         </Button>
