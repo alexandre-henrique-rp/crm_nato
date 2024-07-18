@@ -1,11 +1,7 @@
 "use client";
-
 import { AlertComponent } from "@/app/componentes/alerts";
 import { Link } from "@chakra-ui/next-js";
-
 import {
-  Alert,
-  AlertIcon,
   Box,
   Button,
   Divider,
@@ -13,32 +9,34 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Stack,
-  Text,
   useDisclosure
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiSolidBellRing } from "react-icons/bi";
 
 export const ModalComponent = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [alerts, setAlerts] = useState<AlertsType.AlertsProps[]>([]);
+  const [Requests, setRequests] = useState<boolean>(false);
 
   const [showButton, setShowButton] = useState(false);
-  if (alerts.length === 0) {
-    (async () => {
-      const request = await fetch("/api/alerts/geral");
-      if (request.ok) {
+  useEffect(() => {
+    if (!Requests) {
+      (async () => {
+        const request = await fetch("/api/alerts/geral");
         const response = await request.json();
-        setShowButton(true);
-        setAlerts(response);
-      }
-    })();
-  }
+        if (request.ok) {
+          setShowButton(true);
+          setAlerts(response);
+          setRequests(true);
+        }
+      })();
+    }
+  }, [Requests, alerts]);
 
   const OverlayTwo = () => (
     <ModalOverlay
