@@ -24,7 +24,7 @@ export async function POST(request: Request) {
     const emailOptions: any = {
       from: "redebrasilrp@gmail.com",
       to: data.email,
-      subject: `O Prazer Foi Nosso!`,
+      subject: `Comfirmação de email`,
       html: emailBody
     };
 

@@ -247,6 +247,9 @@ export default function SolicitacaoForm({
         <Box>
           <CheckEmail email={email} nome={nome} />
         </Box>
+        <Box>
+          <CheckEmail email={email} nome={nome} />
+        </Box>
         {user?.hierarquia === "ADM" && (
           <Box>
             <FormLabel>Corretor</FormLabel>

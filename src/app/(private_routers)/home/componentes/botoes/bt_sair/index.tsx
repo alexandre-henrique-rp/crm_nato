@@ -1,11 +1,10 @@
-"use client";
 
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";;
+import { redirect, useRouter  } from "next/navigation";
+import { destroyCookie } from "nookies";
 
 export default function BotaoSair() {
-  const route = useRouter();
 
   return (
     <Flex w={"100%"}>
@@ -25,8 +24,9 @@ export default function BotaoSair() {
           _hover={{ bg: "#00631B" }}
           size="lg"
           onClick={() => {
-            route.push("/login");
-            signOut({ redirect: false });
+            destroyCookie(null, "next-auth.session-token");
+            signOut({ callbackUrl: "/login" });
+            redirect('/login')
           }}
         >
           Sair

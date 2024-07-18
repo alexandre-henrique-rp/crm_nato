@@ -46,8 +46,6 @@ export const ModalFormComponent = ({
   const [StatusAlert, setStatusAlert] = useState("");
   const [Empreedimeto, setEmpreedimeto] = useState([]);
   const toast = useToast();
-  const { data: session } = useSession();
-  const route = useRouter();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -78,13 +76,11 @@ export const ModalFormComponent = ({
     const data: AlertsType.AlertsProps =
       rota === "geral"
         ? {
-            tipo: rota,
+            tipo: rota.toUpperCase(),
             empreendimento: IdEmpreedimento,
             tag: "info",
             texto: Descricao,
-            titulo: `${PostName?.split(" ")[0]} ${
-              PostName?.split(" ")[1]
-            } - ${Titulo}`
+            titulo: `${Empreedimeto.filter((e: any) => e.id === IdEmpreedimento).map((e: any) => e.nome)[0]} - ${Titulo}`
           }
         : {
             tipo: "CORRETOR",
@@ -97,7 +93,7 @@ export const ModalFormComponent = ({
               PostName?.split(" ")[1]
             } - ${Titulo}`
           };
-
+console.log(data)
     try {
       const request = await fetch(`/api/alerts/create`, {
         method: "POST",
@@ -168,15 +164,14 @@ export const ModalFormComponent = ({
               <FormLabel>Status</FormLabel>
               <Select
                 name="status"
-                value={StatusAlert}
+                value={rota === "geral"? "info":StatusAlert}
+                disabled={rota === "geral" ? true : false}
                 onChange={(e) => setStatusAlert(e.target.value)}
                 placeholder="Selecione o status"
               >
                 <option value="info">Informação</option>
                 <option value="warning">Atenção</option>
-                {/* <option value="success">Success</option> */}
                 <option value="error">Erro</option>
-                {/* <option value="loading">Loading</option> */}
               </Select>
 
               <FormControl id="title" isRequired mt={4}>
@@ -194,6 +189,7 @@ export const ModalFormComponent = ({
                   <Select
                     name="idEmpreedimento"
                     value={IdEmpreedimento}
+                    placeholder="Selecione o empreedimento"
                     onChange={(e) => setIdEmpreedimento(Number(e.target.value))}
                   >
                     {Empreedimeto.length > 0 &&
