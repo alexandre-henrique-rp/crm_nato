@@ -1,11 +1,31 @@
 import { chakra, Input, useToast } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 
-export const Whatsapp = () => {
+interface WhatsAppProps {
+  onValue: any;
+  setValue: string;
+}
+
+export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
   const [Tel, setTel] = useState("");
   const [IsvalideTel, setIsvalideTel] = useState(false);
-  const toast = useToast();
+
+  useEffect(() => {
+    if (setValue && !Tel) {
+      const valor: string = setValue;
+      const valorLinpo = unMask(valor);
+      const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
+      const check = checkwhatsapp(unMask(masked));
+      if (!check) {
+        setIsvalideTel(true);
+      } else {
+        onValue(valor);
+        setIsvalideTel(false);
+      }
+      setTel(masked);
+    }
+  }, [Tel, onValue, setValue]);
 
   const WhatsAppMask = (e: any) => {
     const valor = e.target.value;
@@ -27,9 +47,8 @@ export const Whatsapp = () => {
         telefone: whatsapp
       })
     });
-
     const data = await request.json();
-    if (data.status === 'INVALID_WA_NUMBER') {
+    if (data.status === "INVALID_WA_NUMBER") {
       return false;
     }
     return true;
@@ -44,10 +63,11 @@ export const Whatsapp = () => {
         onBlur={async (e) => {
           const valor = unMask(e.target.value);
           if (valor.length === 11) {
-            const check = await checkwhatsapp(e.target.value);
+            const check = await checkwhatsapp(valor);
             if (!check) {
               setIsvalideTel(true);
-            }else{
+            } else {
+              onValue(valor);
               setIsvalideTel(false);
             }
           }

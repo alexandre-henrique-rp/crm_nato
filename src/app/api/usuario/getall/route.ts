@@ -2,6 +2,13 @@ import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { nextAuthOptions } from "../../auth/[...nextauth]/route";
 
+/**
+ * ${1:Description placeholder}
+ *
+ * @export
+ * @async
+ * @returns {unknown}
+ */
 export async function GET() {
   try {
     const session = await getServerSession(nextAuthOptions)
@@ -25,7 +32,6 @@ export async function GET() {
       return new NextResponse("Invalid credentials", { status: 401 });
     }
     const data = await reqest.json();
-    console.log("🚀 ~ GET ~ data:", data)
     const users = data.filter((user: any) => user.hierarquia !== "ADM");
 
     return NextResponse.json(users, { status: 200 });    

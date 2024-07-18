@@ -47,7 +47,9 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [Whatsappdois, setWhatsappdois] = useState<string>("");
   const [WhatsAppMaskdois, setWhatsAppMaskdois] = useState<string>("");
   const [CnhFile, setCnhFile] = useState<string>("");
+  const [CnhFile64, setCnhFile64] = useState<string>("");
   const [RgFile, setRgFile] = useState<string>("");
+  const [RgFile64, setRgFile64] = useState<string>("");
   const [Email, setEmail] = useState<string>("");
   const [LinkDoc, setLinkDoc] = useState<string>("");
   const [IdFcweb, setsetIdFcweb] = useState<number | null>(null);
@@ -83,8 +85,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         SetData.telefone2 &&
           mask(SetData.telefone2, ["(99) 9999-9999", "(99) 9 9999-9999"])
       );
-      setCnhFile(SetData.uploadCnh);
-      setRgFile(SetData.uploadRg);
+      setCnhFile64(SetData.uploadCnh);
+      setRgFile64(SetData.uploadRg);
       setEmail(SetData.email);
       setConstrutoraId(SetData.construtora && SetData.construtora.id);
       setConstrutora(SetData.construtora && SetData.construtora.razaosocial);
@@ -462,7 +464,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   >
                     Downloads da CNH
                   </FormLabel>
-                  <DownloadDoc base64={CnhFile} name="Cnh" />
+                  <DownloadDoc base64={CnhFile64} name="Cnh" />
                 </FormControl>
               )}
               {input !== "USER" && (
@@ -477,7 +479,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   >
                     Download do Rg
                   </FormLabel>
-                  <DownloadDoc base64={RgFile} name="Rg" />
+                  <DownloadDoc base64={RgFile64} name="Rg" />
                 </FormControl>
               )}
 
@@ -521,7 +523,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     empreedimento={EmpreendimentoId}
                     PostName={Name}
                     CorretorName={Corretor}
-                    CorretorId={CorretorId} objAlert={undefined}                  />
+                    CorretorId={CorretorId} />
                 )}
               </FormControl>
             </SimpleGrid>

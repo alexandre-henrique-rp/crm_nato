@@ -48,6 +48,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
+  console.log(user?.hierarquia);
 
   useEffect(() => {
     (() => {
