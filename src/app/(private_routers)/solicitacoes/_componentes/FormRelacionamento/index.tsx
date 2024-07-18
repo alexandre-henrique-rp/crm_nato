@@ -319,18 +319,20 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
           <Input type="file" variant="flushed" onChange={handleCnhChange} />
         </FormControl>
 
-        <GridItem colSpan={1}>
-          <FormLabel>
-            Voucher
-            <Tooltip
-              label="Voucher para Atendimento em qualquer unidade Soluti"
-              aria-label="A tooltip"
-            >
-              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
-            </Tooltip>
-          </FormLabel>
-          <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
-        </GridItem>
+        {user?.hierarquia === "ADM" && (
+          <Box>
+            <FormLabel>
+              Voucher
+              <Tooltip
+                label="Voucher para Atendimento em qualquer unidade Soluti"
+                aria-label="A tooltip"
+              >
+                <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+              </Tooltip>
+            </FormLabel>
+            <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
+          </Box>
+        )}
       </Grid>
 
       <Button

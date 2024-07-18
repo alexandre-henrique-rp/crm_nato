@@ -23,6 +23,7 @@ import CheckEmail from "@/app/componentes/checkEmail";
 import { Whatsapp } from "@/app/componentes/whatsapp";
 import { SelectCorretor } from "@/app/componentes/select_user";
 import Loading from "@/app/loading";
+import VerificadorFileComponent from "@/app/componentes/file";
 
 interface relacionamentoProps {
   onvalue: any;
@@ -178,7 +179,6 @@ export default function SolicitacaoForm({
       telefone2: teldois,
       dt_nascimento: DataNascimento,
       email: email,
-
       uploadRg: uploadRg,
       uploadCnh: uploadCnh,
       corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
@@ -258,9 +258,7 @@ export default function SolicitacaoForm({
         <Box>
           <CheckEmail email={email} nome={nome} />
         </Box>
-        <Box>
-          <CheckEmail email={email} nome={nome} />
-        </Box>
+
         {user?.hierarquia === "ADM" && (
           <Box>
             <FormLabel>Corretor</FormLabel>
@@ -307,12 +305,12 @@ export default function SolicitacaoForm({
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} mt={6}>
         <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
-          <Input type="file" variant="flushed" onChange={handleRgChange} />
+          <VerificadorFileComponent />
         </FormControl>
 
         <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
-          <Input type="file" variant="flushed" onChange={handleCnhChange} />
+          <VerificadorFileComponent />
         </FormControl>
       </SimpleGrid>
 
@@ -343,18 +341,20 @@ export default function SolicitacaoForm({
           </Box>
         )}
 
-        <Box>
-          <FormLabel>
-            Voucher
-            <Tooltip
-              label="Voucher para Atendimento em qualquer unidade Soluti"
-              aria-label="A tooltip"
-            >
-              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
-            </Tooltip>
-          </FormLabel>
-          <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
-        </Box>
+        {user?.hierarquia === "ADM" && (
+          <Box>
+            <FormLabel>
+              Voucher
+              <Tooltip
+                label="Voucher para Atendimento em qualquer unidade Soluti"
+                aria-label="A tooltip"
+              >
+                <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+              </Tooltip>
+            </FormLabel>
+            <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
+          </Box>
+        )}
       </SimpleGrid>
 
       <Button

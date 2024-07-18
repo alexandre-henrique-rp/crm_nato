@@ -1,6 +1,22 @@
 "use client";
 
-import { ButtonGroup, Flex, IconButton, useToast } from "@chakra-ui/react";
+import { BotaoRetorno } from "@/app/componentes/btm_retorno";
+import {
+  Button,
+  ButtonGroup,
+  Flex,
+  IconButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Text,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
@@ -11,14 +27,15 @@ interface BotoesFunctionProps {
   onUpdate: any;
 }
 
-export const BotoesFunction = ({ id , onUpdate}: BotoesFunctionProps ) => {
+export const BotoesFunction = ({ id, onUpdate }: BotoesFunctionProps) => {
   const route = useRouter();
   const { data: session } = useSession();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const HandleDelet = async(e: MouseEvent<HTMLButtonElement>) => {
+  const HandleDelet = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-     try {
+    try {
       const res = await fetch(`/api/solicitacao/delete/${id}`, {
         method: "POST",
         headers: {
@@ -37,19 +54,16 @@ export const BotoesFunction = ({ id , onUpdate}: BotoesFunctionProps ) => {
           isClosable: true,
         });
       }
-      
-     } catch (error) {
+    } catch (error) {
       toast({
         title: "Erro, em remover a solicitação",
         description: JSON.stringify(error),
         status: "error",
         duration: 3000,
         isClosable: true,
-      })
-     }
-
-    
-  }
+      });
+    }
+  };
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <ButtonGroup variant="solid" size="sm" spacing={3}>
@@ -64,9 +78,29 @@ export const BotoesFunction = ({ id , onUpdate}: BotoesFunctionProps ) => {
           variant="outline"
           icon={<BsFillTrashFill />}
           aria-label="Delete"
-          onClick={(e) => HandleDelet(e)}
+          onClick={onOpen}
         />
       </ButtonGroup>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Você tem certeza de que deseja deletar esta solicitação?
+            </Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <BotaoRetorno />
+
+            <Button onClick={(e) => HandleDelet(e)} colorScheme="red">
+              Confirmar Exclusão
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };
