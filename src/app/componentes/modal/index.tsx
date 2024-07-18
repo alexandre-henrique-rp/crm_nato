@@ -16,7 +16,7 @@ import {
   Select,
   Textarea,
   useDisclosure,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -84,7 +84,7 @@ export const ModalFormComponent = ({
             texto: Descricao,
             titulo: `${PostName?.split(" ")[0]} ${
               PostName?.split(" ")[1]
-            } - ${Titulo}`
+            } - ${Titulo}`,
           }
         : {
             tipo: "CORRETOR",
@@ -95,16 +95,16 @@ export const ModalFormComponent = ({
             texto: Descricao,
             titulo: `${PostName?.split(" ")[0]} ${
               PostName?.split(" ")[1]
-            } - ${Titulo}`
+            } - ${Titulo}`,
           };
 
     try {
       const request = await fetch(`/api/alerts/create`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       const response = await request.json();
       console.log(response);
@@ -114,7 +114,7 @@ export const ModalFormComponent = ({
           description: "Alerta criado com sucesso!",
           status: "success",
           duration: 3000,
-          isClosable: true
+          isClosable: true,
         });
         window.location.reload();
       }
@@ -125,7 +125,7 @@ export const ModalFormComponent = ({
         description: "Erro ao criar alerta!",
         status: "error",
         duration: 3000,
-        isClosable: true
+        isClosable: true,
       });
     }
   };

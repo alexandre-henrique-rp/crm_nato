@@ -6,6 +6,7 @@ import {
   Box,
   Flex,
   IconButton,
+  useBreakpointValue,
 } from "@chakra-ui/react";
 import SolicitacaoForm from "./_componentes";
 import { useState } from "react";
@@ -39,33 +40,33 @@ export default function Solicitacao() {
 
   return (
     <Box
-      h={"100vh"}
-      overflowY={"auto"}
+      h="100vh"
+      overflowY="auto"
       background="#F8F8F8"
-      alignItems={"center"}
-      justifyContent={"center"}
-      padding={"32px"}
+      alignItems="center"
+      justifyContent="center"
+      p={8}
       gap={4}
     >
       <Flex
-        flexDirection={"column"}
-        alignItems={"center"}
-        justifyContent={"center"}
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
         gap={4}
       >
         <Stack>
           <Box
-            border={"3px solid #E8E8E8"}
-            borderRadius={"8px"}
-            padding={"32px"}
-            w={"60em"}
-            textAlign={"center"}
+            border="3px solid #E8E8E8"
+            borderRadius="8px"
+            p={8}
+            w={useBreakpointValue({ base: "100%", md: "80%", lg: "60em" })}
+            textAlign="center"
           >
             <Flex>
-              <Box zIndex={1} position={"initial"}>
+              <Box zIndex={1} position="initial">
                 <BotaoRetorno />
               </Box>
-              <Box w={"100%"}>
+              <Box w="100%">
                 <Text
                   fontFamily="Poppins"
                   fontWeight="regular"
@@ -86,19 +87,17 @@ export default function Solicitacao() {
         </Stack>
 
         {!isHidden ? (
-          <>
-            <Stack>
-              <Box
-                border={"3px solid #E8E8E8"}
-                borderRadius={"8px"}
-                padding={"32px"}
-                w={"60em"}
-                textAlign={"center"}
-              >
-                <RelacionadoForm SetValue={onvalue} />
-              </Box>
-            </Stack>
-          </>
+          <Stack>
+            <Box
+              border="3px solid #E8E8E8"
+              borderRadius="8px"
+              p={8}
+              // w={useBreakpointValue({ base: "100%", md: "80%", lg: "60em" })}
+              textAlign="center"
+            >
+              <RelacionadoForm SetValue={onvalue} />
+            </Box>
+          </Stack>
         ) : null}
       </Flex>
     </Box>

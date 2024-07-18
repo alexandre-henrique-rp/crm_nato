@@ -5,26 +5,33 @@ import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 export default function Register() {
   return (
     <Stack
-      h={"100vh"}
+      h="100vh"
       background="#F8F8F8"
-      justifyContent={"center"}
-      alignItems={"center"}
+      alignItems="center"
+      padding={4} // Adiciona padding para telas pequenas
     >
       <Box
-        border={"3px solid #E8E8E8"}
-        borderRadius={"8px"}
-        padding={"32px"}
-        w={"60em"}
-        textAlign={"center"}
+        border="3px solid #E8E8E8"
+        borderRadius="8px"
+        padding={8} // Usa valores de espaçamento padrão do Chakra
+        w={{ base: "90%", sm: "80%", md: "60em" }} // Responsivo para diferentes tamanhos de tela
+        maxW="60em" // Define um tamanho máximo
+        textAlign="center"
       >
-        <Flex w={"100%"} justifyContent={"center"} mb={5}>
-          <Box zIndex={1} position={"initial"}>
+        <Flex
+          w="100%"
+          justifyContent="center"
+          mb={5}
+          flexDirection={{ base: "column", sm: "row" }} // Muda a direção do flex em telas menores
+          alignItems="center" // Centraliza o conteúdo verticalmente em telas pequenas
+        >
+          <Box zIndex={1} position="initial" mb={{ base: 4, sm: 0 }}>
             <BotaoRetorno />
           </Box>
-          <Box width={"100%"}>
+          <Box width="100%">
             <Text
               fontWeight="regular"
-              fontSize="32px"
+              fontSize={{ base: "24px", md: "32px" }} // Responsivo para diferentes tamanhos de texto
               color="#333333"
             >
               Cadastro de Usuarios

@@ -8,6 +8,7 @@ interface FiltroAndamentoProps {
   setBlank: any;
 }
 
+
 export const AndamentoFilter = ({ onAndamento }: FiltroAndamentoProps) => {
   const [Andamento, setAndamento] = useState<string>("");
 
@@ -17,7 +18,7 @@ export const AndamentoFilter = ({ onAndamento }: FiltroAndamentoProps) => {
       justifyContent="start"
       alignItems="center"
       gap="5px"
-      flexDirection={{ base: "column", md: "row" }} // Ajusta a direção da flexbox para diferentes tamanhos de tela
+      flexDirection={{ base: "column", md: "row" }} 
     >
       <Box
         w={"full"}
