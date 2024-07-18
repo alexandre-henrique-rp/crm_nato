@@ -9,7 +9,6 @@ interface FiltroDataProps {
 }
 export const DateFilter = ({ onData, setBlank }: FiltroDataProps) => {
   const [Date, setDate] = useState<string>("");
-  console.log(Date);
 
   useEffect(() => {
     if (setBlank === true && Date) {

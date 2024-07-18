@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Flex, Select } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface FiltroAndamentoProps {
   onAndamento: string | any;
@@ -9,8 +9,15 @@ interface FiltroAndamentoProps {
 }
 
 
-export const AndamentoFilter = ({ onAndamento }: FiltroAndamentoProps) => {
+export const AndamentoFilter = ({ onAndamento, setBlank }: FiltroAndamentoProps) => {
   const [Andamento, setAndamento] = useState<string>("");
+
+  useEffect(() => {
+    if (setBlank === true && Andamento) {
+      setAndamento("");
+    }
+    onAndamento(Andamento);
+  }, [Andamento, onAndamento, setBlank]);
 
   return (
     <Flex

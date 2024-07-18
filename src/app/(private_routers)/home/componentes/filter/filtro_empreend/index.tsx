@@ -8,10 +8,17 @@ interface FiltroEmpreendimentoProps {
 }
 
 export const EmpreendimentoFilter = ({
-  onEmpreendimento,
+  onEmpreendimento, setBlank
 }: FiltroEmpreendimentoProps) => {
   const [Empreendimento, setEmpreendimento] = useState<number>(0);
   const [Data, setData] = useState<any>([]);
+
+  useEffect(() => {
+    if (setBlank === true && Empreendimento) {
+      setEmpreendimento(0);
+    }
+    onEmpreendimento(Empreendimento);
+  }, [Empreendimento, onEmpreendimento, setBlank]);
 
   useEffect(() => {
     (async () => {

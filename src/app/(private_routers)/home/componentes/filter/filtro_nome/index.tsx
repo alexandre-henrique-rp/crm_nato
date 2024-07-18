@@ -1,15 +1,22 @@
 "use client";
 
 import { Box, Flex, Input } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface FiltroNomeProps {
   onNome: string | any;
   setBlank: any;
 }
 
-export const NomeFilter = ({ onNome }: FiltroNomeProps) => {
+export const NomeFilter = ({ onNome, setBlank }: FiltroNomeProps) => {
   const [FilterNome, setFilterNome] = useState<string>("");
+
+  useEffect(() => {
+    if (setBlank === true && FilterNome) {
+      setFilterNome("");
+    }
+    onNome(FilterNome);
+  }, [FilterNome, onNome, setBlank]);
 
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
