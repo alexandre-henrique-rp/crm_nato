@@ -45,6 +45,7 @@ export default async function perfilPage({
         borderWidth={0}
         overflowX="auto"
         flexDir={"column"}
+        h={"100vh"}
       >
         <DadosPessoaisComponent SetData={data} />
       </Flex>
