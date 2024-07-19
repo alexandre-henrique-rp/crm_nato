@@ -25,8 +25,8 @@ export default function BotaoSair() {
           size="lg"
           onClick={() => {
             destroyCookie(null, "next-auth.session-token");
-            signOut({ callbackUrl: "/login" });
             redirect('/login')
+            signOut();
           }}
         >
           Sair
