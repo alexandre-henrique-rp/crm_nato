@@ -12,6 +12,8 @@ import Aprovacao from "./_components/aprovacao";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 import BotaoCadastro from "../home/componentes/botoes/bt_cadastro";
 import BotaoJuncao from "../home/componentes/botoes/bt_juncao";
+import BotaoNovaSolicita from "../home/componentes/botoes/bt_nvsolicita";
+import { ModalFormComponent } from "@/app/componentes/modal";
 
 export default function PainelAdministrativo() {
   return (
@@ -44,9 +46,15 @@ export default function PainelAdministrativo() {
           </Box>
         </Flex>
 
-        <Flex justifyContent="center" gap={10} pt={10}>
+        <Flex justifyContent="center" gap={10}>
           <Box>
-            <BotaoJuncao />
+            <BotaoCadastro />
+          </Box>
+          <Box>
+            <BotaoNovaSolicita />
+          </Box>
+          <Box>
+            <ModalFormComponent rota={"geral"} />
           </Box>
         </Flex>
       </Box>

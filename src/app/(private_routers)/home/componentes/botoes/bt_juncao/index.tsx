@@ -15,6 +15,7 @@ import BotaoSair from "../bt_sair";
 import { useSession } from "next-auth/react";
 import { ModalFormComponent } from "@/app/componentes/modal";
 import { IoChevronDownCircleOutline } from "react-icons/io5";
+import BotaoPainelAdm from "../bt_paineladm";
 
 export default function BotaoJuncao() {
   const { data: session } = useSession();
@@ -24,12 +25,10 @@ export default function BotaoJuncao() {
   return (
     <Flex w={"100%"}>
       <Box h={"100%"} borderRadius={"15px"} display={"flex"} gap={"20px"}>
-
         {isLargerThanTablet ? (
           <>
-            {but === "ADM" && <ModalFormComponent rota={"geral"} />}
             <BotaoNovaSolicita />
-            {but !== "USER" && <BotaoCadastro />}
+            {but === "ADM" && <BotaoPainelAdm />}
             <BotaoSair />
           </>
         ) : (
@@ -38,17 +37,12 @@ export default function BotaoJuncao() {
               Menu
             </MenuButton>
             <MenuList>
-              {but === "ADM" && (
-                <MenuItem>
-                  <ModalFormComponent rota={"geral"} />
-                </MenuItem>
-              )}
               <MenuItem>
                 <BotaoNovaSolicita />
               </MenuItem>
-              {but !== "USER" && (
+              {but === "ADM" && (
                 <MenuItem>
-                  <BotaoCadastro />
+                  <BotaoPainelAdm />
                 </MenuItem>
               )}
               <MenuItem>
@@ -57,7 +51,6 @@ export default function BotaoJuncao() {
             </MenuList>
           </Menu>
         )}
-
       </Box>
     </Flex>
   );
