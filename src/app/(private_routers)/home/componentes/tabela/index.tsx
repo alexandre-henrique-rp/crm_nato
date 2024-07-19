@@ -43,29 +43,34 @@ export const Tabela = ({ onDados }: TabelaProps) => {
     setData(newData);
   };
 
-  const { nome, andamento, empreendimento } = onDados;
+  useEffect(() => {
+    const { nome, andamento, empreendimento } = onDados;
 
-  const Filter = Data.filter((item: solictacao.SolicitacaoGetType) => {
-    const itemDate = item.fcweb?.dt_agenda
-      ? new Date(item.fcweb.dt_agenda)
-      : null;
-     
-    const matchNome = nome
-      ? item.nome.toLowerCase().includes(nome.toLowerCase())
-      : true;
-    const matchAndamento = andamento
-      ? item.fcweb?.andamento.toLowerCase().includes(andamento.toLowerCase())
-      : true;
-  
-    const matchEmpreendimento = empreendimento
-      ? item.empreedimento?.id === empreendimento
-      : true;
+    const Filter = Data.filter((item: solictacao.SolicitacaoGetType) => {
+      const itemDate = item.fcweb?.dt_agenda
+        ? new Date(item.fcweb.dt_agenda)
+        : null;
 
-    return matchNome && matchAndamento && matchEmpreendimento;
-  });
+      const matchNome = nome
+        ? item.nome.toLowerCase().includes(nome.toLowerCase())
+        : true;
+      const matchAndamento = andamento
+        ? item.fcweb?.andamento.toLowerCase().includes(andamento.toLowerCase())
+        : true;
+
+      const matchEmpreendimento = empreendimento
+        ? item.empreedimento?.id === empreendimento
+        : true;
+
+      return matchNome && matchAndamento && matchEmpreendimento;
+    });
+
+    setFilterData(Filter);
+  }, [Data, onDados]);
+
   const tabela =
-    Data.length > 0 &&
-    Filter.map((item: solictacao.SolicitacaoGetType) => {
+    FilterData.length > 0 &&
+    FilterData.map((item: solictacao.SolicitacaoGetType) => {
       const dtAgenda =
         item.fcweb &&
         new Date(
@@ -101,7 +106,7 @@ export const Tabela = ({ onDados }: TabelaProps) => {
           p={{ base: "10px", md: "20px" }}
           alignContent={"center"}
           justifyContent={"space-evenly"}
-          overflowX={{ base: "auto", md: "hidden" }} 
+          overflowX={{ base: "auto", md: "hidden" }}
         >
           <Table variant="simple" size="sm">
             <Thead>
@@ -116,7 +121,7 @@ export const Tabela = ({ onDados }: TabelaProps) => {
                 {user?.hierarquia !== "USER" && <Th>VALOR</Th>}
               </Tr>
             </Thead>
-            <Tbody>{Filter.length > 0 && tabela}</Tbody>
+            <Tbody>{FilterData.length > 0 && tabela}</Tbody>
           </Table>
         </Flex>
       )}

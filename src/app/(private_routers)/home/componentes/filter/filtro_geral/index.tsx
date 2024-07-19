@@ -16,7 +16,7 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
   const [FilterNome, setFilterNome] = useState<string>("");
   const [FilterAndamento, setFilterAndamento] = useState<string>("");
   const [FilterData, setFilterData] = useState<Date | string>("");
-  const [FilterEmpreendimento, setFilterEmpreendimento] = useState<string>("");
+  const [FilterEmpreendimento, setFilterEmpreendimento] = useState<number>(0);
   const [StatusNome, setStatusNome] = useState<boolean>(false);
   const [StatusAndamento, setStatusAndamento] = useState<boolean>(false);
   const [StatusData, setStatusData] = useState<boolean>(false);
@@ -26,28 +26,41 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
   const user = session?.user;
 
   const SetNomeEvent = (e: SetStateAction<string>) => {
+    
     if (e !== "") {
       setFilterNome(e);
+    }
+    if (e === "") {
+      setFilterNome("");
     }
   };
 
   const SetAndamentoEvent = (e: SetStateAction<string>) => {
+   
     if (e !== "") {
       setFilterAndamento(e);
+    }
+    if (e === "") {
+      setFilterAndamento("");
     }
   };
 
   const SetDataEvent = (e: SetStateAction<Date | string | any>) => {
     if (e) {
       setFilterData(e);
-    } else {
+    } 
+    if (e === "") {
       setFilterData("");
     }
   };
 
-  const SetEmpreendimentoEvent = (e: SetStateAction<string>) => {
-    if (e !== "") {
-      setFilterEmpreendimento(e);
+  const SetEmpreendimentoEvent = (e: SetStateAction<number>) => {
+    console.log(e);
+    if (e !== 0) {
+      setFilterEmpreendimento(Number(e));
+    }
+    if ( e === 0) {
+      setFilterEmpreendimento(0);
     }
   };
 
@@ -65,10 +78,10 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
 
   const HandleFilterBlank = () => {
     const data = {
-      nome: undefined,
-      andamento: undefined,
-      data: undefined,
-      empreendimento: undefined,
+      nome: '',
+      andamento: '',
+      data: '',
+      empreendimento: '',
     };
     setStatusData(true);
     setStatusAndamento(true);
