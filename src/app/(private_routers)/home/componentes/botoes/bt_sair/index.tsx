@@ -24,7 +24,8 @@ export default async function BotaoSair() {
           _hover={{ bg: "#00631B" }}
           size="lg"
           onClick={() => {
-            signOut();
+            redirect("/login");
+            // signOut();
           }}
         >
           Sair
