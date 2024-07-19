@@ -1,4 +1,4 @@
-import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/lib/auth_confg";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(nextAuthOptions)
+    const session = await getServerSession(auth)
     const { id } = params;
 
     if (!session?.token) {

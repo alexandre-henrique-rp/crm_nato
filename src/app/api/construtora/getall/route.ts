@@ -1,10 +1,12 @@
+import { auth } from "@/lib/auth_confg";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { nextAuthOptions } from "../../auth/[...nextauth]/route";
+
+
 
 export async function GET() {
   try {
-    const session = await getServerSession(nextAuthOptions)
+    const session = await getServerSession(auth)
 
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
