@@ -31,8 +31,7 @@ FrontEnd:
 1. [React](https://reactjs.org/docs/getting-started.html) - ui
 2. [ChakraUI](https://v2.chakra-ui.com/getting-started) - ux
 3. [Remask](https://github.com/brunobertolini/remask)
-4. [React-Icons](https://react-icons.github.io/react-icons/)
-5. 
+4. [React-Icons](https://react-icons.github.io/react-icons/) 
 
 ## Setup
 
@@ -54,7 +53,7 @@ yarn
 yarn dev
 ```
 
-### Start backend
+<!-- ### Start backend - ALEXANDRE PREENCHER
 
 - Go to 'backends/express'
 - Install dependencies
@@ -67,7 +66,7 @@ yarn install
 
 ```
 yarn run start
-```
+``` -->
 
 ## License
 
