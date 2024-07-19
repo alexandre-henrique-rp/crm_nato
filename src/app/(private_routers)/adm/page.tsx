@@ -28,7 +28,7 @@ export default function PainelAdministrativo() {
         p={8}
         w={useBreakpointValue({ base: "100%", md: "80%", lg: "60em" })}
         textAlign="center"
-        d="flex"
+        display={{ base: "none", md: "flex" }}
         flexDir="column"
         alignItems="center"
       >
@@ -56,7 +56,7 @@ export default function PainelAdministrativo() {
         p={8}
         w={useBreakpointValue({ base: "100%", md: "80%", lg: "60em" })}
         textAlign="center"
-        d="flex"
+        display={{ base: "none", md: "flex" }}
         flexDir="column"
         alignItems="center"
         mt={8}
