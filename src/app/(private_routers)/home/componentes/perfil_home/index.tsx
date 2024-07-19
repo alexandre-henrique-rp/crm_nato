@@ -52,7 +52,7 @@ export default function PerfilHome() {
           </Box>
           <Box w={{ base: "100%", md: "40%" }}>
             <TextHome SetName="CARGO" SetValue={user.cargo} />
-            {user.empreendimento.length > 1 ? (
+            {/* {user.empreendimento.length > 1 ? (
               <>
                 <Text textColor="#00713D" fontWeight="bold">
                   EMPREENDIMENTO
@@ -71,7 +71,7 @@ export default function PerfilHome() {
                   SetValue={user.empreendimento[0].nome}
                 />
               )
-            )}
+            )} */}
 
             {user.construtora.length > 1 ? (
               <>
