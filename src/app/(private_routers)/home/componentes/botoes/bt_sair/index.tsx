@@ -24,11 +24,7 @@ export default async function BotaoSair() {
           _hover={{ bg: "#00631B" }}
           size="lg"
           onClick={() => {
-            destroyCookie(null, "next-auth.session-token");
-            destroyCookie(null, "next-auth.csrf-token");
-            destroyCookie(null, "next-auth.callback-url");
             signOut();
-            redirect('/login')
           }}
         >
           Sair
