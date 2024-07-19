@@ -137,15 +137,15 @@ console.log(data)
         alignItems={"center"}
         gap={"20px"}
       >
-        <Button
+       <Button
           bg={"#00713D"}
           textColor={"white"}
           variant="solid"
           _hover={{ bg: "#00631B" }}
-          height="50px"
+          size="lg"
           onClick={onOpen}
         >
-          Criar Alerta
+          CRIAR ALERTA
         </Button>
       </Box>
 

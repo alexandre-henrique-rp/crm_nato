@@ -29,7 +29,7 @@ export default function BotaoNovaSolicita() {
           size="lg"
           onClick={handleClick}
         >
-          Nova Solicitação
+          NOVA SOLICITAÇÃO
         </Button>
       </Box>
     </Flex>

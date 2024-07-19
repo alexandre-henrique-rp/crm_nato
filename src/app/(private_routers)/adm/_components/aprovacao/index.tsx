@@ -47,12 +47,11 @@ export default function Aprovacao({ onDados }: any) {
 
   return (
     <Container maxW="container.lg" py={8}>
-      <Heading as="h1" mb={8} textAlign="center">
+      <Heading as="h1" mb={8}>
         Aprovação de Solicitações
       </Heading>
       <Stack spacing={4}>
         {Aprovacao.map((solicitacao: any) => {
-          console.log(solicitacao.status.toString());
           return (
             <Box
               key={solicitacao.id}
@@ -60,33 +59,53 @@ export default function Aprovacao({ onDados }: any) {
               shadow="md"
               borderWidth="1px"
               borderRadius="md"
-              justifyContent={"space-between"}
             >
-              <Box display="flex" justifyContent="space-between">
-                <Box w={"50%"}>
+              <Box
+                display={{ base: "block", md: "flex" }}
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Box
+                  w={{ base: "100%", md: "50%" }}
+                  mb={{ base: 4, md: 0 }}
+                  textAlign={{ base: "center", md: "left" }}
+                >
                   <Text fontWeight="bold" fontSize="md">
                     NOME:
                   </Text>
                   {solicitacao.nome}
                 </Box>
-                <Box w={"25%"}>
+                <Box
+                  w={{ base: "100%", md: "25%" }}
+                  mb={{ base: 4, md: 0 }}
+                  textAlign={{ base: "center", md: "left" }}
+                >
                   <Text fontWeight="bold" fontSize="md">
-                    FUNÇÃO:{" "}
+                    FUNÇÃO:
                   </Text>
                   {solicitacao.cargo}
                 </Box>
-                <Box w={"25%"}>
+                <Box
+                  w={{ base: "100%", md: "25%" }}
+                  mb={{ base: 4, md: 0 }}
+                  textAlign={{ base: "center", md: "left" }}
+                >
                   <Text fontWeight="bold" fontSize="md">
-                    STATUS:{" "}
+                    STATUS:
                   </Text>
                   {solicitacao.status.toString()}
                 </Box>
-
-                <Box w={"25%"}>
+                <Box
+                  w={{ base: "100%", md: "25%" }}
+                  textAlign={{ base: "center", md: "right" }}
+                >
                   <Text fontWeight="bold" fontSize="md">
-                    APROVAR:{" "}
+                    APROVAR:
                   </Text>
-                  <Box display="flex">
+                  <Box
+                    display="flex"
+                    justifyContent={{ base: "center", md: "flex-end" }}
+                  >
                     <IconButton
                       aria-label="Aprovar"
                       icon={<FaCheck />}
@@ -103,7 +122,6 @@ export default function Aprovacao({ onDados }: any) {
                   </Box>
                 </Box>
               </Box>
-              <Table variant="simple"></Table>
             </Box>
           );
         })}

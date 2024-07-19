@@ -31,7 +31,7 @@ export default function BotaoSair() {
           size="lg"
           onClick={HandleSair}
         >
-          Sair
+          SAIR
         </Button>
       </Box>
     </Flex>

@@ -11,16 +11,17 @@ import {
 import Aprovacao from "./_components/aprovacao";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 import BotaoCadastro from "../home/componentes/botoes/bt_cadastro";
+import BotaoJuncao from "../home/componentes/botoes/bt_juncao";
 
 export default function PainelAdministrativo() {
   return (
     <Flex
       flexDir="column"
-      h="100vh"
+      h="100%"
       background="#F8F8F8"
       alignItems="center"
-      justifyContent="center"
-      p={4}
+      py={10}
+      px={4} // Adicionei um padding lateral para melhorar o espaçamento em telas menores
     >
       <Box
         border="3px solid #E8E8E8"
@@ -28,11 +29,11 @@ export default function PainelAdministrativo() {
         p={8}
         w={useBreakpointValue({ base: "100%", md: "80%", lg: "60em" })}
         textAlign="center"
-        display={{ base: "none", md: "flex" }}
         flexDir="column"
         alignItems="center"
+        mb={8}
       >
-        <Flex justifyContent="center" mb={8}>
+        <Flex mb={8} justifyContent="center" alignItems="center">
           <Box zIndex={1} position="initial">
             <BotaoRetorno />
           </Box>
@@ -45,7 +46,7 @@ export default function PainelAdministrativo() {
 
         <Flex justifyContent="center" gap={10} pt={10}>
           <Box>
-            <BotaoCadastro />
+            <BotaoJuncao />
           </Box>
         </Flex>
       </Box>
@@ -56,7 +57,7 @@ export default function PainelAdministrativo() {
         p={8}
         w={useBreakpointValue({ base: "100%", md: "80%", lg: "60em" })}
         textAlign="center"
-        display={{ base: "none", md: "flex" }}
+        display={{ base: "block", md: "flex" }} // Mudança de 'none' para 'block' para garantir que o componente seja exibido em telas menores
         flexDir="column"
         alignItems="center"
         mt={8}
