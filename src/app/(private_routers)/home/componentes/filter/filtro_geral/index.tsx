@@ -55,7 +55,6 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
   };
 
   const SetEmpreendimentoEvent = (e: SetStateAction<number>) => {
-    console.log(e);
     if (e !== 0) {
       setFilterEmpreendimento(Number(e));
     }

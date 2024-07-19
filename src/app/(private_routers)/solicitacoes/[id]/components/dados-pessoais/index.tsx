@@ -23,12 +23,12 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  useToast
+  useToast,
+  Wrap
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEventHandler, useEffect, useState } from "react";
-import { FaPen } from "react-icons/fa";
 import { mask, unMask } from "remask";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 
@@ -103,7 +103,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setObs(SetData.obs);
       setAlertDb(SetData.alert == null ? [] : SetData.alert);
       setsetIdFcweb(SetData.id_fcw);
-      console.log(SetData);
     }
   }, [Name, SetData]);
 
@@ -181,12 +180,13 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         justifyContent="center"
         overflowX="auto"
         flexDir={"column"}
+        h={"100vdh"}
       >
         {/* Dados pessoais */}
         <Box w="80%" h="100%" p={10} bg="white" borderRadius={8} boxShadow="lg">
-          <Box 
-          display={"flex"} 
-          // justifyContent={"space-between"}
+          <Box
+            display={"flex"}
+            // justifyContent={"space-between"}
           >
             <Box zIndex={1} position={"initial"}>
               <BotaoRetorno />
@@ -503,28 +503,32 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               </FormControl>
 
               <FormControl isRequired as={GridItem} colSpan={[6, 1]}>
-                <Button
-                  onClick={handleSubmit}
-                  colorScheme={"green"}
-                  variant="outline"
-                  height="50px"
-                  px={1}
-                  isLoading={Looad}
-                >
-                  Salvar e Enviar
-                </Button>
-              </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 1]}>
-                {input !== "USER" && (
-                  <ModalFormComponent
-                    rota={"CORRETROR"}
-                    clienteId={ClientId}
-                    empreedimento={EmpreendimentoId}
-                    PostName={Name}
-                    CorretorName={Corretor}
-                    CorretorId={CorretorId} />
-                )}
+                <Flex gap={3} mt={2}>
+                  <Box>
+                    <Button
+                      onClick={handleSubmit}
+                      colorScheme={"green"}
+                      variant="outline"
+                      height="50px"
+                      px={1}
+                      isLoading={Looad}
+                    >
+                      Salvar e Enviar
+                    </Button>
+                  </Box>
+                  <Box>
+                    {input !== "USER" && (
+                      <ModalFormComponent
+                        rota={"CORRETROR"}
+                        clienteId={ClientId}
+                        empreedimento={EmpreendimentoId}
+                        PostName={Name}
+                        CorretorName={Corretor}
+                        CorretorId={CorretorId}
+                      />
+                    )}
+                  </Box>
+                </Flex>
               </FormControl>
             </SimpleGrid>
           </Stack>
@@ -548,20 +552,39 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               <Stack spacing={3}>
                 {AlertDb.length > 0 &&
                   AlertDb.map((item: solictacao.AlertProps) => {
-                    const status =
-                      item.tipo === "success" ? "success" : "error";
-
-                    console.log("status", item.status);
-                    console.log("id", item.id);
+                    const fakeStatus = true;
                     return (
                       <>
-                        <AlertComponent
-                          msg={item.texto}
-                          titulo={item.titulo}
-                          status={item.tag}
-                          ID={item.id}
-                          DeleteAlertStatus={item.status}
-                        />
+                        {input === "USER" && item.tag === "info" && (
+                          <AlertComponent
+                            key={item.id}
+                            msg={item.texto}
+                            titulo={item.titulo}
+                            status={item.tag}
+                            ID={item.id}
+                            DeleteAlertStatus={fakeStatus}
+                          />
+                        )}
+                        {input === "USER" && item.status && (
+                          <AlertComponent
+                            key={item.id}
+                            msg={item.texto}
+                            titulo={item.titulo}
+                            status={item.tag}
+                            ID={item.id}
+                            DeleteAlertStatus={item.status}
+                          />
+                        )}
+                        {input !== "USER" && (
+                          <AlertComponent
+                            key={item.id}
+                            msg={item.texto}
+                            titulo={item.titulo}
+                            status={item.tag}
+                            ID={item.id}
+                            DeleteAlertStatus={item.status}
+                          />
+                        )}
                       </>
                     );
                   })}

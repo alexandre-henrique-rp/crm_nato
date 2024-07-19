@@ -7,6 +7,8 @@ import {
   Flex,
   Icon,
   IconButton,
+  Link,
+  Tooltip,
   useToast
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -18,10 +20,11 @@ interface AlertProps {
   titulo: string;
   status: any;
   ID?: number;
+  clientId?: number;
   DeleteAlertStatus?: boolean | null;
 }
 
-export const AlertComponent = ({ msg, titulo, status, ID, DeleteAlertStatus }: AlertProps) => {
+export const AlertComponent = ({ msg, titulo, status, ID, DeleteAlertStatus ,clientId }: AlertProps) => {
   const toast = useToast();
   const route = useRouter();
 
@@ -37,9 +40,10 @@ export const AlertComponent = ({ msg, titulo, status, ID, DeleteAlertStatus }: A
         duration: 3000,
         isClosable: true,
       });
-      route.refresh();
+      window.location.reload();
     }
   };
+  
   return (
     <>
       {status && (
@@ -50,14 +54,30 @@ export const AlertComponent = ({ msg, titulo, status, ID, DeleteAlertStatus }: A
             w={"full"}
             justifyContent={"space-between"}
           >
-            <Flex gap={"0.4rem"}>
+            {clientId ? (
+              <Link href={`/solicitacoes/${clientId}`}>
+                <Flex gap={"0.4rem"}>
+              {!DeleteAlertStatus && status !== "info" && (
+                  <Tooltip label='Esse Alerta foi deletado'>
+                  <Icon as={IoIosWarning} color={"yellow.500"}  fontSize={"1.5rem"} />
+                </Tooltip>
+                
+                )}
+              <AlertIcon boxSize="1.3rem" />
+              <AlertTitle fontSize="md">{titulo.toUpperCase()}</AlertTitle>
+              <AlertDescription fontSize="sm">{msg}</AlertDescription>
+            </Flex>
+              </Link>
+            ): (
+              <Flex gap={"0.4rem"}>
               {!DeleteAlertStatus && <Icon as={IoIosWarning} color={"yellow.500"}  fontSize={"1.5rem"} />}
               <AlertIcon boxSize="1.3rem" />
               <AlertTitle fontSize="md">{titulo.toUpperCase()}</AlertTitle>
               <AlertDescription fontSize="sm">{msg}</AlertDescription>
             </Flex>
-
-           { DeleteAlertStatus && <IconButton
+            )}
+           
+            { DeleteAlertStatus && status !== "info" && <IconButton
               colorScheme="red"
               variant={"ghost"}
               fontSize={"2rem"}

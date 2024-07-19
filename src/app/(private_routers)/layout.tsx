@@ -18,7 +18,7 @@ export default function Layout({
 
   if (!user) return <><Loading /></>
   return (
-    <Box bg={"#f3f3f3"}>
+    <Box h={"100vh"} w={"100vw"} bg={"#f3f3f3"}>
       {user && children}
     </Box>
   )
