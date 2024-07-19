@@ -1,10 +1,16 @@
-
+"use client";
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
-import { signOut } from "next-auth/react";;
-import { redirect  } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { redirect, useRouter  } from "next/navigation";
 import { destroyCookie } from "nookies";
 
-export default async function BotaoSair() {
+export default function BotaoSair() {
+  const router = useRouter();
+
+  const HandleSair = async (e: any) => {
+    e.preventDefault();
+    signOut();
+  };
 
   return (
     <Flex w={"100%"}>
@@ -23,10 +29,7 @@ export default async function BotaoSair() {
           variant="solid"
           _hover={{ bg: "#00631B" }}
           size="lg"
-          onClick={() => {
-            redirect("/login");
-            // signOut();
-          }}
+          onClick={HandleSair}
         >
           Sair
         </Button>
