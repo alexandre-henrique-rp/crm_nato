@@ -1,5 +1,6 @@
 "use client";
 import { Box, Flex, Select } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 interface FiltroEmpreendimentoProps {
@@ -12,6 +13,8 @@ export const EmpreendimentoFilter = ({
 }: FiltroEmpreendimentoProps) => {
   const [Empreendimento, setEmpreendimento] = useState<number>(0);
   const [Data, setData] = useState<any>([]);
+  const { data: session } = useSession();
+  const user = session?.user;
 
   useEffect(() => {
     if (setBlank === true && Empreendimento) {
@@ -20,13 +23,18 @@ export const EmpreendimentoFilter = ({
     onEmpreendimento(Empreendimento);
   }, [Empreendimento, onEmpreendimento, setBlank]);
 
+
   useEffect(() => {
+   if (user?.hierarquia !== "USER" ) {
     (async () => {
       const resq = await fetch(`/api/empreendimento/getall`);
       const data = await resq.json();      
       setData(data);
     })();
-  }, []);
+  }else {
+   setData(user?.empreendimento);
+  }
+  }, [user?.empreendimento, user?.hierarquia]);
 
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
