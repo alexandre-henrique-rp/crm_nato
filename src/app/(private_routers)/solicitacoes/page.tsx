@@ -20,8 +20,7 @@ export default function Solicitacao() {
   const [isHidden, setIsHidden] = useState<Boolean>(true); // Inicialmente, defina como true
   const route = useRouter();
 
-  const handleIshiddenChange = (e: any) => {
-    console.log("ishidden", e);
+  const handleIshiddenChange = (e: any) => {;
     // Só atualize o estado se o valor de 'e' for diferente do estado atual
     if (e === "sim") {
       setIsHidden(false); // Atualize o estado conforme necessário

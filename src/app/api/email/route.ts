@@ -14,23 +14,23 @@ export async function POST(request: Request) {
       secure: true,
       auth: {
         user: "redebrasilrp@gmail.com",
-        pass: "qhwp rkii sses ezwm"
+        pass: "qhwp rkii sses ezwm",
       },
       tls: {
-        rejectUnauthorized: false
-      }
+        rejectUnauthorized: false,
+      },
     });
 
     const emailOptions: any = {
       from: "redebrasilrp@gmail.com",
       to: data.email,
-      subject: `Comfirmação de email`,
-      html: emailBody
+      subject: `Confirmacao de email`,
+      html: emailBody.emailcorpo,
     };
 
-    const emailResult = await transporter.sendMail(emailOptions); // Adicione "await" aqui
+    await transporter.sendMail(emailOptions); // Adicione "await" aqui
 
-    return NextResponse.json(emailResult, { status: 200 });
+    return NextResponse.json(emailBody.codigo, { status: 200 });
   } catch (error) {
     return NextResponse.json(error, { status: 500 });
   }

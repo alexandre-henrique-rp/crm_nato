@@ -41,14 +41,14 @@ export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
     const request = await fetch("/api/verificador/whatsapp", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        telefone: whatsapp
-      })
+        telefone: whatsapp,
+      }),
     });
     const data = await request.json();
-    if (data.status === "INVALID_WA_NUMBER") {
+    if (data.status !== "VALID_WA_NUMBER") {
       return false;
     }
     return true;
