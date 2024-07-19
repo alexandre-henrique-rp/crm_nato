@@ -21,6 +21,7 @@ async function handleGetUpdate() {
 
 export const Tabela = ({ onDados }: TabelaProps) => {
   const [Data, setData] = useState<solictacao.SolicitacaoGetType[]>([]);
+  const [FilterData, setFilterData] = useState<any>([]);
   const { data: session } = useSession();
   const user = session?.user;
   const token = session?.token;
@@ -42,32 +43,26 @@ export const Tabela = ({ onDados }: TabelaProps) => {
     setData(newData);
   };
 
-  const { nome, andamento, data, empreendimento } = onDados;
+  const { nome, andamento, empreendimento } = onDados;
 
   const Filter = Data.filter((item: solictacao.SolicitacaoGetType) => {
     const itemDate = item.fcweb?.dt_agenda
       ? new Date(item.fcweb.dt_agenda)
       : null;
-    const inputDate = data ? new Date(data) : null;
-
+     
     const matchNome = nome
       ? item.nome.toLowerCase().includes(nome.toLowerCase())
       : true;
     const matchAndamento = andamento
       ? item.fcweb?.andamento.toLowerCase().includes(andamento.toLowerCase())
       : true;
-    const matchData =
-      inputDate && itemDate
-        ? itemDate.toLocaleDateString("pt-BR") ===
-          inputDate.toLocaleDateString("pt-BR")
-        : true;
+  
     const matchEmpreendimento = empreendimento
-      ? item.empreedimento.id === empreendimento
+      ? item.empreedimento?.id === empreendimento
       : true;
 
-    return matchNome && matchAndamento && matchData && matchEmpreendimento;
+    return matchNome && matchAndamento && matchEmpreendimento;
   });
-
   const tabela =
     Data.length > 0 &&
     Filter.map((item: solictacao.SolicitacaoGetType) => {

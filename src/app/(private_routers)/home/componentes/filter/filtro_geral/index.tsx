@@ -101,12 +101,16 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
         />
       </Box>
       <Box w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>
-        {user?.hierarquia !== "USER" && (
+        {/* {user?.hierarquia !== "USER" && (
           <EmpreendimentoFilter
             onEmpreendimento={SetEmpreendimentoEvent}
             setBlank={StatusEmpreendimento}
           />
-        )}
+        )} */}
+          <EmpreendimentoFilter
+            onEmpreendimento={SetEmpreendimentoEvent}
+            setBlank={StatusEmpreendimento}
+          />
       </Box>
 
       <Flex w="full" h="100%" bg="#F8F8F8" mr={{ base: "0", md: "10px" }}>

@@ -167,7 +167,7 @@ export default function FormRegister() {
             onChange={(e: any) => setEmail(e.target.value)}
           />
         </Box>
-        <CheckEmail email={Email} nome={Nome} />
+        <CheckEmail email={Email} nome={Nome}  />
       </Box>
 
       <Box

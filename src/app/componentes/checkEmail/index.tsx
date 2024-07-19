@@ -3,7 +3,7 @@ import { Button, useToast } from "@chakra-ui/react";
 interface checkEmailProps {
   nome: string;
   email: string;
-  onvalue: any;
+  onvalue?: any;
 }
 
 export default function CheckEmail({ nome, email, onvalue }: checkEmailProps) {
