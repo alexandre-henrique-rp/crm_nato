@@ -13,7 +13,7 @@ export default function middleware(req: NextRequest) {
 
   if (isBlockRoute) {
     if (session) {
-      return NextResponse.redirect(new URL("/home", req.url));
+      return NextResponse.redirect(new URL("/", req.url));
     }
     return NextResponse.redirect(new URL("/login", req.url));
   }
@@ -43,6 +43,7 @@ export const config = {
     "/",
     "/home",
     "/solicitacoes/:path*",
+    "/solicitacoes",
     "/redefinicao",
     "/solicitacoes",
     "/login",

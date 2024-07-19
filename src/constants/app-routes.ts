@@ -1,10 +1,10 @@
 import type { ConfigRoutes } from "@/types/route";
 
 export const APP_ROUTES: ConfigRoutes = {
-  blockRoutes: ["/"],
+  blockRoutes: ["/home"],
   publicRoutes: ["/login", "/reset-password", "/termos/uso"],
   privateRoutes: [
-    "/home",
+    "/",
     "/solicitacoes",
     "/solicitacoes/:id",
     "/aprovacao",
