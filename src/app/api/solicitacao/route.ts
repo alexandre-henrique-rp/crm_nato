@@ -1,12 +1,11 @@
 import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "../auth/[...nextauth]/route";
+import { NextResponse } from "next/server";
+import { auth } from "@/lib/auth_confg";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    console.log(body);
-    const session = await getServerSession(nextAuthOptions);
-    //  console.log("🚀 ~ POST ~ session:", session)
+    const session = await getServerSession(auth);
     if (!session) {
       return new Response("Unauthorized2", { status: 401 });
     }
@@ -23,17 +22,12 @@ export async function POST(request: Request) {
     );
 
     const data = await user.json();
-    console.log("🚀 ~ POST ~ data:", data)
     if (!user.ok) {
       return new Response("Invalid credentials", { status: 401 });
     }
-
-
-
-    return new Response(JSON.stringify(data), { status: 200 });
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
     console.log(error);
-
-    return new Response("Internal Server Error", { status: 500 });
+    return NextResponse.json(error, { status: 500 });
   }
 }

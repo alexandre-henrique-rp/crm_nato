@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { nextAuthOptions } from "../../auth/[...nextauth]/route";
+import { auth } from "@/lib/auth_confg";
 
 
 
@@ -11,7 +11,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
     console.log("🚀 ~ PUT ~ data:", data)
     const { id } = params;
     console.log("🚀 ~ PUT ~ id:", id)
-    const session = await getServerSession(nextAuthOptions);
+    const session = await getServerSession(auth);
     console.log("🚀 ~ PUT ~ session:", session)
 
     if (!session) {
