@@ -1,16 +1,17 @@
-export const APP_ROUTES = {
-    private: {
-      home:"/home/:path*",
-      Notification:"/notification/:path*",
-      perfil_adm:"/perfil-adm/:path*",
-      perfil_client:"/perfil-client/:path*",
-      redefinicao: "/redefinicao",
-      solicitacao: "/solicitacoes/:path*",
-      register: '/register',
-    },
-    public: {
-        login: '/login',
-        reset_password: '/reset-password',
-        termos_uso: '/termos/uso',
-    }
-  }
+import type { ConfigRoutes } from "@/types/route";
+
+export const APP_ROUTES: ConfigRoutes = {
+  blockRoutes: ["/"],
+  publicRoutes: ["/login", "/reset-password", "/termos/uso"],
+  privateRoutes: [
+    "/home",
+    "/solicitacoes",
+    "/solicitacoes/:id",
+    "/aprovacao",
+    "/aprovacao/:id",
+    "/perfil",
+    "/perfil/:id",
+    "/redefinica",
+    "/register"
+  ]
+};

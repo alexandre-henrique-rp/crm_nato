@@ -1,4 +1,4 @@
-import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/lib/auth_confg";
 import { getServerSession } from "next-auth";
 
 /**
@@ -9,7 +9,7 @@ import { getServerSession } from "next-auth";
 export default function SeaaionProviderFunction(): boolean {
   let session ;
   (async () => {
-    const session = await getServerSession(nextAuthOptions)
+    const session = await getServerSession(auth)
     
   })()
   return true;
