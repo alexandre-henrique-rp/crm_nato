@@ -1,10 +1,10 @@
 
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { signOut } from "next-auth/react";;
-import { redirect, useRouter  } from "next/navigation";
+import { redirect  } from "next/navigation";
 import { destroyCookie } from "nookies";
 
-export default function BotaoSair() {
+export default async function BotaoSair() {
 
   return (
     <Flex w={"100%"}>
@@ -27,7 +27,7 @@ export default function BotaoSair() {
             destroyCookie(null, "next-auth.session-token");
             destroyCookie(null, "next-auth.csrf-token");
             destroyCookie(null, "next-auth.callback-url");
-            // signOut();
+            signOut();
             redirect('/login')
           }}
         >
