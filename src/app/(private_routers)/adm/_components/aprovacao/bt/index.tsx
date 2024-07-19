@@ -2,7 +2,7 @@
 import { Flex, Box, Button } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
-export default function BotaoCadastro() {
+export default function BotaoAprovacao() {
   const router = useRouter();
 
   return (
@@ -22,9 +22,9 @@ export default function BotaoCadastro() {
           variant="solid"
           _hover={{ bg: "#00631B" }}
           size="lg"
-          onClick={() => router.push("/register")}
+          onClick={() => router.push("/aprovacao")}
         >
-          CADASTRAR
+          APROVAR CADASTRO
         </Button>
       </Box>
     </Flex>
