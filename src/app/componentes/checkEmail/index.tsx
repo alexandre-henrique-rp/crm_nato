@@ -6,10 +6,8 @@ interface checkEmailProps {
   onvalue: any;
 }
 
-export default function CheckEmail({ nome, email, onvalue,  }: checkEmailProps) {
+export default function CheckEmail({ nome, email, onvalue }: checkEmailProps) {
   const toast = useToast();
-
-
 
   const sendEmail = async () => {
     if (!nome && !email) {
@@ -19,18 +17,18 @@ export default function CheckEmail({ nome, email, onvalue,  }: checkEmailProps) 
         status: "error",
         duration: 3000,
         isClosable: true,
-        position: "top-right"
+        position: "top-right",
       });
     } else {
       const request = await fetch("/api/email", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           nome: nome,
-          email: email
-        })
+          email: email,
+        }),
       });
 
       const data = await request.json();
@@ -46,7 +44,7 @@ export default function CheckEmail({ nome, email, onvalue,  }: checkEmailProps) 
           status: "error",
           duration: 3000,
           isClosable: true,
-          position: "top-right"
+          position: "top-right",
         });
       }
       toast({
@@ -55,10 +53,9 @@ export default function CheckEmail({ nome, email, onvalue,  }: checkEmailProps) 
         status: "success",
         duration: 3000,
         isClosable: true,
-        position: "top-right"
+        position: "top-right",
       });
     }
-
   };
 
   return (
