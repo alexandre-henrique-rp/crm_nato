@@ -10,13 +10,14 @@ export async function POST(request: Request) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "access-token": `${process.env.NEXT_API_WHATSAPP_KEY}`
-        }
+          "access-token": `${process.env.NEXT_API_WHATSAPP_KEY}`,
+        },
       }
     );
 
+    const res = await req.json();
+
     if (req.ok) {
-      const res = await req.json();
       return NextResponse.json(res, { status: 200 });
     }
   } catch (error) {

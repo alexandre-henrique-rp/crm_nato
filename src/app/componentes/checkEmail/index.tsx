@@ -3,10 +3,13 @@ import { Button, useToast } from "@chakra-ui/react";
 interface checkEmailProps {
   nome: string;
   email: string;
+  onvalue: any;
 }
 
-export default function CheckEmail({ nome, email }: checkEmailProps) {
+export default function CheckEmail({ nome, email, onvalue,  }: checkEmailProps) {
   const toast = useToast();
+
+
 
   const sendEmail = async () => {
     if (!nome && !email) {
@@ -29,6 +32,13 @@ export default function CheckEmail({ nome, email }: checkEmailProps) {
           email: email
         })
       });
+
+      const data = await request.json();
+
+      console.log(data);
+
+      onvalue(data);
+
       if (!request.ok) {
         toast({
           title: "Erro",
@@ -48,6 +58,7 @@ export default function CheckEmail({ nome, email }: checkEmailProps) {
         position: "top-right"
       });
     }
+
   };
 
   return (

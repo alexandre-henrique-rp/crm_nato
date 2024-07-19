@@ -10,19 +10,24 @@ import {
   GridItem,
   Icon,
   Input,
+  InputGroup,
+  InputLeftAddon,
+  PinInput,
+  PinInputField,
   Select,
   SimpleGrid,
   Stack,
   Tooltip,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import CheckEmail from "@/app/componentes/checkEmail";
 import { Whatsapp } from "@/app/componentes/whatsapp";
 import { SelectCorretor } from "@/app/componentes/select_user";
 import Loading from "@/app/loading";
+import VerificadorFileComponent from "@/app/componentes/file";
 
 interface relacionamentoProps {
   onvalue: any;
@@ -48,13 +53,23 @@ export default function SolicitacaoForm({
   const [teldois, SetTeldois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
+  const [checkEmail, setcheckEmail] = useState<string>("");
+  const [codigo, setcodigo] = useState<boolean>(false);
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
 
   const handlesubmit = async () => {
-    if (!nome || !cpf || !email || !relacionamento) {
+    if (!codigo) {
+      toast({
+        title: "Erro",
+        description: "Falha na verificação de Email",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } else if (!nome || !cpf || !email || !relacionamento) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos",
@@ -100,11 +115,9 @@ export default function SolicitacaoForm({
           setLoad(false);
           router.push("/home");
         }
-
       } catch (error) {
         console.log(error);
       }
-
     }
   };
 
@@ -116,90 +129,86 @@ export default function SolicitacaoForm({
     setConstrutoraID(user.construtora[0].id);
   }
 
-  // Função para converter arquivo em base64
-  const fileToBase64 = (file: File): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
+  
 
-      reader.onloadend = () => {
-        if (reader.result) {
-          const result = reader.result as string;
-          const base64String = result.split(",")[1];
-          resolve(base64String);
-        } else {
-          reject(new Error("O resultado do FileReader é null ou undefined"));
-        }
-      };
-
-      reader.onerror = () => {
-        reject(new Error("Erro ao ler o arquivo"));
-      };
-
-      reader.readAsDataURL(file);
-    });
-  };
-
-  // Função chamada quando um arquivo RG é selecionado
-  const handleRgChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      try {
-        const base64 = await fileToBase64(file);
-        setRgFile(base64);
-      } catch (error) {}
+  const VerificadorEmail = (e: any) => {
+    const value = e.target.value;
+    if ("NT-" + value === checkEmail) {
+      setcheckEmail("");
+      setcodigo(true);
+    } else {
+      setcheckEmail(value);
+      setcodigo(false);
     }
   };
 
-  // Função chamada quando um arquivo CNH é selecionado
-  const handleCnhChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
+  useEffect(() => {
+    if (
+      relacionamento === "sim" &&
+      cpfdois.length === 11 &&
+      nome &&
+      cpf &&
+      email &&
+      tel &&
+      DataNascimento
+    ) {
+      if (!codigo) {
+        toast({
+          title: "Erro",
+          description: "Falha na verificação de Email",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        ishidden("sim");
 
-    if (file) {
-      try {
-        const base64 = await fileToBase64(file);
-        setCnhFile(base64);
-      } catch (error) {}
+        const data: solictacao.SolicitacaoPost = {
+          nome: nome,
+          cpf: cpf,
+          telefone: tel,
+          telefone2: teldois,
+          dt_nascimento: DataNascimento,
+          email: email,
+          uploadRg: uploadRg,
+          uploadCnh: uploadCnh,
+          corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
+          relacionamento: [cpfdois],
+          cpfdois: cpfdois,
+          construtora: Number(ConstrutoraID),
+          empreedimento: Number(empreendimento),
+          rela_quest: relacionamento === "sim" ? true : false,
+          voucher: Voucher,
+        };
+        onvalue(data);
+      }
     }
-  };
 
-  if (
-    relacionamento === "sim" &&
-    cpfdois.length === 11 &&
-    nome &&
-    cpf &&
-    email &&
-    tel &&
-    DataNascimento
-  ) {
-    ishidden("sim");
-
-    const data: solictacao.SolicitacaoPost = {
-      nome: nome,
-      cpf: cpf,
-      telefone: tel,
-      telefone2: teldois,
-      dt_nascimento: DataNascimento,
-      email: email,
-
-      uploadRg: uploadRg,
-      uploadCnh: uploadCnh,
-      corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
-      relacionamento: [cpfdois],
-      cpfdois: cpfdois,
-      construtora: Number(ConstrutoraID),
-      empreedimento: Number(empreendimento),
-      rela_quest: relacionamento === "sim" ? true : false,
-      voucher: Voucher
-
-    };
-    onvalue(data);
-  }
-
-  if (relacionamento === "nao" || cpfdois.length < 11) {
-    ishidden("nao");
-  }
+    if (relacionamento === "nao" || cpfdois.length < 11) {
+      ishidden("nao");
+    }
+  }, [
+    ConstrutoraID,
+    CorretorId,
+    DataNascimento,
+    Voucher,
+    codigo,
+    cpf,
+    cpfdois,
+    email,
+    empreendimento,
+    ishidden,
+    nome,
+    onvalue,
+    relacionamento,
+    tel,
+    teldois,
+    toast,
+    uploadCnh,
+    uploadRg,
+    user?.hierarquia,
+    user?.id,
+  ]);
 
   if (Load) {
     return <Loading />;
@@ -220,13 +229,6 @@ export default function SolicitacaoForm({
             onChange={(e) => setDataNascimento(e.target.value)}
           />
         </Box>
-
-        <Box>
-          <FormLabel>Whatsapp com DDD</FormLabel>
-
-          <Whatsapp setValue={tel} onValue={setTel} />
-        </Box>
-
       </SimpleGrid>
 
       <SimpleGrid
@@ -235,27 +237,36 @@ export default function SolicitacaoForm({
         mt={6}
         alignItems={"end"}
       >
-        <Box>
+        <GridItem>
+          <FormLabel>Whatsapp com DDD</FormLabel>
+          <Whatsapp setValue={tel} onValue={setTel} />
+        </GridItem>
+        <GridItem>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
           <Whatsapp setValue={teldois} onValue={SetTeldois} />
-        </Box>
+        </GridItem>
 
-        <Box>
+        <GridItem>
           <FormLabel>Email</FormLabel>
           <Input
             type="text"
             onChange={(e) => setemail(e.target.value.replace(/\s/g, ""))}
             value={email}
           />
-        </Box>
-        <CheckEmail email={email} nome={nome} />
+        </GridItem>
 
-        <Box>
-          <CheckEmail email={email} nome={nome} />
-        </Box>
-        <Box>
-          <CheckEmail email={email} nome={nome} />
-        </Box>
+        <GridItem>
+          <CheckEmail onvalue={setcheckEmail} email={email} nome={nome} />
+        </GridItem>
+
+        <GridItem>
+          <FormLabel>Codigo</FormLabel>
+          <InputGroup>
+            <InputLeftAddon>NT-</InputLeftAddon>
+            <Input type="text" onChange={VerificadorEmail} />
+          </InputGroup>
+        </GridItem>
+
         {user?.hierarquia === "ADM" && (
           <Box>
             <FormLabel>Corretor</FormLabel>
@@ -290,8 +301,7 @@ export default function SolicitacaoForm({
               tag="construtora"
               SetValue={user.construtora.map((item) => ({
                 id: item.id,
-                nome: item.razaosocial
-
+                nome: item.razaosocial,
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
             />
@@ -302,12 +312,12 @@ export default function SolicitacaoForm({
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} mt={6}>
         <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
-          <Input type="file" variant="flushed" onChange={handleRgChange} />
+          <VerificadorFileComponent />
         </FormControl>
 
         <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
-          <Input type="file" variant="flushed" onChange={handleCnhChange} />
+          <VerificadorFileComponent />
         </FormControl>
       </SimpleGrid>
 
@@ -338,18 +348,20 @@ export default function SolicitacaoForm({
           </Box>
         )}
 
-        <Box>
-          <FormLabel>
-            Voucher
-            <Tooltip
-              label="Voucher para Atendimento em qualquer unidade Soluti"
-              aria-label="A tooltip"
-            >
-              <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
-            </Tooltip>
-          </FormLabel>
-          <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
-        </Box>
+        {user?.hierarquia === "ADM" && (
+          <Box>
+            <FormLabel>
+              Voucher
+              <Tooltip
+                label="Voucher para Atendimento em qualquer unidade Soluti"
+                aria-label="A tooltip"
+              >
+                <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
+              </Tooltip>
+            </FormLabel>
+            <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
+          </Box>
+        )}
       </SimpleGrid>
 
       <Button
