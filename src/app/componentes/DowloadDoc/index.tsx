@@ -8,17 +8,19 @@ interface DownloadDocProps {
 
 export const DownloadDoc = ({ base64, name }: DownloadDocProps) => {
   const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = base64;
-    link.download = `${name}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (base64) {
+      const link = document.createElement("a");
+      link.href = base64;
+      link.download = name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   return (
     <>
-      {base64 ? (
+      {base64 && (
         <Button
           bg={"#00713D"}
           textColor={"white"}
@@ -29,7 +31,7 @@ export const DownloadDoc = ({ base64, name }: DownloadDocProps) => {
         >
           Download {name}
         </Button>
-      ) : null}
+      )}
     </>
   );
 };

@@ -312,12 +312,12 @@ export default function SolicitacaoForm({
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} mt={6}>
         <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
-          <VerificadorFileComponent />
+          <VerificadorFileComponent onFileConverted={setCnhFile} />
         </FormControl>
 
         <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
-          <VerificadorFileComponent />
+          <VerificadorFileComponent onFileConverted={setRgFile} />
         </FormControl>
       </SimpleGrid>
 

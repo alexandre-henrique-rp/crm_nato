@@ -31,6 +31,7 @@ import { useRouter } from "next/navigation";
 import { FormEventHandler, useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
+import VerificadorFileComponent from "@/app/componentes/file";
 
 interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
@@ -117,8 +118,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         telefone: Whatsapp,
         telefone2: Whatsappdois,
         email: Email,
-        uploadRg: RgFile,
-        uploadCnh: CnhFile,
+        uploadRg: !RgFile ? RgFile64 : RgFile,
+        uploadCnh: !CnhFile ? CnhFile64 : CnhFile,
         construtora: ConstrutoraId,
         empreedimento: EmpreendimentoId,
         relacionamento: Relacionamento,
@@ -144,7 +145,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         duration: 9000,
         isClosable: true
       });
-      router.refresh();
+      window.location.reload();
       setLooad(false);
     } catch (error) {
       setLooad(false);
@@ -425,12 +426,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 >
                   CNH
                 </FormLabel>
-                <Input
-                  type="File"
-                  variant="flushed"
-                  value={CnhFile}
-                  onChange={(e) => setCnhFile(e.target.value)}
-                ></Input>
+                <VerificadorFileComponent onFileConverted={setCnhFile} />
               </FormControl>
 
               <FormControl as={GridItem} colSpan={[6, 2]}>
@@ -444,12 +440,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 >
                   RG
                 </FormLabel>
-                <Input
-                  type="File"
-                  variant="flushed"
-                  value={RgFile}
-                  onChange={(e) => setRgFile(e.target.value)}
-                ></Input>
+                <VerificadorFileComponent onFileConverted={setRgFile} />
               </FormControl>
 
               {input !== "USER" && (
