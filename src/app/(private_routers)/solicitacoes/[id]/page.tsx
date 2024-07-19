@@ -1,12 +1,12 @@
 import { Flex } from "@chakra-ui/react";
 import { DadosPessoaisComponent } from "./components/dados-pessoais";
 import { getServerSession } from "next-auth";
-import { nextAuthOptions } from "@/app/api/auth/[...nextauth]/route";
+import { auth } from "@/lib/auth_confg";
 
 const Requestes = async (id: string) => {
   try {
     const url = `http://189.5.194.55:3031/solicitacao/${id}`;
-    const session = await getServerSession(nextAuthOptions);
+    const session = await getServerSession(auth);
     const request = await fetch(url, {
       method: "GET",
       headers: {

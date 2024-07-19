@@ -17,7 +17,6 @@ export const auth: NextAuthOptions = {
             username: credentials.email,
             password: credentials.password
           };
-          console.log("🚀 ~ authorize ~ dados:", credentials)
           const res = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/auth`,{
             method: "POST",
             body: JSON.stringify(dados),
@@ -27,7 +26,6 @@ export const auth: NextAuthOptions = {
           });
 
           const retorno = await res.json();
-          console.log("🚀 ~ authorize ~ retorno:", retorno)
           const { token, expires, user } = retorno;
 
           const {
