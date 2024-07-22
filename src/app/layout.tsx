@@ -6,14 +6,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   return (
     <html lang="pt-br">
-      <NextAuSessionProvider>
-        <body>
+      <body>
+        <NextAuSessionProvider>
           <Providers>{children}</Providers>
-        </body>
-      </NextAuSessionProvider>
+        </NextAuSessionProvider>
+      </body>
     </html>
   );
 }
