@@ -16,7 +16,7 @@
     "axios": "^1.7.2",
     "cpf-cnpj-validator": "^1.0.3",
     "framer-motion": "^11.2.12",
-    "next": "14.2.4",
+    "next": "14.2.5",
     "next-auth": "^4.24.7",
     "nodemailer": "^6.9.14",
     "nookies": "^2.5.2",
@@ -30,8 +30,8 @@
     "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.4",
+    "eslint": "^9.7.0",
+    "eslint-config-next": "14.2.5",
     "typescript": "^5"
   }
 }
