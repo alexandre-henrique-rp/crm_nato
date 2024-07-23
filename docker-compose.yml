@@ -6,7 +6,7 @@ services:
     build:
       context: .
     ports:
-      - "3000:3000"
+      - "3002:3002"
     environment:
       - NODE_ENV=production
     deploy:

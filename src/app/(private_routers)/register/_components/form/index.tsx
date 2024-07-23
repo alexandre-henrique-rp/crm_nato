@@ -2,6 +2,7 @@
 
 import CheckEmail from "@/app/componentes/checkEmail";
 import CpfMask from "@/app/componentes/cpf_mask";
+import { ModalConsultaRegistro } from "@/app/componentes/modal_consulra_registro";
 import { SenhaComponent } from "@/app/componentes/Senha";
 import {
   Box,
@@ -128,6 +129,7 @@ export default function FormRegister() {
         justifyContent="space-between"
         w="full"
       >
+      
         <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
           <FormLabel>Nome Completo</FormLabel>
           <Input

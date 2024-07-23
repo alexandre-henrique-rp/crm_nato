@@ -28,6 +28,7 @@ import { Whatsapp } from "@/app/componentes/whatsapp";
 import { SelectCorretor } from "@/app/componentes/select_user";
 import Loading from "@/app/loading";
 import VerificadorFileComponent from "@/app/componentes/file";
+import { ModalConsultaRegistro } from "@/app/componentes/modal_consulra_registro";
 
 interface relacionamentoProps {
   onvalue: any;
@@ -217,6 +218,7 @@ export default function SolicitacaoForm({
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6}>
+      <ModalConsultaRegistro OnCpf=""  />
         <Box>
           <FormLabel>Nome Completo</FormLabel>
           <Input type="text" onChange={(e) => setnome(e.target.value)} />
