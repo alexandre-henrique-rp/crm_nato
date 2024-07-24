@@ -13,8 +13,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
-  Textarea,
   useDisclosure,
   useToast
 } from "@chakra-ui/react";
@@ -29,20 +27,22 @@ interface CpfProps {
 export const ModalConsultaRegistro = ({ OnCpf }: CpfProps) => {
   const [CPF, setCPF] = useState("");
   const [CPFMask, setCPFMask] = useState("");
+  const [IsContinue, setIsContinue] = useState(false);
+  const [IsRedirect, setIsRedirect] = useState(false);
+  const [IsCancel, setIsCancel] = useState(false);
   const toast = useToast();
-  const { data: session } = useSession();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-useEffect(() => {
-  console.log('aki');
-  onOpen();
-}, []);
+  useEffect(() => {
+    console.log("aki");
+    onOpen();
+  }, [onOpen]);
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
-    e.preventDefault();
+  const handleSubmit = async (e: any) => {
+    const ValorCertfic = e.target.value;
 
-    if (!CPF) {
+    if (!ValorCertfic) {
       toast({
         title: "Erro!",
         description: "o CPF e obrigatorio!",
@@ -50,41 +50,36 @@ useEffect(() => {
         duration: 3000,
         isClosable: true
       });
-      return;
-    }
-    const data = {
-      cpf: CPF
-    };
-
-    const ID = session?.user?.id;
-    try {
-      const request = await fetch(`/api/consulta/cpf/${CPF}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-      if (request.ok) {
-        const response = await request.json();
-        console.log(response);
-
-        toast({
-          title: "Sucesso!",
-          description: "Alerta criado com sucesso!",
-          status: "success",
-          duration: 3000,
-          isClosable: true
-        });
-      }
-      onClose();
-    } catch (error) {
+    } else if (ValorCertfic.length < 11) {
       toast({
         title: "Erro!",
-        description: "Erro ao criar alerta!",
+        description: "Falta caracteres no CPF!",
         status: "error",
         duration: 3000,
         isClosable: true
       });
+    } else {
+      try {
+        const request = await fetch(`/api/consulta/cpf/${ValorCertfic}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json"
+          }
+        });
+        if (request.ok) {
+          const response = await request.json();
+          console.log(response);
+          // onClose();
+        }
+      } catch (error) {
+        toast({
+          title: "Erro!",
+          description: "Erro ao criar alerta!",
+          status: "error",
+          duration: 3000,
+          isClosable: true
+        });
+      }
     }
   };
 
@@ -120,14 +115,33 @@ useEffect(() => {
                     setCPFMask(masked);
                     setCPF(cpfNumber);
                   }}
+                  onBlur={(e) => {
+                    const valor = e.target.value;
+                    const valorLinpo = unMask(valor);
+                    const masked = mask(valorLinpo, "999.999.999-99");
+                    const cpfNumber = unMask(masked);
+                    handleSubmit(cpfNumber);
+                  }}
                 />
               </Box>
             </ModalBody>
             <Divider />
             <ModalFooter>
-              <Button colorScheme="whatsapp" mr={3} onClick={onClose}>
-                Continuar cadatro
-              </Button>
+              {IsContinue && (
+                <Button colorScheme="whatsapp" onClick={onClose}>
+                  Continuar cadatro
+                </Button>
+              )}
+              {IsRedirect && (
+                <Button colorScheme="whatsapp" onClick={onClose}>
+                  Redirecionar
+                </Button>
+              )}
+              {IsCancel && (
+                <Button colorScheme="whatsapp" onClick={onClose}>
+                  Cancelar
+                </Button>
+              )}
             </ModalFooter>
           </FormControl>
         </ModalContent>
