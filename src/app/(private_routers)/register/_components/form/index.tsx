@@ -174,7 +174,7 @@ export default function FormRegister() {
             onChange={(e: any) => setUsername(e.target.value)}
           />
         </Box>
-      </SimpleGrid>
+      </Box>
 
       <SimpleGrid
         columns={{ base: 1, md: 2, lg: 3 }}
@@ -337,6 +337,6 @@ export default function FormRegister() {
       >
         CRIAR CONTA
       </Button>
-    </Stack>
+    </>
   );
 }
