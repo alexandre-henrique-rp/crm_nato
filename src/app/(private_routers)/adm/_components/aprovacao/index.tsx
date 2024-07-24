@@ -73,8 +73,6 @@ export default function Aprovacao({ onDados }: any) {
       if (refresh > 0) {
         window.location.reload();
       }
-      router.refresh();
-      setRefresh(refresh + 1);
     }
   };
 
