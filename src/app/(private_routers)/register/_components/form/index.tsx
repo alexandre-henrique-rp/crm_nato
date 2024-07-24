@@ -2,6 +2,7 @@
 
 import CheckEmail from "@/app/componentes/checkEmail";
 import CpfMask from "@/app/componentes/cpf_mask";
+import { ModalConsultaRegistro } from "@/app/componentes/modal_consulra_registro";
 import { SenhaComponent } from "@/app/componentes/Senha";
 import { Whatsapp } from "@/app/componentes/whatsapp";
 import {
@@ -143,11 +144,22 @@ export default function FormRegister() {
   };
 
   return (
-    <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-        <Box>
-          <FormLabel>CPF</FormLabel>
-          <CpfMask setvalue={cpf} onvalue={setCpf} />
+
+    <>
+      <Box
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        justifyContent="space-between"
+        w="full"
+      >
+      
+        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
+          <FormLabel>Nome Completo</FormLabel>
+          <Input
+            type="text"
+            border="1px solid #b8b8b8cc"
+            onChange={(e: any) => setNome(e.target.value)}
+          />
         </Box>
 
         <Box>

@@ -1,6 +1,7 @@
 import { Stack, Text, Box, Button, Flex } from "@chakra-ui/react";
 import FormRegister from "./_components/form";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
+import { ModalConsultaRegistro } from "@/app/componentes/modal_consulra_registro";
 
 export default function Register() {
   return (
@@ -41,7 +42,7 @@ export default function Register() {
             </Text>
           </Box>
         </Flex>
-
+        
         <FormRegister />
       </Box>
     </Flex>
