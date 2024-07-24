@@ -42,7 +42,7 @@ export default function Register() {
             </Text>
           </Box>
         </Flex>
-        
+
         <FormRegister />
       </Box>
     </Flex>
