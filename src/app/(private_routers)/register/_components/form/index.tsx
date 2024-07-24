@@ -3,12 +3,19 @@
 import CheckEmail from "@/app/componentes/checkEmail";
 import CpfMask from "@/app/componentes/cpf_mask";
 import { SenhaComponent } from "@/app/componentes/Senha";
+import { Whatsapp } from "@/app/componentes/whatsapp";
 import {
   Box,
   Button,
   FormLabel,
+  GridItem,
   Input,
+  InputGroup,
+  InputLeftAddon,
+  InputRightElement,
   Select,
+  SimpleGrid,
+  Stack,
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
@@ -18,16 +25,20 @@ import { mask, unMask } from "remask";
 export default function FormRegister() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [Telefone, setTelefone] = useState("");
+  const [tel, setTel] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [cpf, setCpf] = useState("");
   const [Empreendimento, setEmpreendimento] = useState<number | undefined>();
   const [EmpreendimentoData, setEmpreendimentoData] = useState<any>([]);
   const [Construtora, setConstrutora] = useState<number | undefined>();
   const [ConstrutoraData, setConstrutoraData] = useState<any>([]);
+  const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Cargo, setCargo] = useState("");
   const [Hierarquia, setHierarquia] = useState("");
   const [Email, setEmail] = useState("");
+  const [Load, setLoad] = useState<boolean>(false);
+  const [checkEmail, setcheckEmail] = useState<string>("");
+  const [codigo, setcodigo] = useState<boolean>(false);
   const [Nome, setNome] = useState("");
   const toast = useToast();
   const route = useRouter();
@@ -70,7 +81,7 @@ export default function FormRegister() {
       const data = {
         username: username,
         password: password,
-        telefone: Telefone,
+        telefone: tel,
         email: Email,
         cpf: cpf,
         nome: Nome,
@@ -108,6 +119,17 @@ export default function FormRegister() {
     }
   };
 
+  const VerificadorEmail = (e: any) => {
+    const value = e.target.value;
+    if ("NT-" + value === checkEmail) {
+      setcheckEmail("");
+      setcodigo(true);
+    } else {
+      setcheckEmail(value);
+      setcodigo(false);
+    }
+  };
+
   const GetConstrutora = (e: any) => {
     const value = e.target.value;
     (async () => {
@@ -121,23 +143,18 @@ export default function FormRegister() {
   };
 
   return (
-    <>
-      <Box
-        display="flex"
-        flexDirection={{ base: "column", md: "row" }}
-        justifyContent="space-between"
-        w="full"
-      >
-        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
-          <FormLabel>Nome Completo</FormLabel>
-          <Input
-            type="text"
-            border="1px solid #b8b8b8cc"
-            onChange={(e: any) => setNome(e.target.value)}
-          />
+    <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+        <Box>
+          <FormLabel>CPF</FormLabel>
+          <CpfMask setvalue={cpf} onvalue={setCpf} />
         </Box>
 
-        <Box w={{ base: "100%", md: "48%" }}>
+        <Box>
+          <FormLabel>Nome Completo</FormLabel>
+          <Input type="text" onChange={(e) => setNome(e.target.value)} />
+        </Box>
+        <Box>
           <FormLabel>Usuario</FormLabel>
           <Input
             type="text"
@@ -145,47 +162,55 @@ export default function FormRegister() {
             onChange={(e: any) => setUsername(e.target.value)}
           />
         </Box>
-      </Box>
+      </SimpleGrid>
 
-      <Box
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 3 }}
+        spacing={6}
         mt={6}
-        display="flex"
-        flexDirection={{ base: "column", md: "row" }}
-        justifyContent="space-between"
-        w="full"
-        alignItems="end"
+        alignItems={"end"}
       >
-        <Box w={{ base: "100%", md: "40%" }} mb={{ base: 4, md: 0 }}>
-          <FormLabel>CPF</FormLabel>
-          <CpfMask setvalue={cpf} onvalue={(e: any) => setCpf(e)} />
-        </Box>
-        <Box w={{ base: "100%", md: "40%" }}>
+        <GridItem>
+          <FormLabel>Data de Nascimento</FormLabel>
+          <Input
+            type="date"
+            onChange={(e) => setDataNascimento(e.target.value)}
+          />
+        </GridItem>
+        <GridItem>
+          <FormLabel>Whatsapp com DDD</FormLabel>
+          <Whatsapp setValue={tel} onValue={setTel} />
+        </GridItem>
+      </SimpleGrid>
+
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 2 }}
+        spacing={6}
+        mt={6}
+        alignItems={"end"}
+      >
+        <GridItem>
           <FormLabel>Email</FormLabel>
-          <Input
-            type="text"
-            border="1px solid #b8b8b8cc"
-            onChange={(e: any) => setEmail(e.target.value)}
-          />
-        </Box>
-        <CheckEmail email={Email} nome={Nome}  />
-      </Box>
+          <InputGroup>
+            <Input
+              type="text"
+              border="1px solid #b8b8b8cc"
+              onChange={(e: any) => setEmail(e.target.value)}
+            />
+            <InputRightElement width="8rem">
+              <CheckEmail onvalue={setcheckEmail} email={Email} nome={Nome} />
+            </InputRightElement>
+          </InputGroup>
+        </GridItem>
 
-      <Box
-        mt={6}
-        display="flex"
-        flexDirection={{ base: "column", md: "row" }}
-        justifyContent="space-between"
-        w="full"
-      >
-        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
-          <FormLabel>Telefone</FormLabel>
-          <Input
-            type="text"
-            border="1px solid #b8b8b8cc"
-            onChange={(e: any) => setTelefone(e.target.value)}
-          />
-        </Box>
-      </Box>
+        <GridItem>
+          <FormLabel>Codigo email</FormLabel>
+          <InputGroup>
+            <InputLeftAddon>NT-</InputLeftAddon>
+            <Input type="text" onChange={VerificadorEmail} />
+          </InputGroup>
+        </GridItem>
+      </SimpleGrid>
 
       <Box
         mt={6}
@@ -300,6 +325,6 @@ export default function FormRegister() {
       >
         CRIAR CONTA
       </Button>
-    </>
+    </Stack>
   );
 }

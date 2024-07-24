@@ -45,6 +45,15 @@ export default function Aprovacao({ onDados }: any) {
     })();
   }, []);
 
+
+const handleAprovar = async (id: number) => {
+  const re
+}
+
+
+
+
+
   return (
     <Container maxW="container.lg" py={8}>
       <Heading as="h1" mb={8}>
@@ -114,6 +123,7 @@ export default function Aprovacao({ onDados }: any) {
                       mr={2}
                     />
                     <IconButton
+
                       aria-label="Rejeitar"
                       icon={<FaTimes />}
                       colorScheme="red"

@@ -12,6 +12,7 @@ import {
   Input,
   InputGroup,
   InputLeftAddon,
+  InputRightElement,
   PinInput,
   PinInputField,
   Select,
@@ -115,9 +116,7 @@ export default function SolicitacaoForm({
           setLoad(false);
           router.push("/home");
         }
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     }
   };
 
@@ -128,9 +127,6 @@ export default function SolicitacaoForm({
   if (user?.construtora.length === 1 && !ConstrutoraID) {
     setConstrutoraID(user.construtora[0].id);
   }
-
-  
-
   const VerificadorEmail = (e: any) => {
     const value = e.target.value;
     if ("NT-" + value === checkEmail) {
@@ -218,25 +214,29 @@ export default function SolicitacaoForm({
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6}>
         <Box>
-          <FormLabel>Nome Completo</FormLabel>
-          <Input type="text" onChange={(e) => setnome(e.target.value)} />
+          <FormLabel>CPF</FormLabel>
+          <CpfMask setvalue={cpf} onvalue={setCpf} />
         </Box>
 
         <Box>
+          <FormLabel>Nome Completo</FormLabel>
+          <Input type="text" onChange={(e) => setnome(e.target.value)} />
+        </Box>
+      </SimpleGrid>
+
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 3 }}
+        spacing={6}
+        mt={6}
+        alignItems={"end"}
+      >
+        <GridItem>
           <FormLabel>Data de Nascimento</FormLabel>
           <Input
             type="date"
             onChange={(e) => setDataNascimento(e.target.value)}
           />
-        </Box>
-      </SimpleGrid>
-
-      <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 4 }}
-        spacing={6}
-        mt={6}
-        alignItems={"end"}
-      >
+        </GridItem>
         <GridItem>
           <FormLabel>Whatsapp com DDD</FormLabel>
           <Whatsapp setValue={tel} onValue={setTel} />
@@ -245,42 +245,43 @@ export default function SolicitacaoForm({
           <FormLabel>Whatsapp com DDD 2</FormLabel>
           <Whatsapp setValue={teldois} onValue={SetTeldois} />
         </GridItem>
+      </SimpleGrid>
 
+      <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 2 }}
+        spacing={6}
+        mt={6}
+        alignItems={"end"}
+      >
         <GridItem>
           <FormLabel>Email</FormLabel>
-          <Input
-            type="text"
-            onChange={(e) => setemail(e.target.value.replace(/\s/g, ""))}
-            value={email}
-          />
+          <InputGroup>
+            <Input
+              type="text"
+              border="1px solid #b8b8b8cc"
+              onChange={(e: any) => setemail(e.target.value)}
+            />
+            <InputRightElement width="8rem">
+              <CheckEmail onvalue={setcheckEmail} email={email} nome={nome} />
+            </InputRightElement>
+          </InputGroup>
         </GridItem>
-
         <GridItem>
-          <CheckEmail onvalue={setcheckEmail} email={email} nome={nome} />
-        </GridItem>
-
-        <GridItem>
-          <FormLabel>Codigo</FormLabel>
+          <FormLabel>Codigo email</FormLabel>
           <InputGroup>
             <InputLeftAddon>NT-</InputLeftAddon>
             <Input type="text" onChange={VerificadorEmail} />
           </InputGroup>
         </GridItem>
+      </SimpleGrid>
 
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
         {user?.hierarquia === "ADM" && (
           <Box>
             <FormLabel>Corretor</FormLabel>
             <SelectCorretor idcorretor={setCorretorId} />
           </Box>
         )}
-      </SimpleGrid>
-
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
-        <Box>
-          <FormLabel>CPF</FormLabel>
-          <CpfMask setvalue={cpf} onvalue={setCpf} />
-        </Box>
-
         {user?.empreendimento && (
           <Box>
             <FormLabel>Empreendimento</FormLabel>

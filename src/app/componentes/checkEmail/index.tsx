@@ -60,7 +60,7 @@ export default function CheckEmail({ nome, email, onvalue }: checkEmailProps) {
 
   return (
     <>
-      <Button colorScheme={"green"} onClick={sendEmail}>
+      <Button size={"md"} colorScheme={"green"} onClick={sendEmail}>
         Confirmar Email
       </Button>
     </>

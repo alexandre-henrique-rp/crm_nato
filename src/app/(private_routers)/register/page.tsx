@@ -4,11 +4,14 @@ import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 
 export default function Register() {
   return (
-    <Stack
-      h="100vh"
-      background="#F8F8F8"
+    <Flex
+      minH="100vh"
+      w="100%"
+      overflowY="auto"
+      justifyContent="center"
       alignItems="center"
-      padding={4} // Adiciona padding para telas pequenas
+      bg="#F8F8F8"
+      py="2rem"
     >
       <Box
         border="3px solid #E8E8E8"
@@ -41,6 +44,6 @@ export default function Register() {
 
         <FormRegister />
       </Box>
-    </Stack>
+    </Flex>
   );
 }
