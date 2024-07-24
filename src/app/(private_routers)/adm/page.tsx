@@ -21,6 +21,7 @@ export default function PainelAdministrativo() {
       flexDir="column"
       h="100%"
       background="#F8F8F8"
+      overflowY={"auto"}
       alignItems="center"
       py={10}
       px={4} // Adicionei um padding lateral para melhorar o espaçamento em telas menores
