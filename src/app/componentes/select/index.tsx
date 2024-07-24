@@ -17,48 +17,48 @@ export const SelectComponent = ({
 }: SelectProps) => {
   const [Data, setData] = useState([]);
 
-  if (hierarquia === "ADM" && Data.length < 1) {
-    (async () => {
-      if (tag === "empreendimento") {
-        const req = await fetch("/api/empreendimento/getall");
-        const res = await req.json();
-        setData(res);
-      } else if (tag === "construtora") {
-        const req = await fetch("/api/construtora/getall");
-        const res = await req.json();
-        setData(res);
-      } else {
-        const req = await fetch("/api/usuario/getall");
-        const res = await req.json();
-        setData(res);
-      }
-    })();
-  } else if (hierarquia === "CONST" && Data.length < 1) {
-    (async () => {
-      if (tag === "empreendimento") {
-        const req = await fetch("/api/empreendimento/getall");
-        const res = await req.json();
-        setData(res);
-      } else if (tag === "construtora") {
-        const req = await fetch("/api/construtora/getall");
-        const res = await req.json();
-        setData(res);
-      } else {
-        const req = await fetch("/api/usuario/getall");
-        const res = await req.json();
-        setData(res);
-      }
-    })();
-  }
-
   useEffect(() => {
       if (SetValue && Data.length < 1) {
         setData(SetValue);
         onValue(Number(SetValue));
       }
      
-    
+      if (hierarquia === "ADM" && Data.length < 1) {
+        (async () => {
+          if (tag === "empreendimento") {
+            const req = await fetch("/api/empreendimento/getall");
+            const res = await req.json();
+            setData(res);
+          } else if (tag === "construtora") {
+            const req = await fetch("/api/construtora/getall");
+            const res = await req.json();
+            setData(res);
+          } else {
+            const req = await fetch("/api/usuario/getall");
+            const res = await req.json();
+            setData(res);
+          }
+        })();
+      } else if (hierarquia === "CONST" && Data.length < 1) {
+        (async () => {
+          if (tag === "empreendimento") {
+            const req = await fetch("/api/empreendimento/getall");
+            const res = await req.json();
+            setData(res);
+          } else if (tag === "construtora") {
+            const req = await fetch("/api/construtora/getall");
+            const res = await req.json();
+            setData(res);
+          } else {
+            const req = await fetch("/api/usuario/getall");
+            const res = await req.json();
+            setData(res);
+          }
+        })();
+      }
+
   }, [Data.length, SetValue, onValue]);
+  
   return (
     <Flex w={"full"} py={"0.5rem"}>
       <Select

@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth_confg";
 export async function GET() {
   try {
     const session = await getServerSession(auth)
+    console.log("🚀 ~ GET ~ session:", session)
    
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
