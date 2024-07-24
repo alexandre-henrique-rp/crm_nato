@@ -2,14 +2,12 @@ import { auth } from "@/lib/auth_confg";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function PUT(
+export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
     const { id } = params;
-    const body = await request.json();
-
     const session = await getServerSession(auth);
 
     if (!session) {
@@ -17,14 +15,13 @@ export async function PUT(
     }
 
     const reqest = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/user/update/${id}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/user/delete/${id}`,
       {
-        method: "PUT",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${session?.token}`,
         },
-        body: JSON.stringify(body),
       }
     );
 

@@ -14,6 +14,7 @@ import {
   Thead,
   Tr,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import { METHODS } from "http";
 import {
@@ -35,24 +36,40 @@ export default function Aprovacao({ onDados }: any) {
   const [Construtora, setConstrutora] = useState<string>("");
   const [ConstrutoraId, setConstrutoraId] = useState<number>(0);
   const [Id, setId] = useState<number>(0);
+  const toast = useToast();
 
   useEffect(() => {
     (async () => {
       const response = await fetch(`/api/usuario/getall`);
       const data = await response.json();
-      console.log("🚀 ~ file: page.tsx:useEffect ~ data:", data);
-      setAprovacao(data);
+      const filter = data.filter(
+        (solicitacao: any) => solicitacao.status === false
+      );
+      setAprovacao(filter);
     })();
   }, []);
 
+  const handleAprovar = async (id: number) => {
+    const response = await fetch(`/api/usuario/put/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: true,
+      }),
+    });
 
-const handleAprovar = async (id: number) => {
-  const re
-}
-
-
-
-
+    if (response.ok) {
+      toast({
+        title: "Sucesso!",
+        description: "Solicitação aprovada com sucesso!",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <Container maxW="container.lg" py={8}>
@@ -116,18 +133,12 @@ const handleAprovar = async (id: number) => {
                     justifyContent={{ base: "center", md: "flex-end" }}
                   >
                     <IconButton
+                      onClick={() => handleAprovar(solicitacao.id)}
                       aria-label="Aprovar"
                       icon={<FaCheck />}
                       colorScheme="green"
                       size="sm"
                       mr={2}
-                    />
-                    <IconButton
-
-                      aria-label="Rejeitar"
-                      icon={<FaTimes />}
-                      colorScheme="red"
-                      size="sm"
                     />
                   </Box>
                 </Box>
@@ -138,7 +149,4 @@ const handleAprovar = async (id: number) => {
       </Stack>
     </Container>
   );
-}
-function setData(newData: any) {
-  throw new Error("Function not implemented.");
 }
