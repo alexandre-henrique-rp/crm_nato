@@ -35,7 +35,6 @@ export const ModalConsultaRegistro = ({ OnCpf }: CpfProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    console.log("aki");
     onOpen();
   }, [onOpen]);
 
