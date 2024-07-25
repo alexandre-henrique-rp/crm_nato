@@ -131,7 +131,7 @@ export default function SolicitacaoForm({
   const VerificadorEmail = (e: any) => {
     const value = e.target.value;
     if ("NT-" + value === checkEmail) {
-      setcheckEmail("");
+      // setcheckEmail("");
       setcodigo(true);
     } else {
       setcheckEmail(value);

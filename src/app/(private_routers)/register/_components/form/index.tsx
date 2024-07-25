@@ -58,8 +58,8 @@ export default function FormRegister() {
       !username ||
       !Email ||
       !Nome ||
-      !Empreendimento ||
-      !Construtora ||
+      // !Empreendimento ||
+      // !Construtora ||
       !password ||
       !confirmPassword
     ) {

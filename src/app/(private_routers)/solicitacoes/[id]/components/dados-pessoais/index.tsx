@@ -23,8 +23,9 @@ import {
   SimpleGrid,
   Stack,
   Text,
+  Textarea,
   useToast,
-  Wrap
+  Wrap,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -79,12 +80,12 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setWhatsapp(SetData.telefone);
       setWhatsAppMask(
         SetData.telefone &&
-          mask(SetData.telefone, ["(99) 9999-9999", "(99) 9 9999-9999"])
+        mask(SetData.telefone, ["(99) 9999-9999", "(99) 9 9999-9999"])
       );
       setWhatsappdois(SetData.telefone2);
       setWhatsAppMaskdois(
         SetData.telefone2 &&
-          mask(SetData.telefone2, ["(99) 9999-9999", "(99) 9 9999-9999"])
+        mask(SetData.telefone2, ["(99) 9999-9999", "(99) 9 9999-9999"])
       );
       setCnhFile64(SetData.uploadCnh);
       setRgFile64(SetData.uploadRg);
@@ -97,7 +98,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       const formattedDate =
         SetData.dt_nascimento && date.toISOString().split("T")[0];
       setDataNascimento(formattedDate);
-      setRelacionamento(SetData.relacionamento);
+      setRelacionamento(SetData.relacionamento.map((item: any) => item.cpf));
       // setAssDoc();
       setCorretor(SetData.corretor && SetData.corretor.nome);
       setCorretorId(SetData.corretor && SetData.corretor.id);
@@ -106,6 +107,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setsetIdFcweb(SetData.id_fcw);
     }
   }, [Name, SetData]);
+  console.log(SetData);
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
@@ -128,14 +130,14 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         ass_doc: AssDoc,
         link_doc: LinkDoc,
         id_fcw: IdFcweb,
-        obs: Obs
+        obs: Obs,
       };
       const rest = await fetch(`/api/solicitacao/update/${ClientId}`, {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       const response = await rest.json();
 
@@ -143,7 +145,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         title: "Cliente Atualizado Com Sucesso",
         status: "success",
         duration: 9000,
-        isClosable: true
+        isClosable: true,
       });
       window.location.reload();
       setLooad(false);
@@ -175,341 +177,231 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   };
 
   return (
-    <>
-      <Flex
-        alignItems="center"
-        // justifyContent="center"
-        overflowX="auto"
-        flexDir={"column"}
-        h={"100vh"}
-        p={10}
+    <Flex
+      alignItems="center"
+      overflowX="auto"
+      flexDir="column"
+      minH="100vh"
+      p={4} // Padding ao redor do Flex
+    >
+      {/* Dados pessoais */}
+      <Box
+        w={{ base: "95%", md: "85%" }} // Ajuste a largura conforme necessário
+        p={6} // Padding interno
+        bg="white"
+        borderRadius={8}
+        boxShadow="lg"
+        mb={12} // Margin-bottom para espaçamento inferior
       >
-        {/* Dados pessoais */}
-        <Box w="80%" h="100%" p={10} bg="white" borderRadius={8} boxShadow="lg">
-          <Box
-            display={"flex"}
-            // justifyContent={"space-between"}
-          >
-            <Box zIndex={1} position={"initial"}>
-              <BotaoRetorno />
-            </Box>
-            <Box alignItems={"center"} gap={2} ms={2}>
-              <Text fontSize={"2xl"}>Dados Pessoais</Text>
-              {input !== "USER" && (
-                <Text fontSize={"md"}>Corretor: {Corretor} </Text>
-              )}
-            </Box>
-            {/* <Button variant={"link"} leftIcon={<FaPen />}></Button> */}
+        <Box display="flex" alignItems="center" justifyContent="space-between">
+          <BotaoRetorno />
+          <Box alignItems="center" textAlign={{ base: "center", md: "left" }}>
+            <Text fontSize={{ base: "lg", md: "2xl" }}>Dados Pessoais</Text>
+            {input !== "USER" && (
+              <Text fontSize={{ base: "sm", md: "md" }}>
+                Corretor: {Corretor}
+              </Text>
+            )}
           </Box>
-          <Divider borderColor={"#00713D"} pt={2} />
-          <Stack
-            pt={4}
-            bg="white"
-            _dark={{
-              bg: "#141517"
-            }}
-            spacing={6}
-          >
-            <SimpleGrid columns={6} spacing={6}>
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
+        </Box>
+        <Divider borderColor="#00713D" my={4} />
+        <Stack spacing={6}>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Nome Completo
+              </FormLabel>
+              <Input
+                type="text"
+                value={Name}
+                variant="flushed"
+                onChange={(e) => setName(e.target.value)}
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Data de Nascimento
+              </FormLabel>
+              <Input
+                variant="flushed"
+                value={DataNascimento}
+                onChange={(e) => setDataNascimento(e.target.value)}
+                type="date"
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Relacionamento
+              </FormLabel>
+
+              <Input
+                type="text"
+                variant="flushed"
+                value={Relacionamento}
+                disabled
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Telefone Celular
+              </FormLabel>
+              <Input
+                type="text"
+                variant="flushed"
+                onChange={MascaraZap}
+                value={WhatsAppMask}
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Telefone 2
+              </FormLabel>
+              <Input
+                type="text"
+                variant="flushed"
+                onChange={MascaraZap2}
+                value={WhatsAppMaskdois}
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Email
+              </FormLabel>
+              <Input
+                variant="flushed"
+                type="email"
+                value={Email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Construtora
+              </FormLabel>
+              <Input
+                value={Construtora}
+                onChange={(e) => setConstrutora(e.target.value)}
+                type="text"
+                variant="flushed"
+                disabled
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Empreendimento
+              </FormLabel>
+              <Input
+                value={Empreendimento}
+                onChange={(e) => setEmpreendimento(e.target.value)}
+                type="text"
+                variant="flushed"
+                disabled
+              />
+            </FormControl>
+
+            {input !== "USER" && (
+              <FormControl isRequired>
                 <FormLabel fontSize="sm" fontWeight="md">
-                  Nome Completo
+                  ID FCWEB
                 </FormLabel>
                 <Input
-                  type="text"
-                  value={Name}
-                  variant="flushed"
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Data de Nascimento
-                </FormLabel>
-                <Input
-                  variant="flushed"
-                  value={DataNascimento}
-                  onChange={(e) => setDataNascimento(e.target.value)}
-                  type="date"
-                />
-              </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Relacionamento
-                </FormLabel>
-                <Input
-                  type="text"
-                  variant="flushed"
-                  value={Relacionamento}
-                  disabled={true}
-                />
-              </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Telefone Celular
-                </FormLabel>
-                <Input
-                  type="text"
-                  variant="flushed"
-                  onChange={MascaraZap}
-                  value={WhatsAppMask}
-                />
-              </FormControl>
-
-              <FormControl as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Telefone 2
-                </FormLabel>
-                <Input
-                  type="text"
-                  variant="flushed"
-                  onChange={MascaraZap2}
-                  value={WhatsAppMaskdois}
-                />
-              </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Email
-                </FormLabel>
-                <Input
-                  variant="flushed"
-                  type="email"
-                  value={Email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Construtora
-                </FormLabel>
-                <Input
-                  value={Construtora}
-                  onChange={(e) => setConstrutora(e.target.value)}
-                  type="text"
-                  variant="flushed"
-                  disabled={true}
-                />
-              </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Empreendimento
-                </FormLabel>
-                <Input
-                  value={Empreendimento}
-                  onChange={(e) => setEmpreendimento(e.target.value)}
-                  type="text"
-                  variant="flushed"
-                  disabled={true}
-                />
-              </FormControl>
-              {input !== "USER" && (
-                <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                  <FormLabel
-                    fontSize="sm"
-                    fontWeight="md"
-                    color="gray.700"
-                    _dark={{
-                      color: "gray.50"
-                    }}
-                  >
-                    ID FCWEB
-                  </FormLabel>
-                  <Input
-                    value={IdFcweb || ""}
-                    onChange={(e) => setsetIdFcweb(Number(e.target.value))}
-                    type="text"
-                    variant="flushed"
-                    // disabled={IdFcweb ? true : false}
-                  />
-                </FormControl>
-              )}
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Link Contrato
-                </FormLabel>
-                <Input
-                  value={LinkDoc}
-                  onChange={(e) => setLinkDoc(e.target.value)}
+                  value={IdFcweb || ""}
+                  onChange={(e) => setsetIdFcweb(Number(e.target.value))}
                   type="text"
                   variant="flushed"
                 />
               </FormControl>
-              <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  Link Planilha
+            )}
+
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Link Contrato
+              </FormLabel>
+              <Input
+                value={LinkDoc}
+                onChange={(e) => setLinkDoc(e.target.value)}
+                type="text"
+                variant="flushed"
+              />
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Link Planilha
+              </FormLabel>
+              <Input
+                value={LinkDoc}
+                onChange={(e) => setLinkDoc(e.target.value)}
+                type="text"
+                variant="flushed"
+              />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel fontSize="sm" fontWeight="md">
+                CNH
+              </FormLabel>
+              <VerificadorFileComponent onFileConverted={setCnhFile} />
+            </FormControl>
+
+            <FormControl>
+              <FormLabel fontSize="sm" fontWeight="md">
+                RG
+              </FormLabel>
+              <VerificadorFileComponent onFileConverted={setRgFile} />
+            </FormControl>
+
+            {input !== "USER" && (
+              <FormControl>
+                <FormLabel fontSize="sm" fontWeight="md">
+                  Downloads da CNH
                 </FormLabel>
-                <Input
-                  value={LinkDoc}
-                  onChange={(e) => setLinkDoc(e.target.value)}
-                  type="text"
-                  variant="flushed"
-                />
+                <DownloadDoc base64={CnhFile64} name="Cnh" />
               </FormControl>
-
-              <FormControl as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  CNH
+            )}
+            {input !== "USER" && (
+              <FormControl>
+                <FormLabel fontSize="sm" fontWeight="md">
+                  Download do RG
                 </FormLabel>
-                <VerificadorFileComponent onFileConverted={setCnhFile} />
+                <DownloadDoc base64={RgFile64} name="Rg" />
               </FormControl>
+            )}
 
-              <FormControl as={GridItem} colSpan={[6, 2]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
-                  RG
-                </FormLabel>
-                <VerificadorFileComponent onFileConverted={setRgFile} />
-              </FormControl>
-
-              {input !== "USER" && (
-                <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                  <FormLabel
-                    fontSize="sm"
-                    fontWeight="md"
-                    color="gray.700"
-                    _dark={{
-                      color: "gray.50"
-                    }}
-                  >
-                    Downloads da CNH
-                  </FormLabel>
-                  <DownloadDoc base64={CnhFile64} name="Cnh" />
-                </FormControl>
-              )}
-              {input !== "USER" && (
-                <FormControl isRequired as={GridItem} colSpan={[6, 2]}>
-                  <FormLabel
-                    fontSize="sm"
-                    fontWeight="md"
-                    color="gray.700"
-                    _dark={{
-                      color: "gray.50"
-                    }}
-                  >
-                    Download do Rg
-                  </FormLabel>
-                  <DownloadDoc base64={RgFile64} name="Rg" />
-                </FormControl>
-              )}
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 6]}>
-                <FormLabel
-                  fontSize="sm"
-                  fontWeight="md"
-                  color="gray.700"
-                  _dark={{
-                    color: "gray.50"
-                  }}
-                >
+              <FormControl>
+                <FormLabel fontSize="sm" fontWeight="md">
                   Observações
                 </FormLabel>
-                <Input
-                  value={Obs}
-                  onChange={(e) => setObs(e.target.value)}
-                  type="text"
-                  variant="flushed"
-                />
+                <Textarea value={Obs} onChange={(e) => setObs(e.target.value)} />
               </FormControl>
-
-              <FormControl isRequired as={GridItem} colSpan={[6, 1]}>
-                <Flex gap={3} mt={2}>
-                  <Box>
-                    <Button
-                      onClick={handleSubmit}
-                      colorScheme={"green"}
-                      variant="outline"
-                      height="50px"
-                      px={1}
-                      isLoading={Looad}
-                    >
-                      Salvar e Enviar
-                    </Button>
-                  </Box>
-                  <Box>
-                    {input !== "USER" && (
+              <FormControl>
+                <Flex
+                  gap={{ base: 2, md: 3 }}
+                  mt={{ base: 4, md: 6 }}
+                  direction={{ base: "column", md: "row" }}
+                >
+                  <Button
+                    onClick={handleSubmit}
+                    colorScheme="green"
+                    variant="outline"
+                    height={{ base: "40px", md: "50px" }}
+                    minWidth={{ base: "100%", md: "auto" }}
+                    padding={{ base: "8px", md: "12px" }}
+                    textAlign="center"
+                    isLoading={Looad}
+                    flex={{ base: "none", md: "1" }}
+                  >
+                    Salvar e Enviar
+                  </Button>
+                  {input !== "USER" && (
+                    <Box mt={{ base: 4, md: 0 }} flex="1">
                       <ModalFormComponent
                         rota={"CORRETROR"}
                         clienteId={ClientId}
@@ -518,75 +410,45 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                         CorretorName={Corretor}
                         CorretorId={CorretorId}
                       />
-                    )}
-                  </Box>
-                </Flex>
-              </FormControl>
-            </SimpleGrid>
-          </Stack>
-        </Box>
-        {/* Fim dados Pessoais */}
+                    </Box>
+                  )} 
+              </Flex>
+            </FormControl>
+          </SimpleGrid>
+        </Stack>
+      </Box>
+      {/* Fim dados Pessoais */}
 
-        {/* Inicio Dados de contato */}
-        <Box
-          mt={10}
-          w="80%"
-          h="100%"
-          p={10}
-          bg="white"
-          borderRadius={8}
-          boxShadow="lg"
-        >
-          <Text fontSize={"2xl"}> Alertas </Text>
-          <Divider borderColor={"#00713D"} pt={2} />
-          <Stack pt={10}>
-            <Box>
-              <Stack spacing={3}>
-                {AlertDb.length > 0 &&
-                  AlertDb.map((item: solictacao.AlertProps) => {
-                    const fakeStatus = true;
-                    return (
-                      <>
-                        {input === "USER" && item.tag === "info" && (
-                          <AlertComponent
-                            key={item.id}
-                            msg={item.texto}
-                            titulo={item.titulo}
-                            status={item.tag}
-                            ID={item.id}
-                            DeleteAlertStatus={fakeStatus}
-                          />
-                        )}
-                        {input === "USER" && item.status && (
-                          <AlertComponent
-                            key={item.id}
-                            msg={item.texto}
-                            titulo={item.titulo}
-                            status={item.tag}
-                            ID={item.id}
-                            DeleteAlertStatus={item.status}
-                          />
-                        )}
-                        {input !== "USER" && (
-                          <AlertComponent
-                            key={item.id}
-                            msg={item.texto}
-                            titulo={item.titulo}
-                            status={item.tag}
-                            ID={item.id}
-                            DeleteAlertStatus={item.status}
-                          />
-                        )}
-                      </>
-                    );
-                  })}
-              </Stack>
-            </Box>
-          </Stack>
-        </Box>
-
-        {/* Fim dados de contato */}
-      </Flex>
-    </>
+      {/* Inicio Dados de contato */}
+      <Box
+        w={{ base: "95%", md: "85%" }} // Ajuste a largura conforme necessário
+        p={6} // Padding interno
+        bg="white"
+        borderRadius={8}
+        boxShadow="lg"
+      >
+        <Text fontSize={{ base: "xl", md: "2xl" }}>Alertas</Text>
+        <Divider borderColor="#00713D" my={4} />
+        <Stack spacing={6}>
+          {AlertDb.length > 0 &&
+            AlertDb.map((item: solictacao.AlertProps) => {
+              const fakeStatus = true;
+              return (
+                <AlertComponent
+                  key={item.id}
+                  msg={item.texto}
+                  titulo={item.titulo}
+                  status={item.tag}
+                  ID={item.id}
+                  DeleteAlertStatus={
+                    input === "USER" ? fakeStatus : item.status
+                  }
+                />
+              );
+            })}
+        </Stack>
+      </Box>
+      {/* Fim dados de contato */}
+    </Flex>
   );
 };
