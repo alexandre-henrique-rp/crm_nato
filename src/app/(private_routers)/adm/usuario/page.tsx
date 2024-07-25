@@ -122,7 +122,7 @@ export default function Usuarios({ onDados }: any) {
                 alignItems="center"
               >
                 <Box
-                  w={{ base: "100%", md: "50%" }}
+                  w={{ base: "100%", md: "40%" }}
                   mb={{ base: 4, md: 0 }}
                   textAlign={{ base: "center", md: "left" }}
                 >
@@ -132,7 +132,7 @@ export default function Usuarios({ onDados }: any) {
                   {solicitacao.nome}
                 </Box>
                 <Box
-                  w={{ base: "100%", md: "25%" }}
+                  w={{ base: "100%", md: "15%" }}
                   mb={{ base: 4, md: 0 }}
                   textAlign={{ base: "center", md: "left" }}
                 >
@@ -142,27 +142,31 @@ export default function Usuarios({ onDados }: any) {
                   {solicitacao.cargo}
                 </Box>
                 <Box
-                  w={{ base: "100%", md: "25%" }}
+                  w={{ base: "100%", md: "40%" }}
                   mb={{ base: 4, md: 0 }}
                   textAlign={{ base: "center", md: "left" }}
                 >
                   <Text fontWeight="bold" fontSize="md">
                     Constutora:
                   </Text>
-                  {solicitacao.construtora.toString()}
+                  {solicitacao.construtora.map ((item: any) => (
+                    <Text>{item.razaosocial.split(" ")[0] + " " + item.razaosocial.split(" ")[1]}</Text>
+                  ))}
                 </Box>
                 <Box
-                  w={{ base: "100%", md: "25%" }}
+                  w={{ base: "100%", md: "35%" }}
                   mb={{ base: 4, md: 0 }}
                   textAlign={{ base: "center", md: "left" }}
                 >
                   <Text fontWeight="bold" fontSize="md">
                     Empreendimento:
                   </Text>
-                  {solicitacao.empreendimento.toString()}
+                  {solicitacao.empreendimento.map ((item: any) => (
+                    <Text>{item.nome}</Text>
+                  ))}
                 </Box>
                 <Box
-                  w={{ base: "100%", md: "25%" }}
+                  w={{ base: "100%", md: "8%" }}
                   textAlign={{ base: "center", md: "right" }}
                 >
                   <Text fontWeight="bold" fontSize="md">
