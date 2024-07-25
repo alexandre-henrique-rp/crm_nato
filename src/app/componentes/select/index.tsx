@@ -23,11 +23,12 @@ export const SelectComponent = ({
         onValue(Number(SetValue));
       }
      
-      if (hierarquia === "ADM" && Data.length < 1) {
+      if (hierarquia === "ADM") {
         (async () => {
           if (tag === "empreendimento") {
             const req = await fetch("/api/empreendimento/getall");
             const res = await req.json();
+            
             setData(res);
           } else if (tag === "construtora") {
             const req = await fetch("/api/construtora/getall");
@@ -39,7 +40,7 @@ export const SelectComponent = ({
             setData(res);
           }
         })();
-      } else if (hierarquia === "CONST" && Data.length < 1) {
+      } else  {
         (async () => {
           if (tag === "empreendimento") {
             const req = await fetch("/api/empreendimento/getall");
@@ -68,10 +69,10 @@ export const SelectComponent = ({
         }`}
       >
         {Data &&
-          Data.map((item: any) => {
+          Data.map((item: any) => {          
             return (
               <option key={item.id} value={item.id}>
-                 {item.nome}
+                 {!item.nome ? item.razaosocial : item.nome}
               </option>
             );
           })}
