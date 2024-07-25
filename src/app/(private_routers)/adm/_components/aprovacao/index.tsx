@@ -32,10 +32,6 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 
 export default function Aprovacao({ onDados }: any) {
   const [Aprovacao, setAprovacao] = useState<any>([]);
-  const [Name, setName] = useState<string>("");
-  const [Construtora, setConstrutora] = useState<string>("");
-  const [ConstrutoraId, setConstrutoraId] = useState<number>(0);
-  const [Id, setId] = useState<number>(0);
   const [refresh, setRefresh] = useState<number>(0);
   const toast = useToast();
   const router = useRouter();

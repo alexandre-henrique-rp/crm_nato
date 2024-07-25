@@ -14,6 +14,7 @@ import BotaoCadastro from "../home/componentes/botoes/bt_cadastro";
 import BotaoJuncao from "../home/componentes/botoes/bt_juncao";
 import BotaoNovaSolicita from "../home/componentes/botoes/bt_nvsolicita";
 import { ModalFormComponent } from "@/app/componentes/modal";
+import BotaoUser from "../home/componentes/botoes/bt_user";
 
 export default function PainelAdministrativo() {
   return (
@@ -56,6 +57,9 @@ export default function PainelAdministrativo() {
           </Box>
           <Box>
             <ModalFormComponent rota={"geral"} />
+          </Box>
+          <Box>
+            <BotaoUser />
           </Box>
         </Flex>
       </Box>

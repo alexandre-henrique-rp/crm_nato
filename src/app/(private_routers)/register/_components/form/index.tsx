@@ -144,40 +144,33 @@ export default function FormRegister() {
   };
 
   return (
-
     <>
-      <Box
-        display="flex"
-        flexDirection={{ base: "column", md: "row" }}
-        justifyContent="space-between"
-        w="full"
+       <SimpleGrid
+        columns={{ base: 1, md: 2, lg: 2 }}
+        spacing={6}
+        mt={6}
+        alignItems={"end"}
       >
-      
-        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
+        <GridItem>
           <FormLabel>Nome Completo</FormLabel>
           <Input
             type="text"
             border="1px solid #b8b8b8cc"
             onChange={(e: any) => setNome(e.target.value)}
           />
-        </Box>
-
-        <Box>
-          <FormLabel>Nome Completo</FormLabel>
-          <Input type="text" onChange={(e) => setNome(e.target.value)} />
-        </Box>
-        <Box>
+        </GridItem>
+        <GridItem>
           <FormLabel>Usuario</FormLabel>
           <Input
             type="text"
             border="1px solid #b8b8b8cc"
             onChange={(e: any) => setUsername(e.target.value)}
           />
-        </Box>
-      </Box>
+        </GridItem>
+      </SimpleGrid>
 
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3 }}
+        columns={{ base: 1, md: 2, lg: 2 }}
         spacing={6}
         mt={6}
         alignItems={"end"}
