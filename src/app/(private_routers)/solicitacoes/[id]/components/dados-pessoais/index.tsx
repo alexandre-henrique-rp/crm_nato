@@ -178,10 +178,11 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     <>
       <Flex
         alignItems="center"
-        justifyContent="center"
+        // justifyContent="center"
         overflowX="auto"
         flexDir={"column"}
-        h={"100vdh"}
+        h={"100vh"}
+        p={10}
       >
         {/* Dados pessoais */}
         <Box w="80%" h="100%" p={10} bg="white" borderRadius={8} boxShadow="lg">

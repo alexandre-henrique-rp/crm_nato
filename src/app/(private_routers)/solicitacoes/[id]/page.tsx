@@ -44,8 +44,8 @@ export default async function perfilPage({
         pb={10}
         borderWidth={0}
         overflowX="auto"
-        flexDir={"column"}
-        h={"100vh"}
+        flexDir={{ base: "column", md: "row" }} // Coluna em telas pequenas, linha em telas médias ou maiores
+        h={{ base: "auto", md: "100vh" }} // Altura automática em telas pequenas, 100vh em telas maiores
       >
         <DadosPessoaisComponent SetData={data} />
       </Flex>
