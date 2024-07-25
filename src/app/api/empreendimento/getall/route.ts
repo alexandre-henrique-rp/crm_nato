@@ -5,7 +5,6 @@ import { auth } from "@/lib/auth_confg";
 export async function GET() {
   try {
     const session = await getServerSession(auth)
-    console.log("🚀 ~ GET ~ session:", session)
    
     if (!session) {
       return new NextResponse("Unauthorized", { status: 401 });
@@ -22,10 +21,11 @@ export async function GET() {
       }
     );
 
+    const data = await reqest.json();
+    
     if (!reqest.ok) {
       return new NextResponse("Invalid credentials", { status: 401 });
     }
-    const data = await reqest.json();
     return NextResponse.json(data, { status: 200 });    
   } catch (error: any) {
     return NextResponse.json({ error: error }, { status: 500 });
