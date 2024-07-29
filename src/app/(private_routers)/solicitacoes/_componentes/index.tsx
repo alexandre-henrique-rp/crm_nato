@@ -214,7 +214,7 @@ export default function SolicitacaoForm({
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6}>
-      {/* <ModalConsultaRegistro OnCpf=""  /> */}
+      <ModalConsultaRegistro OnCpf=""  />
         <Box>
           <FormLabel>CPF</FormLabel>
           <CpfMask setvalue={cpf} onvalue={setCpf} />
