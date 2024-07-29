@@ -145,7 +145,7 @@ export default function FormRegister() {
 
   return (
     <>
-       <SimpleGrid
+      <SimpleGrid
         columns={{ base: 1, md: 2, lg: 2 }}
         spacing={6}
         mt={6}

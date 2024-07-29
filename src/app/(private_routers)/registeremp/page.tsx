@@ -1,11 +1,11 @@
 import { Stack, Text, Box, Button, Flex } from "@chakra-ui/react";
-import FormRegister from "./_components/form";
+
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 import { ModalConsultaRegistro } from "@/app/componentes/modal_consulra_registro";
-import FormConstutora from "../registerconst/form_const";
-import FormEmpreendimento from "../registeremp/form_empreendimento";
 
-export default function Register() {
+import FormEmpreendime from "./form_empreendimento";
+
+export default function RegisterEmp() {
   return (
     <Flex
       minH="100vh"
@@ -40,14 +40,12 @@ export default function Register() {
               fontSize={{ base: "24px", md: "32px" }} // Responsivo para diferentes tamanhos de texto
               color="#333333"
             >
-              Cadastro de Usuarios
+              Cadastro de Empreendimento
             </Text>
           </Box>
         </Flex>
-
-        <FormRegister />
+        <FormEmpreendime />
       </Box>
     </Flex>
-    
   );
 }
