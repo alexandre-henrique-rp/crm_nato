@@ -4,6 +4,10 @@ import {
   Box,
   Button,
   Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Stack,
   Text,
   useBreakpointValue,
@@ -17,8 +21,11 @@ import { ModalFormComponent } from "@/app/componentes/modal";
 import BotaoUser from "../home/componentes/botoes/bt_user";
 import BotaoCadastroemp from "../home/componentes/botoes/bt_cadastroemp";
 import BotaoCadastroconst from "../home/componentes/botoes/bt_cadastroconst";
+import { IoChevronDownCircleOutline } from "react-icons/io5";
 
 export default function PainelAdministrativo() {
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   return (
     <Flex
       flexDir="column"
@@ -50,26 +57,46 @@ export default function PainelAdministrativo() {
           </Box>
         </Flex>
 
-        <Flex justifyContent="center" gap={10}>
+        {!isMobile ? (
           <Box>
-            <BotaoCadastro />
+            <Flex justifyContent={"space-between"} gap={10} p={5}>
+              <BotaoCadastro />
+              <BotaoCadastroemp />
+              <BotaoCadastroconst />
+            </Flex>
+            <Flex justifyContent={"center"} gap={10}>
+              <BotaoNovaSolicita />
+              <ModalFormComponent rota={"geral"} />
+              <BotaoUser />
+            </Flex>
           </Box>
-          <Box>
-            <BotaoCadastroemp />
-          </Box>
-          <Box>
-            <BotaoCadastroconst />
-          </Box>
-          <Box>
-            <BotaoNovaSolicita />
-          </Box>
-          <Box>
-            <ModalFormComponent rota={"geral"} />
-          </Box>
-          <Box>
-            <BotaoUser />
-          </Box>
-        </Flex>
+        ) : (
+          <Menu>
+            <MenuButton as={Button} rightIcon={<IoChevronDownCircleOutline />}>
+              Menu
+            </MenuButton>
+            <MenuList>
+              <MenuItem>
+                <BotaoCadastro />
+              </MenuItem>
+              <MenuItem>
+                <BotaoCadastroemp />
+              </MenuItem>
+              <MenuItem>
+                <BotaoCadastroconst />
+              </MenuItem>
+              <MenuItem>
+                <BotaoNovaSolicita />
+              </MenuItem>
+              <MenuItem>
+                <ModalFormComponent rota={"geral"} />
+              </MenuItem>
+              <MenuItem>
+                <BotaoUser />
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        )}
       </Box>
 
       <Box

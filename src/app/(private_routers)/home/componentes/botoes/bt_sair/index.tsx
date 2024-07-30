@@ -28,7 +28,7 @@ export default function BotaoSair() {
           textColor={"white"}
           variant="solid"
           _hover={{ bg: "#00631B" }}
-          size="lg"
+          size="md"
           onClick={HandleSair}
         >
           SAIR
