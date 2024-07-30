@@ -54,6 +54,7 @@ export default function Usuarios({ onDados }: any) {
     (async () => {
       const response = await fetch(`/api/usuario/getall`);
       const data = await response.json();
+      console.log(data);
       const filter = data.filter((solicitacao: any) => solicitacao.status);
       setUsuarios(filter);
     })();
@@ -84,19 +85,8 @@ export default function Usuarios({ onDados }: any) {
   };
 
   return (
-    <Flex
-      flexDir="column"
-      h="100%"
-      background="#F8F8F8"
-      overflowY={"auto"}
-      alignItems="center"
-      py={10}
-      px={4} // Adicionei um padding lateral para melhorar o espaçamento em telas menores
-    >
-      <Flex mb={8} justifyContent="center" alignItems="center">
-        <Box zIndex={1} position="initial">
-          <BotaoRetorno />
-        </Box>
+    <>
+      <Flex w={"100%"} mb={8} justifyContent="center" alignItems="center">
         <Box ml={4}>
           <Text fontSize="32px" fontWeight="bold" color="#333333">
             USUARIOS CADASTRADOS
@@ -115,6 +105,7 @@ export default function Usuarios({ onDados }: any) {
               flexDir="column"
               alignItems="center"
               mb={8}
+              w={"full"}
             >
               <Box
                 display={{ base: "block", md: "flex" }}
@@ -141,18 +132,24 @@ export default function Usuarios({ onDados }: any) {
                   </Text>
                   {solicitacao.cargo}
                 </Box>
+
                 <Box
                   w={{ base: "100%", md: "40%" }}
                   mb={{ base: 4, md: 0 }}
                   textAlign={{ base: "center", md: "left" }}
                 >
                   <Text fontWeight="bold" fontSize="md">
-                    Constutora:
+                    Construtora:
                   </Text>
-                  {solicitacao.construtora.map ((item: any) => (
-                    <Text>{item.razaosocial.split(" ")[0] + " " + item.razaosocial.split(" ")[1]}</Text>
+                  {solicitacao.construtora.map((item: any) => (
+                    <Text>
+                      {item.razaosocial.split(" ")[0] +
+                        " " +
+                        item.razaosocial.split(" ")[1]}
+                    </Text>
                   ))}
                 </Box>
+
                 <Box
                   w={{ base: "100%", md: "35%" }}
                   mb={{ base: 4, md: 0 }}
@@ -161,7 +158,7 @@ export default function Usuarios({ onDados }: any) {
                   <Text fontWeight="bold" fontSize="md">
                     Empreendimento:
                   </Text>
-                  {solicitacao.empreendimento.map ((item: any) => (
+                  {solicitacao.empreendimento.map((item: any) => (
                     <Text>{item.nome}</Text>
                   ))}
                 </Box>
@@ -224,6 +221,6 @@ export default function Usuarios({ onDados }: any) {
           );
         })}
       </Stack>
-    </Flex>
+    </>
   );
 }

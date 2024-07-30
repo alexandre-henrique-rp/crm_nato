@@ -65,7 +65,7 @@ export const SelectComponent = ({
       <Select
         onChange={(e) => onValue(Number(e.target.value))}
         placeholder={`Escolha ${
-          tag === "construtora" ? "uma construtora" : "um" + tag
+          tag === "construtora" ? "uma construtora" : "um " + tag
         }`}
       >
         {Data &&

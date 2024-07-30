@@ -21,7 +21,7 @@ export default function BotaoUser() {
           variant="solid"
           _hover={{ bg: "#00631B" }}
           size="md"
-          onClick={() => router.push("/adm/usuario")}
+          onClick={() => router.push("/adm/cadastro")}
         >
           USUARIOS
         </Button>

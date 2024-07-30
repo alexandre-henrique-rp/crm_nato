@@ -276,7 +276,7 @@ export default function FormRegister() {
             <option value="vendedor">Vendedor</option>
             <option value="construtor">Construtor</option>
             <option value="gerente">Gerente</option>
-            <option value="financeiro">Finaceiro</option>
+            <option value="financeiro">Financeiro</option>
             <option value="admin">Admin</option>
           </Select>
         </Box>
