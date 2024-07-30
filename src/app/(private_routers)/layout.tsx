@@ -17,11 +17,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </>
     );
 
-  (async () => await Promise.resolve(setTimeout((resolve) => resolve, 3000)))();
+  (async () => await Promise.resolve(setTimeout((resolve: any) => resolve, 3000)))();
   console.log(user);
   if (!user) {
-    signOut({ redirect: false });
     route.push("/login");
+    signOut({ redirect: false });
   }
   return (
     <Box overflowY={"auto"} h={"100vh"} w={"100vw"} bg={"#f3f3f3"}>
