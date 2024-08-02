@@ -1,10 +1,7 @@
-"use client";
-
 import {
   Box,
   Button,
   Divider,
-  FormControl,
   FormLabel,
   Input,
   Modal,
@@ -25,23 +22,22 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaIdCard } from "react-icons/fa";
 import { mask, unMask } from "remask";
 
 interface CpfProps {
-  OnCpf: string;
+  onCpfChange: (cpf: string) => void; // Adicione esta linha
 }
+
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
 
-export const ModalConsultaRegistro = ({ OnCpf }: CpfProps) => {
+export const ModalConsultaRegistro = ({ onCpfChange }: CpfProps) => { // Adicione onCpfChange aqui
   const [CPF, setCPF] = useState("");
   const [CPFMask, setCPFMask] = useState("");
   const [solicitacoes, setSolicitacoes] = useState([]);
   const [IsContinue, setIsContinue] = useState(false);
-  const router = useRouter();
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -97,6 +93,7 @@ export const ModalConsultaRegistro = ({ OnCpf }: CpfProps) => {
               isClosable: true,
             });
             setIsContinue(true);
+            onCpfChange(CPF); // Adicione esta linha
             onClose();
           }
         }
@@ -111,24 +108,26 @@ export const ModalConsultaRegistro = ({ OnCpf }: CpfProps) => {
       }
     }
   };
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
       isCentered
-      size={{ base: "70%", md: "xl" }} // Modal ocupa 100% da tela em dispositivos menores
+      size={{ base: "70%", md: "xl" }}
       closeOnOverlayClick={false}
+      closeOnEsc={false}
     >
       <ModalOverlay bg="blackAlpha.700" backdropFilter="blur(12px)" />
       <ModalContent
         bg="white"
         borderRadius="2xl"
         boxShadow="2xl"
-        p={{ base: 4, md: 6 }} // Padding adaptável
-        maxW={{ base: "90%", md: "container.md" }} // Max-width responsivo
+        p={{ base: 4, md: 6 }}
+        maxW={{ base: "90%", md: "container.md" }}
       >
         <ModalHeader
-          fontSize={{ base: "lg", md: "2xl" }} // Tamanho da fonte adaptável
+          fontSize={{ base: "lg", md: "2xl" }}
           fontWeight="bold"
           color="teal.600"
           textAlign="center"
@@ -209,7 +208,6 @@ export const ModalConsultaRegistro = ({ OnCpf }: CpfProps) => {
                     </Box>
                     <Box mt={{ base: 2, md: 0 }}>
                       {" "}
-                      {/* Margem superior adaptável */}
                       <Link
                         href={`/solicitacoes/${solicitacao.id}`}
                         color="teal.600"
@@ -231,7 +229,7 @@ export const ModalConsultaRegistro = ({ OnCpf }: CpfProps) => {
               Continuar cadastro
             </Button>
           )}
-          <Button variant="outline" colorScheme="teal" onClick={router.back}>
+          <Button variant="outline" colorScheme="teal" onClick={onClose}>
             Fechar
           </Button>
         </ModalFooter>

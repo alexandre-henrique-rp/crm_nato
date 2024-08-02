@@ -80,12 +80,12 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setWhatsapp(SetData.telefone);
       setWhatsAppMask(
         SetData.telefone &&
-        mask(SetData.telefone, ["(99) 9999-9999", "(99) 9 9999-9999"])
+          mask(SetData.telefone, ["(99) 9999-9999", "(99) 9 9999-9999"])
       );
       setWhatsappdois(SetData.telefone2);
       setWhatsAppMaskdois(
         SetData.telefone2 &&
-        mask(SetData.telefone2, ["(99) 9999-9999", "(99) 9 9999-9999"])
+          mask(SetData.telefone2, ["(99) 9999-9999", "(99) 9 9999-9999"])
       );
       setCnhFile64(SetData.uploadCnh);
       setRgFile64(SetData.uploadRg);
@@ -363,7 +363,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   Downloads da CNH
                 </FormLabel>
-                <DownloadDoc base64={CnhFile64} name="Cnh" />
+                <DownloadDoc base64={CnhFile64} name="Cnh" clienteName={Name} />
               </FormControl>
             )}
             {input !== "USER" && (
@@ -371,47 +371,47 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   Download do RG
                 </FormLabel>
-                <DownloadDoc base64={RgFile64} name="Rg" />
+                <DownloadDoc base64={RgFile64} name="Rg" clienteName={Name} />
               </FormControl>
             )}
 
-              <FormControl>
-                <FormLabel fontSize="sm" fontWeight="md">
-                  Observações
-                </FormLabel>
-                <Textarea value={Obs} onChange={(e) => setObs(e.target.value)} />
-              </FormControl>
-              <FormControl>
-                <Flex
-                  gap={{ base: 2, md: 3 }}
-                  mt={{ base: 4, md: 6 }}
-                  direction={{ base: "column", md: "row" }}
+            <FormControl>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Observações
+              </FormLabel>
+              <Textarea value={Obs} onChange={(e) => setObs(e.target.value)} />
+            </FormControl>
+            <FormControl>
+              <Flex
+                gap={{ base: 2, md: 3 }}
+                mt={{ base: 4, md: 6 }}
+                direction={{ base: "column", md: "row" }}
+              >
+                <Button
+                  onClick={handleSubmit}
+                  colorScheme="green"
+                  variant="outline"
+                  height={{ base: "40px", md: "50px" }}
+                  minWidth={{ base: "100%", md: "auto" }}
+                  padding={{ base: "8px", md: "12px" }}
+                  textAlign="center"
+                  isLoading={Looad}
+                  flex={{ base: "none", md: "1" }}
                 >
-                  <Button
-                    onClick={handleSubmit}
-                    colorScheme="green"
-                    variant="outline"
-                    height={{ base: "40px", md: "50px" }}
-                    minWidth={{ base: "100%", md: "auto" }}
-                    padding={{ base: "8px", md: "12px" }}
-                    textAlign="center"
-                    isLoading={Looad}
-                    flex={{ base: "none", md: "1" }}
-                  >
-                    Salvar e Enviar
-                  </Button>
-                  {input !== "USER" && (
-                    <Box mt={{ base: 4, md: 0 }} flex="1">
-                      <ModalFormComponent
-                        rota={"CORRETROR"}
-                        clienteId={ClientId}
-                        empreedimento={EmpreendimentoId}
-                        PostName={Name}
-                        CorretorName={Corretor}
-                        CorretorId={CorretorId}
-                      />
-                    </Box>
-                  )} 
+                  Salvar e Enviar
+                </Button>
+                {input !== "USER" && (
+                  <Box mt={{ base: 4, md: 0 }} flex="1">
+                    <ModalFormComponent
+                      rota={"CORRETROR"}
+                      clienteId={ClientId}
+                      empreedimento={EmpreendimentoId}
+                      PostName={Name}
+                      CorretorName={Corretor}
+                      CorretorId={CorretorId}
+                    />
+                  </Box>
+                )}
               </Flex>
             </FormControl>
           </SimpleGrid>

@@ -30,7 +30,7 @@ export async function GET(
     }
 
     const data = await response.json();
-console.log(data)
+    console.log(data);
     // Verifique se o CPF existe nas solicitações
     const solicitacoes = data.filter(
       (solicitacao: any) => solicitacao.cpf === cpf

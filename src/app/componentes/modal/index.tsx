@@ -172,7 +172,7 @@ export const ModalFormComponent = ({
                 onChange={(e) => setStatusAlert(e.target.value)}
                 placeholder="Selecione o status"
               >
-                <option value="info">Informação</option>
+                {rota == "geral" && <option value="info">Informação</option>}
                 <option value="warning">Atenção</option>
                 <option value="error">Erro</option>
               </Select>

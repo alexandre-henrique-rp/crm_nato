@@ -104,10 +104,10 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         construtora: SetValue.construtora,
         empreedimento: SetValue.empreedimento,
         dt_nascimento: SetValue.dt_nascimento,
-        relacionamento: SetValue.relacionamento ,
+        relacionamento: SetValue.relacionamento,
         rela_quest: SetValue.rela_quest,
         voucher: SetValue.voucher,
-      }
+      };
       const dados: solictacao.SolicitacaoPost = {
         nome: nome,
         telefone: tel,
@@ -266,7 +266,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             />
           </Box>
         )}
-
         {user?.construtora && (
           <Box>
             <FormLabel>Construtora</FormLabel>
