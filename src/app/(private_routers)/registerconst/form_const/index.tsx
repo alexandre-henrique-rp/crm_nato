@@ -10,7 +10,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 // @ts-ignore
 import consultarCNPJ from "consultar-cnpj";
@@ -18,15 +18,25 @@ import consultarCNPJ from "consultar-cnpj";
 export default function FormConstutora() {
   const [tel, setTel] = useState<string>("");
   const [Cnpj, setCnpj] = useState("");
+  const [cnpjMask, setCnpjMask] = useState("");
   const [Email, setEmail] = useState("");
   const [RazaoSocial, setRazaoSocial] = useState("");
-  const [Disabled, setDisabled] = useState(false);
+  const [DisabledEnviar, setDisabledEnviar] = useState(true);
+  const [DisabledCnpj, setDisabledCnpj] = useState(false);
+  const [checkcolor, setCheckcolor] = useState<boolean | null>(null);
   const toast = useToast();
   const route = useRouter();
 
-  const checkCnpj = async (e: any) => {
-    setDisabled(true);
-    const value = e.target.value;
+  const cnpjmasks = (cnpj: any) => {
+    const Cnpjlimpo = unMask(cnpj);
+    const masked = mask(Cnpjlimpo, ["99.999.999/9999-99"]);
+    const cpnjmasklimpo = unMask(masked);
+    setCnpj(cpnjmasklimpo);
+    setCnpjMask(masked);
+  };
+
+  const checkCnpj = async (cnpj: any) => {
+    const value = cnpj;
     const Cnpjlimpo = unMask(value);
     const masked = mask(Cnpjlimpo, ["99.999.999/9999-99"]);
     const cpnjmasklimpo = unMask(masked);
@@ -35,6 +45,8 @@ export default function FormConstutora() {
       const empresa = await consultarCNPJ(cpnjmasklimpo);
       if (empresa && empresa.razao_social) {
         setRazaoSocial(empresa.razao_social);
+        setDisabledCnpj(true);
+        setCheckcolor(true);
       } else {
         toast({
           title: "Erro",
@@ -43,7 +55,7 @@ export default function FormConstutora() {
           duration: 3000,
           isClosable: true,
         });
-        setDisabled(false);
+        setCheckcolor(false);
       }
     } catch (error) {
       toast({
@@ -53,7 +65,7 @@ export default function FormConstutora() {
         duration: 3000,
         isClosable: true,
       });
-      setDisabled(false);
+      setCheckcolor(false);
     }
   };
 
@@ -68,7 +80,6 @@ export default function FormConstutora() {
       });
     } else {
       try {
-        setDisabled(true);
         const data = {
           tel: tel,
           email: Email,
@@ -99,10 +110,15 @@ export default function FormConstutora() {
           duration: 3000,
           isClosable: true,
         });
-        setDisabled(false);
       }
     }
   };
+
+  useEffect(() => {
+    if (Cnpj && tel && Email && RazaoSocial && DisabledCnpj) {
+      setDisabledEnviar(false);
+    }
+  }, [Cnpj, tel, Email, RazaoSocial]);
 
   return (
     <>
@@ -125,10 +141,12 @@ export default function FormConstutora() {
           <FormLabel>CNPJ</FormLabel>
           <Input
             type="text"
-            border="1px solid #b8b8b8cc"
-            value={Cnpj}
-            onChange={(e: any) => setCnpj(e.target.value)}
-            onBlur={checkCnpj}
+            border={
+              checkcolor === false ? "1px solid red" : "1px solid #b8b8b8cc"
+            }
+            value={cnpjMask}
+            onChange={(e: any) => cnpjmasks(e.target.value)}
+            onBlur={(e: any) => checkCnpj(e.target.value)}
           />
         </GridItem>
       </SimpleGrid>
@@ -165,7 +183,7 @@ export default function FormConstutora() {
         maxWidth="100%"
         textColor="Black"
         onClick={handlesubmit}
-        disabled={Disabled}
+        isDisabled={DisabledEnviar}
       >
         CRIAR CONTA
       </Button>

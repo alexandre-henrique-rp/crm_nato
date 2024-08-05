@@ -34,7 +34,7 @@ export default function PainelAdministrativo() {
       overflowY={"auto"}
       alignItems="center"
       py={10}
-      px={4} // Adicionei um padding lateral para melhorar o espaçamento em telas menores
+      px={4} 
     >
       <Box
         border="3px solid #E8E8E8"

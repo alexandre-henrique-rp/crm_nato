@@ -21,7 +21,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BsFillTrashFill } from "react-icons/bs";
-
 import { IoIosArrowBack } from "react-icons/io";
 
 export default function ConstrutoraPage({ onDados }: any) {
@@ -34,9 +33,7 @@ export default function ConstrutoraPage({ onDados }: any) {
     (async () => {
       const response = await fetch(`/api/construtora/getall`);
       const data = await response.json();
-      console.log(data);
       setUsuarios(data);
-      console.log(Usuarios);
     })();
   }, []);
 

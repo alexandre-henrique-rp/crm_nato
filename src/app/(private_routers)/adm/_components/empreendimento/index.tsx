@@ -98,7 +98,7 @@ export default function EmpreendimentoPage({ onDados }: any) {
       <Flex mb={8} justifyContent="center" alignItems="center">
         <Box ml={4}>
           <Text
-            fontSize="32px"
+            fontSize="25px"
             fontWeight="bold"
             color="#333333"
             textAlign="center"

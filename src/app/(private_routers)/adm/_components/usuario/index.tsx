@@ -88,7 +88,7 @@ export default function Usuarios({ onDados }: any) {
     <>
       <Flex w={"100%"} mb={8} justifyContent="center" alignItems="center">
         <Box ml={4}>
-          <Text fontSize="32px" fontWeight="bold" color="#333333">
+          <Text fontSize="25px" fontWeight="bold" color="#333333">
             USUARIOS CADASTRADOS
           </Text>
         </Box>
