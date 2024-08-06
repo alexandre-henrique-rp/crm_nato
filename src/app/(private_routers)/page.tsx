@@ -33,9 +33,6 @@ export default function HomePage() {
         justifyContent="space-between"
       >
         <Stack spacing={4} w="100%" bg="#F8F8F8" padding="10px">
-          <Box>
-            <BotaoJuncao />
-          </Box>
           <Box justifyContent="center" alignItems="center">
             <PerfilHome />
           </Box>

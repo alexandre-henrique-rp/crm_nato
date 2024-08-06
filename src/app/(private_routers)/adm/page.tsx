@@ -34,7 +34,7 @@ export default function PainelAdministrativo() {
       overflowY={"auto"}
       alignItems="center"
       py={10}
-      px={4} 
+      px={4}
     >
       <Box
         border="3px solid #E8E8E8"
@@ -64,11 +64,6 @@ export default function PainelAdministrativo() {
               <BotaoCadastroemp />
               <BotaoCadastroconst />
             </Flex>
-            <Flex justifyContent={"center"} gap={10}>
-              <BotaoNovaSolicita />
-              <ModalFormComponent rota={"geral"} />
-              <BotaoUser />
-            </Flex>
           </Box>
         ) : (
           <Menu>
@@ -84,15 +79,6 @@ export default function PainelAdministrativo() {
               </MenuItem>
               <MenuItem>
                 <BotaoCadastroconst />
-              </MenuItem>
-              <MenuItem>
-                <BotaoNovaSolicita />
-              </MenuItem>
-              <MenuItem>
-                <ModalFormComponent rota={"geral"} />
-              </MenuItem>
-              <MenuItem>
-                <BotaoUser />
               </MenuItem>
             </MenuList>
           </Menu>

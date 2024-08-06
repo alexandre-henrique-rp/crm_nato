@@ -22,12 +22,14 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaIdCard } from "react-icons/fa";
 import { mask, unMask } from "remask";
 
+
 interface CpfProps {
-  onCpfChange: (cpf: string) => void; // Adicione esta linha
+  onCpfChange: (cpf: string) => void;
 }
 
 const MotionBox = motion(Box);
@@ -40,10 +42,16 @@ export const ModalConsultaRegistro = ({ onCpfChange }: CpfProps) => {
   const [IsContinue, setIsContinue] = useState(false);
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter(); // Inicializando o useRouter
 
   useEffect(() => {
     onOpen();
   }, [onOpen]);
+
+  const handleClose = () => {
+    onClose();
+    router.push("/"); // Redirecionando para a página inicial
+  };
 
   const handleSubmit = async () => {
     if (!CPF) {
@@ -112,7 +120,7 @@ export const ModalConsultaRegistro = ({ onCpfChange }: CpfProps) => {
   return (
     <Modal
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={handleClose} // Usando handleClose aqui
       isCentered
       size={{ base: "70%", md: "xl" }}
       closeOnOverlayClick={false}
@@ -229,7 +237,7 @@ export const ModalConsultaRegistro = ({ onCpfChange }: CpfProps) => {
               Continuar cadastro
             </Button>
           )}
-          <Button variant="outline" colorScheme="teal" onClick={onClose}>
+          <Button variant="outline" colorScheme="teal" onClick={handleClose}>
             Fechar
           </Button>
         </ModalFooter>

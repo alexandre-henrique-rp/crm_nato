@@ -1,15 +1,10 @@
 "use client";
-
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Flex, Box, Button } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
-import { SiGoogleforms } from "react-icons/si";
+import { FaHome } from "react-icons/fa";
 
-export default function BotaoNovaSolicita() {
+export default function BotaoHome() {
   const router = useRouter();
-
-  const handleClick = () => {
-    router.push("/solicitacoes");
-  };
 
   return (
     <Flex>
@@ -25,10 +20,10 @@ export default function BotaoNovaSolicita() {
           textColor={"white"}
           variant="link"
           size="sm"
-          leftIcon={<SiGoogleforms />}
-          onClick={handleClick}
+          leftIcon={<FaHome />}
+          onClick={() => router.push("/")}
         >
-          NOVA SOLICITAÇÃO
+          HOME
         </Button>
       </Box>
     </Flex>
