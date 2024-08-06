@@ -112,26 +112,49 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     setLooad(true);
+
     try {
-      const data: solictacao.SolicitacaoPutType = {
-        cnh: Cnh,
-        cpf: Cpf,
-        nome: Name,
-        telefone: Whatsapp,
-        telefone2: Whatsappdois,
-        email: Email,
-        uploadRg: !RgFile ? RgFile64 : RgFile,
-        uploadCnh: !CnhFile ? CnhFile64 : CnhFile,
-        construtora: ConstrutoraId,
-        empreedimento: EmpreendimentoId,
-        relacionamento: Relacionamento,
-        corretor: CorretorId,
-        dt_nascimento: DataNascimento,
-        ass_doc: AssDoc,
-        link_doc: LinkDoc,
-        id_fcw: IdFcweb,
-        obs: Obs,
-      };
+      const data = !SetData.ativo
+        ? {
+            ativo: true,
+            cnh: Cnh,
+            cpf: Cpf,
+            nome: Name,
+            telefone: Whatsapp,
+            telefone2: Whatsappdois,
+            email: Email,
+            uploadRg: !RgFile ? RgFile64 : RgFile,
+            uploadCnh: !CnhFile ? CnhFile64 : CnhFile,
+            construtora: ConstrutoraId,
+            empreedimento: EmpreendimentoId,
+            relacionamento: Relacionamento,
+            corretor: CorretorId,
+            dt_nascimento: DataNascimento,
+            ass_doc: AssDoc,
+            link_doc: LinkDoc,
+            id_fcw: IdFcweb,
+            obs: Obs,
+          }
+        : {
+            cnh: Cnh,
+            cpf: Cpf,
+            nome: Name,
+            telefone: Whatsapp,
+            telefone2: Whatsappdois,
+            email: Email,
+            uploadRg: !RgFile ? RgFile64 : RgFile,
+            uploadCnh: !CnhFile ? CnhFile64 : CnhFile,
+            construtora: ConstrutoraId,
+            empreedimento: EmpreendimentoId,
+            relacionamento: Relacionamento,
+            corretor: CorretorId,
+            dt_nascimento: DataNascimento,
+            ass_doc: AssDoc,
+            link_doc: LinkDoc,
+            id_fcw: IdFcweb,
+            obs: Obs,
+          };
+
       const rest = await fetch(`/api/solicitacao/update/${ClientId}`, {
         method: "PUT",
         headers: {

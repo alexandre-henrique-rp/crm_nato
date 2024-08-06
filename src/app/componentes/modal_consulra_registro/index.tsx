@@ -33,7 +33,7 @@ interface CpfProps {
 const MotionBox = motion(Box);
 const MotionFlex = motion(Flex);
 
-export const ModalConsultaRegistro = ({ onCpfChange }: CpfProps) => { // Adicione onCpfChange aqui
+export const ModalConsultaRegistro = ({ onCpfChange }: CpfProps) => {
   const [CPF, setCPF] = useState("");
   const [CPFMask, setCPFMask] = useState("");
   const [solicitacoes, setSolicitacoes] = useState([]);
@@ -93,7 +93,7 @@ export const ModalConsultaRegistro = ({ onCpfChange }: CpfProps) => { // Adicion
               isClosable: true,
             });
             setIsContinue(true);
-            onCpfChange(CPF); // Adicione esta linha
+            onCpfChange(CPF);
             onClose();
           }
         }
