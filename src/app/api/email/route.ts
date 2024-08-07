@@ -9,29 +9,29 @@ export async function POST(request: Request) {
     const emailBody = EmailHtml(data.nome);
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: "smtpi.kinghost.net",
       port: 465,
       secure: true,
       auth: {
-        user: "redebrasilrp@gmail.com",
-        pass: "qhwp rkii sses ezwm",
+        user: process.env.LOGIN_EMAIL,
+        pass: process.env.PASS_EMAIL,
       },
-      tls: {
-        rejectUnauthorized: false,
-      },
+      tls: { rejectUnauthorized: false },
     });
 
     const emailOptions: any = {
-      from: "redebrasilrp@gmail.com",
+      from: process.env.LOGIN_EMAIL,
       to: data.email,
-      subject: `Confirmacao de email`,
+      subject: `Confirmação de email`,
       html: emailBody.emailcorpo,
     };
 
     await transporter.sendMail(emailOptions); // Adicione "await" aqui
 
+    console.log("🚀 ~ POST ~ emailBody:", emailBody.codigo)
     return NextResponse.json(emailBody.codigo, { status: 200 });
   } catch (error) {
+    console.log("🚀 ~ POST ~ error:", error)
     return NextResponse.json(error, { status: 500 });
   }
 }
