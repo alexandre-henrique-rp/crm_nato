@@ -276,16 +276,24 @@ export default function SolicitacaoForm({
           <FormLabel>Codigo email</FormLabel>
           <InputGroup>
             <InputLeftAddon>NT-</InputLeftAddon>
-            <Input type="text" onChange={VerificadorEmail} />
+            <Input type="text" onChange={VerificadorEmail} textTransform={"uppercase"} />
           </InputGroup>
         </GridItem>
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
-        {user?.hierarquia === "ADM" && (
+        {user?.construtora && (
           <Box>
-            <FormLabel>Corretor</FormLabel>
-            <SelectCorretor idcorretor={setCorretorId} />
+            <FormLabel>Construtora</FormLabel>
+            <SelectComponent
+              hierarquia={user.hierarquia}
+              tag="construtora"
+              SetValue={user.construtora.map((item) => ({
+                id: item.id,
+                nome: item.razaosocial,
+              }))}
+              onValue={(e: any) => setConstrutoraID(e)}
+            />
           </Box>
         )}
         {user?.empreendimento && (
@@ -299,19 +307,10 @@ export default function SolicitacaoForm({
             />
           </Box>
         )}
-
-        {user?.construtora && (
+        {user?.hierarquia === "ADM" && (
           <Box>
-            <FormLabel>Construtora</FormLabel>
-            <SelectComponent
-              hierarquia={user.hierarquia}
-              tag="construtora"
-              SetValue={user.construtora.map((item) => ({
-                id: item.id,
-                nome: item.razaosocial,
-              }))}
-              onValue={(e: any) => setConstrutoraID(e)}
-            />
+            <FormLabel>Corretor</FormLabel>
+            <SelectCorretor idcorretor={setCorretorId} />
           </Box>
         )}
       </SimpleGrid>
