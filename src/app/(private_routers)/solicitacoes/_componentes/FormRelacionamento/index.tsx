@@ -3,6 +3,7 @@
 import CheckEmail from "@/app/componentes/checkEmail";
 import CpfMask from "@/app/componentes/cpf_mask";
 import VerificadorFileComponent from "@/app/componentes/file";
+import { ModalConsultaRegistro } from "@/app/componentes/modal_consulra_registro";
 import { SelectComponent } from "@/app/componentes/select";
 import { SelectCorretor } from "@/app/componentes/select_user";
 import { Whatsapp } from "@/app/componentes/whatsapp";
@@ -174,6 +175,11 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     return <Loading />;
   }
 
+
+  const handleCpfChange = (cpf: string) => {
+    setCpf(cpf);
+  };
+
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6}>
@@ -315,3 +321,11 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     </Stack>
   );
 }
+function setIsContinue(arg0: boolean) {
+  throw new Error("Function not implemented.");
+}
+
+function setSolicitacoes(solicitacoes: any) {
+  throw new Error("Function not implemented.");
+}
+

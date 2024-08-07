@@ -43,6 +43,8 @@ export default function SolicitacaoForm({
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
+  const [cpfBlock, setcpfBlock] = useState<boolean>(false);
+  const [blockLoop, setblockLoop] = useState<boolean>(false);
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [CorretorId, setCorretorId] = useState(0);
@@ -151,7 +153,8 @@ export default function SolicitacaoForm({
       cpf &&
       email &&
       tel &&
-      DataNascimento
+      DataNascimento &&
+      cpfBlock
     ) {
       if (!codigo) {
         toast({
@@ -215,6 +218,38 @@ export default function SolicitacaoForm({
     return <Loading />;
   }
 
+  const Consultarcpf = async (consulta: string) => {
+    const request = await fetch(`/api/consulta/cpf/${consulta}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const response = await request.json();
+    if (response) {
+      setblockLoop(true);
+      if (response.exists) {
+        toast({
+          title: "Erro",
+          description: "CPF ja Cadastrado",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        setcpfBlock(false);
+      } else {
+        toast({
+          title: "Sucesso",
+          description: "CPF Disponível",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setcpfBlock(true);
+      }
+    }
+  };
+
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6}>
@@ -227,9 +262,7 @@ export default function SolicitacaoForm({
           <Input type="text" onChange={(e) => setnome(e.target.value)} />
         </Box>
       </SimpleGrid>
-
       <ModalConsultaRegistro onCpfChange={handleCpfChange} />
-
       <SimpleGrid
         columns={{ base: 1, md: 2, lg: 3 }}
         spacing={6}
@@ -276,7 +309,11 @@ export default function SolicitacaoForm({
           <FormLabel>Codigo email</FormLabel>
           <InputGroup>
             <InputLeftAddon>NT-</InputLeftAddon>
-            <Input type="text" onChange={VerificadorEmail} textTransform={"uppercase"} />
+            <Input
+              type="text"
+              onChange={VerificadorEmail}
+              textTransform={"uppercase"}
+            />
           </InputGroup>
         </GridItem>
       </SimpleGrid>
@@ -350,7 +387,13 @@ export default function SolicitacaoForm({
         {relacionamento === "sim" && (
           <Box>
             <FormLabel>CPF do relacionado</FormLabel>
-            <CpfMask setvalue={cpfdois} onvalue={setCpfdois} />
+            <Input
+              type="text"
+              onChange={(e) => setCpfdois(e.target.value)}
+              value={cpfdois}
+              onBlur={(e) => Consultarcpf(e.target.value)}
+            />
+            {/* <CpfMask setvalue={cpfdois} onvalue={setCpfdois} /> */}
           </Box>
         )}
 
