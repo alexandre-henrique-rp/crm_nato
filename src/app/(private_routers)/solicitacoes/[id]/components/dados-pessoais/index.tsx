@@ -61,6 +61,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [Empreendimento, setEmpreendimento] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Relacionamento, setRelacionamento] = useState<string[]>([]);
+  const [RelacionamentoID, setRelacionamentoID] = useState<number[]>([]);
   const [AssDoc, setAssDoc] = useState<boolean>(false);
   const [Corretor, setCorretor] = useState<string>("");
   const [CorretorId, setCorretorId] = useState<number>(0);
@@ -99,6 +100,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         SetData.dt_nascimento && date.toISOString().split("T")[0];
       setDataNascimento(formattedDate);
       setRelacionamento(SetData.relacionamento.map((item: any) => item.cpf));
+      setRelacionamentoID(SetData.relacionamento.map((item: any) => item.id));
       // setAssDoc();
       setCorretor(SetData.corretor && SetData.corretor.nome);
       setCorretorId(SetData.corretor && SetData.corretor.id);
@@ -259,12 +261,13 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 Relacionamento
               </FormLabel>
 
-              <Input
-                type="text"
-                variant="flushed"
-                value={Relacionamento}
-                disabled
-              />
+              <Link
+                href={`/solicitacoes/${RelacionamentoID}`}
+                color="teal.600"
+                fontWeight="bold"
+              >
+                {Relacionamento}
+              </Link>
             </FormControl>
 
             <FormControl isRequired>
