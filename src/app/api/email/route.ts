@@ -9,14 +9,14 @@ export async function POST(request: Request) {
     const emailBody = EmailHtml(data.nome);
 
     const transporter = nodemailer.createTransport({
-      host: "smtpi.kinghost.net",
+      host: "smtp.kinghost.net",
       port: 465,
       secure: true,
       auth: {
         user: process.env.LOGIN_EMAIL,
         pass: process.env.PASS_EMAIL,
       },
-      //tls: { rejectUnauthorized: false },
+      tls: { rejectUnauthorized: false },
     });
 
     const emailOptions: any = {
