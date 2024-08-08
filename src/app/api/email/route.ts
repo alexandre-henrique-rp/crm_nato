@@ -9,7 +9,7 @@ export async function POST(request: Request) {
     const emailBody = EmailHtml(data.nome);
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.kinghost.net",
+      host: "smtpi.kinghost.net",
       port: 465,
       secure: true,
       auth: {
