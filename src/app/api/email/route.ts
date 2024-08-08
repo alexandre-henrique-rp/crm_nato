@@ -13,14 +13,14 @@ export async function POST(request: Request) {
       port: 465,
       secure: true,
       auth: {
-        user: process.env.LOGIN_EMAIL,
-        pass: process.env.PASS_EMAIL,
+        user: "verificador@redebrasilrp.com.br",
+        pass: "Verify@123",
       },
       tls: { rejectUnauthorized: false },
     });
 
     const emailOptions: any = {
-      from: process.env.LOGIN_EMAIL,
+      from: "verificador@redebrasilrp.com.br",
       to: data.email,
       subject: `Confirmação de email`,
       html: emailBody.emailcorpo,
@@ -28,6 +28,9 @@ export async function POST(request: Request) {
 
     const email = await transporter.sendMail(emailOptions); // Adicione "await" aqui
 
+    if (!email.messageId) {
+      return NextResponse.json("Email não enviado", { status: 500 });
+    }
     console.log("🚀 ~ POST ~ emailBody:", email)
     return NextResponse.json(emailBody.codigo, { status: 200 });
   } catch (error) {
