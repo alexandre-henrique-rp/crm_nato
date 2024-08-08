@@ -16,7 +16,7 @@ export async function POST(request: Request) {
         user: process.env.LOGIN_EMAIL,
         pass: process.env.PASS_EMAIL,
       },
-      tls: { rejectUnauthorized: false },
+      //tls: { rejectUnauthorized: false },
     });
 
     const emailOptions: any = {
