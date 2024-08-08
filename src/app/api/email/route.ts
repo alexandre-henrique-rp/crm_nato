@@ -26,9 +26,9 @@ export async function POST(request: Request) {
       html: emailBody.emailcorpo,
     };
 
-    await transporter.sendMail(emailOptions); // Adicione "await" aqui
+    const email = await transporter.sendMail(emailOptions); // Adicione "await" aqui
 
-    console.log("🚀 ~ POST ~ emailBody:", emailBody.codigo)
+    console.log("🚀 ~ POST ~ emailBody:", email)
     return NextResponse.json(emailBody.codigo, { status: 200 });
   } catch (error) {
     console.log("🚀 ~ POST ~ error:", error)
