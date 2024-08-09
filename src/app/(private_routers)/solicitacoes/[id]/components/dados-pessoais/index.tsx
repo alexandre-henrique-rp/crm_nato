@@ -7,25 +7,18 @@ import { AlertComponent } from "@/app/componentes/alerts";
 import { ModalFormComponent } from "@/app/componentes/modal";
 import { Link } from "@chakra-ui/next-js";
 import {
-  Alert,
-  AlertIcon,
-  Badge,
   Box,
   Button,
   Divider,
   Flex,
   FormControl,
   FormLabel,
-  GridItem,
-  Heading,
   Input,
-  Select,
   SimpleGrid,
   Stack,
   Text,
   Textarea,
   useToast,
-  Wrap,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -61,6 +54,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [Empreendimento, setEmpreendimento] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Relacionamento, setRelacionamento] = useState<string[]>([]);
+  const [CreatedDate, setCreatedDate] = useState<string>("");
+  const [DataAprovacao, setDataAprovacao] = useState<string>("");
   const [RelacionamentoID, setRelacionamentoID] = useState<number[]>([]);
   const [AssDoc, setAssDoc] = useState<boolean>(false);
   const [Corretor, setCorretor] = useState<string>("");
@@ -107,6 +102,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setObs(SetData.obs);
       setAlertDb(SetData.alert == null ? [] : SetData.alert);
       setsetIdFcweb(SetData.id_fcw);
+      setCreatedDate(new Date(SetData.createdAt).toLocaleDateString("pt-BR"));
+      setDataAprovacao(SetData.fcweb?.dt_aprovacao ? new Date(SetData.fcweb?.dt_aprovacao).toLocaleDateString("pt-BR") : "");
     }
   }, [Name, SetData]);
   console.log(SetData);
@@ -203,15 +200,15 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
   return (
     <Flex
+      w={"100%"}
       alignItems="center"
-      overflowX="auto"
       flexDir="column"
       minH="100vh"
       p={4} // Padding ao redor do Flex
     >
       {/* Dados pessoais */}
       <Box
-        w={{ base: "95%", md: "85%" }} // Ajuste a largura conforme necessário
+        w={{ base: "95%", md: "65%" }}
         p={6} // Padding interno
         bg="white"
         borderRadius={8}
@@ -220,6 +217,14 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       >
         <Box display="flex" alignItems="center" justifyContent="space-between">
           <BotaoRetorno />
+          <Box>
+            <Text fontSize={{ base: "sm", md: "md" }}>
+              Criado: {CreatedDate}
+            </Text>
+            <Text fontSize={{ base: "sm", md: "md" }}>
+              Aprovação: {DataAprovacao}
+            </Text>
+          </Box>
           <Box alignItems="center" textAlign={{ base: "center", md: "left" }}>
             <Text fontSize={{ base: "lg", md: "2xl" }}>Dados Pessoais</Text>
             {input !== "USER" && (
@@ -231,12 +236,25 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         </Box>
         <Divider borderColor="#00713D" my={4} />
         <Stack spacing={6}>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
+            <FormControl isRequired>
+              <FormLabel fontSize="sm" fontWeight="md">
+                CPF
+              </FormLabel>
+              <Input
+                disabled
+                type="text"
+                value={Cpf}
+                variant="flushed"
+                onChange={(e) => setCpf(e.target.value)}
+              />
+            </FormControl>
             <FormControl isRequired>
               <FormLabel fontSize="sm" fontWeight="md">
                 Nome Completo
               </FormLabel>
               <Input
+                disabled
                 type="text"
                 value={Name}
                 variant="flushed"
@@ -249,6 +267,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 Data de Nascimento
               </FormLabel>
               <Input
+                disabled
                 variant="flushed"
                 value={DataNascimento}
                 onChange={(e) => setDataNascimento(e.target.value)}
@@ -275,6 +294,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 Telefone Celular
               </FormLabel>
               <Input
+                disabled
                 type="text"
                 variant="flushed"
                 onChange={MascaraZap}
@@ -332,12 +352,13 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               />
             </FormControl>
 
-            {input !== "USER" && (
+            {input === "ADM" && (
               <FormControl isRequired>
                 <FormLabel fontSize="sm" fontWeight="md">
                   ID FCWEB
                 </FormLabel>
                 <Input
+                  disabled
                   value={IdFcweb || ""}
                   onChange={(e) => setsetIdFcweb(Number(e.target.value))}
                   type="text"
@@ -345,31 +366,36 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 />
               </FormControl>
             )}
-
-            <FormControl isRequired>
-              <FormLabel fontSize="sm" fontWeight="md">
-                Link Contrato
-              </FormLabel>
-              <Input
-                value={LinkDoc}
-                onChange={(e) => setLinkDoc(e.target.value)}
-                type="text"
-                variant="flushed"
-              />
-            </FormControl>
-
-            <FormControl isRequired>
-              <FormLabel fontSize="sm" fontWeight="md">
-                Link Planilha
-              </FormLabel>
-              <Input
-                value={LinkDoc}
-                onChange={(e) => setLinkDoc(e.target.value)}
-                type="text"
-                variant="flushed"
-              />
-            </FormControl>
-
+            {input === "ADM" && (
+              <FormControl isRequired>
+                <FormLabel fontSize="sm" fontWeight="md">
+                  Link Contrato
+                </FormLabel>
+                <Input
+                  disabled
+                  value={LinkDoc}
+                  onChange={(e) => setLinkDoc(e.target.value)}
+                  type="text"
+                  variant="flushed"
+                />
+              </FormControl>
+            )}
+            {input === "ADM" && (
+              <FormControl isRequired>
+                <FormLabel fontSize="sm" fontWeight="md">
+                  Link Planilha
+                </FormLabel>
+                <Input
+                  disabled
+                  value={LinkDoc}
+                  onChange={(e) => setLinkDoc(e.target.value)}
+                  type="text"
+                  variant="flushed"
+                />
+              </FormControl>
+            )}
+          </SimpleGrid>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
             <FormControl>
               <FormLabel fontSize="sm" fontWeight="md">
                 CNH
@@ -400,54 +426,45 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <DownloadDoc base64={RgFile64} name="Rg" clienteName={Name} />
               </FormControl>
             )}
-
+          </SimpleGrid>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 1 }} spacing={6}>
             <FormControl>
               <FormLabel fontSize="sm" fontWeight="md">
                 Observações
               </FormLabel>
               <Textarea value={Obs} onChange={(e) => setObs(e.target.value)} />
             </FormControl>
-            <FormControl>
-              <Flex
-                gap={{ base: 2, md: 3 }}
-                mt={{ base: 4, md: 6 }}
-                direction={{ base: "column", md: "row" }}
-              >
-                <Button
-                  onClick={handleSubmit}
-                  colorScheme="green"
-                  variant="outline"
-                  height={{ base: "40px", md: "50px" }}
-                  minWidth={{ base: "100%", md: "auto" }}
-                  padding={{ base: "8px", md: "12px" }}
-                  textAlign="center"
-                  isLoading={Looad}
-                  flex={{ base: "none", md: "1" }}
-                >
-                  Salvar e Enviar
-                </Button>
-                {input !== "USER" && (
-                  <Box mt={{ base: 4, md: 0 }} flex="1">
-                    <ModalFormComponent
-                      rota={"CORRETROR"}
-                      clienteId={ClientId}
-                      empreedimento={EmpreendimentoId}
-                      PostName={Name}
-                      CorretorName={Corretor}
-                      CorretorId={CorretorId}
-                    />
-                  </Box>
-                )}
-              </Flex>
-            </FormControl>
           </SimpleGrid>
+          <FormControl>
+            <Flex gap={"10px"} justifyContent={"flex-end"} mt={"20px"}>
+              <Button
+                onClick={handleSubmit}
+                colorScheme="green"
+                variant="outline"
+                textAlign="center"
+                isLoading={Looad}
+              >
+                Salvar e Enviar
+              </Button>
+              {input !== "USER" && (
+                <ModalFormComponent
+                  rota={"CORRETROR"}
+                  clienteId={ClientId}
+                  empreedimento={EmpreendimentoId}
+                  PostName={Name}
+                  CorretorName={Corretor}
+                  CorretorId={CorretorId}
+                />
+              )}
+            </Flex>
+          </FormControl>
         </Stack>
       </Box>
       {/* Fim dados Pessoais */}
 
       {/* Inicio Dados de contato */}
       <Box
-        w={{ base: "95%", md: "85%" }} // Ajuste a largura conforme necessário
+        w={{ base: "95%", md: "65%" }} // Ajuste a largura conforme necessário
         p={6} // Padding interno
         bg="white"
         borderRadius={8}

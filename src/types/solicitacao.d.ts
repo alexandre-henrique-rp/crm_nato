@@ -51,9 +51,11 @@ declare module solictacao {
       id: number;
       andamento: string;
       dt_agenda: Date | string;
-      hr_agenda: Date | string;
+      hr_agenda: string | any;
       valorcd: string;
       estatos_pgto: string;
+      validacao: string;
+      dt_aprovacao: string | any;
     };
     obs: string;
     alert: AlertProps[];

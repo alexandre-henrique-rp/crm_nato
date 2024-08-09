@@ -5,7 +5,7 @@ import { ModalPrimeAsses } from "@/app/componentes/prime_asses";
 import { FiltroComponent } from "./home/componentes/filter/filtro_geral";
 import PerfilHome from "./home/componentes/perfil_home";
 import { Tabela } from "./home/componentes/tabela";
-import BotaoJuncao from "./home/componentes/botoes/bt_juncao";
+
 
 export default function HomePage() {
   const [Data, setData] = useState<any>([]);
