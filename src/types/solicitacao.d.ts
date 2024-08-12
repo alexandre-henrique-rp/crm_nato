@@ -44,8 +44,8 @@ declare module solictacao {
     };
     telefone: string;
     dt_nascimento: Date | string | any;
-    ass_doc?: boolean;
-    link_doc: string;
+    ass_doc?: string |any;
+    link_doc: string | any;
     id_fcw: number;
     fcweb?: {
       id: number;
