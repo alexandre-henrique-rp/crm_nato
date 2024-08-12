@@ -57,7 +57,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [CreatedDate, setCreatedDate] = useState<string>("");
   const [DataAprovacao, setDataAprovacao] = useState<string>("");
   const [RelacionamentoID, setRelacionamentoID] = useState<number[]>([]);
-  const [AssDoc, setAssDoc] = useState<boolean>(false);
+  const [AssDoc, setAssDoc] = useState<string>("");
   const [Corretor, setCorretor] = useState<string>("");
   const [CorretorId, setCorretorId] = useState<number>(0);
   const [ClientId, setClientId] = useState<number>(0);
