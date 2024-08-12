@@ -16,8 +16,7 @@ export default function LoginPage() {
       bg={"#dfdfdf"}
       justifyContent="center"
       alignItems="center"
-      spacing={8} // Espaçamento entre os elementos dentro do Stack
-      padding={{ base: "20px", md: "40px", lg: "80px" }} // Padding responsivo
+      padding={{ base: "20px", md: "40px", lg: "40px" }} // Padding responsivo
     >
       {/* Bloco de Login */}
       <Box
@@ -46,17 +45,6 @@ export default function LoginPage() {
           <FormLogin />
         </Box>
         <Box>
-          {/* <Text
-            fontWeight="regular"
-            fontSize={{ base: "12px", sm: "14px", md: "15px" }} // Tamanho de fonte responsivo
-            textDecoration="underline"
-            color="#111111"
-            marginBottom={5}
-            marginTop={{ base: -2, sm: -1 }} // Margem superior responsiva
-          >
-            <Link href="/reset-password">Esqueci a Senha</Link>
-          </Text> */}
-
           <Text
             fontWeight="regular"
             fontSize={{ base: "10px", sm: "12px", md: "13px" }} // Tamanho de fonte responsivo
