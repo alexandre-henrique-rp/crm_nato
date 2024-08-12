@@ -44,16 +44,18 @@ declare module solictacao {
     };
     telefone: string;
     dt_nascimento: Date | string | any;
-    ass_doc?: boolean;
-    link_doc: string;
+    ass_doc?: string |any;
+    link_doc: string | any;
     id_fcw: number;
     fcweb?: {
       id: number;
       andamento: string;
       dt_agenda: Date | string;
-      hr_agenda: Date | string;
+      hr_agenda: string | any;
       valorcd: string;
       estatos_pgto: string;
+      validacao: string;
+      dt_aprovacao: string | any;
     };
     obs: string;
     alert: AlertProps[];

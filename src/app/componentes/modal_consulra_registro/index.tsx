@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import { FaIdCard } from "react-icons/fa";
 import { mask, unMask } from "remask";
 
+
 interface CpfProps {
   onCpfChange: (cpf: string) => void;
 }
@@ -80,6 +81,7 @@ export const ModalConsultaRegistro = ({ onCpfChange }: CpfProps) => {
 
         if (request.ok) {
           const response = await request.json();
+          console.log(response);
 
           if (response.exists) {
             setSolicitacoes(response.solicitacoes);

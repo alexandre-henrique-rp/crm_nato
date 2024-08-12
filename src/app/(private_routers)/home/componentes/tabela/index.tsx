@@ -1,8 +1,9 @@
 "use client";
-import { Flex, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, Flex, Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { BotoesFunction } from "../botoes/bt_group_function";
+
 
 interface TabelaProps {
   onDados: {
@@ -58,6 +59,8 @@ export const Tabela = ({ onDados }: TabelaProps) => {
         ? item.fcweb?.andamento.toLowerCase().includes(andamento.toLowerCase())
         : true;
 
+console.log(item.empreedimento.id, empreendimento);
+
       const matchEmpreendimento = empreendimento
         ? item.empreedimento?.id === empreendimento
         : true;
@@ -65,17 +68,21 @@ export const Tabela = ({ onDados }: TabelaProps) => {
       return matchNome && matchAndamento && matchEmpreendimento;
     });
 
+    console.log(Filter);
     setFilterData(Filter);
   }, [Data, onDados]);
 
   const tabela =
     FilterData.length > 0 &&
     FilterData.map((item: solictacao.SolicitacaoGetType) => {
+      console.log(item.fcweb);
       const dtAgenda =
         item.fcweb &&
         new Date(
           item.fcweb.dt_agenda.toString().split("T")[0]
         ).toLocaleDateString("pt-BR");
+      const TypeValid = item.fcweb && item.fcweb.validacao;
+      const HoraAgenda = item.fcweb?.hr_agenda?.split("T")[1].split(".")[0];
       const andamento = item.fcweb && item.fcweb.andamento;
       const statusPg = item.fcweb && item.fcweb.estatos_pgto;
       const colors = item.ativo ? "transparent" : "red.400";
@@ -86,7 +93,11 @@ export const Tabela = ({ onDados }: TabelaProps) => {
           </Td>
           {user?.hierarquia === "ADM" && <Td>{item.id}</Td>}
           <Td>{item.nome}</Td>
-          <Td>{dtAgenda}</Td>
+          <Td>
+            <Box>{dtAgenda}</Box>
+            <Box>{HoraAgenda}</Box>
+            <Box>{TypeValid}</Box>
+          </Td>
           <Td>{andamento}</Td>
           <Td>{item.ass_doc && item.ass_doc}</Td>
           {user?.hierarquia !== "USER" && <Td>{statusPg}</Td>}

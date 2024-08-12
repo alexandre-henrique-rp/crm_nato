@@ -17,6 +17,7 @@ export async function GET() {
       },
     });
     const data = await request.json();
+    console.log("🚀 ~ GET ~ data:", data)
     if (!request.ok)
       return NextResponse.json(
         { message: "Solicitação não encontrada" },

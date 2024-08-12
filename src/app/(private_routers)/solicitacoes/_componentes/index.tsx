@@ -4,7 +4,6 @@ import { SelectComponent } from "@/app/componentes/select";
 import {
   Box,
   Button,
-  Flex,
   FormControl,
   FormLabel,
   GridItem,
@@ -13,13 +12,13 @@ import {
   InputGroup,
   InputLeftAddon,
   InputRightElement,
-  PinInput,
-  PinInputField,
+  chakra,
   Select,
   SimpleGrid,
   Stack,
   Tooltip,
   useToast,
+  Flex,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -30,6 +29,7 @@ import { SelectCorretor } from "@/app/componentes/select_user";
 import Loading from "@/app/loading";
 import VerificadorFileComponent from "@/app/componentes/file";
 import { ModalConsultaRegistro } from "@/app/componentes/modal_consulra_registro";
+import { mask, unMask } from "remask";
 
 interface relacionamentoProps {
   onvalue: any;
@@ -43,8 +43,6 @@ export default function SolicitacaoForm({
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
-  const [cpfBlock, setcpfBlock] = useState<boolean>(false);
-  const [blockLoop, setblockLoop] = useState<boolean>(false);
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [CorretorId, setCorretorId] = useState(0);
@@ -57,8 +55,9 @@ export default function SolicitacaoForm({
   const [teldois, SetTeldois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
-  const [checkEmail, setcheckEmail] = useState<string>("");
+  const [checkEmailString, setcheckEmailString] = useState<string>("");
   const [codigo, setcodigo] = useState<boolean>(false);
+   const [Whatappdois, setWhatappdois] = useState<string>("");
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
@@ -132,12 +131,25 @@ export default function SolicitacaoForm({
   }
   const VerificadorEmail = (e: any) => {
     const value = e.target.value;
-    if ("NT-" + value === checkEmail) {
-      // setcheckEmail("");
+    if ("NT-" + value == checkEmailString) {
       setcodigo(true);
+      toast({
+        title: "Sucesso",
+        description: "Email verificado com sucesso",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      })
     } else {
-      setcheckEmail(value);
+      setcheckEmailString(value);
       setcodigo(false);
+      toast({
+        title: "Erro",
+        description: "Falha na verificação de Email",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      })
     }
   };
 
@@ -153,8 +165,7 @@ export default function SolicitacaoForm({
       cpf &&
       email &&
       tel &&
-      DataNascimento &&
-      cpfBlock
+      DataNascimento
     ) {
       if (!codigo) {
         toast({
@@ -218,37 +229,14 @@ export default function SolicitacaoForm({
     return <Loading />;
   }
 
-  const Consultarcpf = async (consulta: string) => {
-    const request = await fetch(`/api/consulta/cpf/${consulta}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const response = await request.json();
-    if (response) {
-      setblockLoop(true);
-      if (response.exists) {
-        toast({
-          title: "Erro",
-          description: "CPF ja Cadastrado",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-        setcpfBlock(false);
-      } else {
-        toast({
-          title: "Sucesso",
-          description: "CPF Disponível",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-        setcpfBlock(true);
-      }
-    }
-  };
+   const WhatsAppMask = (e: any) => {
+     const valor = e.target.value;
+     const valorLinpo = unMask(valor);
+     const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
+     SetTeldois(unMask(masked));
+     setWhatappdois(masked);
+   };
+
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
@@ -258,11 +246,20 @@ export default function SolicitacaoForm({
           <CpfMask desativado setvalue={cpf} onvalue={setCpf} />
         </Box>
         <Box>
-          <FormLabel>Nome Completo</FormLabel>
+          <FormLabel>
+            <Flex alignItems={"flex-start"}>
+              Nome Completo{" "}
+              <chakra.p color={"red"} fontSize={"9px"}>
+                (Obrigatório)
+              </chakra.p>
+            </Flex>
+          </FormLabel>
           <Input type="text" onChange={(e) => setnome(e.target.value)} />
         </Box>
       </SimpleGrid>
+
       <ModalConsultaRegistro onCpfChange={handleCpfChange} />
+
       <SimpleGrid
         columns={{ base: 1, md: 2, lg: 3 }}
         spacing={6}
@@ -270,30 +267,51 @@ export default function SolicitacaoForm({
         alignItems={"end"}
       >
         <GridItem>
-          <FormLabel>Data de Nascimento</FormLabel>
+          <FormLabel>
+            <Flex alignItems={"flex-start"}>
+              Data de Nascimento{" "}
+              <chakra.p color={"red"} fontSize={"9px"}>
+                (Obrigatório)
+              </chakra.p>
+            </Flex>
+          </FormLabel>
           <Input
             type="date"
             onChange={(e) => setDataNascimento(e.target.value)}
           />
         </GridItem>
         <GridItem>
-          <FormLabel>Whatsapp com DDD</FormLabel>
+          <FormLabel>
+            <Flex alignItems={"flex-start"}>
+              Whatsapp com DDD{" "}
+              <chakra.p color={"red"} fontSize={"9px"}>
+                (Obrigatório)
+              </chakra.p>
+            </Flex>
+          </FormLabel>
           <Whatsapp setValue={tel} onValue={setTel} />
         </GridItem>
         <GridItem>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
-          <Whatsapp setValue={teldois} onValue={SetTeldois} />
+          <Input type="text" onChange={WhatsAppMask} value={Whatappdois} />
         </GridItem>
       </SimpleGrid>
 
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 2 }}
+        columns={{ base: 1, md: 2, lg: 3 }}
         spacing={6}
         mt={6}
         alignItems={"end"}
       >
-        <GridItem>
-          <FormLabel>Email</FormLabel>
+        <GridItem colSpan={{ base: 1, md: 1, lg: 2 }}>
+          <FormLabel>
+            <Flex alignItems={"flex-start"}>
+              Email{" "}
+              <chakra.p color={"red"} fontSize={"9px"}>
+                (Obrigatório)
+              </chakra.p>
+            </Flex>
+          </FormLabel>
           <InputGroup>
             <Input
               type="text"
@@ -301,7 +319,11 @@ export default function SolicitacaoForm({
               onChange={(e: any) => setemail(e.target.value)}
             />
             <InputRightElement width="8rem">
-              <CheckEmail onvalue={setcheckEmail} email={email} nome={nome} />
+              <CheckEmail
+                onvalue={(e: any) => setcheckEmailString(e)}
+                email={email}
+                nome={nome}
+              />
             </InputRightElement>
           </InputGroup>
         </GridItem>
@@ -386,14 +408,15 @@ export default function SolicitacaoForm({
 
         {relacionamento === "sim" && (
           <Box>
-            <FormLabel>CPF do relacionado</FormLabel>
-            <Input
-              type="text"
-              onChange={(e) => setCpfdois(e.target.value)}
-              value={cpfdois}
-              onBlur={(e) => Consultarcpf(e.target.value)}
-            />
-            {/* <CpfMask setvalue={cpfdois} onvalue={setCpfdois} /> */}
+            <FormLabel>
+              <Flex alignItems={"flex-start"}>
+                CPF do relacionado{" "}
+                <chakra.p color={"red"} fontSize={"9px"}>
+                  (Obrigatório)
+                </chakra.p>
+              </Flex>
+            </FormLabel>
+            <CpfMask setvalue={cpfdois} onvalue={setCpfdois} />
           </Box>
         )}
 

@@ -3,7 +3,6 @@
 import CheckEmail from "@/app/componentes/checkEmail";
 import CpfMask from "@/app/componentes/cpf_mask";
 import VerificadorFileComponent from "@/app/componentes/file";
-import { ModalConsultaRegistro } from "@/app/componentes/modal_consulra_registro";
 import { SelectComponent } from "@/app/componentes/select";
 import { SelectCorretor } from "@/app/componentes/select_user";
 import { Whatsapp } from "@/app/componentes/whatsapp";
@@ -165,9 +164,23 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     if ("NT-" + value === checkEmail) {
       setcheckEmail("");
       setcodigo(true);
+      toast({
+        title: "Sucesso",
+        description: "Email verificado com sucesso",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      })
     } else {
       setcheckEmail(value);
       setcodigo(false);
+      toast({
+        title: "Erro",
+        description: "Falha na verificação de Email",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      })
     }
   };
 
@@ -175,10 +188,14 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     return <Loading />;
   }
 
+   const WhatsAppMask = (e: any) => {
+     const valor = e.target.value;
+     const valorLinpo = unMask(valor);
+     const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
+     SetTeldois(unMask(masked));
+     setWhatappdois(masked);
+   };
 
-  const handleCpfChange = (cpf: string) => {
-    setCpf(cpf);
-  };
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
@@ -212,16 +229,16 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         </GridItem>
         <GridItem>
           <FormLabel>Whatsapp com DDD 2</FormLabel>
-          <Whatsapp setValue={teldois} onValue={SetTeldois} />
+          <Input type="text" onChange={WhatsAppMask} value={Whatappdois} />
         </GridItem>
       </SimpleGrid>
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 2 }}
+        columns={{ base: 1, md: 2, lg: 3 }}
         spacing={6}
         mt={6}
         alignItems={"end"}
       >
-        <GridItem>
+        <GridItem colSpan={2}>
           <FormLabel>Email</FormLabel>
           <InputGroup>
             <Input
@@ -230,7 +247,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
               onChange={(e: any) => setemail(e.target.value)}
             />
             <InputRightElement width="8rem">
-              <CheckEmail onvalue={setcheckEmail} email={email} nome={nome} />
+              <CheckEmail onvalue={(e: any) => setcheckEmail(e)} email={email} nome={nome} />
             </InputRightElement>
           </InputGroup>
         </GridItem>
@@ -321,11 +338,3 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     </Stack>
   );
 }
-function setIsContinue(arg0: boolean) {
-  throw new Error("Function not implemented.");
-}
-
-function setSolicitacoes(solicitacoes: any) {
-  throw new Error("Function not implemented.");
-}
-

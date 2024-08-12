@@ -21,13 +21,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   (async () =>
     await Promise.resolve(setTimeout((resolve: any) => resolve, 3000)))();
-
+  console.log(user);
   if (!user) {
     route.push("/login");
     signOut({ redirect: false });
   }
   return (
-    <Box overflowY={"auto"} h={"100vh"} w={"100vw"}>
+    <Box overflowY={"auto"} h={"100vh"} w={"100vw"} >
       <BotaoJuncao />
       {user && children}
       <FooterComponent />

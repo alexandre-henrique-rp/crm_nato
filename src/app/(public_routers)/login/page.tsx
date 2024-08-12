@@ -1,6 +1,6 @@
 "use client";
 
-import { Stack, Text, Box, Button, Link } from "@chakra-ui/react";
+import { Stack, Text, Box, Button, Link, Img } from "@chakra-ui/react";
 import { FormLogin } from "./componentes/form";
 
 export default function LoginPage() {
@@ -30,6 +30,7 @@ export default function LoginPage() {
         bg={"#ffffff"}
         boxShadow="lg"
       >
+        <Img src="public\SisNato fundo sujo.jpeg" w={"100%"} />
         <Text
           fontWeight="regular"
           fontSize={{ base: "24px", sm: "28px", md: "32px" }} // Tamanho de fonte responsivo
