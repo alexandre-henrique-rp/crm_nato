@@ -373,8 +373,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 </FormLabel>
                 <Input
                   
-                  value={LinkDoc}
-                  onChange={(e) => setLinkDoc(e.target.value)}
+                  value={AssDoc}
+                  onChange={(e) => setAssDoc(e.target.value)}
                   type="text"
                   variant="flushed"
                 />
