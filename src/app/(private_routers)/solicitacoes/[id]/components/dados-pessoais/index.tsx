@@ -358,7 +358,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   ID FCWEB
                 </FormLabel>
                 <Input
-                  disabled
+                 
                   value={IdFcweb || ""}
                   onChange={(e) => setsetIdFcweb(Number(e.target.value))}
                   type="text"
@@ -372,7 +372,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   Link Contrato
                 </FormLabel>
                 <Input
-                  disabled
+                  
                   value={LinkDoc}
                   onChange={(e) => setLinkDoc(e.target.value)}
                   type="text"
@@ -386,7 +386,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   Link Planilha
                 </FormLabel>
                 <Input
-                  disabled
+                 
                   value={LinkDoc}
                   onChange={(e) => setLinkDoc(e.target.value)}
                   type="text"
