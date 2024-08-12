@@ -1,6 +1,6 @@
 "use client";
 
-import { Stack, Text, Box, Button, Link, Img } from "@chakra-ui/react";
+import { Stack, Text, Box, Button, Link, Image } from "@chakra-ui/react";
 import { FormLogin } from "./componentes/form";
 
 export default function LoginPage() {
@@ -23,21 +23,24 @@ export default function LoginPage() {
       <Box
         border="3px solid #f1f1f1"
         borderRadius="8px"
-        padding="32px"
+        padding="25px"
         width={{ base: "90%", sm: "80%", md: "70%", lg: "50%", xl: "35em" }} // Largura responsiva
         textAlign="center"
-        maxWidth="100%"
         bg={"#ffffff"}
         boxShadow="lg"
       >
-        <Img src="public\SisNato fundo sujo.jpeg" w={"100%"} />
-        <Text
-          fontWeight="regular"
-          fontSize={{ base: "24px", sm: "28px", md: "32px" }} // Tamanho de fonte responsivo
-          color="#333333"
-        >
-          LOGIN
-        </Text>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Image src="/sisnatologo.png" alt="Logo" width={150} height={150} />
+        </Box>
+        <Box>
+          <Text
+            fontWeight="regular"
+            fontSize={{ base: "24px", sm: "28px", md: "32px" }} // Tamanho de fonte responsivo
+            color="#333333"
+          >
+            LOGIN
+          </Text>
+        </Box>
         <Box>
           {/* Componente de formulário de login */}
           <FormLogin />
