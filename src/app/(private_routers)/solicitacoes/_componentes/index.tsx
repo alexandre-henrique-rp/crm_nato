@@ -44,6 +44,7 @@ export default function SolicitacaoForm({
   const [cpf, setCpf] = useState("");
   const [cpfdois, setCpfdois] = useState("");
   const [ConstrutoraID, setConstrutoraID] = useState(0);
+  const [FinanceiraID, setFinanceiraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [CorretorId, setCorretorId] = useState(0);
   const [email, setemail] = useState("");
@@ -53,11 +54,12 @@ export default function SolicitacaoForm({
   const [Voucher, setVoucher] = useState<string>("");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
+  const [teste, setTeste] = useState<any>([]);
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
   const [checkEmailString, setcheckEmailString] = useState<string>("");
   const [codigo, setcodigo] = useState<boolean>(false);
-   const [Whatappdois, setWhatappdois] = useState<string>("");
+  const [Whatappdois, setWhatappdois] = useState<string>("");
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
@@ -96,6 +98,7 @@ export default function SolicitacaoForm({
         relacionamento: cpfdois ? [cpfdois] : [],
         rela_quest: relacionamento === "sim" ? true : false,
         voucher: Voucher,
+        Financeira: Number(FinanceiraID),
       };
 
       try {
@@ -129,6 +132,11 @@ export default function SolicitacaoForm({
   if (user?.construtora.length === 1 && !ConstrutoraID) {
     setConstrutoraID(user.construtora[0].id);
   }
+
+  if (user?.Financeira?.length === 1 && !FinanceiraID) {
+    setFinanceiraID(user.Financeira[0].id);
+  }
+
   const VerificadorEmail = (e: any) => {
     const value = e.target.value;
     if ("NT-" + value == checkEmailString) {
@@ -139,7 +147,7 @@ export default function SolicitacaoForm({
         status: "success",
         duration: 3000,
         isClosable: true,
-      })
+      });
     } else {
       setcheckEmailString(value);
       setcodigo(false);
@@ -149,7 +157,7 @@ export default function SolicitacaoForm({
         status: "error",
         duration: 3000,
         isClosable: true,
-      })
+      });
     }
   };
 
@@ -192,6 +200,8 @@ export default function SolicitacaoForm({
           cpfdois: cpfdois,
           construtora: Number(ConstrutoraID),
           empreedimento: Number(empreendimento),
+          Financeira: Number(FinanceiraID),
+
           rela_quest: relacionamento === "sim" ? true : false,
           voucher: Voucher,
         };
@@ -224,19 +234,19 @@ export default function SolicitacaoForm({
     user?.hierarquia,
     user?.id,
   ]);
+  console.log("teste", user);
 
   if (Load) {
     return <Loading />;
   }
 
-   const WhatsAppMask = (e: any) => {
-     const valor = e.target.value;
-     const valorLinpo = unMask(valor);
-     const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-     SetTeldois(unMask(masked));
-     setWhatappdois(masked);
-   };
-
+  const WhatsAppMask = (e: any) => {
+    const valor = e.target.value;
+    const valorLinpo = unMask(valor);
+    const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
+    SetTeldois(unMask(masked));
+    setWhatappdois(masked);
+  };
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
@@ -340,18 +350,29 @@ export default function SolicitacaoForm({
         </GridItem>
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6} mt={6}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={6}>
         {user?.construtora && (
           <Box>
             <FormLabel>Construtora</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
               tag="construtora"
-              SetValue={user.construtora.map((item) => ({
+              SetValue={user.construtora.map((item: any) => ({
                 id: item.id,
                 nome: item.razaosocial,
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
+            />
+          </Box>
+        )}
+        {user?.Financeira && (
+          <Box>
+            <FormLabel>Financeira</FormLabel>
+            <SelectComponent
+              hierarquia={user.hierarquia}
+              tag="Financeira"
+              SetValue={user.Financeira}
+              onValue={(e: any) => setFinanceiraID(e)}
             />
           </Box>
         )}

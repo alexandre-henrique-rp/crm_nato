@@ -3,9 +3,9 @@ import { Flex, Select, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 interface SelectProps {
-  SetValue: any;
+  SetValue?: any;
   onValue: any;
-  hierarquia: string;
+  hierarquia?: string;
   tag: string;
 }
 
@@ -13,53 +13,61 @@ export const SelectComponent = ({
   SetValue,
   onValue,
   hierarquia,
-  tag
+  tag,
 }: SelectProps) => {
   const [Data, setData] = useState([]);
 
   useEffect(() => {
-      if (SetValue && Data.length < 1) {
-        setData(SetValue);
-        onValue(Number(SetValue));
-      }
-     
-      if (hierarquia === "ADM") {
-        (async () => {
-          if (tag === "empreendimento") {
-            const req = await fetch("/api/empreendimento/getall");
-            const res = await req.json();
-            
-            setData(res);
-          } else if (tag === "construtora") {
-            const req = await fetch("/api/construtora/getall");
-            const res = await req.json();
-            setData(res);
-          } else {
-            const req = await fetch("/api/usuario/getall");
-            const res = await req.json();
-            setData(res);
-          }
-        })();
-      } else  {
-        (async () => {
-          if (tag === "empreendimento") {
-            const req = await fetch("/api/empreendimento/getall");
-            const res = await req.json();
-            setData(res);
-          } else if (tag === "construtora") {
-            const req = await fetch("/api/construtora/getall");
-            const res = await req.json();
-            setData(res);
-          } else {
-            const req = await fetch("/api/usuario/getall");
-            const res = await req.json();
-            setData(res);
-          }
-        })();
-      }
+    if (SetValue && Data.length < 1) {
+      setData(SetValue);
+      onValue(Number(SetValue));
+    }
 
+    if (hierarquia === "ADM") {
+      (async () => {
+        if (tag === "empreendimento") {
+          const req = await fetch("/api/empreendimento/getall");
+          const res = await req.json();
+
+          setData(res);
+        } else if (tag === "construtora") {
+          const req = await fetch("/api/construtora/getall");
+          const res = await req.json();
+          setData(res);
+        } else if (tag === "corretor") {
+          const req = await fetch("/api/usuario/getall");
+          const res = await req.json();
+          setData(res);
+        } else if (tag === "Financeira") {
+          const req = await fetch("/api/financeira/getall");
+          const res = await req.json();
+          setData(res);
+        }
+      })();
+    }
+    // else {
+    //   (async () => {
+    //     if (tag === "empreendimento") {
+    //       const req = await fetch("/api/empreendimento/getall");
+    //       const res = await req.json();
+    //       setData(res);
+    //     } else if (tag === "construtora") {
+    //       const req = await fetch("/api/construtora/getall");
+    //       const res = await req.json();
+    //       setData(res);
+    //     } else if (tag === "corretor") {
+    //       const req = await fetch("/api/usuario/getall");
+    //       const res = await req.json();
+    //       setData(res);
+    //     } else if (tag === "Financeira") {
+    //       const req = await fetch("/api/financeira/getall");
+    //       const res = await req.json();
+    //       setData(res);
+    //     }
+    //   })();
+    // }
   }, [Data.length, SetValue, onValue]);
-  
+
   return (
     <Flex w={"full"} py={"0.5rem"}>
       <Select
@@ -69,10 +77,10 @@ export const SelectComponent = ({
         }`}
       >
         {Data &&
-          Data.map((item: any) => {          
+          Data.map((item: any) => {
             return (
               <option key={item.id} value={item.id}>
-                 {!item.nome ? item.razaosocial : item.nome}
+                {!item.nome ? item.razaosocial : item.nome}
               </option>
             );
           })}

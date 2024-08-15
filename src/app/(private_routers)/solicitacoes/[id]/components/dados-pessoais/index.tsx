@@ -55,6 +55,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Relacionamento, setRelacionamento] = useState<string[]>([]);
   const [CreatedDate, setCreatedDate] = useState<string>("");
+  const [Voucher, setVoucher] = useState<string>("");
   const [DataAprovacao, setDataAprovacao] = useState<string>("");
   const [RelacionamentoID, setRelacionamentoID] = useState<number[]>([]);
   const [AssDoc, setAssDoc] = useState<string>("");
@@ -103,9 +104,14 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setAlertDb(SetData.alert == null ? [] : SetData.alert);
       setsetIdFcweb(SetData.id_fcw);
       setCreatedDate(new Date(SetData.createdAt).toLocaleDateString("pt-BR"));
-      setDataAprovacao(SetData.fcweb?.dt_aprovacao ? new Date(SetData.fcweb?.dt_aprovacao).toLocaleDateString("pt-BR") : "");
+      setDataAprovacao(
+        SetData.fcweb?.dt_aprovacao
+          ? new Date(SetData.fcweb?.dt_aprovacao).toLocaleDateString("pt-BR")
+          : ""
+      );
       setAssDoc(SetData.ass_doc);
       setLinkDoc(SetData.link_doc);
+      setVoucher(SetData.fcweb?.vouchersoluti);
       console.log(SetData);
     }
   }, [Name, SetData]);
@@ -361,7 +367,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   ID FCWEB
                 </FormLabel>
                 <Input
-                 
                   value={IdFcweb || ""}
                   onChange={(e) => setsetIdFcweb(Number(e.target.value))}
                   type="text"
@@ -372,10 +377,19 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             {input !== "USER" && (
               <FormControl isRequired>
                 <FormLabel fontSize="sm" fontWeight="md">
+                  VOUCHER
+                </FormLabel>
+                <Text fontSize={{ base: "sm", md: "md", lg: "md" }}>
+                  {Voucher}
+                </Text>
+              </FormControl>
+            )}
+            {input !== "USER" && (
+              <FormControl isRequired>
+                <FormLabel fontSize="sm" fontWeight="md">
                   Link Contrato
                 </FormLabel>
                 <Input
-                  
                   value={AssDoc}
                   onChange={(e) => setAssDoc(e.target.value)}
                   type="text"
@@ -389,7 +403,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   Link Planilha
                 </FormLabel>
                 <Input
-                 
                   value={LinkDoc}
                   onChange={(e) => setLinkDoc(e.target.value)}
                   type="text"
