@@ -113,7 +113,7 @@ export const Tabela = ({ onDados }: TabelaProps) => {
             <Box>{TypeValid}</Box>
           </Td>
           <Td>{andamento}</Td>
-          <Td>{item.ass_doc && item.ass_doc}</Td>
+          {/* <Td>{item.ass_doc && item.ass_doc}</Td> */}
           {user?.hierarquia !== "USER" && <Td>{statusPg}</Td>}
           {user?.hierarquia !== "USER" && <Td>{item.fcweb?.valorcd}</Td>}
         </Tr>
@@ -140,8 +140,8 @@ export const Tabela = ({ onDados }: TabelaProps) => {
                 {user?.hierarquia === "ADM" && <Th>ID</Th>}
                 <Th>NOME</Th>
                 <Th>AGENDAMENTO</Th>
-                <Th>ANDAMENTO</Th>
-                <Th>ASS.DOC</Th>
+                <Th>CERTIFICADO</Th>
+                {/* <Th>CCA</Th> */}
                 {user?.hierarquia !== "USER" && <Th>STATUS PGMNT</Th>}
                 {user?.hierarquia !== "USER" && <Th>VALOR</Th>}
               </Tr>

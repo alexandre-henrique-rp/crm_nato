@@ -387,7 +387,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             {input !== "USER" && (
               <FormControl isRequired>
                 <FormLabel fontSize="sm" fontWeight="md">
-                  Link Contrato
+                  LINK CONTRATO
                 </FormLabel>
                 <Input
                   value={AssDoc}
@@ -400,7 +400,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             {input !== "USER" && (
               <FormControl isRequired>
                 <FormLabel fontSize="sm" fontWeight="md">
-                  Link Planilha
+                  LINK FICHA
                 </FormLabel>
                 <Input
                   value={LinkDoc}
