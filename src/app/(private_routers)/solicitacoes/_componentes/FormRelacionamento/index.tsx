@@ -42,6 +42,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [cpfdois, setCpfdois] = useState("");
   const [cpfdoismask, setCpfdoismask] = useState("");
   const [ConstrutoraID, setConstrutoraID] = useState(0);
+  const [FinanceiraID, setFinanceiraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
@@ -108,6 +109,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         relacionamento: SetValue.relacionamento,
         rela_quest: SetValue.rela_quest,
         voucher: SetValue.voucher,
+        Financeira: 0
       };
       const dados: solictacao.SolicitacaoPost = {
         nome: nome,
@@ -124,6 +126,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         relacionamento: SetValue.cpf ? [SetValue.cpf] : [],
         rela_quest: SetValue.rela_quest ? true : false,
         voucher: Voucher,
+        Financeira: 0
       };
 
       const data = [dados, dadossuperior];
@@ -158,6 +161,9 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   if (user?.construtora.length === 1 && !ConstrutoraID) {
     setConstrutoraID(user.construtora[0].id);
   }
+  if (user?.Financeira?.length === 1 && !FinanceiraID) {
+    setFinanceiraID(user.Financeira[0].id);
+  }
 
   const VerificadorEmail = (e: any) => {
     const value = e.target.value;
@@ -170,7 +176,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         status: "success",
         duration: 3000,
         isClosable: true,
-      })
+      });
     } else {
       setcheckEmail(value);
       setcodigo(false);
@@ -180,7 +186,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         status: "error",
         duration: 3000,
         isClosable: true,
-      })
+      });
     }
   };
 
@@ -188,14 +194,13 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     return <Loading />;
   }
 
-   const WhatsAppMask = (e: any) => {
-     const valor = e.target.value;
-     const valorLinpo = unMask(valor);
-     const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
-     SetTeldois(unMask(masked));
-     setWhatappdois(masked);
-   };
-
+  const WhatsAppMask = (e: any) => {
+    const valor = e.target.value;
+    const valorLinpo = unMask(valor);
+    const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
+    SetTeldois(unMask(masked));
+    setWhatappdois(masked);
+  };
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
@@ -247,7 +252,11 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
               onChange={(e: any) => setemail(e.target.value)}
             />
             <InputRightElement width="8rem">
-              <CheckEmail onvalue={(e: any) => setcheckEmail(e)} email={email} nome={nome} />
+              <CheckEmail
+                onvalue={(e: any) => setcheckEmail(e)}
+                email={email}
+                nome={nome}
+              />
             </InputRightElement>
           </InputGroup>
         </GridItem>
@@ -265,18 +274,29 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         </GridItem>
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 3, lg: 3 }} spacing={6} mt={6}>
+      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={6}>
         {user?.construtora && (
           <Box>
             <FormLabel>Construtora</FormLabel>
             <SelectComponent
               hierarquia={user.hierarquia}
               tag="construtora"
-              SetValue={user.construtora.map((item) => ({
+              SetValue={user.construtora.map((item: any) => ({
                 id: item.id,
                 nome: item.razaosocial,
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
+            />
+          </Box>
+        )}
+        {user?.Financeira && (
+          <Box>
+            <FormLabel>Financeira</FormLabel>
+            <SelectComponent
+              hierarquia={user.hierarquia}
+              tag="Financeira"
+              SetValue={user.Financeira}
+              onValue={(e: any) => setFinanceiraID(e)}
             />
           </Box>
         )}
