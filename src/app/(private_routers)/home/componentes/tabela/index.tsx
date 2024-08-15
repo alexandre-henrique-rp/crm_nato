@@ -59,7 +59,7 @@ export const Tabela = ({ onDados }: TabelaProps) => {
         ? item.fcweb?.andamento.toLowerCase().includes(andamento.toLowerCase())
         : true;
 
-console.log(item.empreedimento.id, empreendimento);
+      console.log(item.empreedimento.id, empreendimento);
 
       const matchEmpreendimento = empreendimento
         ? item.empreedimento?.id === empreendimento
@@ -77,10 +77,25 @@ console.log(item.empreedimento.id, empreendimento);
     FilterData.map((item: solictacao.SolicitacaoGetType) => {
       console.log(item.fcweb);
       const dtAgenda =
+        item &&
         item.fcweb &&
-        new Date(
-          item.fcweb.dt_agenda.toString().split("T")[0]
-        ).toLocaleDateString("pt-BR");
+        item.fcweb.dt_agenda &&
+        (() => {
+          const originalDate = new Date(item.fcweb.dt_agenda);
+
+          const saoPauloOffset = -3 * 60; // Em minutos (UTC-3)
+
+          const currentOffset = originalDate.getTimezoneOffset(); // Em minutos
+
+          const adjustedDate = new Date(
+            originalDate.getTime() + (currentOffset - saoPauloOffset) * 60000
+          );
+
+          return new Intl.DateTimeFormat("pt-BR", {
+            dateStyle: "short",
+          }).format(adjustedDate);
+        })();
+
       const TypeValid = item.fcweb && item.fcweb.validacao;
       const HoraAgenda = item.fcweb?.hr_agenda?.split("T")[1].split(".")[0];
       const andamento = item.fcweb && item.fcweb.andamento;
@@ -99,7 +114,7 @@ console.log(item.empreedimento.id, empreendimento);
             <Box>{TypeValid}</Box>
           </Td>
           <Td>{andamento}</Td>
-          <Td>{item.ass_doc && item.ass_doc}</Td>
+          {/* <Td>{item.ass_doc && item.ass_doc}</Td> */}
           {user?.hierarquia !== "USER" && <Td>{statusPg}</Td>}
           {user?.hierarquia !== "USER" && <Td>{item.fcweb?.valorcd}</Td>}
         </Tr>
@@ -126,8 +141,8 @@ console.log(item.empreedimento.id, empreendimento);
                 {user?.hierarquia === "ADM" && <Th>ID</Th>}
                 <Th>NOME</Th>
                 <Th>AGENDAMENTO</Th>
-                <Th>ANDAMENTO</Th>
-                <Th>ASS.DOC</Th>
+                <Th>CERTIFICADO</Th>
+                {/* <Th>CCA</Th> */}
                 {user?.hierarquia !== "USER" && <Th>STATUS PGMNT</Th>}
                 {user?.hierarquia !== "USER" && <Th>VALOR</Th>}
               </Tr>

@@ -90,6 +90,7 @@ export default function FormRegister() {
         construtora: Construtora ? [Number(Construtora)] : [],
         empreendimento: Empreendimento ? [Number(Empreendimento)] : [],
         hierarquia: Hierarquia,
+        obs: "",
       };
       try {
         const response = await fetch("/api/register", {
@@ -160,11 +161,11 @@ export default function FormRegister() {
           />
         </GridItem>
         <GridItem>
-          <FormLabel>Usuario</FormLabel>
+          <FormLabel>CPF</FormLabel>
           <Input
             type="text"
             border="1px solid #b8b8b8cc"
-            onChange={(e: any) => setUsername(e.target.value)}
+            onChange={(e: any) => setCpf(e.target.value)}
           />
         </GridItem>
       </SimpleGrid>
@@ -176,10 +177,11 @@ export default function FormRegister() {
         alignItems={"end"}
       >
         <GridItem>
-          <FormLabel>Data de Nascimento</FormLabel>
+          <FormLabel>Usuario</FormLabel>
           <Input
-            type="date"
-            onChange={(e) => setDataNascimento(e.target.value)}
+            type="text"
+            border="1px solid #b8b8b8cc"
+            onChange={(e: any) => setUsername(e.target.value)}
           />
         </GridItem>
         <GridItem>
