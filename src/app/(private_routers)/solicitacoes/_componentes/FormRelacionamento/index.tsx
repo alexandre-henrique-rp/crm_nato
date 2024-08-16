@@ -110,7 +110,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         relacionamento: SetValue.relacionamento,
         rela_quest: SetValue.rela_quest,
         voucher: SetValue.voucher,
-        Financeira: 0,
+        financeiro: SetValue.financeiro,
       };
       const dados: solictacao.SolicitacaoPost = {
         nome: nome.toUpperCase(),
@@ -127,7 +127,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         relacionamento: SetValue.cpf ? [SetValue.cpf] : [],
         rela_quest: SetValue.rela_quest ? true : false,
         voucher: Voucher,
-        Financeira: 0
+        financeiro: FinanceiraID,
       };
 
       const data = [dados, dadossuperior];

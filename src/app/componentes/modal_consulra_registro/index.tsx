@@ -81,7 +81,6 @@ export const ModalConsultaRegistro = ({ onCpfChange }: CpfProps) => {
 
         if (request.ok) {
           const response = await request.json();
-          console.log(response);
 
           if (response.exists) {
             setSolicitacoes(response.solicitacoes);

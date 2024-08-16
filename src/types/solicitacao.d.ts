@@ -156,7 +156,7 @@ declare module solictacao {
     uploadCnh?: string;
     empreedimento: number;
     construtora: number;
-    Financeira: number;
+    financeiro: number;
     corretor: number;
     relacionamento: string[];
     cpfdois?: string;

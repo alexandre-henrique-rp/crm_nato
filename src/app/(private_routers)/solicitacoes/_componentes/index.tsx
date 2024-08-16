@@ -100,7 +100,7 @@ export default function SolicitacaoForm({
         relacionamento: cpfdois ? [cpfdois] : [],
         rela_quest: relacionamento === "sim" ? true : false,
         voucher: Voucher,
-        Financeira: Number(FinanceiraID),
+        financeiro: Number(FinanceiraID),
       };
 
       try {
@@ -202,8 +202,7 @@ export default function SolicitacaoForm({
           cpfdois: cpfdois,
           construtora: Number(ConstrutoraID),
           empreedimento: Number(empreendimento),
-          Financeira: Number(FinanceiraID),
-
+          financeiro: Number(FinanceiraID),
           rela_quest: relacionamento === "sim" ? true : false,
           voucher: Voucher,
         };
