@@ -15,8 +15,6 @@ export async function POST(request: Request) {
     const Msg = `Ola *${body.nome}*, tudo bem?!\n\nomos a *Rede Brasil RP*, e à pedido de ${session.user.name} estamos entrando em contato referente ao seu novo empreendimento.\nPrecisamos fazer o seu certificado digital para que você possa assinar o contrato e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
     
 
-
-
     if (sms == "true") {
       if (body.telefone) {
         await SendWhatsapp(body.telefone, Msg);
