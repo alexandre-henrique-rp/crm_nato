@@ -20,6 +20,12 @@ export default function middleware(req: NextRequest) {
     }
     return NextResponse.next();
   }
+  if (pathname === "/") {
+    if (!session) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+    return NextResponse.next();
+  }
   if (isBlockRoute) {
     if (session) {
       return NextResponse.redirect(new URL("/", req.url));
