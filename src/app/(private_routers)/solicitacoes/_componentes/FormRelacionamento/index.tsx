@@ -10,6 +10,7 @@ import Loading from "@/app/loading";
 import {
   Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
   Grid,
@@ -22,6 +23,7 @@ import {
   Select,
   SimpleGrid,
   Stack,
+  Switch,
   Tooltip,
   useToast,
 } from "@chakra-ui/react";
@@ -47,18 +49,17 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [email, setemail] = useState("");
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
-  const [Corretor, setCorretor] = useState<string>("");
   const [CorretorId, setCorretorId] = useState<number>(0);
   const [relacionamento, setrelacionamento] = useState<string>("nao");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
-  const [Whatapp, setWhatapp] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
   const [Voucher, setVoucher] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
   const [checkEmail, setcheckEmail] = useState<string>("");
   const [codigo, setcodigo] = useState<boolean>(false);
+  const [Sms, setSms] = useState<boolean>(true);
   // const [base64String, setBase64String] = useState("");
   const toast = useToast();
   const router = useRouter();
@@ -95,11 +96,11 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       });
     } else {
       const dadossuperior: solictacao.SolicitacaoPost = {
-        nome: SetValue.nome,
+        nome: SetValue.nome.toUpperCase(),
         telefone: SetValue.telefone,
         cpf: SetValue.cpf,
         telefone2: SetValue.telefone2,
-        email: SetValue.email,
+        email: SetValue.email.replace(/\s+/g, "").toLowerCase(),
         uploadRg: SetValue.uploadRg,
         uploadCnh: SetValue.uploadCnh,
         corretor: SetValue.corretor,
@@ -109,10 +110,10 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         relacionamento: SetValue.relacionamento,
         rela_quest: SetValue.rela_quest,
         voucher: SetValue.voucher,
-        Financeira: 0
+        Financeira: 0,
       };
       const dados: solictacao.SolicitacaoPost = {
-        nome: nome,
+        nome: nome.toUpperCase(),
         telefone: tel,
         cpf: SetValue.cpfdois ? SetValue.cpfdois : "",
         telefone2: teldois,
@@ -131,7 +132,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
 
       const data = [dados, dadossuperior];
       data.map(async (item: any, index: number) => {
-        const response = await fetch("/api/solicitacao", {
+        const response = await fetch(`/api/solicitacao?sms=${Sms}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -211,7 +212,11 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         </Box>
         <Box>
           <FormLabel>Nome Completo</FormLabel>
-          <Input type="text" onChange={(e) => setnome(e.target.value)} />
+          <Input
+            type="text"
+            onChange={(e) => setnome(e.target.value.toUpperCase())}
+            value={nome}
+          />
         </Box>
       </SimpleGrid>
 
@@ -249,7 +254,10 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             <Input
               type="text"
               border="1px solid #b8b8b8cc"
-              onChange={(e: any) => setemail(e.target.value)}
+              onChange={(e: any) =>
+                setemail(e.target.value.replace(/\s+/g, "").toLowerCase())
+              }
+              value={email}
             />
             <InputRightElement width="8rem">
               <CheckEmail
@@ -341,7 +349,20 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             </FormLabel>
             <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
           </Box>
-        )}{" "}
+        )}
+        {user?.hierarquia === "ADM" && (
+          <Box>
+            <FormLabel>Envio de SMS</FormLabel>
+            <Flex alignItems={"flex-start"}>
+              <Switch
+                colorScheme="green"
+                size="lg"
+                onChange={(e) => setSms(e.target.checked)}
+                isChecked={Sms}
+              />
+            </Flex>
+          </Box>
+        )}
       </SimpleGrid>
 
       <Button

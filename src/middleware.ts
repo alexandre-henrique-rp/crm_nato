@@ -11,6 +11,15 @@ export default function middleware(req: NextRequest) {
     req
   );
 
+  if (pathname === "/home") {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+  if (pathname === "/login") {
+    if (session) {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+    return NextResponse.next();
+  }
   if (isBlockRoute) {
     if (session) {
       return NextResponse.redirect(new URL("/", req.url));
@@ -29,12 +38,6 @@ export default function middleware(req: NextRequest) {
       return NextResponse.next();
     }
     return NextResponse.redirect(new URL("/login", req.url));
-  }
-  if (session) {
-    if (pathname === "/login") {
-      return NextResponse.redirect(new URL("/home", req.url));
-    }
-    return NextResponse.next();
   }
 }
 

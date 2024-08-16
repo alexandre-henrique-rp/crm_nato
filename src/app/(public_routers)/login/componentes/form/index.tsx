@@ -23,34 +23,17 @@ export const FormLogin = () => {
       email: username,
       password: password,
       redirect: false
-    });
+    });    
     if (res.status !== 200) {
-    
-        const request = await fetch("/api/verificador", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: username,
-            password: password,
-          }),
-        });
-        
-        const response = await request.json();
-        console.log(response);
 
-        if (response.error) {
-          toast({
-            title: "Erro!",
-            description: response.mesage,
-            status: "error",
-            duration: 5000,
-          });
-        }
-     
+        toast({
+          title: "Erro!",
+          description: "Email ou senha inválidos",
+          status: "error",
+          duration: 5000,
+        });     
     } else {
-      router.replace("/home");
+      router.replace("/");
     }
   };
 

@@ -4,8 +4,8 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { BotoesFunction } from "../botoes/bt_group_function";
 
-
 interface TabelaProps {
+  ClientData: any
   onDados: {
     nome: string;
     andamento: string;
@@ -15,24 +15,30 @@ interface TabelaProps {
 }
 
 async function handleGetUpdate() {
-  const res = await fetch(`/api/solicitacao/getall`);
+  const res = await fetch(`/api/solicitacao/getall`,{
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 2 },
+  });
   const data = await res.json();
   return data;
 }
 
-export const Tabela = ({ onDados }: TabelaProps) => {
+export const Tabela = ({ onDados, ClientData}: TabelaProps) => {
   const [Data, setData] = useState<solictacao.SolicitacaoGetType[]>([]);
   const [FilterData, setFilterData] = useState<any>([]);
   const { data: session } = useSession();
   const user = session?.user;
   const token = session?.token;
 
+
   useEffect(() => {
-    (async () => {
-      const data = await handleGetUpdate();
-      setData(data);
-    })();
-  }, [token]);
+    if (ClientData.length > 0) {
+      setData(ClientData);
+    }
+  }, [ClientData]);
 
   const Update = async (id: number) => {
     // const data = await handleGetUpdate();
@@ -59,8 +65,6 @@ export const Tabela = ({ onDados }: TabelaProps) => {
         ? item.fcweb?.andamento.toLowerCase().includes(andamento.toLowerCase())
         : true;
 
-      console.log(item.empreedimento.id, empreendimento);
-
       const matchEmpreendimento = empreendimento
         ? item.empreedimento?.id === empreendimento
         : true;
@@ -68,14 +72,12 @@ export const Tabela = ({ onDados }: TabelaProps) => {
       return matchNome && matchAndamento && matchEmpreendimento;
     });
 
-    console.log(Filter);
     setFilterData(Filter);
   }, [Data, onDados]);
 
   const tabela =
     FilterData.length > 0 &&
     FilterData.map((item: solictacao.SolicitacaoGetType) => {
-      console.log(item.fcweb);
       const dtAgenda =
         item &&
         item.fcweb &&

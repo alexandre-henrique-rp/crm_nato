@@ -1,14 +1,35 @@
 "use client";
 import { Box, Flex, Stack } from "@chakra-ui/react";
-import { SetStateAction, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { ModalPrimeAsses } from "@/app/componentes/prime_asses";
 import { FiltroComponent } from "./home/componentes/filter/filtro_geral";
 import PerfilHome from "./home/componentes/perfil_home";
 import { Tabela } from "./home/componentes/tabela";
 
 
+async function handleGetUpdate() {
+  const res = await fetch(`/api/solicitacao/getall`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 2 },
+  });
+  const data = await res.json();
+  return data;
+}
+
+
 export default function HomePage() {
   const [Data, setData] = useState<any>([]);
+  const [DadosClientes, setDadosClientes] = useState<any>([]);
+
+  useEffect(() => {
+    (async () => {
+      const data = await handleGetUpdate();
+      setDadosClientes(data);
+    })();
+  }, []);
 
   const HandleFilter = (e: SetStateAction<any>) => {
     if (e) {
@@ -40,7 +61,7 @@ export default function HomePage() {
             <FiltroComponent onData={HandleFilter} />
           </Box>
           <Box justifyContent="center" alignItems="center">
-            <Tabela onDados={Data} />
+            <Tabela onDados={Data} ClientData={DadosClientes} />
           </Box>
         </Stack>
       </Box>

@@ -61,6 +61,7 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
     }
   };
 
+  // console.log(FilterNome);
   const HandleFilter = () => {
     console.log(FilterData);
     const data = {
@@ -72,8 +73,6 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
 
     onData(data);
   };
-  
-  console.log(FilterEmpreendimento);
 
   const HandleFilterBlank = () => {
     const data = {

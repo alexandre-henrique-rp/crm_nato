@@ -113,7 +113,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setAssDoc(SetData.ass_doc);
       setLinkDoc(SetData.link_doc);
       setVoucher(SetData.fcweb?.vouchersoluti);
-      console.log(SetData);
+      // console.log(SetData);
     }
   }, [Name, SetData]);
   console.log(SetData);

@@ -19,6 +19,7 @@ import {
   Tooltip,
   useToast,
   Flex,
+  Switch,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -60,6 +61,7 @@ export default function SolicitacaoForm({
   const [checkEmailString, setcheckEmailString] = useState<string>("");
   const [codigo, setcodigo] = useState<boolean>(false);
   const [Whatappdois, setWhatappdois] = useState<string>("");
+  const [Sms, setSms] = useState<boolean>(true);
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
@@ -84,11 +86,11 @@ export default function SolicitacaoForm({
       });
     } else {
       const data: solictacao.SolicitacaoPost = {
-        nome: nome,
-        telefone: tel,
-        cpf: cpf,
-        telefone2: teldois,
-        email: email,
+        nome: nome.toUpperCase(),
+        telefone: tel.replace(/\s+/g, ""),
+        cpf: cpf.replace(/\s+/g, ""),
+        telefone2: teldois.replace(/\s+/g, ""),
+        email: email.replace(/\s+/g, "").toLowerCase(),
         uploadRg: uploadRg,
         uploadCnh: uploadCnh,
         corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
@@ -103,7 +105,7 @@ export default function SolicitacaoForm({
 
       try {
         setLoad(true);
-        const response = await fetch("/api/solicitacao", {
+        const response = await fetch(`/api/solicitacao?sms=${Sms}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -187,12 +189,12 @@ export default function SolicitacaoForm({
         ishidden("sim");
 
         const data: solictacao.SolicitacaoPost = {
-          nome: nome,
-          cpf: cpf,
-          telefone: tel,
+          nome: nome.toUpperCase(),
+          cpf: cpf.replace(/\s+/g, ""),
+          telefone: tel.replace(/\s+/g, ""),
           telefone2: teldois,
           dt_nascimento: DataNascimento,
-          email: email,
+          email: email.replace(/\s+/g, "").toLowerCase(),
           uploadRg: uploadRg,
           uploadCnh: uploadCnh,
           corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
@@ -234,7 +236,7 @@ export default function SolicitacaoForm({
     user?.hierarquia,
     user?.id,
   ]);
-  console.log("teste", user);
+
 
   if (Load) {
     return <Loading />;
@@ -264,7 +266,11 @@ export default function SolicitacaoForm({
               </chakra.p>
             </Flex>
           </FormLabel>
-          <Input type="text" onChange={(e) => setnome(e.target.value)} />
+          <Input
+            type="text"
+            onChange={(e) => setnome(e.target.value.toUpperCase())}
+            value={nome}
+          />
         </Box>
       </SimpleGrid>
 
@@ -326,7 +332,10 @@ export default function SolicitacaoForm({
             <Input
               type="text"
               border="1px solid #b8b8b8cc"
-              onChange={(e: any) => setemail(e.target.value)}
+              onChange={(e: any) =>
+                setemail(e.target.value.replace(/\s+/g, "").toLowerCase())
+              }
+              value={email}
             />
             <InputRightElement width="8rem">
               <CheckEmail
@@ -453,6 +462,20 @@ export default function SolicitacaoForm({
               </Tooltip>
             </FormLabel>
             <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
+          </Box>
+        )}
+
+        {user?.hierarquia === "ADM" && relacionamento !== "sim" && (
+          <Box>
+            <FormLabel>Envio de SMS</FormLabel>
+            <Flex alignItems={"flex-start"}>
+              <Switch
+                colorScheme="green"
+                size="lg"
+                onChange={(e) => setSms(e.target.checked)}
+                isChecked={Sms}
+              />
+            </Flex>
           </Box>
         )}
       </SimpleGrid>
