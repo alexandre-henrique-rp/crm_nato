@@ -12,6 +12,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const user = session?.user;
   const route = useRouter();
 
+  const expiration = session ? session.expiration : 0;
+  const expired = Date.now() > expiration * 1000;
   if (!user)
     return (
       <>
@@ -22,6 +24,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   if (!user) {
     route.push("/login");
     signOut({ redirect: false });
+  }
+
+  if(user) {
+    if (expired) {
+       route.push("/login");
+       signOut({ redirect: false });
+    }
   }
   return (
     <Box overflowY={"auto"} h={"100vh"} w={"100vw"}>

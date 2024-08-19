@@ -23,7 +23,8 @@ export const FormLogin = () => {
       email: username,
       password: password,
       redirect: false
-    });    
+    });   
+    console.log(res); 
     if (res.status !== 200) {
 
         toast({
