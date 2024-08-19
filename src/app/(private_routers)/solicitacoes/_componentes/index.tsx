@@ -10,8 +10,6 @@ import {
   Icon,
   Input,
   InputGroup,
-  InputLeftAddon,
-  InputRightElement,
   chakra,
   Select,
   SimpleGrid,
@@ -23,8 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
-import CheckEmail from "@/app/componentes/checkEmail";
+import { useEffect, useState } from "react";
 import { Whatsapp } from "@/app/componentes/whatsapp";
 import { SelectCorretor } from "@/app/componentes/select_user";
 import Loading from "@/app/loading";
@@ -55,7 +52,7 @@ export default function SolicitacaoForm({
   const [Voucher, setVoucher] = useState<string>("");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
-  const [teste, setTeste] = useState<any>([]);
+  const [Error, setError] = useState<boolean>(false);
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
   const [checkEmailString, setcheckEmailString] = useState<string>("");
@@ -121,9 +118,29 @@ export default function SolicitacaoForm({
             isClosable: true,
           });
           setLoad(false);
-          router.push("/home");
+          // router.push("/home");
+        } else {
+           toast({
+             title: "Erro",
+             description: "Erro ao enviar solicitacao",
+             status: "error",
+             duration: 3000,
+             isClosable: true,
+           });
+           setLoad(false);
+           setError(true);
         }
-      } catch (error) {}
+      } catch (error) {
+        toast({
+          title: "Erro",
+          description: "Erro ao enviar solicitacao",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        setLoad(false);
+        setError(true);
+      }
     }
   };
 
@@ -139,19 +156,11 @@ export default function SolicitacaoForm({
     setFinanceiraID(user.Financeira[0].id);
   }
 
-  const VerificadorEmail = (e: any) => {
-    const value = e.target.value;
-    if ("NT-" + value == checkEmailString) {
+  const VerificadorEmail = () => {
+
+    if ( email === checkEmailString) {
       setcodigo(true);
-      toast({
-        title: "Sucesso",
-        description: "Email verificado com sucesso",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
     } else {
-      setcheckEmailString(value);
       setcodigo(false);
       toast({
         title: "Erro",
@@ -273,7 +282,7 @@ export default function SolicitacaoForm({
         </Box>
       </SimpleGrid>
 
-      <ModalConsultaRegistro onCpfChange={handleCpfChange} />
+      <ModalConsultaRegistro setCpfChange={cpf} onCpfChange={handleCpfChange} />
 
       <SimpleGrid
         columns={{ base: 1, md: 2, lg: 3 }}
@@ -313,12 +322,12 @@ export default function SolicitacaoForm({
       </SimpleGrid>
 
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3 }}
+        columns={{ base: 1, md: 2, lg: 2 }}
         spacing={6}
         mt={6}
         alignItems={"end"}
       >
-        <GridItem colSpan={{ base: 1, md: 1, lg: 2 }}>
+        <GridItem colSpan={{ base: 1, md: 1, lg: 1 }}>
           <FormLabel>
             <Flex alignItems={"flex-start"}>
               Email{" "}
@@ -336,23 +345,26 @@ export default function SolicitacaoForm({
               }
               value={email}
             />
-            <InputRightElement width="8rem">
-              <CheckEmail
-                onvalue={(e: any) => setcheckEmailString(e)}
-                email={email}
-                nome={nome}
-              />
-            </InputRightElement>
           </InputGroup>
         </GridItem>
         <GridItem>
-          <FormLabel>Codigo email</FormLabel>
+          <FormLabel>
+            Confirme o email{" "}
+            <chakra.p color={"red"} fontSize={"9px"}>
+              (Obrigatório)
+            </chakra.p>
+          </FormLabel>
           <InputGroup>
-            <InputLeftAddon>NT-</InputLeftAddon>
             <Input
               type="text"
-              onChange={VerificadorEmail}
-              textTransform={"uppercase"}
+              border="1px solid #b8b8b8cc"
+              onChange={(e: any) =>
+                setcheckEmailString(
+                  e.target.value.replace(/\s+/g, "").toLowerCase()
+                )
+              }
+              value={checkEmailString}
+              onBlur={VerificadorEmail}
             />
           </InputGroup>
         </GridItem>
@@ -370,6 +382,7 @@ export default function SolicitacaoForm({
                 nome: item.razaosocial,
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
+              DefaultValue={Number(ConstrutoraID)}
             />
           </Box>
         )}
@@ -381,6 +394,7 @@ export default function SolicitacaoForm({
               tag="Financeira"
               SetValue={user.Financeira}
               onValue={(e: any) => setFinanceiraID(e)}
+              DefaultValue={Number(FinanceiraID)}
             />
           </Box>
         )}
@@ -392,13 +406,17 @@ export default function SolicitacaoForm({
               tag="empreendimento"
               SetValue={user.empreendimento}
               onValue={(e: any) => setempreendimento(e)}
+              DefaultValue={Number(empreendimento)}
             />
           </Box>
         )}
         {user?.hierarquia === "ADM" && (
           <Box>
             <FormLabel>Corretor</FormLabel>
-            <SelectCorretor idcorretor={setCorretorId} />
+            <SelectCorretor
+              idcorretor={setCorretorId}
+              setCorretor={CorretorId}
+            />
           </Box>
         )}
       </SimpleGrid>
@@ -407,11 +425,22 @@ export default function SolicitacaoForm({
         <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
           <VerificadorFileComponent onFileConverted={setCnhFile} />
+          {uploadCnh && Error ?(
+             <chakra.span color={"red"} fontSize={"9px"}>
+                Documento Ja Anexado
+              </chakra.span>
+          ): null}
         </FormControl>
 
         <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
           <VerificadorFileComponent onFileConverted={setRgFile} />
+          {uploadRg &&
+            Error ?(
+              <chakra.span color={"red"} fontSize={"9px"}>
+                Documento Ja Anexado
+              </chakra.span>
+            ): null}
         </FormControl>
       </SimpleGrid>
 
@@ -460,7 +489,7 @@ export default function SolicitacaoForm({
                 <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
               </Tooltip>
             </FormLabel>
-            <Input type="text" onChange={(e) => setVoucher(e.target.value)} />
+            <Input type="text" onChange={(e) => setVoucher(e.target.value)}  value={Voucher}/>
           </Box>
         )}
 

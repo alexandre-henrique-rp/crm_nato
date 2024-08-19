@@ -3,7 +3,7 @@ import 'next-auth';
 declare module 'next-auth' {
   interface Session {
     token: string;
-    expires: Date | string;
+    expiration: number;
     user: {
       Financeira: any;
       id: number;

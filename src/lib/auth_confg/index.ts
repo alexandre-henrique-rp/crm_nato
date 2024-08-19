@@ -26,7 +26,6 @@ export const auth: NextAuthOptions = {
           });
 
           const retorno = await res.json();
-          console.log("🚀 ~ authorize ~ retorno:", retorno)
           const { token, expires, user } = retorno;
 
           const {
@@ -56,7 +55,6 @@ export const auth: NextAuthOptions = {
             empreendimento: empreendimento,
             hierarquia: hierarquia,
             cargo: cargo,
-            tokenexpires: expires,
             reset_password: reset_password,
             Financeira: Financeira 
           };
@@ -80,12 +78,12 @@ export const auth: NextAuthOptions = {
     // newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
   },
   jwt: {
-    secret: process.env.NEXT_PUBLIC_JWT_SECRET || "secret"
+    secret: process.env.JWT_SIGNING_PRIVATE_KEY,
   },
-  secret: process.env.NEXT_PUBLIC_JWT_SECRET || "123456",
+  secret: process.env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
-    maxAge: 3 * 60 * 60 // 4 hours
+    maxAge: 3 * 60 * 60 // 3 hours
   },
   callbacks: {
     jwt: async ({
@@ -98,7 +96,8 @@ export const auth: NextAuthOptions = {
       const isSignIn = !!user;
 
       const actualDateInSeconds = Math.floor(Date.now() / 1000);
-      const tokenExpirationInSeconds = Math.floor(3 * 60 * 60); // 4 hours
+      const tokenExpirationInSeconds = 3 * 60 * 60; // 4 hours
+      const dateExpirationInSeconds = actualDateInSeconds + tokenExpirationInSeconds;
 
       if (isSignIn) {
         if (!user?.jwt || !user?.id || !user?.name || !user?.email) {
@@ -119,7 +118,7 @@ export const auth: NextAuthOptions = {
         token.reset_password = user.reset_password;
         token.Financeira = user.Financeira;
 
-        token.expiration = actualDateInSeconds + tokenExpirationInSeconds;
+        token.expiration = dateExpirationInSeconds;
       } else {
         if (!token?.expiration) {
           return null;
@@ -161,6 +160,7 @@ export const auth: NextAuthOptions = {
       };
 
       session.token = token.jwt as string;
+      session.expiration = token.expiration as number;
       return session;
     }
   }

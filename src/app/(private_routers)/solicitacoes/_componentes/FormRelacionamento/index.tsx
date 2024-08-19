@@ -21,6 +21,7 @@ import {
   InputLeftAddon,
   InputRightElement,
   Select,
+  chakra,
   SimpleGrid,
   Stack,
   Switch,
@@ -29,8 +30,8 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { SetStateAction, use, useEffect, useState } from "react";
-import { IconBase } from "react-icons";
+import { useState } from "react";
+
 
 import { mask, unMask } from "remask";
 
@@ -41,8 +42,6 @@ interface RelacionadoProps {
 export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
-  const [cpfdois, setCpfdois] = useState("");
-  const [cpfdoismask, setCpfdoismask] = useState("");
   const [ConstrutoraID, setConstrutoraID] = useState(0);
   const [FinanceiraID, setFinanceiraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
@@ -50,7 +49,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [uploadCnh, setCnhFile] = useState<string>("");
   const [uploadRg, setRgFile] = useState<string>("");
   const [CorretorId, setCorretorId] = useState<number>(0);
-  const [relacionamento, setrelacionamento] = useState<string>("nao");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
   const [Whatappdois, setWhatappdois] = useState<string>("");
@@ -60,22 +58,12 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [checkEmail, setcheckEmail] = useState<string>("");
   const [codigo, setcodigo] = useState<boolean>(false);
   const [Sms, setSms] = useState<boolean>(true);
-  // const [base64String, setBase64String] = useState("");
+  const [Error, setError] = useState<boolean>(false);
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
   const user = session?.user;
 
-  useEffect(() => {
-    (() => {
-      if (SetValue.cpfdois) {
-        const cpf = SetValue.cpfdois;
-        const masked = mask(cpf, ["999.999.999-99"]);
-        setCpfdoismask(masked);
-        setCpfdois(cpf);
-      }
-    })();
-  }, [SetValue.cpfdois]);
 
   const handlesubmit = () => {
     if (!codigo) {
@@ -115,7 +103,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       const dados: solictacao.SolicitacaoPost = {
         nome: nome.toUpperCase(),
         telefone: tel,
-        cpf: SetValue.cpfdois ? SetValue.cpfdois : "",
+        cpf: SetValue.cpfdois ? SetValue.cpfdois : cpf,
         telefone2: teldois,
         email: email,
         uploadRg: uploadRg,
@@ -131,7 +119,9 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       };
 
       const data = [dados, dadossuperior];
+      setLoad(true);
       data.map(async (item: any, index: number) => {
+
         const response = await fetch(`/api/solicitacao?sms=${Sms}`, {
           method: "POST",
           headers: {
@@ -147,9 +137,22 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             duration: 3000,
             isClosable: true,
           });
+
           if (data.length === index + 1) {
             router.push("/home");
+            setLoad(false);
           }
+        }else {
+          toast({
+            title: "Erro",
+            description: "Erro ao enviar solicitacao",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          setLoad(false);
+          setError(true);
+          return null;
         }
       });
     }
@@ -166,20 +169,10 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     setFinanceiraID(user.Financeira[0].id);
   }
 
-  const VerificadorEmail = (e: any) => {
-    const value = e.target.value;
-    if ("NT-" + value === checkEmail) {
-      setcheckEmail("");
+  const VerificadorEmail = () => {
+    if (email === checkEmail) {
       setcodigo(true);
-      toast({
-        title: "Sucesso",
-        description: "Email verificado com sucesso",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
     } else {
-      setcheckEmail(value);
       setcodigo(false);
       toast({
         title: "Erro",
@@ -208,10 +201,19 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6}>
         <Box>
           <FormLabel>CPF</FormLabel>
-          <CpfMask desativado setvalue={cpfdois} onvalue={setCpf} />
+          <CpfMask
+            desativado
+            setvalue={SetValue.cpfdois ? SetValue.cpfdois : cpf}
+            onvalue={setCpf}
+          />
         </Box>
         <Box>
-          <FormLabel>Nome Completo</FormLabel>
+          <FormLabel>
+            Nome Completo{" "}
+            <chakra.p color={"red"} fontSize={"9px"}>
+              (Obrigatório)
+            </chakra.p>
+          </FormLabel>
           <Input
             type="text"
             onChange={(e) => setnome(e.target.value.toUpperCase())}
@@ -221,20 +223,30 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       </SimpleGrid>
 
       <SimpleGrid
-        columns={{ base: 1, md: 3, lg: 3 }}
+        columns={{ base: 1, md: 3 }}
         spacing={6}
         mt={6}
         alignItems={"end"}
       >
         <Box>
-          <FormLabel>Data de Nascimento</FormLabel>
+          <FormLabel>
+            Data de Nascimento
+            <chakra.p color={"red"} fontSize={"9px"}>
+              (Obrigatório)
+            </chakra.p>
+          </FormLabel>
           <Input
             type="date"
             onChange={(e) => setDataNascimento(e.target.value)}
           />
         </Box>
         <GridItem>
-          <FormLabel>Whatsapp com DDD</FormLabel>
+          <FormLabel>
+            Whatsapp com DDD{" "}
+            <chakra.p color={"red"} fontSize={"9px"}>
+              (Obrigatório)
+            </chakra.p>
+          </FormLabel>
           <Whatsapp setValue={tel} onValue={setTel} />
         </GridItem>
         <GridItem>
@@ -243,13 +255,18 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         </GridItem>
       </SimpleGrid>
       <SimpleGrid
-        columns={{ base: 1, md: 2, lg: 3 }}
+        columns={{ base: 1, md: 2 }}
         spacing={6}
         mt={6}
         alignItems={"end"}
       >
-        <GridItem colSpan={2}>
-          <FormLabel>Email</FormLabel>
+        <GridItem colSpan={1}>
+          <FormLabel>
+            Email{" "}
+            <chakra.p color={"red"} fontSize={"9px"}>
+              (Obrigatório)
+            </chakra.p>
+          </FormLabel>
           <InputGroup>
             <Input
               type="text"
@@ -259,24 +276,25 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
               }
               value={email}
             />
-            <InputRightElement width="8rem">
-              <CheckEmail
-                onvalue={(e: any) => setcheckEmail(e)}
-                email={email}
-                nome={nome}
-              />
-            </InputRightElement>
           </InputGroup>
         </GridItem>
 
         <GridItem>
-          <FormLabel>Codigo email</FormLabel>
+          <FormLabel>
+            Confirme o email{" "}
+            <chakra.p color={"red"} fontSize={"9px"}>
+              (Obrigatório)
+            </chakra.p>
+          </FormLabel>
           <InputGroup>
-            <InputLeftAddon>NT-</InputLeftAddon>
             <Input
               type="text"
-              onChange={VerificadorEmail}
-              textTransform={"uppercase"}
+              border="1px solid #b8b8b8cc"
+              onChange={(e: any) =>
+                setcheckEmail(e.target.value.replace(/\s+/g, "").toLowerCase())
+              }
+              value={checkEmail}
+              onBlur={VerificadorEmail}
             />
           </InputGroup>
         </GridItem>
@@ -294,6 +312,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
                 nome: item.razaosocial,
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
+              DefaultValue={SetValue.construtora}
             />
           </Box>
         )}
@@ -305,6 +324,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
               tag="Financeira"
               SetValue={user.Financeira}
               onValue={(e: any) => setFinanceiraID(e)}
+              DefaultValue={SetValue.financeiro}
             />
           </Box>
         )}
@@ -316,13 +336,17 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
               tag="empreendimento"
               SetValue={user.empreendimento}
               onValue={(e: any) => setempreendimento(e)}
+              DefaultValue={SetValue.empreedimento}
             />
           </Box>
         )}
         {user?.hierarquia === "ADM" && (
           <Box>
             <FormLabel>Corretor</FormLabel>
-            <SelectCorretor idcorretor={setCorretorId} />
+            <SelectCorretor
+              idcorretor={setCorretorId}
+              setCorretor={SetValue.corretor}
+            />
           </Box>
         )}
       </SimpleGrid>
@@ -331,10 +355,20 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
           <VerificadorFileComponent onFileConverted={setCnhFile} />
+          {uploadCnh && Error ? (
+            <chakra.span color={"red"} fontSize={"9px"}>
+              Documento Ja Anexado
+            </chakra.span>
+          ) : null}
         </FormControl>
         <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
           <VerificadorFileComponent onFileConverted={setRgFile} />
+          {uploadRg && Error ? (
+            <chakra.span color={"red"} fontSize={"9px"}>
+              Documento Ja Anexado
+            </chakra.span>
+          ) : null}
         </FormControl>
         {user?.hierarquia === "ADM" && (
           <Box>
@@ -372,7 +406,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         maxWidth="250px"
         height="50px"
         onClick={handlesubmit}
-        hidden={relacionamento === "sim"}
+        // hidden={relacionamento === "sim"}
       >
         CRIAR CONTA
       </Button>

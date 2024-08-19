@@ -7,6 +7,7 @@ interface SelectProps {
   onValue: any;
   hierarquia?: string;
   tag: string;
+  DefaultValue: number | null
 }
 
 export const SelectComponent = ({
@@ -14,10 +15,15 @@ export const SelectComponent = ({
   onValue,
   hierarquia,
   tag,
+  DefaultValue
 }: SelectProps) => {
+  const [Valor, setValor] = useState(0);
   const [Data, setData] = useState([]);
 
   useEffect(() => {
+    if (DefaultValue) {
+      setValor(DefaultValue);
+    }
     if (SetValue && Data.length < 1) {
       setData(SetValue);
       onValue(Number(SetValue));
@@ -71,10 +77,13 @@ export const SelectComponent = ({
   return (
     <Flex w={"full"} py={"0.5rem"}>
       <Select
-        onChange={(e) => onValue(Number(e.target.value))}
+        onChange={(e) => {
+          onValue(Number(e.target.value));
+          setValor(Number(e.target.value));}}
         placeholder={`Escolha ${
           tag === "construtora" ? "uma construtora" : "um " + tag
         }`}
+        value={Valor}
       >
         {Data &&
           Data.map((item: any) => {
