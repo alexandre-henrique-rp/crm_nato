@@ -7,7 +7,7 @@ interface SelectProps {
   onValue: any;
   hierarquia?: string;
   tag: string;
-  DefaultValue: number | null
+  DefaultValue?: number | null
 }
 
 export const SelectComponent = ({
