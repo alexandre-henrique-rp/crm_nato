@@ -14,17 +14,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const expiration = session ? session.expiration : 0;
   const expired = Date.now() > expiration * 1000;
-  // if (!user)
-  //   return (
-  //     <>
-  //       <Loading />
-  //     </>
-  //   );
 
-  if (!user) {
-    route.push("/login");
-    signOut({ redirect: false });
-  }
+  if (!user)
+    return (
+      <>
+        <Loading />
+      </>
+    );
+
 
   if(user) {
     if (expired) {

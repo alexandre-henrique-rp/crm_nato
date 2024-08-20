@@ -9,13 +9,16 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-      // const session = await getServerSession(auth);
-      // const expiration = session ? session.expiration : 0;
-      // const expired = Date.now() > expiration * 1000;
+      const session = await getServerSession(auth);
+      const expiration = session ? session.expiration : 0;
+      const user = session?.user;
+      const expired = Date.now() > expiration * 1000;
 
-      // if (expired) {
-      //   signOut();
-    // }
+      if (user) {
+        if (expired) {
+          signOut();
+        }
+      }
   return (
     <html lang="pt-br">
       <body>
