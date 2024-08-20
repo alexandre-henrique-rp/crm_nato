@@ -70,35 +70,46 @@ export const ModalFormComponent = ({
     />
   );
 
+  /**
+   * Handles form submission and creates an alert.
+   *
+   * @param {Object} e - The event object.
+   * @param {Function} e.preventDefault - Prevents the default form submission behavior.
+   * @return {Promise<void>} - A promise that resolves when the alert is created.
+   */
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-
-    const data: AlertsType.AlertsProps =
-      rota === "geral"
-        ? {
-            tipo: rota.toUpperCase(),
-            empreendimento: IdEmpreedimento,
-            tag: "info",
-            texto: Descricao,
-            titulo: `${
-              Empreedimeto.filter((e: any) => e.id === IdEmpreedimento).map(
-                (e: any) => e.nome
-              )[0]
-            } - ${Titulo}`,
-          }
-        : {
-            tipo: "CORRETOR",
-            corretor: CorretorId,
-            empreendimento: empreedimento,
-            solicitacao_id: clienteId,
-            tag: !StatusAlert ? "warning" : StatusAlert,
-            texto: Descricao,
-            titulo: `${PostName?.split(" ")[0]} ${
-              PostName?.split(" ")[1]
-            } - ${Titulo}`,
-          };
-    console.log(data);
     try {
+      // Construct the alert data object based on the form inputs and selected route.
+      const data: AlertsType.AlertsProps =
+        rota === "geral"
+          ? {
+              tipo: rota.toUpperCase(), // Set the alert type to the uppercase value of the route.
+              empreendimento: IdEmpreedimento, // Set the empreendimento ID.
+              tag: "info", // Set the tag to "info".
+              texto: Descricao, // Set the texto to the value of Descricao.
+              titulo: `${
+                Empreedimeto.filter((e: any) => e.id === IdEmpreedimento).map(
+                  (e: any) => e.nome
+                )[0]
+              } - ${Titulo}`, // Set the title based on the selected empreendimento and Titulo.
+            }
+          : {
+              tipo: "CORRETOR", // Set the alert type to "CORRETOR".
+              corretor: CorretorId, // Set the corretor ID.
+              empreendimento: empreedimento, // Set the empreendimento ID.
+              solicitacao_id: clienteId, // Set the solicitacao_id.
+              tag: !StatusAlert ? "warning" : StatusAlert, // Set the tag based on the value of StatusAlert.
+              texto: Descricao, // Set the texto to the value of Descricao.
+              titulo: `${PostName?.split(" ")[0]} ${
+                PostName?.split(" ")[1]
+              } - ${Titulo}`, // Set the title based on the PostName and Titulo.
+            };
+
+      // Log the constructed data object.
+      console.log(data);
+
+      // Send a POST request to the /api/alerts/create endpoint with the data object.
       const request = await fetch(`/api/alerts/create`, {
         method: "POST",
         headers: {
@@ -106,8 +117,14 @@ export const ModalFormComponent = ({
         },
         body: JSON.stringify(data),
       });
+
+      // Parse the response body as JSON.
       const response = await request.json();
+
+      // Log the response.
       console.log(response);
+
+      // If the request was successful, show a success toast message.
       if (request.ok) {
         toast({
           title: "Sucesso!",
@@ -118,8 +135,11 @@ export const ModalFormComponent = ({
         });
         window.location.reload();
       }
+
+      // Close the modal.
       onClose();
     } catch (error) {
+      // If there was an error, show an error toast message.
       toast({
         title: "Erro!",
         description: "Erro ao criar alerta!",

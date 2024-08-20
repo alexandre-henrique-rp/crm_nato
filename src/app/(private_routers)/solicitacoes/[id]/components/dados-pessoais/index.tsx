@@ -201,10 +201,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     setWhatsAppMaskdois(masked);
   };
 
-  console.log(CorretorId);
-  console.log(Corretor);
-  console.log(input);
-
   return (
     <Flex
       w={"100%"}
