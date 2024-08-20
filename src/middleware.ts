@@ -14,16 +14,15 @@ export default function middleware(req: NextRequest) {
         APP_ROUTES,
         req
     );
-    console.log(session);
 
 
-    // if (pathname === "/") {
-    //     if (!session) {
-    //         return NextResponse.redirect(new URL("/login", req.url));
-    //     }
+    if (pathname === "/") {
+        if (!session) {
+            return NextResponse.redirect(new URL("/login", req.url));
+        }
 
-    //     return NextResponse.next();
-    // }
+        return NextResponse.next();
+    }
 
     if (pathname === "/home") {
         return NextResponse.redirect(new URL("/", req.url));
