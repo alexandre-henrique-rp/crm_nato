@@ -25,8 +25,11 @@ export const FormLogin = () => {
       redirect: false
     });   
     console.log(res); 
-    if (res.status !== 200) {
+    console.log(res.status);
+    console.log(res.status === 200);
+    console.log(res.status !== 200);
 
+    if (res.status !== 200) {
         toast({
           title: "Erro!",
           description: "Email ou senha inválidos",
