@@ -162,5 +162,6 @@ declare module solictacao {
     cpfdois?: string;
     rela_quest?: boolean;
     voucher?: string;
+    vendedorName?: string;
   }
 }

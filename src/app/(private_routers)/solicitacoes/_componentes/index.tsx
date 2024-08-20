@@ -58,6 +58,7 @@ export default function SolicitacaoForm({
   const [checkEmailString, setcheckEmailString] = useState<string>("");
   const [codigo, setcodigo] = useState<boolean>(false);
   const [Whatappdois, setWhatappdois] = useState<string>("");
+  const [VendedorName, setVendedorName] = useState<string>("");
   const [Sms, setSms] = useState<boolean>(true);
   const toast = useToast();
   const router = useRouter();
@@ -102,13 +103,16 @@ export default function SolicitacaoForm({
 
       try {
         setLoad(true);
-        const response = await fetch(`/api/solicitacao?sms=${Sms}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
+        const response = await fetch(
+          `/api/solicitacao?sms=${Sms}&vendedor=${VendedorName}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          }
+        );
         if (response.ok) {
           toast({
             title: "Sucesso",
@@ -214,6 +218,7 @@ export default function SolicitacaoForm({
           financeiro: Number(FinanceiraID),
           rela_quest: relacionamento === "sim" ? true : false,
           voucher: Voucher,
+          vendedorName: VendedorName,
         };
         onvalue(data);
       }
@@ -302,6 +307,7 @@ export default function SolicitacaoForm({
           <Input
             type="date"
             onChange={(e) => setDataNascimento(e.target.value)}
+            value={DataNascimento}
           />
         </GridItem>
         <GridItem>
@@ -415,7 +421,8 @@ export default function SolicitacaoForm({
             <FormLabel>Corretor</FormLabel>
             <SelectCorretor
               idcorretor={setCorretorId}
-              setCorretor={CorretorId}
+              setCorretor={Number(CorretorId)}
+              Vendedor={setVendedorName}
             />
           </Box>
         )}
@@ -425,22 +432,21 @@ export default function SolicitacaoForm({
         <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
           <VerificadorFileComponent onFileConverted={setCnhFile} />
-          {uploadCnh && Error ?(
-             <chakra.span color={"red"} fontSize={"9px"}>
-                Documento Ja Anexado
-              </chakra.span>
-          ): null}
+          {uploadCnh && Error ? (
+            <chakra.span color={"red"} fontSize={"9px"}>
+              Documento Ja Anexado
+            </chakra.span>
+          ) : null}
         </FormControl>
 
         <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
           <VerificadorFileComponent onFileConverted={setRgFile} />
-          {uploadRg &&
-            Error ?(
-              <chakra.span color={"red"} fontSize={"9px"}>
-                Documento Ja Anexado
-              </chakra.span>
-            ): null}
+          {uploadRg && Error ? (
+            <chakra.span color={"red"} fontSize={"9px"}>
+              Documento Ja Anexado
+            </chakra.span>
+          ) : null}
         </FormControl>
       </SimpleGrid>
 
@@ -489,7 +495,11 @@ export default function SolicitacaoForm({
                 <Icon ml={1} color="black" cursor="pointer" boxSize={3} />
               </Tooltip>
             </FormLabel>
-            <Input type="text" onChange={(e) => setVoucher(e.target.value)}  value={Voucher}/>
+            <Input
+              type="text"
+              onChange={(e) => setVoucher(e.target.value)}
+              value={Voucher}
+            />
           </Box>
         )}
 

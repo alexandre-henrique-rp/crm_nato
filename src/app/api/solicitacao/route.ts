@@ -7,12 +7,13 @@ export async function POST(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const sms = searchParams.get("sms");
+    const vendedor = searchParams.get("vendedor");
     const body = await request.json();
     const session = await getServerSession(auth);
     if (!session) {
       return new Response("Unauthorized2", { status: 401 });
     }
-    const Msg = `Ola *${body.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido de ${session.user.name} estamos entrando em contato referente ao seu novo empreendimento.\nPrecisamos fazer o seu certificado digital para que você possa assinar o contrato e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
+    const Msg = `Ola *${body.nome}*, tudo bem?!\n\nSomos a *Rede Brasil RP*, e à pedido de ${session.user.hierarquia === "ADM" ? vendedor : session.user.name} estamos entrando em contato referente ao seu novo empreendimento.\nPrecisamos fazer o seu certificado digital para que você possa assinar o contrato e assim prosseguir para a próxima etapa.\n\nPara mais informações, responda essa mensagem, ou aguarde segundo contato.`;
 
 
     if (sms == "true") {
@@ -71,6 +72,6 @@ const SendWhatsapp = async (number: string, message: string) => {
     return await response.json();
   } catch (error) {
     console.log("error send sms", error);
-    throw error;
+    // throw error;
   }
 }

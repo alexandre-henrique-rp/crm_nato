@@ -5,16 +5,21 @@ import { useEffect, useState } from "react";
 
 interface SelectProps {
   idcorretor: any;
-  setCorretor: number | null;
+  setCorretor?: number | null;
+  Vendedor?: string | any;
 }
 
-export const SelectCorretor = ({ idcorretor }: SelectProps) => {
+export const SelectCorretor = ({
+  idcorretor,
+  setCorretor,
+  Vendedor,
+}: SelectProps) => {
   const [Data, setData] = useState([]);
   const [id, setId] = useState(0);
 
   useEffect(() => {
-    if (idcorretor) {
-      setId(idcorretor);
+    if (setCorretor) {
+      setId(setCorretor);
     }
     (async () => {
       const resq = await fetch(`/api/usuario/getall`);
@@ -27,8 +32,13 @@ export const SelectCorretor = ({ idcorretor }: SelectProps) => {
     <>
       <Select
         onChange={(e) => {
-          idcorretor(Number(e.target.value))
-          setId(Number(e.target.value))
+          idcorretor(Number(e.target.value));
+          setId(Number(e.target.value));
+          Vendedor(
+            Data.filter((item: any) => item.id === Number(e.target.value)).map(
+              (item: any) => item.nome
+            )[0]
+          );
         }}
         placeholder="Selecione um corretor"
         value={id}

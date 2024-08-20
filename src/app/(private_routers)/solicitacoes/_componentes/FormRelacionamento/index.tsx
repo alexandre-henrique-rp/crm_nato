@@ -122,13 +122,16 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       setLoad(true);
       data.map(async (item: any, index: number) => {
 
-        const response = await fetch(`/api/solicitacao?sms=${Sms}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(item),
-        });
+        const response = await fetch(
+          `/api/solicitacao?sms=${Sms}&vendedor=${SetValue.vendedorName}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(item),
+          }
+        );
         if (response.ok) {
           toast({
             title: "Sucesso",
