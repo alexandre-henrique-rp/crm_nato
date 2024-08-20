@@ -116,7 +116,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       // console.log(SetData);
     }
   }, [Name, SetData]);
-  console.log(SetData);
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
@@ -202,12 +201,9 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     setWhatsAppMaskdois(masked);
   };
 
-  const CnhMask = (e: any) => {
-    const valor = e.target.value;
-    const valorLinpo = unMask(valor);
-    const masked = mask(valorLinpo, ["99999999999"]);
-    setCnh(masked);
-  };
+  console.log(CorretorId);
+  console.log(Corretor);
+  console.log(input);
 
   return (
     <Flex
@@ -286,86 +282,86 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               />
             </GridItem>
           </SimpleGrid>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
-              <GridItem>
-                <FormLabel fontSize="sm" fontWeight="md">
-                  Relacionamento
-                </FormLabel>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
+            <GridItem>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Relacionamento
+              </FormLabel>
 
-                <Link
-                  href={`/solicitacoes/${RelacionamentoID}`}
-                  color="teal.600"
-                  fontWeight="bold"
-                >
-                  {Relacionamento}
-                </Link>
-              </GridItem>
+              <Link
+                href={`/solicitacoes/${RelacionamentoID}`}
+                color="teal.600"
+                fontWeight="bold"
+              >
+                {Relacionamento}
+              </Link>
+            </GridItem>
 
-              <GridItem>
-                <FormLabel fontSize="sm" fontWeight="md">
-                  Telefone Celular
-                </FormLabel>
-                <Input
-                  disabled
-                  type="text"
-                  variant="flushed"
-                  onChange={MascaraZap}
-                  value={WhatsAppMask}
-                />
-              </GridItem>
+            <GridItem>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Telefone Celular
+              </FormLabel>
+              <Input
+                disabled
+                type="text"
+                variant="flushed"
+                onChange={MascaraZap}
+                value={WhatsAppMask}
+              />
+            </GridItem>
 
-              <GridItem>
-                <FormLabel fontSize="sm" fontWeight="md">
-                  Telefone 2
-                </FormLabel>
-                <Input
-                  type="text"
-                  variant="flushed"
-                  onChange={MascaraZap2}
-                  value={WhatsAppMaskdois}
-                />
-              </GridItem>
-            </SimpleGrid>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
-              <GridItem>
-                <FormLabel fontSize="sm" fontWeight="md">
-                  Email
-                </FormLabel>
-                <Input
-                  variant="flushed"
-                  type="email"
-                  value={Email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </GridItem>
+            <GridItem>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Telefone 2
+              </FormLabel>
+              <Input
+                type="text"
+                variant="flushed"
+                onChange={MascaraZap2}
+                value={WhatsAppMaskdois}
+              />
+            </GridItem>
+          </SimpleGrid>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
+            <GridItem>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Email
+              </FormLabel>
+              <Input
+                variant="flushed"
+                type="email"
+                value={Email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </GridItem>
 
-              <GridItem>
-                <FormLabel fontSize="sm" fontWeight="md">
-                  Construtora
-                </FormLabel>
-                <Input
-                  value={Construtora}
-                  onChange={(e) => setConstrutora(e.target.value)}
-                  type="text"
-                  variant="flushed"
-                  disabled
-                />
-              </GridItem>
+            <GridItem>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Construtora
+              </FormLabel>
+              <Input
+                value={Construtora}
+                onChange={(e) => setConstrutora(e.target.value)}
+                type="text"
+                variant="flushed"
+                disabled
+              />
+            </GridItem>
 
-              <GridItem>
-                <FormLabel fontSize="sm" fontWeight="md">
-                  Empreendimento
-                </FormLabel>
-                <Input
-                  value={Empreendimento}
-                  onChange={(e) => setEmpreendimento(e.target.value)}
-                  type="text"
-                  variant="flushed"
-                  disabled
-                />
-              </GridItem>
-            </SimpleGrid>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
+            <GridItem>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Empreendimento
+              </FormLabel>
+              <Input
+                value={Empreendimento}
+                onChange={(e) => setEmpreendimento(e.target.value)}
+                type="text"
+                variant="flushed"
+                disabled
+              />
+            </GridItem>
+          </SimpleGrid>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
             {input !== "USER" && (
               <GridItem>
                 <FormLabel fontSize="sm" fontWeight="md">
@@ -389,8 +385,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 </Text>
               </GridItem>
             )}
-            </SimpleGrid>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
+          </SimpleGrid>
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
             {input !== "USER" && (
               <GridItem>
                 <FormLabel fontSize="sm" fontWeight="md">

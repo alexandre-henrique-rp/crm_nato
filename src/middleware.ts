@@ -6,7 +6,7 @@ export default function middleware(req: NextRequest) {
     const cookiesAll = req.cookies.getAll();
     const filtro = cookiesAll.filter((cookie) => cookie.name.includes("next-auth.session-token"));
     const session = filtro[0]?.value;
-    
+
 
     const { pathname } = req.nextUrl;
 
@@ -14,9 +14,27 @@ export default function middleware(req: NextRequest) {
         APP_ROUTES,
         req
     );
+    console.log(pathname);
+    console.log(pathname === "/");
+
+    if (pathname === "/") {
+        if (!session) {
+            return NextResponse.redirect(new URL("/login", req.url));
+        }
+
+        return NextResponse.next();
+    }
 
     if (pathname === "/home") {
         return NextResponse.redirect(new URL("/", req.url));
+    }
+
+    if (isPrivateRoute) {
+        if (!session) {
+            return NextResponse.redirect(new URL("/login", req.url));
+        }
+
+        return NextResponse.next();
     }
 
     if (!session) {
