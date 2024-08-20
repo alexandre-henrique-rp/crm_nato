@@ -122,7 +122,7 @@ export default function SolicitacaoForm({
             isClosable: true,
           });
           setLoad(false);
-          // router.push("/home");
+          router.push("/home");
         } else {
            toast({
              title: "Erro",
