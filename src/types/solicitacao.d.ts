@@ -7,7 +7,7 @@ declare module solictacao {
    * @param {string} email
    * @param {Date | string | any} dt_solicitacao
    * @param {object} corretor { id: number, nome: string }
-   * @param {number} construtora
+   * @param {object} construtora { id: number, fantasia: string }
    * @param {string} telefone
    * @param {Date | string | any} dt_nascimento
    * @param {boolean} ass_doc
@@ -15,8 +15,9 @@ declare module solictacao {
    * @param {number} id_fcw
    * @param {object} fcweb { id: number, andamento: string, dt_agenda: Date | string, hr_agenda: Date | string, valorcd: string, estatos_pgto: string }
    * @param {string} obs
+   * @param {object} Financeira { id: number, fantasia: string }
    * @param {string} alert
-   * @param {number} empreedimento
+   * @param {number} empreedimento { id: number, fantasia: string }
    * @param {string} cnh
    * @param {boolean} ativo
    * @param {string} uploadCnh
@@ -40,11 +41,11 @@ declare module solictacao {
     };
     construtora: {
       id: number;
-      razaosocial: string;
+      fantasia: string;
     };
     Financeira: {
       id: number;
-      razaosocial: string;
+      fantasia: string;
     };
     telefone: string;
     dt_nascimento: Date | string | any;

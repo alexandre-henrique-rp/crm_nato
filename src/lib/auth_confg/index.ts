@@ -26,16 +26,12 @@ export const auth: NextAuthOptions = {
           });
 
           const retorno = await res.json();
-          console.log("🚀 ~ authorize ~ retorno:", retorno)
           
           const { token, user } = retorno;
 
           const {
             id,
-            username,
             nome,
-            email,
-            cpf,
             construtora,
             telefone,
             empreendimento,
@@ -49,9 +45,6 @@ export const auth: NextAuthOptions = {
             jwt: token,
             id: id,
             name: nome,
-            username: username,
-            email: email,
-            cpf: cpf,
             construtora: construtora,
             telefone: telefone,
             empreendimento: empreendimento,
@@ -60,8 +53,9 @@ export const auth: NextAuthOptions = {
             reset_password: reset_password,
             Financeira: Financeira 
           };
+          console.log(response);
 
-          if (!token || !id || !username) {
+          if (!token || !id || !nome) {
             throw new Error("Usuário e senha incorreto");
             return null;
           }
@@ -102,16 +96,13 @@ export const auth: NextAuthOptions = {
       const dateExpirationInSeconds = actualDateInSeconds + tokenExpirationInSeconds;
 
       if (isSignIn) {
-        if (!user?.jwt || !user?.id || !user?.name || !user?.email) {
+        if (!user?.jwt || !user?.id || !user?.name) {
           return null;
         }
 
         token.jwt = user.jwt;
         token.id = user.id;
         token.name = user.name;
-        token.username = user.username;
-        token.email = user.email;
-        token.cpf = user.cpf;
         token.construtora = user.construtora;
         token.telefone = user.telefone;
         token.empreendimento = user.empreendimento;
@@ -140,7 +131,6 @@ export const auth: NextAuthOptions = {
         !token?.jwt ||
         !token?.id ||
         !token?.name ||
-        !token?.email ||
         !token?.expiration
       ) {
         return null;
@@ -148,10 +138,7 @@ export const auth: NextAuthOptions = {
 
       session.user = {
         id: token.id as number,
-        username: token.username as string,
         name: token.name as string,
-        email: token.email as string,
-        cpf: token.cpf as string,
         construtora: token.construtora as any[],
         telefone: token.telefone as string,
         empreendimento: token.empreendimento as any[],

@@ -34,7 +34,6 @@ export const SelectComponent = ({
         if (tag === "empreendimento") {
           const req = await fetch("/api/empreendimento/getall");
           const res = await req.json();
-
           setData(res);
         } else if (tag === "construtora") {
           const req = await fetch("/api/construtora/getall");
@@ -51,27 +50,6 @@ export const SelectComponent = ({
         }
       })();
     }
-    // else {
-    //   (async () => {
-    //     if (tag === "empreendimento") {
-    //       const req = await fetch("/api/empreendimento/getall");
-    //       const res = await req.json();
-    //       setData(res);
-    //     } else if (tag === "construtora") {
-    //       const req = await fetch("/api/construtora/getall");
-    //       const res = await req.json();
-    //       setData(res);
-    //     } else if (tag === "corretor") {
-    //       const req = await fetch("/api/usuario/getall");
-    //       const res = await req.json();
-    //       setData(res);
-    //     } else if (tag === "Financeira") {
-    //       const req = await fetch("/api/financeira/getall");
-    //       const res = await req.json();
-    //       setData(res);
-    //     }
-    //   })();
-    // }
   }, [Data.length, SetValue, onValue]);
 
   return (
@@ -89,7 +67,10 @@ export const SelectComponent = ({
           Data.map((item: any) => {
             return (
               <option key={item.id} value={item.id}>
-                {!item.nome ? item.razaosocial : item.nome}
+                {/* {!item.nome ? item.razaosocial : item.nome} */}
+                {tag === "empreendimento" && item.nome}
+                {tag === "construtora" && item.fantasia}
+                {tag === "Financeira" && item.fantasia}
               </option>
             );
           })}

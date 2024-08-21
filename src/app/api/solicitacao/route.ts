@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     // }
 
     const user = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/solicitacao`,
+      `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/solicitacao?sms=${sms}`,
       {
         method: "POST",
         headers: {
