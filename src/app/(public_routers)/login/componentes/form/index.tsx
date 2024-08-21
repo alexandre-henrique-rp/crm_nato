@@ -6,7 +6,9 @@ import {
   FormControl,
   FormLabel,
   Button,
-  useToast
+  useToast,
+  Flex,
+  CircularProgress
 } from "@chakra-ui/react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -15,21 +17,19 @@ import { useState } from "react";
 export const FormLogin = () => {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
   const toast = useToast();
   const router = useRouter();
 
   const handlesubmit = async () => {
+    setLoading(true);
     const res: any = await signIn("credentials", {
       email: username,
       password: password,
       redirect: false
     });   
-    console.log(res); 
-    console.log(res.status);
-    console.log(res.status === 200);
-    console.log(res.status !== 200);
-
     if (res.status !== 200) {
+        setLoading(false);
         toast({
           title: "Erro!",
           description: "Email ou senha inválidos",
@@ -37,10 +37,16 @@ export const FormLogin = () => {
           duration: 5000,
         });     
     } else {
+      setLoading(false);
       router.replace("/");
     }
   };
 
+  if (loading) {
+    return (<Flex w={"100%"} h={"100%"} justifyContent={"center"} alignItems={"center"}> 
+<CircularProgress size='10rem' p={10} isIndeterminate color='green.300' />
+    </Flex>);
+  }
   return (
     <>
       <FormControl>
