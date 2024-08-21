@@ -89,7 +89,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setRgFile64(SetData.uploadRg);
       setEmail(SetData.email);
       setConstrutoraId(SetData.construtora && SetData.construtora.id);
-      setConstrutora(SetData.construtora && SetData.construtora.razaosocial);
+      setConstrutora(SetData.construtora && SetData.construtora.fantasia);
       setEmpreendimento(SetData.empreedimento && SetData.empreedimento.nome);
       setEmpreendimentoId(SetData.empreedimento && SetData.empreedimento.id);
       const date = new Date(SetData.dt_nascimento);

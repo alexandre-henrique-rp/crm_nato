@@ -46,32 +46,10 @@ export default function PerfilHome() {
           </Box>
           <Box w={{ base: "100%", md: "40%" }}>
             <TextHome SetName="NOME" SetValue={user.name} />
-            <TextHome SetName="EMAIL" SetValue={user.email} />
             <TextHome SetName="TELEFONE" SetValue={user.telefone} />
-            <TextHome SetName="CPF" SetValue={user.cpf} />
           </Box>
           <Box w={{ base: "100%", md: "40%" }}>
             <TextHome SetName="CARGO" SetValue={user.cargo} />
-            {/* {user.empreendimento.length > 1 ? (
-              <>
-                <Text textColor="#00713D" fontWeight="bold">
-                  EMPREENDIMENTO
-                </Text>
-                <SelectComponent
-                  SetValue={user.empreendimento}
-                  onValue={SetIdEmpreedimento}
-                  hierarquia={session?.user.hierarquia}
-                  tag={''}
-                />
-              </>
-            ) : (
-              user.empreendimento.length === 1 && (
-                <TextHome
-                  SetName="EMPREENDIMENTO"
-                  SetValue={user.empreendimento[0].nome}
-                />
-              )
-            )} */}
 
             {user.construtora.length > 1 ? (
               <>
@@ -81,7 +59,7 @@ export default function PerfilHome() {
                 <SelectComponent
                   SetValue={user.construtora.map((item) => ({
                     id: item.id,
-                    nome: item.razaosocial,
+                    nome: item.fantasia,
                   }))}
                   onValue={SetIdConstrutora}
                   hierarquia={session?.user.hierarquia}
@@ -93,7 +71,7 @@ export default function PerfilHome() {
               user.construtora.length === 1 && (
                 <TextHome
                   SetName="CONSTRUTORA"
-                  SetValue={user.construtora[0].razaosocial}
+                  SetValue={user.construtora[0].fantasia}
                 />
               )
             )}
