@@ -7,6 +7,7 @@ import { FilterRoute } from "./home/componentes/filter/filtro_route";
 
 export default async function HomePage() {
   const session = await getServerSession(auth);
+  
   const reqest = await fetch(
     `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/solicitacao`,
     {
@@ -18,6 +19,7 @@ export default async function HomePage() {
     }
   );
   const res = await reqest.json();
+  
 
   return (
     <Flex

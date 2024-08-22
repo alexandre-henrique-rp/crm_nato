@@ -37,7 +37,6 @@ export const FormLogin = () => {
           duration: 5000,
         });     
     } else {
-      setLoading(false);
       router.replace("/");
     }
   };

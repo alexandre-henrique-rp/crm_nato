@@ -39,9 +39,43 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
         setDataFinanceira(data);
       })();
     } else {
-      setDataEmpreendimento(user?.empreendimento);
-      setDataConstrutora(user?.construtora);
-      setDataFinanceira(user?.Financeira);
+      if (user){
+        if (user.construtora.length > 0) {
+          setDataConstrutora(user?.construtora);
+        }
+
+        if (user.construtora.length === 0 && user?.hierarquia === "CONST") {
+           (async () => {
+             const resq = await fetch(`/api/construtora/getall`);
+             const data = await resq.json();
+             setDataConstrutora(data);
+           })();
+        }
+        
+        if (user.empreendimento.length > 0) {
+          setDataEmpreendimento(user?.empreendimento);
+        }
+
+        if (user.empreendimento.length === 0 && user?.hierarquia === "CONST") {
+          (async () => {
+            const resq = await fetch(`/api/empreendimento/getall`);
+            const data = await resq.json();
+            setDataEmpreendimento(data);
+          })();
+        }
+
+        if (user.Financeira.length > 0) {
+          setDataFinanceira(user?.Financeira);
+        }
+
+        if (user.Financeira.length === 0 && user?.hierarquia === "CONST") {
+           (async () => {
+             const resq = await fetch(`/api/financeira/getall`);
+             const data = await resq.json();
+             setDataFinanceira(data);
+           })();
+        }
+      }
     }
   }, [user]);
 

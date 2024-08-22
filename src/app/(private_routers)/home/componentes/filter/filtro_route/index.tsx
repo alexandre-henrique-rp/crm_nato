@@ -5,6 +5,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Tabela } from "../../tabela";
 
+
 interface FiltroRouteProps {
   DataRequest: any;
 }
@@ -19,7 +20,6 @@ export const FilterRoute = ({ DataRequest }: FiltroRouteProps) => {
   };
 
   useEffect(() => {
-    console.log(Data);
     const Filter = DataRequest.filter((item: solictacao.SolicitacaoGetType) => {
       const matchNome = Data.nome
         ? item.nome.toLowerCase().includes(Data.nome.toLowerCase())
@@ -57,7 +57,7 @@ export const FilterRoute = ({ DataRequest }: FiltroRouteProps) => {
         <FiltroComponent onData={HandleFilter} />
       </Box>
       <Flex justifyContent="center" alignItems="center">
-        <Tabela ClientData={DadosClientes} />
+        {DataRequest.length > 0 && <Tabela ClientData={DadosClientes} />}
       </Flex>
     </>
   );
