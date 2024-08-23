@@ -19,6 +19,7 @@ export default async function HomePage() {
     }
   );
   const res = await reqest.json();
+
   
 
   return (

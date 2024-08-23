@@ -30,7 +30,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }
   }
   return (
-    <Box overflowY={"auto"} h={"100vh"} w={"100vw"}>
+    <Box overflowY={"auto"} h={"100dvh"} w={"100vw"}>
       <BotaoJuncao />
       {children}
       <FooterComponent />
