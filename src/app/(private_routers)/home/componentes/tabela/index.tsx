@@ -65,33 +65,29 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
       const statusPg = item.fcweb && item.fcweb.estatos_pgto;
       const colors = item.ativo ? "transparent" : "red.400";
 
-     const DownTimeInDays = () => {
-       // Verifica se item e item.dt_solicitacao existem
-       if (!item || !item.dt_solicitacao) return null;
+    //  const DownTimeInDays = () => {
+    //    // Verifica se item e item.dt_solicitacao existem
+    //    if (!item || !item.dt_solicitacao) return null;
 
-       // Converte dt_solicitacao para o tempo em milissegundos
-       const dt_solicitacao = new Date(item.dt_solicitacao).getTime();
-       console.log("🚀 ~ DownTimeInDays ~ dt_solicitacao:", dt_solicitacao)
-       if (item.fcweb?.dt_aprovacao){
-         console.log(
-           "🚀 ~ DownTimeInDays ~ dt_solicitacao:",
-           new Date(item.fcweb.dt_aprovacao).getTime()
-         );
-       }
+    //    // Converte dt_solicitacao para o tempo em milissegundos
+    //    const dt_solicitacao = new Date(item.dt_solicitacao).getTime();
+  
+    //    if (item.fcweb?.dt_aprovacao){
+    //    }
 
-       // Verifica se item.fcweb.dt_aprovacao existe
-       const dt_aprovacao = item.fcweb?.dt_aprovacao
-         ? new Date(item.fcweb.dt_aprovacao).getTime()
-         : Date.now(); // Se não existir, usa a data atual
+    //    // Verifica se item.fcweb.dt_aprovacao existe
+    //    const dt_aprovacao = item.fcweb?.dt_aprovacao
+    //      ? new Date(item.fcweb.dt_aprovacao).getTime()
+    //      : Date.now(); // Se não existir, usa a data atual
 
-       // Calcula a diferença em milissegundos
-       const diffInMs = dt_aprovacao - dt_solicitacao;
+    //    // Calcula a diferença em milissegundos
+    //    const diffInMs = dt_aprovacao - dt_solicitacao;
 
-       // Converte a diferença para dias
-       const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    //    // Converte a diferença para dias
+    //    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
-       return diffInDays;
-     };
+    //    return diffInDays;
+    //  };
 
      console.log(item);
       return (
