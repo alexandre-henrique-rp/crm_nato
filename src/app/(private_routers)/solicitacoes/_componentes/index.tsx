@@ -95,7 +95,7 @@ export default function SolicitacaoForm({
         construtora: Number(ConstrutoraID),
         empreedimento: Number(empreendimento),
         dt_nascimento: DataNascimento,
-        relacionamento: cpfdois ? [cpfdois] : [],
+        relacionamento: cpfdois && relacionamento === "sim" ? [cpfdois] : [],
         rela_quest: relacionamento === "sim" ? true : false,
         voucher: Voucher,
         financeiro: Number(FinanceiraID),
@@ -385,7 +385,7 @@ export default function SolicitacaoForm({
               tag="construtora"
               SetValue={user.construtora.map((item: any) => ({
                 id: item.id,
-                nome: item.razaosocial,
+                nome: item.fantasia,
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
               DefaultValue={Number(ConstrutoraID)}

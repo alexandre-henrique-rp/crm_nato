@@ -11,7 +11,7 @@ import {
   Button,
   Divider,
   Flex,
-  FormControl,
+  chakra,
   FormLabel,
   Input,
   SimpleGrid,
@@ -27,6 +27,7 @@ import { FormEventHandler, useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 import VerificadorFileComponent from "@/app/componentes/file";
+import { FaRegCopy } from "react-icons/fa";
 
 interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
@@ -48,6 +49,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [RgFile64, setRgFile64] = useState<string>("");
   const [Email, setEmail] = useState<string>("");
   const [LinkDoc, setLinkDoc] = useState<string>("");
+  const [LinkDocMask, setLinkDocMask] = useState<string>("");
   const [IdFcweb, setsetIdFcweb] = useState<number | null>(null);
   const [Construtora, setConstrutora] = useState<string>("");
   const [ConstrutoraId, setConstrutoraId] = useState<number>(0);
@@ -60,6 +62,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [DataAprovacao, setDataAprovacao] = useState<string>("");
   const [RelacionamentoID, setRelacionamentoID] = useState<number[]>([]);
   const [AssDoc, setAssDoc] = useState<string>("");
+  const [AssDocMask, setAssDocMask] = useState<string>("");
   const [Corretor, setCorretor] = useState<string>("");
   const [CorretorId, setCorretorId] = useState<number>(0);
   const [ClientId, setClientId] = useState<number>(0);
@@ -98,6 +101,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setDataNascimento(formattedDate);
       setRelacionamento(SetData.relacionamento.map((item: any) => item.cpf));
       setRelacionamentoID(SetData.relacionamento.map((item: any) => item.id));
+      console.log(!!SetData.uploadCnh);
       // setAssDoc();
       setCorretor(SetData.corretor && SetData.corretor.nome);
       setCorretorId(SetData.corretor && SetData.corretor.id);
@@ -111,9 +115,18 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
           : ""
       );
       setAssDoc(SetData.ass_doc);
+      const Docmask =
+        SetData.ass_doc && SetData.ass_doc.length > 45
+          ? SetData.ass_doc.slice(0, 45) + "........"
+          : SetData.ass_doc;
+      setLinkDocMask(Docmask);
       setLinkDoc(SetData.link_doc);
+      const AssDocmask =
+        SetData.link_doc && SetData.link_doc.length > 45
+          ? SetData.link_doc.slice(0, 45) + "........"
+          : SetData.link_doc;
+      setAssDocMask(AssDocmask);
       setVoucher(SetData.fcweb?.vouchersoluti);
-      // console.log(SetData);
     }
   }, [Name, SetData]);
 
@@ -199,6 +212,28 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     const masked = mask(valorLinpo, ["(99) 9999-9999", "(99) 9 9999-9999"]);
     setWhatsappdois(valorLinpo);
     setWhatsAppMaskdois(masked);
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(AssDoc);
+    toast({
+      title: "Copiado",
+      description: "Link copiado para a area de transferência",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+
+  const handleCopy2 = () => {
+    navigator.clipboard.writeText(LinkDoc);
+    toast({
+      title: "Copiado",
+      description: "Link copiado para a area de transferência",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
   };
 
   return (
@@ -388,12 +423,19 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   LINK FICHA
                 </FormLabel>
-                <Input
-                  value={LinkDoc}
-                  onChange={(e) => setLinkDoc(e.target.value)}
-                  type="text"
-                  variant="flushed"
-                />
+                <Flex gap={3}>
+                  <Input
+                    value={AssDocMask}
+                    onChange={(e) => setLinkDoc(e.target.value)}
+                    type="text"
+                    variant="flushed"
+                  />
+                  <Button
+                    size="sm"
+                    onClick={handleCopy2}
+                    leftIcon={<FaRegCopy />}
+                  />
+                </Flex>
               </GridItem>
             )}
             {input !== "USER" && (
@@ -401,12 +443,19 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   LINK CONTRATO
                 </FormLabel>
-                <Input
-                  value={AssDoc}
-                  onChange={(e) => setAssDoc(e.target.value)}
-                  type="text"
-                  variant="flushed"
-                />
+                <Flex gap={3}>
+                  <Input
+                    value={LinkDocMask}
+                    onChange={(e) => setAssDoc(e.target.value)}
+                    type="text"
+                    variant="flushed"
+                  />
+                  <Button
+                    size="sm"
+                    onClick={handleCopy}
+                    leftIcon={<FaRegCopy />}
+                  />
+                </Flex>
               </GridItem>
             )}
           </SimpleGrid>
@@ -416,6 +465,11 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 CNH
               </FormLabel>
               <VerificadorFileComponent onFileConverted={setCnhFile} />
+              {!!SetData.uploadCnh && (
+                <chakra.p color="green" fontSize={"10px"}>
+                  cnh adicionada
+                </chakra.p>
+              )}
             </GridItem>
 
             <GridItem>
@@ -423,6 +477,11 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 RG
               </FormLabel>
               <VerificadorFileComponent onFileConverted={setRgFile} />
+              {!!SetData.uploadRg && (
+                <chakra.p color="green" fontSize={"10px"}>
+                  Rg adicionada
+                </chakra.p>
+              )}
             </GridItem>
 
             {input !== "USER" && (

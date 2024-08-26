@@ -67,10 +67,7 @@ export const SelectComponent = ({
           Data.map((item: any) => {
             return (
               <option key={item.id} value={item.id}>
-                {/* {!item.nome ? item.razaosocial : item.nome} */}
-                {tag === "empreendimento" && item.nome}
-                {tag === "construtora" && item.fantasia}
-                {tag === "Financeira" && item.fantasia}
+                {!item.nome ? item.fantasia : item.nome}
               </option>
             );
           })}

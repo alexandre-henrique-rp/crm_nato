@@ -64,6 +64,36 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
       const andamento = item.fcweb && item.fcweb.andamento;
       const statusPg = item.fcweb && item.fcweb.estatos_pgto;
       const colors = item.ativo ? "transparent" : "red.400";
+
+     const DownTimeInDays = () => {
+       // Verifica se item e item.dt_solicitacao existem
+       if (!item || !item.dt_solicitacao) return null;
+
+       // Converte dt_solicitacao para o tempo em milissegundos
+       const dt_solicitacao = new Date(item.dt_solicitacao).getTime();
+       console.log("🚀 ~ DownTimeInDays ~ dt_solicitacao:", dt_solicitacao)
+       if (item.fcweb?.dt_aprovacao){
+         console.log(
+           "🚀 ~ DownTimeInDays ~ dt_solicitacao:",
+           new Date(item.fcweb.dt_aprovacao).getTime()
+         );
+       }
+
+       // Verifica se item.fcweb.dt_aprovacao existe
+       const dt_aprovacao = item.fcweb?.dt_aprovacao
+         ? new Date(item.fcweb.dt_aprovacao).getTime()
+         : Date.now(); // Se não existir, usa a data atual
+
+       // Calcula a diferença em milissegundos
+       const diffInMs = dt_aprovacao - dt_solicitacao;
+
+       // Converte a diferença para dias
+       const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+       return diffInDays;
+     };
+
+     console.log(item);
       return (
         <Tr key={item.id} bg={colors}>
           <Td>
@@ -77,9 +107,11 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
             <Box>{TypeValid}</Box>
           </Td>
           <Td>{andamento}</Td>
-          {/* <Td>{item.ass_doc && item.ass_doc}</Td> */}
-          {user?.hierarquia !== "USER" && <Td>{statusPg}</Td>}
-          {user?.hierarquia !== "USER" && <Td>{item.fcweb?.valorcd}</Td>}
+          {/* <Td>{item.ativo && DownTimeInDays()}</Td> */}
+          {user?.hierarquia === "ADM" && <Td>{statusPg}</Td>}
+          {user?.hierarquia === "CONT" && <Td>{statusPg}</Td>}
+          {user?.hierarquia === "ADM" && <Td>{item.fcweb?.valorcd}</Td>}
+          {user?.hierarquia === "CONT" && <Td>{item.fcweb?.valorcd}</Td>}
         </Tr>
       );
     });
