@@ -29,6 +29,7 @@ declare module solictacao {
    *
    */
   interface SolicitacaoGetType {
+    filter(): unknown;
     nato_user: any;
     id: number;
     nome: string;
@@ -43,7 +44,7 @@ declare module solictacao {
       id: number;
       fantasia: string;
     };
-    Financeira: {
+    financeiro: {
       id: number;
       fantasia: string;
     };
@@ -71,6 +72,7 @@ declare module solictacao {
     };
     cnh: string;
     ativo: boolean;
+    distrato: boolean;
     uploadCnh: string;
     relacionamento: string[];
     createdAt: Date | string | any;

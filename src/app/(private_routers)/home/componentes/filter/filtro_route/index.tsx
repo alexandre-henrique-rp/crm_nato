@@ -5,59 +5,85 @@ import { Box, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Tabela } from "../../tabela";
 
-
+// Defina tipos para evitar o uso de "any"
 interface FiltroRouteProps {
-  DataRequest: any;
+  DataRequest: solictacao.SolicitacaoGetType[];
+}
+
+interface FiltroData {
+  id?: number;
+  nome?: string;
+  andamento?: string;
+  empreendimento?: string;
+  construtora?: string;
+  financeira?: string;
 }
 
 export const FilterRoute = ({ DataRequest }: FiltroRouteProps) => {
-  const [Data, setData] = useState<any>([]);
-  const [DadosClientes, setDadosClientes] = useState<any>([]);
+  const [data, setData] = useState<FiltroData>({});
+  const [dadosClientes, setDadosClientes] = useState<
+    solictacao.SolicitacaoGetType[]
+  >([]);
 
-  const HandleFilter = (e: any) => {
-    console.log(e);
-      setData(e);
+  const handleFilter = (filtroData: FiltroData) => {
+    setData(filtroData);
+  };
+
+  const filterData = (item: solictacao.SolicitacaoGetType) => {
+  
+    const { nome, andamento, empreendimento, construtora, financeira, id } = data;
+
+    const matchId = !id || item.id === Number(id);
+
+    const matchNome =
+      !nome || item.nome.toLowerCase().includes(nome.toLowerCase());
+
+    const matchAndamento =
+      andamento !== "VAZIO"
+        ? andamento
+          ? item.fcweb?.andamento
+              .toLowerCase()
+              .includes(andamento.toLowerCase())
+          : true
+        : !item.fcweb;
+
+    const matchEmpreendimento =
+      !empreendimento ||
+      item.empreedimento?.id === Number(empreendimento);
+
+    const matchConstrutora =
+      !construtora ||
+      item.construtora?.id === Number(construtora);
+
+    const matchFinanceiro =
+      !financeira ||
+      item.financeiro?.id === Number(financeira);
+  
+
+    return (
+      matchId &&
+      matchNome &&
+      matchAndamento &&
+      matchEmpreendimento &&
+      matchConstrutora &&
+      matchFinanceiro
+    );
   };
 
   useEffect(() => {
-    const Filter = DataRequest.filter((item: solictacao.SolicitacaoGetType) => {
-      const matchNome = Data.nome
-        ? item.nome.toLowerCase().includes(Data.nome.toLowerCase())
-        : true;
+    const filteredData = DataRequest.filter(filterData);
+    setDadosClientes(filteredData);
+  }, [data, DataRequest]);
 
-      const matchAndamento =
-        Data.andamento === "VAZIO"
-          ? !item.fcweb
-          : Data.andamento
-          ? item.fcweb?.andamento
-              .toLowerCase()
-              .includes(Data.andamento.toLowerCase())
-          : true;
 
-      const matchEmpreendimento = Data.empreendimento
-        ? item.empreedimento?.id === Data.empreendimento
-        : true;
-
-      const matchConstrutora = Data.construtora
-        ? item.construtora?.id == Data.construtora
-        : true;
-      const matchFinanceiro = Data.financeiro
-        ? item.Financeira?.id == Data.financeiro
-        : true;
-
-      return matchNome && matchAndamento && matchEmpreendimento && matchConstrutora && matchFinanceiro;
-    });
-
-    setDadosClientes(Filter);
-  }, [Data]);
 
   return (
     <>
-      <Box w={"100%"} py={5}>
-        <FiltroComponent onData={HandleFilter} />
+      <Box w="100%" py={5}>
+        <FiltroComponent onData={handleFilter} />
       </Box>
       <Flex justifyContent="center" alignItems="center">
-        {DataRequest.length > 0 && <Tabela ClientData={DadosClientes} />}
+        {DataRequest.length > 0 && <Tabela ClientData={dadosClientes} />}
       </Flex>
     </>
   );

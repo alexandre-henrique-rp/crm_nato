@@ -34,6 +34,8 @@ interface relacionamentoProps {
   ishidden: any;
 }
 
+
+
 export default function SolicitacaoForm({
   onvalue,
   ishidden,
@@ -46,13 +48,14 @@ export default function SolicitacaoForm({
   const [empreendimento, setempreendimento] = useState(0);
   const [CorretorId, setCorretorId] = useState(0);
   const [email, setemail] = useState("");
-  const [uploadCnh, setCnhFile] = useState<string>("");
-  const [uploadRg, setRgFile] = useState<string>("");
+  const [uploadCnh, setCnhFile] = useState<any>();
+  const [UploadCnhUrl, setUploadCnhUrl] = useState<string>("");
+  const [uploadRg, setRgFile] = useState<any>();
+  const [UploadRgUrl, setUploadRgUrl] = useState<string>("");
   const [relacionamento, setrelacionamento] = useState<string>("nao");
   const [Voucher, setVoucher] = useState<string>("");
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
-  const [Error, setError] = useState<boolean>(false);
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
   const [checkEmailString, setcheckEmailString] = useState<string>("");
@@ -83,23 +86,24 @@ export default function SolicitacaoForm({
         isClosable: true,
       });
     } else {
-      const data: solictacao.SolicitacaoPost = {
-        nome: nome.toUpperCase(),
-        telefone: tel.replace(/\s+/g, ""),
-        cpf: cpf.replace(/\s+/g, ""),
-        telefone2: teldois.replace(/\s+/g, ""),
-        email: email.replace(/\s+/g, "").toLowerCase(),
-        uploadRg: uploadRg,
-        uploadCnh: uploadCnh,
-        corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
-        construtora: Number(ConstrutoraID),
-        empreedimento: Number(empreendimento),
-        dt_nascimento: DataNascimento,
-        relacionamento: cpfdois && relacionamento === "sim" ? [cpfdois] : [],
-        rela_quest: relacionamento === "sim" ? true : false,
-        voucher: Voucher,
-        financeiro: Number(FinanceiraID),
-      };
+      
+        const data: solictacao.SolicitacaoPost = {
+          nome: nome.toUpperCase(),
+          telefone: tel.replace(/\s+/g, ""),
+          cpf: cpf.replace(/\s+/g, ""),
+          telefone2: teldois.replace(/\s+/g, ""),
+          email: email.replace(/\s+/g, "").toLowerCase(),
+          uploadRg: UploadRgUrl,
+          uploadCnh: UploadCnhUrl,
+          corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
+          construtora: Number(ConstrutoraID),
+          empreedimento: Number(empreendimento),
+          dt_nascimento: DataNascimento,
+          relacionamento: cpfdois && relacionamento === "sim" ? [cpfdois] : [],
+          rela_quest: relacionamento === "sim" ? true : false,
+          voucher: Voucher,
+          financeiro: Number(FinanceiraID),
+        };
 
       try {
         setLoad(true);
@@ -132,7 +136,6 @@ export default function SolicitacaoForm({
              isClosable: true,
            });
            setLoad(false);
-           setError(true);
         }
       } catch (error) {
         toast({
@@ -143,7 +146,7 @@ export default function SolicitacaoForm({
           isClosable: true,
         });
         setLoad(false);
-        setError(true);
+        
       }
     }
   };
@@ -200,7 +203,6 @@ export default function SolicitacaoForm({
         });
       } else {
         ishidden("sim");
-
         const data: solictacao.SolicitacaoPost = {
           nome: nome.toUpperCase(),
           cpf: cpf.replace(/\s+/g, ""),
@@ -208,8 +210,8 @@ export default function SolicitacaoForm({
           telefone2: teldois,
           dt_nascimento: DataNascimento,
           email: email.replace(/\s+/g, "").toLowerCase(),
-          uploadRg: uploadRg,
-          uploadCnh: uploadCnh,
+          uploadRg: UploadRgUrl,
+          uploadCnh: UploadCnhUrl,
           corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
           relacionamento: [cpfdois],
           cpfdois: cpfdois,
@@ -262,6 +264,13 @@ export default function SolicitacaoForm({
     SetTeldois(unMask(masked));
     setWhatappdois(masked);
   };
+
+   const handleFileUploadedRg = (result: any) => {
+     setUploadRgUrl(result.url);
+   };
+   const handleFileUploadedCnh = (result: any) => {
+     setUploadCnhUrl(result.url);
+   };
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
@@ -431,22 +440,12 @@ export default function SolicitacaoForm({
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} mt={6}>
         <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
-          <VerificadorFileComponent onFileConverted={setCnhFile} />
-          {uploadCnh && Error ? (
-            <chakra.span color={"red"} fontSize={"9px"}>
-              Documento Ja Anexado
-            </chakra.span>
-          ) : null}
+          <VerificadorFileComponent onFileUploaded={handleFileUploadedCnh} />
         </FormControl>
 
         <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
-          <VerificadorFileComponent onFileConverted={setRgFile} />
-          {uploadRg && Error ? (
-            <chakra.span color={"red"} fontSize={"9px"}>
-              Documento Ja Anexado
-            </chakra.span>
-          ) : null}
+          <VerificadorFileComponent onFileUploaded={handleFileUploadedRg} />
         </FormControl>
       </SimpleGrid>
 

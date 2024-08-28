@@ -39,6 +39,8 @@ interface RelacionadoProps {
   SetValue: solictacao.SolicitacaoPost;
 }
 
+
+
 export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [nome, setnome] = useState("");
   const [cpf, setCpf] = useState("");
@@ -46,8 +48,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [FinanceiraID, setFinanceiraID] = useState(0);
   const [empreendimento, setempreendimento] = useState(0);
   const [email, setemail] = useState("");
-  const [uploadCnh, setCnhFile] = useState<string>("");
-  const [uploadRg, setRgFile] = useState<string>("");
   const [CorretorId, setCorretorId] = useState<number>(0);
   const [tel, setTel] = useState<string>("");
   const [teldois, SetTeldois] = useState<string>("");
@@ -58,7 +58,8 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [checkEmail, setcheckEmail] = useState<string>("");
   const [codigo, setcodigo] = useState<boolean>(false);
   const [Sms, setSms] = useState<boolean>(true);
-  const [Error, setError] = useState<boolean>(false);
+   const [UploadRgUrl, setUploadRgUrl] = useState<string>("");
+  const [UploadCnhUrl, setUploadCnhUrl] = useState<string>("");
   const toast = useToast();
   const router = useRouter();
   const { data: session } = useSession();
@@ -106,8 +107,8 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         cpf: SetValue.cpfdois ? SetValue.cpfdois : cpf,
         telefone2: teldois,
         email: email,
-        uploadRg: uploadRg,
-        uploadCnh: uploadCnh,
+        uploadRg: UploadRgUrl,
+        uploadCnh: UploadCnhUrl,
         corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
         construtora: Number(ConstrutoraID),
         empreedimento: Number(empreendimento),
@@ -154,7 +155,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             isClosable: true,
           });
           setLoad(false);
-          setError(true);
           return null;
         }
       });
@@ -190,6 +190,14 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   if (Load) {
     return <Loading />;
   }
+
+   const handleFileUploadedRg = (result: any) => {
+     setUploadRgUrl(result.url);
+   };
+   const handleFileUploadedCnh = (result: any) => {
+     setUploadCnhUrl(result.url);
+   };
+
 
   const WhatsAppMask = (e: any) => {
     const valor = e.target.value;
@@ -357,21 +365,11 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} mt={6}>
         <FormControl as={GridItem}>
           <FormLabel>CNH</FormLabel>
-          <VerificadorFileComponent onFileConverted={setCnhFile} />
-          {uploadCnh && Error ? (
-            <chakra.span color={"red"} fontSize={"9px"}>
-              Documento Ja Anexado
-            </chakra.span>
-          ) : null}
+          <VerificadorFileComponent onFileUploaded={handleFileUploadedCnh} />
         </FormControl>
         <FormControl as={GridItem}>
           <FormLabel>RG</FormLabel>
-          <VerificadorFileComponent onFileConverted={setRgFile} />
-          {uploadRg && Error ? (
-            <chakra.span color={"red"} fontSize={"9px"}>
-              Documento Ja Anexado
-            </chakra.span>
-          ) : null}
+          <VerificadorFileComponent onFileUploaded={handleFileUploadedRg} />
         </FormControl>
         {user?.hierarquia === "ADM" && (
           <Box>

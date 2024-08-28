@@ -1,11 +1,14 @@
 "use client";
 
+import BtmDistrato from "@/app/componentes/btm_distra";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 import {
+  Box,
   Button,
   ButtonGroup,
   Flex,
   IconButton,
+  Image,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -26,9 +29,11 @@ import { IoIosArrowBack } from "react-icons/io";
 interface BotoesFunctionProps {
   id: number;
   onUpdate: any;
+  distrato: boolean;
+  exclude?: boolean;
 }
 
-export const BotoesFunction = ({ id, onUpdate }: BotoesFunctionProps) => {
+export const BotoesFunction = ({ id, onUpdate, distrato, exclude }: BotoesFunctionProps) => {
   const route = useRouter();
   const { data: session } = useSession();
   const toast = useToast();
@@ -74,15 +79,18 @@ export const BotoesFunction = ({ id, onUpdate }: BotoesFunctionProps) => {
           aria-label="Up"
           onClick={() => route.push(`/solicitacoes/${id}`)}
         />
-        <IconButton
-          colorScheme="red"
-          variant="outline"
-          icon={<BsFillTrashFill />}
-          aria-label="Delete"
-          onClick={onOpen}
-        />
+        <Box hidden={exclude}>
+          <IconButton
+            colorScheme="red"
+            variant="outline"
+            icon={<BsFillTrashFill />}
+            aria-label="Delete"
+            onClick={onOpen}
+            _hover={{ bg: "red.300", color: "white", border: "none" }}
+          />
+        </Box>
+        <BtmDistrato id={id} distrato={distrato} exclude={exclude} />
       </ButtonGroup>
-
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
 

@@ -13,6 +13,13 @@ export async function POST(request: Request) {
       return new Response("Unauthorized2", { status: 401 });
     }
 
+    const expiration = session ? session.expiration : 0;
+    const expired = Date.now() > expiration * 1000;
+
+    if (expired) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/solicitacao?sms=${sms}`,
       {
@@ -21,7 +28,7 @@ export async function POST(request: Request) {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${session?.token}`
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({...body, user: session?.user.id})
       }
     );
 

@@ -7,6 +7,17 @@ export async function GET(request: Request) {
     const session = await getServerSession(auth)
     const token  = session?.token;
 
+    if (!session) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
+    const expiration = session ? session.expiration : 0;
+    const expired = Date.now() > expiration * 1000;
+
+    if (expired) {
+      return NextResponse.redirect(new URL('/login', request.url))
+    }
+
     const user = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/solicitacao`,
       {

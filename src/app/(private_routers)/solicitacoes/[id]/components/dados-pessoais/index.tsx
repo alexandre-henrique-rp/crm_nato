@@ -26,11 +26,34 @@ import { useRouter } from "next/navigation";
 import { FormEventHandler, useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
-import VerificadorFileComponent from "@/app/componentes/file";
+
 import { FaRegCopy } from "react-icons/fa";
+import VerificadorFileComponent from "@/app/componentes/file";
 
 interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
+}
+
+async function SendFile(Arquivo: any) {
+  
+  const formData = new FormData();
+  formData.append("file", Arquivo);
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/file`,
+    {
+      method: "POST",
+      body: formData,
+    }
+  );
+      if (!response.ok) {
+        console.log(response.statusText);
+        throw new Error(`Error sending file: ${response.statusText}`);
+      }
+      console.log(response);
+
+  const data = await response.json();
+  console.log("🚀 ~ SendFile ~ data:", data)
+  return data;
 }
 
 export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
@@ -43,9 +66,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [WhatsAppMask, setWhatsAppMask] = useState<string>("");
   const [Whatsappdois, setWhatsappdois] = useState<string>("");
   const [WhatsAppMaskdois, setWhatsAppMaskdois] = useState<string>("");
-  const [CnhFile, setCnhFile] = useState<string>("");
   const [CnhFile64, setCnhFile64] = useState<string>("");
-  const [RgFile, setRgFile] = useState<string>("");
   const [RgFile64, setRgFile64] = useState<string>("");
   const [Email, setEmail] = useState<string>("");
   const [LinkDoc, setLinkDoc] = useState<string>("");
@@ -56,11 +77,14 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [EmpreendimentoId, setEmpreendimentoId] = useState<number>(0);
   const [Empreendimento, setEmpreendimento] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
-  const [Relacionamento, setRelacionamento] = useState<string[]>([]);
+  const [Relacionamento, setRelacionamento] = useState<string>("");
+  const [RelacionamentoUpdate, setRelacionamentoUpdate] = useState<string>("");
+  const [RelacionamentoUpdateMask, setRelacionamentoUpdateMask] =
+    useState<string>("");
   const [CreatedDate, setCreatedDate] = useState<string>("");
   const [Voucher, setVoucher] = useState<string>("");
   const [DataAprovacao, setDataAprovacao] = useState<string>("");
-  const [RelacionamentoID, setRelacionamentoID] = useState<number[]>([]);
+  const [RelacionamentoID, setRelacionamentoID] = useState<number>(0);
   const [AssDoc, setAssDoc] = useState<string>("");
   const [AssDocMask, setAssDocMask] = useState<string>("");
   const [Corretor, setCorretor] = useState<string>("");
@@ -76,7 +100,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     if (SetData && Name == "") {
       setClientId(SetData.id);
       setName(SetData.nome);
-      setCpf(SetData.cpf);
+      setCpf(SetData.cpf && mask(SetData.cpf, ["999.999.999-99"]));
       setCnh(SetData.cnh);
       setWhatsapp(SetData.telefone);
       setWhatsAppMask(
@@ -88,8 +112,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         SetData.telefone2 &&
           mask(SetData.telefone2, ["(99) 9999-9999", "(99) 9 9999-9999"])
       );
-      setCnhFile64(SetData.uploadCnh);
-      setRgFile64(SetData.uploadRg);
       setEmail(SetData.email);
       setConstrutoraId(SetData.construtora && SetData.construtora.id);
       setConstrutora(SetData.construtora && SetData.construtora.fantasia);
@@ -99,9 +121,15 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       const formattedDate =
         SetData.dt_nascimento && date.toISOString().split("T")[0];
       setDataNascimento(formattedDate);
-      setRelacionamento(SetData.relacionamento.map((item: any) => item.cpf));
-      setRelacionamentoID(SetData.relacionamento.map((item: any) => item.id));
-      console.log(!!SetData.uploadCnh);
+      setRelacionamento(
+        SetData.relacionamento.map(
+          (item: any) => item.cpf && mask(item.cpf, ["999.999.999-99"])
+        )[0]
+      );
+      setRelacionamentoID(
+        SetData.relacionamento.map((item: any) => item.id)[0]
+      );
+      console.log(SetData.relacionamento.length);
       // setAssDoc();
       setCorretor(SetData.corretor && SetData.corretor.nome);
       setCorretorId(SetData.corretor && SetData.corretor.id);
@@ -127,8 +155,11 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
           : SetData.link_doc;
       setAssDocMask(AssDocmask);
       setVoucher(SetData.fcweb?.vouchersoluti);
+      setCnhFile64(SetData.uploadCnh);
+      setRgFile64(SetData.uploadRg);
     }
   }, [Name, SetData]);
+
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
@@ -144,12 +175,13 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             telefone: Whatsapp,
             telefone2: Whatsappdois,
             email: Email,
-            uploadRg: !RgFile ? RgFile64 : RgFile,
-            uploadCnh: !CnhFile ? CnhFile64 : CnhFile,
             construtora: ConstrutoraId,
-
             empreedimento: EmpreendimentoId,
-            relacionamento: Relacionamento,
+            relacionamento: !Relacionamento
+              ? RelacionamentoUpdate
+              : Relacionamento,
+            uploadRg: RgFile64 ? RgFile64 : SetData.uploadRg,
+            uploadCnh: CnhFile64 ? CnhFile64 : SetData.uploadCnh,
             corretor: CorretorId,
             dt_nascimento: DataNascimento,
             ass_doc: AssDoc,
@@ -164,11 +196,13 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             telefone: Whatsapp,
             telefone2: Whatsappdois,
             email: Email,
-            uploadRg: !RgFile ? RgFile64 : RgFile,
-            uploadCnh: !CnhFile ? CnhFile64 : CnhFile,
             construtora: ConstrutoraId,
             empreedimento: EmpreendimentoId,
-            relacionamento: Relacionamento,
+            relacionamento: !Relacionamento
+              ? RelacionamentoUpdate
+              : Relacionamento,
+            uploadRg: RgFile64 ? RgFile64 : SetData.uploadRg,
+            uploadCnh: CnhFile64 ? CnhFile64 : SetData.uploadCnh,
             corretor: CorretorId,
             dt_nascimento: DataNascimento,
             ass_doc: AssDoc,
@@ -185,6 +219,17 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         body: JSON.stringify(data),
       });
       const response = await rest.json();
+
+      if (!rest.ok) {
+        toast({
+          title: "Erro ao Atualizar o Registro",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+        setLooad(false);
+        return;
+      }
 
       toast({
         title: "Cliente Atualizado Com Sucesso",
@@ -214,6 +259,14 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     setWhatsAppMaskdois(masked);
   };
 
+  const MaskCpfRelacionamento = (e: any) => {
+    const valor = e.target.value;
+    const valorLinpo = unMask(valor);
+    const masked = mask(valorLinpo, ["999.999.999-99"]);
+    setRelacionamentoUpdate(unMask(masked));
+    setRelacionamentoUpdateMask(masked);
+  };
+
   const handleCopy = () => {
     navigator.clipboard.writeText(AssDoc);
     toast({
@@ -224,6 +277,17 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       isClosable: true,
     });
   };
+
+  const HandleDownloads = async (url: string) => {
+    window.open(url, "_blank");
+  };
+
+   const handleFileUploadedRg = (result: any) => {
+      setRgFile64(result.url);
+   };
+   const handleFileUploadedCnh = (result: any) => {
+      setCnhFile64(result.url);
+   };
 
   const handleCopy2 = () => {
     navigator.clipboard.writeText(LinkDoc);
@@ -280,7 +344,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 CPF
               </FormLabel>
               <Input
-                disabled
                 type="text"
                 value={Cpf}
                 variant="flushed"
@@ -292,7 +355,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 Nome Completo
               </FormLabel>
               <Input
-                disabled
                 type="text"
                 value={Name}
                 variant="flushed"
@@ -305,7 +367,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 Data de Nascimento
               </FormLabel>
               <Input
-                disabled
                 variant="flushed"
                 value={DataNascimento}
                 onChange={(e) => setDataNascimento(e.target.value)}
@@ -318,14 +379,27 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               <FormLabel fontSize="sm" fontWeight="md">
                 Relacionamento
               </FormLabel>
+              <chakra.p fontSize="xs" color={"red.500"}>
+                * cpf do relacionamento
+              </chakra.p>
 
-              <Link
-                href={`/solicitacoes/${RelacionamentoID}`}
-                color="teal.600"
-                fontWeight="bold"
-              >
-                {Relacionamento}
-              </Link>
+              {SetData.relacionamento.length === 0 && (
+                <Input
+                  type="text"
+                  variant="flushed"
+                  onChange={MaskCpfRelacionamento}
+                  value={RelacionamentoUpdateMask}
+                />
+              )}
+              {SetData.relacionamento.length > 0 && (
+                <Link
+                  href={`/solicitacoes/${RelacionamentoID}`}
+                  color="teal.600"
+                  fontWeight="bold"
+                >
+                  {Relacionamento}
+                </Link>
+              )}
             </GridItem>
 
             <GridItem>
@@ -333,7 +407,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 Telefone Celular
               </FormLabel>
               <Input
-                disabled
                 type="text"
                 variant="flushed"
                 onChange={MascaraZap}
@@ -375,7 +448,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 onChange={(e) => setConstrutora(e.target.value)}
                 type="text"
                 variant="flushed"
-                disabled
               />
             </GridItem>
 
@@ -388,7 +460,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 onChange={(e) => setEmpreendimento(e.target.value)}
                 type="text"
                 variant="flushed"
-                disabled
               />
             </GridItem>
           </SimpleGrid>
@@ -464,24 +535,16 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               <FormLabel fontSize="sm" fontWeight="md">
                 CNH
               </FormLabel>
-              <VerificadorFileComponent onFileConverted={setCnhFile} />
-              {!!SetData.uploadCnh && (
-                <chakra.p color="green" fontSize={"10px"}>
-                  cnh adicionada
-                </chakra.p>
-              )}
+              <VerificadorFileComponent
+                onFileUploaded={handleFileUploadedCnh}
+              />
             </GridItem>
 
             <GridItem>
               <FormLabel fontSize="sm" fontWeight="md">
                 RG
               </FormLabel>
-              <VerificadorFileComponent onFileConverted={setRgFile} />
-              {!!SetData.uploadRg && (
-                <chakra.p color="green" fontSize={"10px"}>
-                  Rg adicionada
-                </chakra.p>
-              )}
+              <VerificadorFileComponent onFileUploaded={handleFileUploadedRg} />
             </GridItem>
 
             {input !== "USER" && (
@@ -489,7 +552,18 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   Downloads da CNH
                 </FormLabel>
-                <DownloadDoc base64={CnhFile64} name="Cnh" clienteName={Name} />
+                {CnhFile64 && (
+                  <Button
+                    bg={"#00713D"}
+                    textColor={"white"}
+                    variant="solid"
+                    _hover={{ bg: "#00631B" }}
+                    size="lg"
+                    onClick={() => HandleDownloads(CnhFile64)}
+                  >
+                    Download
+                  </Button>
+                )}
               </GridItem>
             )}
             {input !== "USER" && (
@@ -497,7 +571,18 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   Download do RG
                 </FormLabel>
-                <DownloadDoc base64={RgFile64} name="Rg" clienteName={Name} />
+                {RgFile64 && (
+                  <Button
+                    bg={"#00713D"}
+                    textColor={"white"}
+                    variant="solid"
+                    _hover={{ bg: "#00631B" }}
+                    size="lg"
+                    onClick={() => HandleDownloads(RgFile64)}
+                  >
+                    Download
+                  </Button>
+                )}
               </GridItem>
             )}
           </SimpleGrid>
