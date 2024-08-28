@@ -33,11 +33,9 @@ export default function FormRegister() {
   const [EmpreendimentoData, setEmpreendimentoData] = useState<any>([]);
   const [Construtora, setConstrutora] = useState<number | undefined>();
   const [ConstrutoraData, setConstrutoraData] = useState<any>([]);
-  const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Cargo, setCargo] = useState("");
   const [Hierarquia, setHierarquia] = useState("");
   const [Email, setEmail] = useState("");
-  const [Load, setLoad] = useState<boolean>(false);
   const [checkEmail, setcheckEmail] = useState<string>("");
   const [codigo, setcodigo] = useState<boolean>(false);
   const [Nome, setNome] = useState("");
@@ -58,8 +56,6 @@ export default function FormRegister() {
       !username ||
       !Email ||
       !Nome ||
-      // !Empreendimento ||
-      // !Construtora ||
       !password ||
       !confirmPassword
     ) {
@@ -90,7 +86,7 @@ export default function FormRegister() {
         construtora: Construtora ? [Number(Construtora)] : [],
         empreendimento: Empreendimento ? [Number(Empreendimento)] : [],
         hierarquia: Hierarquia,
-        obs: "",
+        Financeira: [],
       };
       try {
         const response = await fetch("/api/register", {
@@ -100,7 +96,6 @@ export default function FormRegister() {
           },
           body: JSON.stringify(data),
         });
-        const dados = await response.json();
         toast({
           title: "Sucesso",
           description: "Cadastrado com sucesso",
@@ -121,16 +116,6 @@ export default function FormRegister() {
     }
   };
 
-  const VerificadorEmail = (e: any) => {
-    const value = e.target.value;
-    if ("NT-" + value === checkEmail) {
-      setcheckEmail("");
-      setcodigo(true);
-    } else {
-      setcheckEmail(value);
-      setcodigo(false);
-    }
-  };
 
   const GetConstrutora = (e: any) => {
     const value = e.target.value;
@@ -143,6 +128,18 @@ export default function FormRegister() {
     })();
     setConstrutora(Number(value));
   };
+
+  const GetFinanceira = (e: any) => {
+    const value = e.target.value;
+    (async () => {
+      const response = await fetch(
+        `/api/construtora/getall/filter/${Number(value)}`
+      );
+      const data = await response.json();
+      setConstrutoraData(data);
+    })();
+    setConstrutora(Number(value));
+  }
 
   return (
     <>
@@ -204,29 +201,10 @@ export default function FormRegister() {
               border="1px solid #b8b8b8cc"
               onChange={(e: any) => setEmail(e.target.value)}
             />
-            <InputRightElement width="8rem">
-              <CheckEmail onvalue={setcheckEmail} email={Email} nome={Nome} />
-            </InputRightElement>
           </InputGroup>
         </GridItem>
 
         <GridItem>
-          <FormLabel>Codigo email</FormLabel>
-          <InputGroup>
-            <InputLeftAddon>NT-</InputLeftAddon>
-            <Input type="text" onChange={VerificadorEmail} />
-          </InputGroup>
-        </GridItem>
-      </SimpleGrid>
-
-      <Box
-        mt={6}
-        display="flex"
-        flexDirection={{ base: "column", md: "row" }}
-        justifyContent="space-between"
-        w="full"
-      >
-        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
           <FormLabel>Construtora</FormLabel>
           <Select
             placeholder="Selecione uma construtora"
@@ -241,7 +219,16 @@ export default function FormRegister() {
                 </option>
               ))}
           </Select>
-        </Box>
+        </GridItem>
+      </SimpleGrid>
+
+      <Box
+        mt={6}
+        display="flex"
+        flexDirection={{ base: "column", md: "row" }}
+        justifyContent="space-between"
+        w="full"
+      >
         <Box w={{ base: "100%", md: "48%" }}>
           <FormLabel>Empreendimento</FormLabel>
           <Select
@@ -255,6 +242,22 @@ export default function FormRegister() {
               EmpreendimentoData.map((empreedimento: any) => (
                 <option key={empreedimento.id} value={empreedimento.id}>
                   {empreedimento.nome}
+                </option>
+              ))}
+          </Select>
+        </Box>
+        <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
+          <FormLabel>Financeira</FormLabel>
+          <Select
+            placeholder="Selecione uma construtora"
+            border="1px solid #b8b8b8cc"
+            onChange={GetConstrutora}
+            value={Construtora}
+          >
+            {ConstrutoraData.length > 0 &&
+              ConstrutoraData.map((construtora: any) => (
+                <option key={construtora.id} value={construtora.id}>
+                  {construtora.razaosocial}
                 </option>
               ))}
           </Select>
@@ -291,7 +294,7 @@ export default function FormRegister() {
           >
             <option value="USER">Vendedor</option>
             <option value="CONST">Construtora</option>
-            <option value="CONST">Financeira</option>
+            <option value="CCA">CCA</option>
             <option value="ADM">Administrador</option>
           </Select>
         </Box>

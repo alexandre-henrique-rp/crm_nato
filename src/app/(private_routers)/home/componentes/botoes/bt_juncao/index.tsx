@@ -43,9 +43,14 @@ export default function BotaoJuncao() {
           <>
             <BotaoHome />
             <BotaoNovaSolicita />
-            {but === "ADM" && <BotaoPainelAdm />}
-            <BotaoPainelFinanceiro />
-
+            {but === "ADM" && (
+              <>
+                <BotaoPainelAdm />
+                <BotaoPainelFinanceiro />
+              </>
+            )}
+            {but === "CCA" && <BotaoPainelFinanceiro />}
+            {but === "CONT" && <BotaoPainelFinanceiro />}
           </>
         ) : (
           <Menu>
@@ -59,6 +64,16 @@ export default function BotaoJuncao() {
               {but === "ADM" && (
                 <MenuItem>
                   <BotaoPainelAdm />
+                </MenuItem>
+              )}
+              {but === "CCA" && (
+                <MenuItem>
+                  <BotaoPainelFinanceiro />
+                </MenuItem>
+              )}
+              {but === "CONT" && (
+                <MenuItem>
+                  <BotaoPainelFinanceiro />
                 </MenuItem>
               )}
               <MenuItem>

@@ -16,6 +16,8 @@ export default async function HomePage() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${session?.token}`,
       },
+      next: { revalidate: 1 },
+      cache: "no-store",
     }
   );
   const res = await reqest.json();

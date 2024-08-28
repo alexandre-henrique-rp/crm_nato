@@ -129,7 +129,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setRelacionamentoID(
         SetData.relacionamento.map((item: any) => item.id)[0]
       );
-      console.log(SetData.relacionamento.length);
+      console.log(SetData.relacionamento);
       // setAssDoc();
       setCorretor(SetData.corretor && SetData.corretor.nome);
       setCorretorId(SetData.corretor && SetData.corretor.id);
@@ -175,14 +175,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             telefone: Whatsapp,
             telefone2: Whatsappdois,
             email: Email,
-            construtora: ConstrutoraId,
-            empreedimento: EmpreendimentoId,
-            relacionamento: !Relacionamento
-              ? RelacionamentoUpdate
-              : Relacionamento,
             uploadRg: RgFile64 ? RgFile64 : SetData.uploadRg,
             uploadCnh: CnhFile64 ? CnhFile64 : SetData.uploadCnh,
-            corretor: CorretorId,
             dt_nascimento: DataNascimento,
             ass_doc: AssDoc,
             link_doc: LinkDoc,
@@ -196,14 +190,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             telefone: Whatsapp,
             telefone2: Whatsappdois,
             email: Email,
-            construtora: ConstrutoraId,
-            empreedimento: EmpreendimentoId,
-            relacionamento: !Relacionamento
-              ? RelacionamentoUpdate
-              : Relacionamento,
             uploadRg: RgFile64 ? RgFile64 : SetData.uploadRg,
             uploadCnh: CnhFile64 ? CnhFile64 : SetData.uploadCnh,
-            corretor: CorretorId,
             dt_nascimento: DataNascimento,
             ass_doc: AssDoc,
             link_doc: LinkDoc,
@@ -218,8 +206,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         },
         body: JSON.stringify(data),
       });
-      const response = await rest.json();
-
       if (!rest.ok) {
         toast({
           title: "Erro ao Atualizar o Registro",
@@ -318,7 +304,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         mb={12} // Margin-bottom para espaçamento inferior
       >
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          <BotaoRetorno />
+          <BotaoRetorno rota="/" />
           <Box>
             <Text fontSize={{ base: "sm", md: "md" }}>
               Criado: {CreatedDate}
@@ -384,12 +370,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               </chakra.p>
 
               {SetData.relacionamento.length === 0 && (
-                <Input
-                  type="text"
-                  variant="flushed"
-                  onChange={MaskCpfRelacionamento}
-                  value={RelacionamentoUpdateMask}
-                />
+                <Text>Não tem relacionamento</Text>
               )}
               {SetData.relacionamento.length > 0 && (
                 <Link

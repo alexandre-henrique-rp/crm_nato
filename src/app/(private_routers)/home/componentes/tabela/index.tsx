@@ -87,7 +87,13 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
         </Td>
         <Td>{andamento}</Td>
         <Td>{item.ativo && downTimeInDays(item)}</Td>
-        {user?.hierarquia !== "USER" && (
+        {user?.hierarquia === "ADM" && (
+          <>
+            <Td>{statusPg}</Td>
+            <Td>{item.fcweb?.valorcd}</Td>
+          </>
+        )}
+        {user?.hierarquia === "CONT" && (
           <>
             <Td>{statusPg}</Td>
             <Td>{item.fcweb?.valorcd}</Td>
@@ -115,15 +121,25 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
               <Thead>
                 <Tr>
                   <Th>FUNÇÕES</Th>
-                  {user?.hierarquia === "ADM" && <Th>ID</Th>}
+                  <Th>ID</Th>
                   <Th>NOME</Th>
                   <Th>AGENDAMENTO</Th>
                   <Th>CERTIFICADO</Th>
                   <Th fontSize={"20px"}>
                     <ImClock />
                   </Th>
-                  {user?.hierarquia !== "USER" && <Th>STATUS PGMNT</Th>}
-                  {user?.hierarquia !== "USER" && <Th>VALOR</Th>}
+                  {user?.hierarquia === "CONT" && (
+                    <>
+                      <Th>STATUS PG</Th>
+                      <Th>VALOR</Th>
+                    </>
+                  )}
+                  {user?.hierarquia === "ADM" && (
+                    <>
+                      <Th>STATUS PG</Th>
+                      <Th>VALOR</Th>
+                    </>
+                  )}
                 </Tr>
               </Thead>
               <Tbody>{tabela}</Tbody>
