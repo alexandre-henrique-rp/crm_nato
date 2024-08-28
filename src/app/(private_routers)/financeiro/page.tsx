@@ -15,7 +15,7 @@ export default function PainelFinanceiro() {
         {/* botoes */}
         <Flex py={5} gap={5}>
           <Box zIndex={1} position="initial">
-            <BotaoRetorno />
+            <BotaoRetorno rota="/" />
           </Box>
           <Flex>
             <CreateAlertGeral />

@@ -43,7 +43,7 @@ export default function PainelAdministrativo() {
       >
         <Flex mb={8} justifyContent="center" alignItems="center">
           <Box zIndex={1} position="initial">
-            <BotaoRetorno />
+            <BotaoRetorno rota="/" />
           </Box>
           <Box ml={4}>
             <Text fontSize="32px" fontWeight="bold" color="#333333">
