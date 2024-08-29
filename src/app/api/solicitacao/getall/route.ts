@@ -25,7 +25,8 @@ export async function GET(request: Request) {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`
-        }
+        },
+        cache: "no-store",
       }
     );
 

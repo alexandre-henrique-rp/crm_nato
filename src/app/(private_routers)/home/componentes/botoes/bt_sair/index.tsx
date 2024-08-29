@@ -9,9 +9,9 @@ export default function BotaoSair() {
 
   const HandleSair = async (e: any) => {
     e.preventDefault();
-    signOut({ redirect: false });
+    router.push("/login");
     setTimeout(() => {
-      router.push("/login");
+      signOut({ redirect: false });
     }, 100)
   };
 

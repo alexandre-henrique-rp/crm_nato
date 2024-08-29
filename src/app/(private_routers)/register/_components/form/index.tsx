@@ -3,6 +3,8 @@
 import CheckEmail from "@/app/componentes/checkEmail";
 import CpfMask from "@/app/componentes/cpf_mask";
 import { ModalConsultaRegistro } from "@/app/componentes/modal_consulra_registro";
+import SelectMultFinanceiro from "@/app/componentes/select_mult_finaceiro";
+import SelectMultiEmpreendimento from "@/app/componentes/select_multi_empreendimento";
 import { SenhaComponent } from "@/app/componentes/Senha";
 import { Whatsapp } from "@/app/componentes/whatsapp";
 import {
@@ -29,15 +31,14 @@ export default function FormRegister() {
   const [tel, setTel] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [cpf, setCpf] = useState("");
-  const [Empreendimento, setEmpreendimento] = useState<number | undefined>();
+  const [Empreendimento, setEmpreendimento] = useState<any>([]);
   const [EmpreendimentoData, setEmpreendimentoData] = useState<any>([]);
   const [Construtora, setConstrutora] = useState<number | undefined>();
   const [ConstrutoraData, setConstrutoraData] = useState<any>([]);
+  const [Financeiro, setFinanceiro] = useState<any>([]);
   const [Cargo, setCargo] = useState("");
   const [Hierarquia, setHierarquia] = useState("");
   const [Email, setEmail] = useState("");
-  const [checkEmail, setcheckEmail] = useState<string>("");
-  const [codigo, setcodigo] = useState<boolean>(false);
   const [Nome, setNome] = useState("");
   const toast = useToast();
   const route = useRouter();
@@ -84,9 +85,9 @@ export default function FormRegister() {
         nome: Nome,
         cargo: Cargo,
         construtora: Construtora ? [Number(Construtora)] : [],
-        empreendimento: Empreendimento ? [Number(Empreendimento)] : [],
+        empreendimento: Empreendimento ? Empreendimento : [],
         hierarquia: Hierarquia,
-        Financeira: [],
+        Financeira: Financeiro,
       };
       try {
         const response = await fetch("/api/register", {
@@ -128,18 +129,6 @@ export default function FormRegister() {
     })();
     setConstrutora(Number(value));
   };
-
-  const GetFinanceira = (e: any) => {
-    const value = e.target.value;
-    (async () => {
-      const response = await fetch(
-        `/api/construtora/getall/filter/${Number(value)}`
-      );
-      const data = await response.json();
-      setConstrutoraData(data);
-    })();
-    setConstrutora(Number(value));
-  }
 
   return (
     <>
@@ -230,7 +219,12 @@ export default function FormRegister() {
         w="full"
       >
         <Box w={{ base: "100%", md: "48%" }}>
-          <FormLabel>Empreendimento</FormLabel>
+          <SelectMultiEmpreendimento
+            ConstrutoraId={Construtora}
+            EmpreendimentoDisabled={!Construtora}
+            EmpreendimentoValue={setEmpreendimento}
+          />
+          {/* <FormLabel>Empreendimento</FormLabel>
           <Select
             placeholder="Selecione uma construtora"
             border="1px solid #b8b8b8cc"
@@ -244,23 +238,13 @@ export default function FormRegister() {
                   {empreedimento.nome}
                 </option>
               ))}
-          </Select>
+          </Select> */}
         </Box>
         <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
-          <FormLabel>Financeira</FormLabel>
-          <Select
-            placeholder="Selecione uma construtora"
-            border="1px solid #b8b8b8cc"
-            onChange={GetConstrutora}
-            value={Construtora}
-          >
-            {ConstrutoraData.length > 0 &&
-              ConstrutoraData.map((construtora: any) => (
-                <option key={construtora.id} value={construtora.id}>
-                  {construtora.razaosocial}
-                </option>
-              ))}
-          </Select>
+          <SelectMultFinanceiro
+            FinanceDisabled={Empreendimento < 1}
+            FinanceiroValue={setFinanceiro}
+          />
         </Box>
       </Box>
 

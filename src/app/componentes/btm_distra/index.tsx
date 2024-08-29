@@ -13,6 +13,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { MouseEvent } from "react";
 import { BsFillTrashFill } from "react-icons/bs";
 import { IoIosArrowBack } from "react-icons/io";
@@ -26,10 +27,22 @@ interface BotoesFunctionProps {
 export default function BtmDistrato({ id, distrato, exclude }: BotoesFunctionProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const{ data: session } = useSession();
+  const User = session?.user;
   const HandleDelet = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     try {
+      const Get = await fetch(`/api/solicitacao/get/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const req = await Get.json();
+      console.log("🚀 ~ HandleDe ~ req:", req)
+      
       const res = await fetch(`/api/solicitacao/update/${id}`, {
         method: "PUT",
         headers: {
@@ -37,7 +50,21 @@ export default function BtmDistrato({ id, distrato, exclude }: BotoesFunctionPro
         },
         body: JSON.stringify({
           distrato: true,
-          
+          distrato_dt: new Date().toISOString(),
+          ...(req.logDelete !== null && {
+            logDelete: `${req.logDelete}\nO usuário: ${User?.name}, id: ${
+              User?.id
+            } Solicitou distrato para esse registro em: ${new Date().toLocaleDateString(
+              "pt-BR"
+            )} as ${new Date().toLocaleTimeString("pt-BR")}`,
+          }),
+          ...(req.logDelete === null && {
+            logDelete: `O usuário: ${User?.name}, id: ${
+              User?.id
+            } Solicitou distrato para esse registro em: ${new Date().toLocaleDateString(
+              "pt-BR"
+            )} as ${new Date().toLocaleTimeString("pt-BR")}`,
+          }),
         }),
       });
 

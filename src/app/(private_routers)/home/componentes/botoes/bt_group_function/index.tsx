@@ -102,6 +102,8 @@ export const BotoesFunction = ({ id, onUpdate, distrato, exclude }: BotoesFuncti
           </ModalBody>
 
           <ModalFooter>
+            <Flex gap={3}>
+
             <Button leftIcon={<IoIosArrowBack />} onClick={onClose} />
 
             <Button
@@ -111,6 +113,7 @@ export const BotoesFunction = ({ id, onUpdate, distrato, exclude }: BotoesFuncti
             >
               Confirmar Exclusão
             </Button>
+            </Flex>
           </ModalFooter>
         </ModalContent>
       </Modal>

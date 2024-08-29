@@ -5,11 +5,6 @@ import { Box, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Tabela } from "../../tabela";
 
-// Defina tipos para evitar o uso de "any"
-interface FiltroRouteProps {
-  DataRequest: solictacao.SolicitacaoGetType[];
-}
-
 interface FiltroData {
   id?: number;
   nome?: string;
@@ -19,11 +14,20 @@ interface FiltroData {
   financeira?: string;
 }
 
-export const FilterRoute = ({ DataRequest }: FiltroRouteProps) => {
+export const FilterRoute = () => {
   const [data, setData] = useState<FiltroData>({});
+  const [Dados, setDados] = useState<solictacao.SolicitacaoGetType[]>([]);
   const [dadosClientes, setDadosClientes] = useState<
     solictacao.SolicitacaoGetType[]
   >([]);
+
+  useEffect(() => {
+     (async () => {
+       const req = await fetch("/api/solicitacao/getall");
+       const data = await req.json();
+       setDados(data);
+     })();
+  }, []);
 
   const handleFilter = (filtroData: FiltroData) => {
     setData(filtroData);
@@ -71,9 +75,9 @@ export const FilterRoute = ({ DataRequest }: FiltroRouteProps) => {
   };
 
   useEffect(() => {
-    const filteredData = DataRequest.filter(filterData);
+    const filteredData = Dados.filter(filterData);
     setDadosClientes(filteredData);
-  }, [data, DataRequest]);
+  }, [data, Dados]);
 
 
 
@@ -83,7 +87,7 @@ export const FilterRoute = ({ DataRequest }: FiltroRouteProps) => {
         <FiltroComponent onData={handleFilter} />
       </Box>
       <Flex justifyContent="center" alignItems="center">
-        {DataRequest.length > 0 && <Tabela ClientData={dadosClientes} />}
+        {Dados.length > 0 && <Tabela ClientData={dadosClientes} />}
       </Flex>
     </>
   );

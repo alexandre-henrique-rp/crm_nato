@@ -6,23 +6,6 @@ import { auth } from "@/lib/auth_confg";
 import { FilterRoute } from "./home/componentes/filter/filtro_route";
 
 export default async function HomePage() {
-  const session = await getServerSession(auth);
-  
-  const reqest = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/solicitacao`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session?.token}`,
-      },
-      next: { revalidate: 1 },
-      cache: "no-store",
-    }
-  );
-  const res = await reqest.json();
-
-  
 
   return (
     <Flex
@@ -44,7 +27,7 @@ export default async function HomePage() {
           <PerfilHome />
         </Box>
         <Box>
-          <FilterRoute DataRequest={res} />
+          <FilterRoute />
         </Box>
       </Box>
     </Flex>
