@@ -59,10 +59,13 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
     const horaAgenda = item.fcweb?.hr_agenda?.split("T")[1].split(".")[0];
     const andamento = item.fcweb?.andamento;
     const statusPg = item.fcweb?.estatos_pgto;
-    console.log("🚀 ~ file: index.tsx:statusPg", item.distrato);
     const colors = !item.ativo
       ? "red.400"
       : item.distrato && user?.hierarquia === "ADM"
+      ? "gray.600"
+      : item.distrato && user?.hierarquia === "CONST"
+      ? "gray.600"
+      : item.distrato && user?.hierarquia === "GRT"
       ? "gray.600"
       : "transparent";
 
