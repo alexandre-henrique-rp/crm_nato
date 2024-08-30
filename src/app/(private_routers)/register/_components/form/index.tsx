@@ -31,6 +31,7 @@ export default function FormRegister() {
   const [tel, setTel] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [cpf, setCpf] = useState("");
+  const [cpfNask, setCpfNask] = useState("");
   const [Empreendimento, setEmpreendimento] = useState<any>([]);
   const [EmpreendimentoData, setEmpreendimentoData] = useState<any>([]);
   const [Construtora, setConstrutora] = useState<number | undefined>();
@@ -58,7 +59,8 @@ export default function FormRegister() {
       !Email ||
       !Nome ||
       !password ||
-      !confirmPassword
+      !confirmPassword ||
+      Financeiro.length === 0 
     ) {
       toast({
         title: "Erro",
@@ -89,6 +91,7 @@ export default function FormRegister() {
         hierarquia: Hierarquia,
         Financeira: Financeiro,
       };
+
       try {
         const response = await fetch("/api/register", {
           method: "POST",
@@ -97,14 +100,17 @@ export default function FormRegister() {
           },
           body: JSON.stringify(data),
         });
-        toast({
-          title: "Sucesso",
-          description: "Cadastrado com sucesso",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-        route.back();
+
+        if (!response.ok) {
+          toast({
+            title: "Sucesso",
+            description: "Cadastrado com sucesso",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+          route.back();
+        }
       } catch (error: any) {
         toast({
           title: "Erro ao cadastrar",
@@ -130,6 +136,14 @@ export default function FormRegister() {
     setConstrutora(Number(value));
   };
 
+  const MaskCpf = (e: any) => {
+   const value = e.target.value;
+   const limpo = unMask(value);
+   const masked = mask(limpo, ["999.999.999-99"]);
+   setCpfNask(masked);
+   setCpf(limpo);
+  };
+
   return (
     <>
       <SimpleGrid
@@ -148,11 +162,7 @@ export default function FormRegister() {
         </GridItem>
         <GridItem>
           <FormLabel>CPF</FormLabel>
-          <Input
-            type="text"
-            border="1px solid #b8b8b8cc"
-            onChange={(e: any) => setCpf(e.target.value)}
-          />
+          <Input type="text" border="1px solid #b8b8b8cc" onChange={MaskCpf} value={cpfNask} />
         </GridItem>
       </SimpleGrid>
 
@@ -224,21 +234,6 @@ export default function FormRegister() {
             EmpreendimentoDisabled={!Construtora}
             EmpreendimentoValue={setEmpreendimento}
           />
-          {/* <FormLabel>Empreendimento</FormLabel>
-          <Select
-            placeholder="Selecione uma construtora"
-            border="1px solid #b8b8b8cc"
-            isDisabled={!Construtora}
-            onChange={(e: any) => setEmpreendimento(e.target.value)}
-            value={Empreendimento}
-          >
-            {EmpreendimentoData.length > 0 &&
-              EmpreendimentoData.map((empreedimento: any) => (
-                <option key={empreedimento.id} value={empreedimento.id}>
-                  {empreedimento.nome}
-                </option>
-              ))}
-          </Select> */}
         </Box>
         <Box w={{ base: "100%", md: "48%" }} mb={{ base: 4, md: 0 }}>
           <SelectMultFinanceiro

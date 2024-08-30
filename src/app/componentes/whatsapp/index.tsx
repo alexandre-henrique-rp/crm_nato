@@ -23,6 +23,7 @@ export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
       } else {
         onValue(valor);
         setIsvalideTel(false);
+        
       }
       setTel(masked);
     }
