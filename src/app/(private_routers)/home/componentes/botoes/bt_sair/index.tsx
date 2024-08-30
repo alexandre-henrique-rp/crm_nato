@@ -9,7 +9,7 @@ export default function BotaoSair() {
 
   const HandleSair = async (e: any) => {
     e.preventDefault();
-    // signOut({ redirect: false });
+    signOut();
     // excluir os cookies
     const cookies = document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {

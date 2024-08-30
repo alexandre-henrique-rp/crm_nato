@@ -433,6 +433,16 @@ export default function SolicitacaoForm({
             />
           </Box>
         )}
+        {user?.hierarquia === "CONT" && (
+          <Box>
+            <FormLabel>Corretor</FormLabel>
+            <SelectCorretor
+              idcorretor={setCorretorId}
+              setCorretor={Number(CorretorId)}
+              Vendedor={setVendedorName}
+            />
+          </Box>
+        )}
         {user?.hierarquia === "GRT" && (
           <Box>
             <FormLabel>Corretor</FormLabel>
