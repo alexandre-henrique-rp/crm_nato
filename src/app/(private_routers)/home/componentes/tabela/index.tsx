@@ -30,10 +30,8 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
     if (ClientData.length > 0) {
       setDataNull(true);
     }
-      setData(ClientData);
+    setData(ClientData);
   }, [ClientData]);
-
-
 
   const update = async (id: number) => {
     const newData = data.filter((item) => item.id !== id);
@@ -53,14 +51,12 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
   };
 
   const tabela = data.map((item) => {
-    const dtAgenda = item.fcweb?.dt_agenda
-      ? new Intl.DateTimeFormat("pt-BR", { dateStyle: "short" }).format(
-          new Date(
-            new Date(item.fcweb.dt_agenda).getTime() +
-              (new Date().getTimezoneOffset() - 3 * 60) * 60000
-          )
-        )
-      : null;
+    const ano = item.fcweb?.dt_agenda?.split("-")[0];
+    const mes = item.fcweb?.dt_agenda?.split("-")[1];
+    const diaBruto = item.fcweb?.dt_agenda?.split("-")[2];
+    const dia = diaBruto?.split("T")[0];
+
+    const dtAgenda = item.fcweb?.dt_agenda ? `${dia}/${mes}/${ano}` : null;
 
     const horaAgenda = item.fcweb?.hr_agenda?.split("T")[1].split(".")[0];
     const andamento = item.fcweb?.andamento;
@@ -75,8 +71,12 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
       ? "gray.600"
       : "transparent";
 
-    const fontColor = colors === "red.400" ? "white" : colors === "gray.600" ? "white" : "black";
-
+    const fontColor =
+      colors === "red.400"
+        ? "white"
+        : colors === "gray.600"
+        ? "white"
+        : "black";
 
     return (
       <Tr key={item.id} bg={colors} color={fontColor}>
@@ -112,7 +112,7 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
       </Tr>
     );
   });
-  
+
   return (
     <>
       {user && (
