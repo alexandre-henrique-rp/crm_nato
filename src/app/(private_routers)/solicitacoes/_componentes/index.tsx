@@ -77,7 +77,7 @@ export default function SolicitacaoForm({
         duration: 3000,
         isClosable: true,
       });
-    } else if (!nome || !cpf || !email || !relacionamento) {
+    } else if (!nome || !cpf || !email || !tel) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos",
@@ -86,24 +86,23 @@ export default function SolicitacaoForm({
         isClosable: true,
       });
     } else {
-      
-        const data: solictacao.SolicitacaoPost = {
-          nome: nome.toUpperCase(),
-          telefone: tel.replace(/\s+/g, ""),
-          cpf: cpf.replace(/\s+/g, ""),
-          telefone2: teldois.replace(/\s+/g, ""),
-          email: email.replace(/\s+/g, "").toLowerCase(),
-          uploadRg: UploadRgUrl,
-          uploadCnh: UploadCnhUrl,
-          corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
-          construtora: Number(ConstrutoraID),
-          empreedimento: Number(empreendimento),
-          dt_nascimento: DataNascimento,
-          relacionamento: cpfdois && relacionamento === "sim" ? [cpfdois] : [],
-          rela_quest: relacionamento === "sim" ? true : false,
-          voucher: Voucher,
-          financeiro: Number(FinanceiraID),
-        };
+      const data: solictacao.SolicitacaoPost = {
+        nome: nome.toUpperCase(),
+        telefone: tel.replace(/\W+/g, ""),
+        cpf: cpf.replace(/\W+/g, ""),
+        telefone2: teldois.replace(/\W+/g, ""),
+        email: email.replace(/\s+/g, "").toLowerCase(),
+        uploadRg: UploadRgUrl,
+        uploadCnh: UploadCnhUrl,
+        corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
+        construtora: Number(ConstrutoraID),
+        empreedimento: Number(empreendimento),
+        dt_nascimento: DataNascimento,
+        relacionamento: cpfdois && relacionamento === "sim" ? [cpfdois] : [],
+        rela_quest: relacionamento === "sim" ? true : false,
+        voucher: Voucher,
+        financeiro: Number(FinanceiraID),
+      };
 
       try {
         setLoad(true);
@@ -128,14 +127,14 @@ export default function SolicitacaoForm({
           setLoad(false);
           router.push("/home");
         } else {
-           toast({
-             title: "Erro",
-             description: "Erro ao enviar solicitacao",
-             status: "error",
-             duration: 3000,
-             isClosable: true,
-           });
-           setLoad(false);
+          toast({
+            title: "Erro",
+            description: "Erro ao enviar solicitacao",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          setLoad(false);
         }
       } catch (error) {
         toast({
@@ -146,7 +145,6 @@ export default function SolicitacaoForm({
           isClosable: true,
         });
         setLoad(false);
-        
       }
     }
   };
@@ -205,8 +203,8 @@ export default function SolicitacaoForm({
         ishidden("sim");
         const data: solictacao.SolicitacaoPost = {
           nome: nome.toUpperCase(),
-          cpf: cpf.replace(/\s+/g, ""),
-          telefone: tel.replace(/\s+/g, ""),
+          cpf: cpf.replace(/\W+/g, ""),
+          telefone: tel.replace(/\W+/g, ""),
           telefone2: teldois,
           dt_nascimento: DataNascimento,
           email: email.replace(/\s+/g, "").toLowerCase(),
@@ -426,6 +424,16 @@ export default function SolicitacaoForm({
           </Box>
         )}
         {user?.hierarquia === "ADM" && (
+          <Box>
+            <FormLabel>Corretor</FormLabel>
+            <SelectCorretor
+              idcorretor={setCorretorId}
+              setCorretor={Number(CorretorId)}
+              Vendedor={setVendedorName}
+            />
+          </Box>
+        )}
+        {user?.hierarquia === "GRT" && (
           <Box>
             <FormLabel>Corretor</FormLabel>
             <SelectCorretor

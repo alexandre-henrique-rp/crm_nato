@@ -15,6 +15,7 @@ export default function middleware(req: NextRequest) {
         req
     );
 
+    console.log(pathname);
 
     if (pathname === "/") {
         if (!session) {

@@ -87,7 +87,7 @@ export const FilterRoute = () => {
         <FiltroComponent onData={handleFilter} />
       </Box>
       <Flex justifyContent="center" alignItems="center">
-        {Dados.length > 0 && <Tabela ClientData={dadosClientes} />}
+         <Tabela ClientData={dadosClientes} />
       </Flex>
     </>
   );

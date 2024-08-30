@@ -86,9 +86,9 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     } else {
       const dadossuperior: solictacao.SolicitacaoPost = {
         nome: SetValue.nome.toUpperCase(),
-        telefone: SetValue.telefone,
-        cpf: SetValue.cpf,
-        telefone2: SetValue.telefone2,
+        telefone: SetValue.telefone.replace(/\W+/g, ""),
+        cpf: SetValue.cpf.replace(/\W+/g, ""),
+        telefone2: SetValue.telefone2.replace(/\W+/g, ""),
         email: SetValue.email.replace(/\s+/g, "").toLowerCase(),
         uploadRg: SetValue.uploadRg,
         uploadCnh: SetValue.uploadCnh,
@@ -103,9 +103,11 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       };
       const dados: solictacao.SolicitacaoPost = {
         nome: nome.toUpperCase(),
-        telefone: tel,
-        cpf: SetValue.cpfdois ? SetValue.cpfdois : cpf,
-        telefone2: teldois,
+        telefone: tel.replace(/\W+/g, ""),
+        cpf: SetValue.cpfdois
+          ? SetValue.cpfdois.replace(/\W+/g, "")
+          : cpf.replace(/\W+/g, ""),
+        telefone2: teldois.replace(/\W+/g, ""),
         email: email,
         uploadRg: UploadRgUrl,
         uploadCnh: UploadCnhUrl,

@@ -22,12 +22,18 @@ interface TabelaProps {
 
 export const Tabela = ({ ClientData }: TabelaProps) => {
   const [data, setData] = useState<solictacao.SolicitacaoGetType[]>([]);
+  const [DataNull, setDataNull] = useState(false);
   const { data: session } = useSession();
   const user = session?.user;
 
   useEffect(() => {
+    if (ClientData.length > 0) {
+      setDataNull(true);
+    }
       setData(ClientData);
   }, [ClientData]);
+
+
 
   const update = async (id: number) => {
     const newData = data.filter((item) => item.id !== id);
@@ -106,7 +112,7 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
       </Tr>
     );
   });
-
+ console.log(DataNull)
   return (
     <>
       {user && (
@@ -120,7 +126,7 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
           justifyContent={"space-evenly"}
           overflowX={{ base: "auto", md: "hidden" }}
         >
-          {data.length > 0 ? (
+          {DataNull ? (
             <Table variant="simple" size="sm">
               <Thead>
                 <Tr>

@@ -1,8 +1,6 @@
 import { Box, Flex, Stack } from "@chakra-ui/react";
 import { ModalPrimeAsses } from "@/app/componentes/prime_asses";
 import PerfilHome from "./home/componentes/perfil_home";
-import { getServerSession } from "next-auth";
-import { auth } from "@/lib/auth_confg";
 import { FilterRoute } from "./home/componentes/filter/filtro_route";
 
 export default async function HomePage() {

@@ -1,6 +1,7 @@
 "use client";
 
 import { Flex, Select } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
 interface SelectProps {
@@ -16,15 +17,26 @@ export const SelectCorretor = ({
 }: SelectProps) => {
   const [Data, setData] = useState([]);
   const [id, setId] = useState(0);
+  const {data: session} = useSession();
+  const user = session?.user;
 
   useEffect(() => {
     if (setCorretor) {
       setId(setCorretor);
     }
+    
     (async () => {
       const resq = await fetch(`/api/usuario/getall`);
       const data = await resq.json();
-      setData(data);
+      const Result = user?.hierarquia === "GRT" ? data.filter((item: any) => {
+        const ConstruraGRT = user.construtora.map((construtora: any) => construtora.id);
+        for (let i = 0; i < item.construtora.length; i++) {
+          if (ConstruraGRT.includes(item.construtora[i].id)) {
+            return item;
+          }
+        }
+      }) : data;
+      setData(Result);
     })();
   }, []);
 

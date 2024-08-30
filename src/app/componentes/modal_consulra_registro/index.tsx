@@ -52,7 +52,6 @@ export const ModalConsultaRegistro = ({ onCpfChange, setCpfChange }: CpfProps) =
   }, [onOpen]);
 
   const handleClose = () => {
-    onClose();
     router.push("/"); // Redirecionando para a página inicial
   };
 
@@ -104,6 +103,7 @@ export const ModalConsultaRegistro = ({ onCpfChange, setCpfChange }: CpfProps) =
               isClosable: true,
             });
           } else {
+            setSolicitacoes([]);
             toast({
               title: "CPF disponível.",
               description: "Você pode prosseguir com o cadastro.",
