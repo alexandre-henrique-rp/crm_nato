@@ -79,6 +79,12 @@ declare module solictacao {
     updatedAt: Date | string | any;
     telefone2: string;
     uploadRg: string;
+    distrato_id: number;
+    logDelete: string;
+    user: number;
+    distrato_dt: Date | string | any;
+    status_aprovacao: boolean;
+    distrato_id: number;
   }
 
   /**

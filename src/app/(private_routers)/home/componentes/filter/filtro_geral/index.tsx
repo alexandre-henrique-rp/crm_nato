@@ -164,8 +164,10 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
           }}
         >
           <option value="VAZIO">VAZIO</option>
+          <option value="INICIADO">INICIADO</option>
           <option value="APROVADO">APROVADO</option>
           <option value="EMITIDO">EMITIDO</option>
+          <option value="REVOGADO">REVOGADO</option>
         </Select>
       </Box>
 

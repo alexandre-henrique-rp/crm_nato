@@ -29,6 +29,8 @@ import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 
 import { FaRegCopy } from "react-icons/fa";
 import VerificadorFileComponent from "@/app/componentes/file";
+import DistratoAlertPrint from "@/app/componentes/Distrato_alert_print";
+import BtRemoverDistrato from "@/app/componentes/bt_Remover_Distrato";
 
 interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
@@ -160,6 +162,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     }
   }, [Name, SetData]);
 
+  console.log(SetData);
+
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
@@ -169,12 +173,11 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       const data = !SetData.ativo
         ? {
             ativo: true,
-            cnh: Cnh,
-            cpf: Cpf,
+            cpf: Cpf.replace(/\W+/g, ""),
             nome: Name,
-            telefone: Whatsapp,
-            telefone2: Whatsappdois,
-            email: Email,
+            telefone: Whatsapp.replace(/\W+/g, ""),
+            telefone2: Whatsappdois.replace(/\W+/g, ""),
+            email: Email.replace(/\s+/g, "").toLowerCase(),
             uploadRg: RgFile64 ? RgFile64 : SetData.uploadRg,
             uploadCnh: CnhFile64 ? CnhFile64 : SetData.uploadCnh,
             dt_nascimento: DataNascimento,
@@ -184,12 +187,11 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             obs: Obs,
           }
         : {
-            cnh: Cnh,
-            cpf: Cpf,
+            cpf: Cpf.replace(/\W+/g, ""),
             nome: Name,
-            telefone: Whatsapp,
-            telefone2: Whatsappdois,
-            email: Email,
+            telefone: Whatsapp.replace(/\W+/g, ""),
+            telefone2: Whatsappdois.replace(/\W+/g, ""),
+            email: Email.replace(/\s+/g, "").toLowerCase(),
             uploadRg: RgFile64 ? RgFile64 : SetData.uploadRg,
             uploadCnh: CnhFile64 ? CnhFile64 : SetData.uploadCnh,
             dt_nascimento: DataNascimento,
@@ -245,13 +247,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     setWhatsAppMaskdois(masked);
   };
 
-  const MaskCpfRelacionamento = (e: any) => {
-    const valor = e.target.value;
-    const valorLinpo = unMask(valor);
-    const masked = mask(valorLinpo, ["999.999.999-99"]);
-    setRelacionamentoUpdate(unMask(masked));
-    setRelacionamentoUpdateMask(masked);
-  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(AssDoc);
@@ -574,9 +569,22 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               </FormLabel>
               <Textarea value={Obs} onChange={(e) => setObs(e.target.value)} />
             </GridItem>
+            {SetData.distrato && (
+              <Box>
+                <DistratoAlertPrint
+                  userId={SetData.distrato_id}
+                  userDateTime={SetData.distrato_dt}
+                />
+              </Box>
+            )}
           </SimpleGrid>
           <GridItem>
             <Flex gap={"10px"} justifyContent={"flex-end"} mt={"20px"}>
+              {input === "ADM" && SetData.distrato && (
+                <>
+                  <BtRemoverDistrato id={SetData.id} />
+                </>
+              )}
               <Button
                 onClick={handleSubmit}
                 colorScheme="green"
@@ -586,7 +594,17 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               >
                 Salvar e Enviar
               </Button>
-              {input !== "USER" && (
+              {input === "ADM" && (
+                <ModalFormComponent
+                  rota={"CORRETROR"}
+                  clienteId={ClientId}
+                  empreedimento={EmpreendimentoId}
+                  PostName={Name}
+                  CorretorName={Corretor}
+                  CorretorId={CorretorId}
+                />
+              )}
+              {input === "CCA" && (
                 <ModalFormComponent
                   rota={"CORRETROR"}
                   clienteId={ClientId}

@@ -1,7 +1,7 @@
 "use client";
 
 import { FiltroComponent } from "../filtro_geral";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Tabela } from "../../tabela";
 
@@ -20,14 +20,19 @@ export const FilterRoute = () => {
   const [dadosClientes, setDadosClientes] = useState<
     solictacao.SolicitacaoGetType[]
   >([]);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
   useEffect(() => {
      (async () => {
+
        const req = await fetch("/api/solicitacao/getall");
        const data = await req.json();
        setDados(data);
      })();
   }, []);
+
+
 
   const handleFilter = (filtroData: FiltroData) => {
     setData(filtroData);

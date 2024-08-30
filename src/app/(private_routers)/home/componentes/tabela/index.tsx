@@ -112,7 +112,7 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
       </Tr>
     );
   });
- console.log(DataNull)
+  
   return (
     <>
       {user && (

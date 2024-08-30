@@ -41,7 +41,6 @@ export default function BtmDistrato({ id, distrato, exclude }: BotoesFunctionPro
       });
 
       const req = await Get.json();
-      console.log("🚀 ~ HandleDe ~ req:", req)
       
       const res = await fetch(`/api/solicitacao/update/${id}`, {
         method: "PUT",
@@ -50,6 +49,7 @@ export default function BtmDistrato({ id, distrato, exclude }: BotoesFunctionPro
         },
         body: JSON.stringify({
           distrato: true,
+          distrato_id: User?.id,
           distrato_dt: new Date().toISOString(),
           ...(req.logDelete !== null && {
             logDelete: `${req.logDelete}\nO usuário: ${User?.name}, id: ${

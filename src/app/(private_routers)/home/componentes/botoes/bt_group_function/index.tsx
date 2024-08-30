@@ -91,6 +91,8 @@ export const BotoesFunction = ({ id, onUpdate, distrato, exclude }: BotoesFuncti
         </Box>
         <BtmDistrato id={id} distrato={distrato} exclude={exclude} />
       </ButtonGroup>
+
+      
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
 
@@ -104,10 +106,10 @@ export const BotoesFunction = ({ id, onUpdate, distrato, exclude }: BotoesFuncti
           <ModalFooter>
             <Flex gap={3}>
 
-            <Button leftIcon={<IoIosArrowBack />} onClick={onClose} />
+            <Button colorScheme="blue" leftIcon={<IoIosArrowBack />} onClick={onClose} />
 
             <Button
-              leftIcon={<BsFillTrashFill />}
+              // leftIcon={<BsFillTrashFill />}
               onClick={(e) => HandleDelet(e)}
               colorScheme="red"
             >
