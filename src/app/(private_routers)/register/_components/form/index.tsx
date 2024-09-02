@@ -33,7 +33,6 @@ export default function FormRegister() {
   const [cpf, setCpf] = useState("");
   const [cpfNask, setCpfNask] = useState("");
   const [Empreendimento, setEmpreendimento] = useState<any>([]);
-  const [EmpreendimentoData, setEmpreendimentoData] = useState<any>([]);
   const [Construtora, setConstrutora] = useState<number | undefined>();
   const [ConstrutoraData, setConstrutoraData] = useState<any>([]);
   const [Financeiro, setFinanceiro] = useState<any>([]);
@@ -101,7 +100,7 @@ export default function FormRegister() {
           body: JSON.stringify(data),
         });
 
-        if (!response.ok) {
+        if (response.ok) {
           toast({
             title: "Sucesso",
             description: "Cadastrado com sucesso",
@@ -126,13 +125,6 @@ export default function FormRegister() {
 
   const GetConstrutora = (e: any) => {
     const value = e.target.value;
-    (async () => {
-      const response = await fetch(
-        `/api/empreendimento/getall/filter/${Number(value)}`
-      );
-      const data = await response.json();
-      setEmpreendimentoData(data);
-    })();
     setConstrutora(Number(value));
   };
 
