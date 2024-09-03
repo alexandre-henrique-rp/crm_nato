@@ -27,6 +27,8 @@ import {
   Switch,
   Tooltip,
   useToast,
+  Alert,
+  AlertIcon,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -362,6 +364,14 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             />
           </Box>
         )}
+      </SimpleGrid>
+
+      <SimpleGrid columns={{ base: 1 }} spacing={6} mt={6}>
+        <Alert status="warning" variant="left-accent">
+          <AlertIcon />
+          Ao subir os arquivos, de preferencia a cnh exportado da app CNH
+          Digital ou foto da CNH totalmente aberta.
+        </Alert>
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={6} mt={6}>
