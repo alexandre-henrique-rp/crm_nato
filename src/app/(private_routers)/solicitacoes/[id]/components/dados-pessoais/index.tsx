@@ -36,28 +36,6 @@ interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
 }
 
-async function SendFile(Arquivo: any) {
-  
-  const formData = new FormData();
-  formData.append("file", Arquivo);
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/file`,
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
-      if (!response.ok) {
-        console.log(response.statusText);
-        throw new Error(`Error sending file: ${response.statusText}`);
-      }
-      console.log(response);
-
-  const data = await response.json();
-  console.log("🚀 ~ SendFile ~ data:", data)
-  return data;
-}
-
 export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const { data: session } = useSession();
   const input = session?.user?.hierarquia;
@@ -98,6 +76,16 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const toast = useToast();
   const router = useRouter();
 
+  const RequesteAlert = async () => {
+    const req = await fetch(`/api/alerts/solicitacao/${SetData.id}`);
+    if (req.ok) {
+      const res = await req.json();
+      console.log("🚀 ~ res:", res);
+      setAlertDb(res);
+      console.log("🚀");
+    }
+  };
+
   useEffect(() => {
     if (SetData && Name == "") {
       setClientId(SetData.id);
@@ -131,13 +119,13 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setRelacionamentoID(
         SetData.relacionamento.map((item: any) => item.id)[0]
       );
-      console.log(SetData.relacionamento);
-      // setAssDoc();
       setCorretor(SetData.corretor && SetData.corretor.nome);
       setCorretorId(SetData.corretor && SetData.corretor.id);
       setObs(SetData.obs);
-      setAlertDb(SetData.alert == null ? [] : SetData.alert);
-      setsetIdFcweb(SetData.id_fcw);
+      const Ficha: any = SetData.fcweb;
+      if (Ficha) {
+        setsetIdFcweb(Ficha.id);
+      }
       setCreatedDate(new Date(SetData.createdAt).toLocaleDateString("pt-BR"));
       setDataAprovacao(
         SetData.fcweb?.dt_aprovacao
@@ -159,11 +147,30 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setVoucher(SetData.fcweb?.vouchersoluti);
       setCnhFile64(SetData.uploadCnh);
       setRgFile64(SetData.uploadRg);
+      RequesteAlert();
     }
   }, [Name, SetData]);
 
-  console.log(SetData);
+  console.log("SetData", SetData);
 
+  const handleCreateFC = async () => {
+    try {
+      const data = {
+        cpf: Cpf.replace(/\W+/g, ""),
+        nome: Name,
+        telefone: Whatsapp.replace(/\W+/g, ""),
+        telefone2: Whatsappdois.replace(/\W+/g, ""),
+        email: Email.replace(/\s+/g, "").toLowerCase(),
+      };
+    } catch (error) {
+      toast({
+        title: "Não foi possível criar o FC",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
 
   const handleSubmit: FormEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
@@ -247,7 +254,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     setWhatsAppMaskdois(masked);
   };
 
-
   const handleCopy = () => {
     navigator.clipboard.writeText(AssDoc);
     toast({
@@ -263,12 +269,12 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     window.open(url, "_blank");
   };
 
-   const handleFileUploadedRg = (result: any) => {
-      setRgFile64(result.url);
-   };
-   const handleFileUploadedCnh = (result: any) => {
-      setCnhFile64(result.url);
-   };
+  const handleFileUploadedRg = (result: any) => {
+    setRgFile64(result.url);
+  };
+  const handleFileUploadedCnh = (result: any) => {
+    setCnhFile64(result.url);
+  };
 
   const handleCopy2 = () => {
     navigator.clipboard.writeText(LinkDoc);
@@ -281,7 +287,9 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     });
   };
 
-  console.log(!CnhFile64.startsWith("data:"));
+  const AtualizarAlert = (e: number) => {
+    if (e === 1) RequesteAlert();
+  };
 
   return (
     <Flex
@@ -530,19 +538,18 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   Downloads da CNH
                 </FormLabel>
-                {!CnhFile64.startsWith("data:") &&
-                  CnhFile64 && (
-                    <Button
-                      bg={"#00713D"}
-                      textColor={"white"}
-                      variant="solid"
-                      _hover={{ bg: "#00631B" }}
-                      size="lg"
-                      onClick={() => HandleDownloads(CnhFile64)}
-                    >
-                      Download
-                    </Button>
-                  )}
+                {!CnhFile64.startsWith("data:") && CnhFile64 && (
+                  <Button
+                    bg={"#00713D"}
+                    textColor={"white"}
+                    variant="solid"
+                    _hover={{ bg: "#00631B" }}
+                    size="lg"
+                    onClick={() => HandleDownloads(CnhFile64)}
+                  >
+                    Download
+                  </Button>
+                )}
               </GridItem>
             )}
             {input !== "USER" && (
@@ -615,6 +622,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               </Button>
               {input === "ADM" && (
                 <ModalFormComponent
+                  atualizar={AtualizarAlert}
                   rota={"CORRETROR"}
                   clienteId={ClientId}
                   empreedimento={EmpreendimentoId}
@@ -625,6 +633,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               )}
               {input === "CCA" && (
                 <ModalFormComponent
+                  atualizar={AtualizarAlert}
                   rota={"CORRETROR"}
                   clienteId={ClientId}
                   empreedimento={EmpreendimentoId}
@@ -655,6 +664,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               const fakeStatus = true;
               return (
                 <AlertComponent
+                  atualizar={AtualizarAlert}
                   key={item.id}
                   msg={item.texto}
                   titulo={item.titulo}

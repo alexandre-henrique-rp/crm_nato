@@ -38,6 +38,7 @@ export const FilterRoute = () => {
     setData(filtroData);
   };
 
+  // console.log("🚀 ~ data:", data);
   const filterData = (item: solictacao.SolicitacaoGetType) => {
   
     const { nome, andamento, empreendimento, construtora, financeira, id } = data;

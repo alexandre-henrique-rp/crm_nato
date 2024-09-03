@@ -18,10 +18,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Interface } from "readline";
 
 interface ModallPropsFormuulario {
   rota: any;
@@ -30,6 +27,7 @@ interface ModallPropsFormuulario {
   PostName?: string;
   CorretorName?: string;
   CorretorId?: number;
+  atualizar: any;
 }
 
 export const ModalFormComponent = ({
@@ -39,6 +37,7 @@ export const ModalFormComponent = ({
   PostName,
   CorretorName,
   CorretorId,
+  atualizar,
 }: ModallPropsFormuulario) => {
   const [Titulo, setTitulo] = useState("");
   const [Descricao, setDescricao] = useState("");
@@ -106,8 +105,6 @@ export const ModalFormComponent = ({
               } - ${Titulo}`, // Set the title based on the PostName and Titulo.
             };
 
-      // Log the constructed data object.
-      console.log(data);
 
       // Send a POST request to the /api/alerts/create endpoint with the data object.
       const request = await fetch(`/api/alerts/create`, {
@@ -118,12 +115,6 @@ export const ModalFormComponent = ({
         body: JSON.stringify(data),
       });
 
-      // Parse the response body as JSON.
-      const response = await request.json();
-
-      // Log the response.
-      console.log(response);
-
       // If the request was successful, show a success toast message.
       if (request.ok) {
         toast({
@@ -133,7 +124,11 @@ export const ModalFormComponent = ({
           duration: 3000,
           isClosable: true,
         });
-        window.location.reload();
+        // window.location.reload();
+        atualizar(1);
+        setTimeout(() => {
+          atualizar(0);
+        }, 100);
       }
 
       // Close the modal.
