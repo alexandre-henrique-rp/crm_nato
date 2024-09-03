@@ -24,7 +24,7 @@ interface AlertProps {
   ID?: number;
   clientId?: number;
   DeleteAlertStatus?: boolean | null;
-  atualizar: any;
+  atualizar?: any;
 }
 
 export const AlertComponent = ({

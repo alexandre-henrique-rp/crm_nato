@@ -20,6 +20,9 @@ import {
   Textarea,
   useToast,
   GridItem,
+  Alert,
+  AlertIcon,
+  Icon,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -31,6 +34,7 @@ import { FaRegCopy } from "react-icons/fa";
 import VerificadorFileComponent from "@/app/componentes/file";
 import DistratoAlertPrint from "@/app/componentes/Distrato_alert_print";
 import BtRemoverDistrato from "@/app/componentes/bt_Remover_Distrato";
+import { MdSimCardAlert } from "react-icons/md";
 
 interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
@@ -41,7 +45,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const input = session?.user?.hierarquia;
   const [Name, setName] = useState<string>("");
   const [Cpf, setCpf] = useState<string>("");
-  const [Cnh, setCnh] = useState<string>("");
   const [Whatsapp, setWhatsapp] = useState<string>("");
   const [WhatsAppMask, setWhatsAppMask] = useState<string>("");
   const [Whatsappdois, setWhatsappdois] = useState<string>("");
@@ -52,15 +55,9 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [LinkDoc, setLinkDoc] = useState<string>("");
   const [LinkDocMask, setLinkDocMask] = useState<string>("");
   const [IdFcweb, setsetIdFcweb] = useState<number | null>(null);
-  const [Construtora, setConstrutora] = useState<string>("");
-  const [ConstrutoraId, setConstrutoraId] = useState<number>(0);
   const [EmpreendimentoId, setEmpreendimentoId] = useState<number>(0);
-  const [Empreendimento, setEmpreendimento] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Relacionamento, setRelacionamento] = useState<string>("");
-  const [RelacionamentoUpdate, setRelacionamentoUpdate] = useState<string>("");
-  const [RelacionamentoUpdateMask, setRelacionamentoUpdateMask] =
-    useState<string>("");
   const [CreatedDate, setCreatedDate] = useState<string>("");
   const [Voucher, setVoucher] = useState<string>("");
   const [DataAprovacao, setDataAprovacao] = useState<string>("");
@@ -74,7 +71,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const [AlertDb, setAlertDb] = useState<any>([]);
   const [Looad, setLooad] = useState<boolean>(false);
   const toast = useToast();
-  const router = useRouter();
 
   const RequesteAlert = async () => {
     const req = await fetch(`/api/alerts/solicitacao/${SetData.id}`);
@@ -91,7 +87,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setClientId(SetData.id);
       setName(SetData.nome);
       setCpf(SetData.cpf && mask(SetData.cpf, ["999.999.999-99"]));
-      setCnh(SetData.cnh);
       setWhatsapp(SetData.telefone);
       setWhatsAppMask(
         SetData.telefone &&
@@ -103,9 +98,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
           mask(SetData.telefone2, ["(99) 9999-9999", "(99) 9 9999-9999"])
       );
       setEmail(SetData.email);
-      setConstrutoraId(SetData.construtora && SetData.construtora.id);
-      setConstrutora(SetData.construtora && SetData.construtora.fantasia);
-      setEmpreendimento(SetData.empreedimento && SetData.empreedimento.nome);
       setEmpreendimentoId(SetData.empreedimento && SetData.empreedimento.id);
       const date = new Date(SetData.dt_nascimento);
       const formattedDate =
@@ -317,6 +309,9 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             <Text fontSize={{ base: "sm", md: "md" }}>
               Aprovação: {DataAprovacao}
             </Text>
+            <Text fontSize={{ base: "sm", md: "md" }}>
+              Id: {SetData.id}
+            </Text>
           </Box>
           <Box alignItems="center" textAlign={{ base: "center", md: "left" }}>
             <Text fontSize={{ base: "lg", md: "2xl" }}>Dados Pessoais</Text>
@@ -334,12 +329,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               <FormLabel fontSize="sm" fontWeight="md">
                 CPF
               </FormLabel>
-              <Input
-                type="text"
-                value={Cpf}
-                variant="flushed"
-                onChange={(e) => setCpf(e.target.value)}
-              />
+              <Text pt={3}>{Cpf}</Text>
             </GridItem>
             <GridItem>
               <FormLabel fontSize="sm" fontWeight="md">
@@ -424,29 +414,28 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </GridItem>
+          </SimpleGrid>
 
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
             <GridItem>
               <FormLabel fontSize="sm" fontWeight="md">
                 Construtora
               </FormLabel>
-              <Input
-                value={Construtora}
-                onChange={(e) => setConstrutora(e.target.value)}
-                type="text"
-                variant="flushed"
-              />
+              <Text pt={3}>{SetData.construtora.fantasia}</Text>
             </GridItem>
 
             <GridItem>
               <FormLabel fontSize="sm" fontWeight="md">
                 Empreendimento
               </FormLabel>
-              <Input
-                value={Empreendimento}
-                onChange={(e) => setEmpreendimento(e.target.value)}
-                type="text"
-                variant="flushed"
-              />
+              <Text pt={3}>{SetData.empreedimento.nome}</Text>
+            </GridItem>
+
+            <GridItem>
+              <FormLabel fontSize="sm" fontWeight="md">
+                Financeira
+              </FormLabel>
+              <Text pt={3}>{SetData.financeiro.fantasia}</Text>
             </GridItem>
           </SimpleGrid>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
@@ -455,12 +444,16 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   ID FCWEB
                 </FormLabel>
-                <Input
-                  value={IdFcweb || ""}
-                  onChange={(e) => setsetIdFcweb(Number(e.target.value))}
-                  type="text"
-                  variant="flushed"
-                />
+                <Link
+                  pt={3}
+                  ps={3}
+                  href={`https://redebrasilrp.com.br/fcw2/abrir_ficha.php?fc=${IdFcweb}`}
+                  target="_blank"
+                  fontWeight={"bold"}
+                  color="teal.600"
+                >
+                  {IdFcweb}
+                </Link>
               </GridItem>
             )}
             {input !== "USER" && (
@@ -468,7 +461,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   VOUCHER
                 </FormLabel>
-                <Text fontSize={{ base: "sm", md: "md", lg: "md" }}>
+                <Text ps={3} fontSize={{ base: "sm", md: "md", lg: "md" }}>
                   {Voucher}
                 </Text>
               </GridItem>
@@ -604,6 +597,29 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               </Box>
             )}
           </SimpleGrid>
+
+          {SetData.logDelete &&
+            input === "ADM" && (
+              <SimpleGrid columns={{ base: 1 }}>
+                <Flex
+                  w={"100%"}
+                  px={5}
+                  py={2}
+                  bg={"blue.50"}
+                  gap={3}
+                  alignItems={"center"}
+                  borderTop={"4px solid #001FAB"}
+                >
+                  <Icon
+                    as={MdSimCardAlert}
+                    color={"#001FAB"}
+                    fontSize={"1.8rem"}
+                  />
+                  Ficha excluída ={">"} {SetData.logDelete}
+                </Flex>
+              </SimpleGrid>
+            )}
+
           <GridItem>
             <Flex gap={"10px"} justifyContent={"flex-end"} mt={"20px"}>
               {input === "ADM" && SetData.distrato && (
