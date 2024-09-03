@@ -281,6 +281,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     });
   };
 
+  console.log(!CnhFile64.startsWith("data:"));
+
   return (
     <Flex
       w={"100%"}
@@ -528,18 +530,19 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   Downloads da CNH
                 </FormLabel>
-                {CnhFile64 && (
-                  <Button
-                    bg={"#00713D"}
-                    textColor={"white"}
-                    variant="solid"
-                    _hover={{ bg: "#00631B" }}
-                    size="lg"
-                    onClick={() => HandleDownloads(CnhFile64)}
-                  >
-                    Download
-                  </Button>
-                )}
+                {!CnhFile64.startsWith("data:") &&
+                  CnhFile64 && (
+                    <Button
+                      bg={"#00713D"}
+                      textColor={"white"}
+                      variant="solid"
+                      _hover={{ bg: "#00631B" }}
+                      size="lg"
+                      onClick={() => HandleDownloads(CnhFile64)}
+                    >
+                      Download
+                    </Button>
+                  )}
               </GridItem>
             )}
             {input !== "USER" && (
@@ -547,7 +550,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 <FormLabel fontSize="sm" fontWeight="md">
                   Download do RG
                 </FormLabel>
-                {RgFile64 && (
+                {!RgFile64.startsWith("data:") && RgFile64 && (
                   <Button
                     bg={"#00713D"}
                     textColor={"white"}
@@ -559,6 +562,22 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                     Download
                   </Button>
                 )}
+              </GridItem>
+            )}
+            {input !== "USER" && CnhFile64.startsWith("data:") && (
+              <GridItem>
+                <FormLabel fontSize="sm" fontWeight="md">
+                  Downloads da CNH 64
+                </FormLabel>
+                <DownloadDoc base64={CnhFile64} name="Cnh" clienteName={Name} />
+              </GridItem>
+            )}
+            {input !== "USER" && RgFile64.startsWith("data:") && (
+              <GridItem>
+                <FormLabel fontSize="sm" fontWeight="md">
+                  Download do RG 64
+                </FormLabel>
+                <DownloadDoc base64={RgFile64} name="Rg" clienteName={Name} />
               </GridItem>
             )}
           </SimpleGrid>
