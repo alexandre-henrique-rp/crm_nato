@@ -64,7 +64,7 @@ export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
         onChange={WhatsAppMask}
         onBlur={async (e) => {
           const valor = unMask(e.target.value);
-          if (valor.length === 11) {
+          if (valor.length === 10) {
             const check = await checkwhatsapp(valor);
             if (!check) {
               setIsvalideTel(true);

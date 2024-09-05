@@ -35,6 +35,7 @@ import VerificadorFileComponent from "@/app/componentes/file";
 import DistratoAlertPrint from "@/app/componentes/Distrato_alert_print";
 import BtRemoverDistrato from "@/app/componentes/bt_Remover_Distrato";
 import { MdSimCardAlert } from "react-icons/md";
+import { SeteDataRelacionamento } from "@/app/componentes/addRelacionamento";
 
 interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
@@ -139,6 +140,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setCnhFile64(SetData.uploadCnh);
       setRgFile64(SetData.uploadRg);
       RequesteAlert();
+      SeteDataRelacionamento(SetData);
     }
   }, [Name, SetData]);
 
@@ -685,16 +687,15 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   <BtRemoverDistrato id={SetData.id} />
                 </>
               )}
-              {input === "ADM" && (
+              {input === "ADM" && !IdFcweb && (
                 <>
                   <Button
                     onClick={handleCreateFC}
                     colorScheme="teal"
-                    // variant="outline"
                     textAlign="center"
                     isLoading={Looad}
                   >
-                    Criar Fc
+                    Criar Fcweb
                   </Button>
                 </>
               )}
