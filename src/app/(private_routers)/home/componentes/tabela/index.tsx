@@ -10,27 +10,34 @@ import {
   Thead,
   Tr,
   Text,
+  Select,
+  IconButton,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { BotoesFunction } from "../botoes/bt_group_function";
 import { ImClock } from "react-icons/im";
+import { IoIosArrowForward } from "react-icons/io";
 
 interface TabelaProps {
   ClientData: solictacao.SolicitacaoGetType[];
+  total: number | null;
+  Pages: any;
+  AtualPage: number;
 }
 
-export const Tabela = ({ ClientData }: TabelaProps) => {
+export const Tabela = ({ ClientData, total, Pages , AtualPage}: TabelaProps) => {
   const [data, setData] = useState<solictacao.SolicitacaoGetType[]>([]);
   const [DataNull, setDataNull] = useState(false);
+  const [SelectPage, setSelectPage] = useState(1);
   const { data: session } = useSession();
   const user = session?.user;
-
   useEffect(() => {
     if (ClientData.length > 0) {
       setDataNull(true);
     }
     setData(ClientData);
+    setSelectPage(AtualPage);
   }, [ClientData]);
 
   const update = async (id: number) => {
@@ -112,62 +119,109 @@ export const Tabela = ({ ClientData }: TabelaProps) => {
       </Tr>
     );
   });
+ 
+const OptionsSelect = () => {
+  if (!total || !data.length) return null; // Verifica se total e data.length existem
+
+  const TotalPages = Math.ceil(total / data.length);
+  // Armazena as opções em um array
+  const options = [];
+  for (let i = 1; i <= TotalPages; i++) {
+    options.push(
+      <option key={i} value={i}>
+        {i}
+      </option>
+    );
+  }
+
+  // Retorna as opções acumuladas
+  return options;
+};
+
 
   return (
     <>
-      {user && (
-        <Flex
-          w={"full"}
-          bg={"white"}
-          shadow={"md"}
-          borderRadius={"15px"}
-          p={{ base: "10px", md: "20px" }}
-          alignContent={"center"}
-          justifyContent={"space-evenly"}
-          overflowX={{ base: "auto", md: "hidden" }}
-        >
-          {DataNull ? (
-            <Table variant="simple" size="sm">
-              <Thead>
-                <Tr>
-                  <Th>FUNÇÕES</Th>
-                  <Th>ID</Th>
-                  <Th>NOME</Th>
-                  <Th>AGENDAMENTO</Th>
-                  <Th>CERTIFICADO</Th>
-                  <Th fontSize={"20px"}>
-                    <ImClock />
-                  </Th>
-                  {user?.hierarquia === "CONT" && (
-                    <>
-                      <Th>STATUS PG</Th>
-                      <Th>VALOR</Th>
-                    </>
-                  )}
-                  {user?.hierarquia === "ADM" && (
-                    <>
-                      <Th>STATUS PG</Th>
-                      <Th>VALOR</Th>
-                    </>
-                  )}
-                </Tr>
-              </Thead>
-              <Tbody>{tabela}</Tbody>
-              <Tfoot>
-                <Tr>
-                  <Td colSpan={user?.hierarquia !== "USER" ? 8 : 6}>
-                    Total de registros: {data.length}
-                  </Td>
-                </Tr>
-              </Tfoot>
-            </Table>
-          ) : (
-            <Text fontSize="lg" color="red.500">
-              Nenhum registro encontrado.
-            </Text>
-          )}
-        </Flex>
-      )}
+      <Suspense fallback={<Text>Carregando...</Text>}>
+        {user && (
+          <Flex
+            w={"full"}
+            bg={"white"}
+            shadow={"md"}
+            borderRadius={"15px"}
+            p={{ base: "10px", md: "20px" }}
+            alignContent={"center"}
+            justifyContent={"space-evenly"}
+            overflowX={{ base: "auto", md: "hidden" }}
+          >
+            {DataNull ? (
+              <Table variant="simple" size="sm">
+                <Thead>
+                  <Tr>
+                    <Th>FUNÇÕES</Th>
+                    <Th>ID</Th>
+                    <Th>NOME</Th>
+                    <Th>AGENDAMENTO</Th>
+                    <Th>CERTIFICADO</Th>
+                    <Th fontSize={"20px"}>
+                      <ImClock />
+                    </Th>
+                    {user?.hierarquia === "CONT" && (
+                      <>
+                        <Th>STATUS PG</Th>
+                        <Th>VALOR</Th>
+                      </>
+                    )}
+                    {user?.hierarquia === "ADM" && (
+                      <>
+                        <Th>STATUS PG</Th>
+                        <Th>VALOR</Th>
+                      </>
+                    )}
+                  </Tr>
+                </Thead>
+                <Tbody>{tabela}</Tbody>
+                <Tfoot>
+                  <Tr>
+                    <Td>
+                      Total de registros: {total} / {data.length}
+                    </Td>
+                    <Td></Td>
+                    <Td></Td>
+                    <Td></Td>
+                    <Td></Td>
+                    <Td>paginas:</Td>
+                    <Td>
+                      <Select
+                        size={"xs"}
+                        borderRadius={"5px"}
+                        value={SelectPage}
+                        onChange={(e) => {
+                          setSelectPage(Number(e.target.value));
+                        }}
+                      >
+                        <OptionsSelect />
+                      </Select>
+                    </Td>
+                    <Td>
+                      <IconButton
+                        icon={<IoIosArrowForward />}
+                        size={"xs"}
+                        colorScheme="green"
+                        aria-label={""}
+                        onClick={() => Pages(SelectPage)}
+                      />
+                    </Td>
+                  </Tr>
+                </Tfoot>
+              </Table>
+            ) : (
+              <Text fontSize="lg" color="red.500">
+                Nenhum registro encontrado.
+              </Text>
+            )}
+          </Flex>
+        )}
+      </Suspense>
     </>
   );
 };

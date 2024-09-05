@@ -147,6 +147,7 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
           onChange={(e) => {
             setFilterId(Number(e.target.value.replace(/\D/g, "")));
           }}
+          
         />
       </Box>
 

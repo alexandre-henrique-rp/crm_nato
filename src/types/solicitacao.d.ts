@@ -69,6 +69,9 @@ declare module solictacao {
     empreedimento: {
       id: number;
       nome: string;
+      cidade: string;
+      uf: string;
+      tag: string;
     };
     cnh: string;
     ativo: boolean;

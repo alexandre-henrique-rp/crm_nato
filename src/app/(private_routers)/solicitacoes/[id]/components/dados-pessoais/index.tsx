@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FormEventHandler, useEffect, useState } from "react";
+import { FormEventHandler, use, useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 
@@ -42,6 +42,7 @@ interface DadosPessoaisProps {
 
 export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
   const { data: session } = useSession();
+  const user = session?.user;
   const input = session?.user?.hierarquia;
   const [Name, setName] = useState<string>("");
   const [Cpf, setCpf] = useState<string>("");
@@ -76,9 +77,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     const req = await fetch(`/api/alerts/solicitacao/${SetData.id}`);
     if (req.ok) {
       const res = await req.json();
-      console.log("🚀 ~ res:", res);
       setAlertDb(res);
-      console.log("🚀");
     }
   };
 
@@ -147,13 +146,67 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
 
   const handleCreateFC = async () => {
     try {
+      const date = new Date();
+      const dia = date.getDate();
+      const mes = date.getMonth() + 1;
+      const ano = date.getFullYear();
+      const hora = date.getHours();
+      const minuto = date.getMinutes();
+      const segundo = date.getSeconds(); 
+      const ref = `${dia}-${mes}-${ano}.${hora}:${minuto}:${segundo}`
+      const NameUserLength = user?.name.split(" ").length;
+      const NameUser: any = NameUserLength === 1 ? user?.name : user?.name.split(" ")[0];
+
       const data = {
         cpf: Cpf.replace(/\W+/g, ""),
         nome: Name,
         telefone: Whatsapp.replace(/\W+/g, ""),
         telefone2: Whatsappdois.replace(/\W+/g, ""),
         email: Email.replace(/\s+/g, "").toLowerCase(),
+        dtnascimento: DataNascimento,
+        cidade: SetData.empreedimento.cidade && SetData.empreedimento.cidade,
+        uf: SetData.empreedimento.uf && SetData.empreedimento.uf,
+        andamento: "NOVA FC",
+        unidade: "1",
+        s_alerta: "ATIVADO",
+        referencia: ref,
+        obscont: `Criado Por: ${user?.name} - Empreendimento: ${
+          SetData.empreedimento.nome
+        } - vendedor: ${
+          SetData.corretor && SetData.corretor.nome
+        } - ( ${ref} )  `,
+        tipocd: "A3PF Bird5000",
+        valorcd: "100,00",
+        criou_fc: NameUser.toUpperCase(),
+        historico: `${ref}-${user?.name}:Criou a FC através do sisnato.\n`,
+        contador: SetData.empreedimento.tag,
       };
+
+      const register = await fetch("/api/fcweb/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if(register.ok) {
+        toast({
+          title: "Sucesso!",
+          description: "FC criada com sucesso!",
+          status: "success",
+          duration: 9000,
+          isClosable: true,
+        });
+        window.location.reload();
+      } else {
+        toast({
+          title: "Não foi possível criar o FC",
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
+      }
     } catch (error) {
       toast({
         title: "Não foi possível criar o FC",
@@ -309,9 +362,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             <Text fontSize={{ base: "sm", md: "md" }}>
               Aprovação: {DataAprovacao}
             </Text>
-            <Text fontSize={{ base: "sm", md: "md" }}>
-              Id: {SetData.id}
-            </Text>
+            <Text fontSize={{ base: "sm", md: "md" }}>Id: {SetData.id}</Text>
           </Box>
           <Box alignItems="center" textAlign={{ base: "center", md: "left" }}>
             <Text fontSize={{ base: "lg", md: "2xl" }}>Dados Pessoais</Text>
@@ -329,7 +380,15 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               <FormLabel fontSize="sm" fontWeight="md">
                 CPF
               </FormLabel>
-              <Text pt={3}>{Cpf}</Text>
+              {input === "USER" && <Text pt={3}>{Cpf}</Text>}
+              {input !== "USER" && (
+                <Input
+                  type="text"
+                  value={Cpf}
+                  variant="flushed"
+                  onChange={(e) => setCpf(e.target.value)}
+                />
+              )}
             </GridItem>
             <GridItem>
               <FormLabel fontSize="sm" fontWeight="md">
@@ -598,33 +657,45 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             )}
           </SimpleGrid>
 
-          {SetData.logDelete &&
-            input === "ADM" && (
-              <SimpleGrid columns={{ base: 1 }}>
-                <Flex
-                  w={"100%"}
-                  px={5}
-                  py={2}
-                  bg={"blue.50"}
-                  gap={3}
-                  alignItems={"center"}
-                  borderTop={"4px solid #001FAB"}
-                >
-                  <Icon
-                    as={MdSimCardAlert}
-                    color={"#001FAB"}
-                    fontSize={"1.8rem"}
-                  />
-                  Ficha excluída ={">"} {SetData.logDelete}
-                </Flex>
-              </SimpleGrid>
-            )}
+          {SetData.logDelete && input === "ADM" && (
+            <SimpleGrid columns={{ base: 1 }}>
+              <Flex
+                w={"100%"}
+                px={5}
+                py={2}
+                bg={"blue.50"}
+                gap={3}
+                alignItems={"center"}
+                borderTop={"4px solid #001FAB"}
+              >
+                <Icon
+                  as={MdSimCardAlert}
+                  color={"#001FAB"}
+                  fontSize={"1.8rem"}
+                />
+                Ficha excluída ={">"} {SetData.logDelete}
+              </Flex>
+            </SimpleGrid>
+          )}
 
           <GridItem>
             <Flex gap={"10px"} justifyContent={"flex-end"} mt={"20px"}>
               {input === "ADM" && SetData.distrato && (
                 <>
                   <BtRemoverDistrato id={SetData.id} />
+                </>
+              )}
+              {input === "ADM" && (
+                <>
+                  <Button
+                    onClick={handleCreateFC}
+                    colorScheme="teal"
+                    // variant="outline"
+                    textAlign="center"
+                    isLoading={Looad}
+                  >
+                    Criar Fc
+                  </Button>
                 </>
               )}
               <Button

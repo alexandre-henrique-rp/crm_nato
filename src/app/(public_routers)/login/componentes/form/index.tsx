@@ -32,7 +32,7 @@ export const FormLogin = () => {
         setLoading(false);
         toast({
           title: "Erro!",
-          description: "Email ou senha inválidos",
+          description: "Usuario ou senha inválidos",
           status: "error",
           duration: 5000,
         });     
@@ -56,6 +56,7 @@ export const FormLogin = () => {
           border={"1px solid #b8b8b8cc"}
           textTransform={"uppercase"}
           onChange={(e: any) => setUsername(e.target.value.toUpperCase())}
+          value={username}
         />
         <FormLabel> Senha</FormLabel>
         <SenhaComponent
