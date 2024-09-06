@@ -15,7 +15,7 @@ export default function middleware(req: NextRequest) {
         req
     );
 
-    console.log(pathname);
+    console.log(isPrivateRoute);
 
     if (pathname === "/") {
         if (!session) {
@@ -63,7 +63,6 @@ export const config = {
         "/solicitacoes/:path*",
         "/solicitacoes",
         "/redefinicao",
-        "/solicitacoes",
         "/login",
         "/register",
         "/reset-password",

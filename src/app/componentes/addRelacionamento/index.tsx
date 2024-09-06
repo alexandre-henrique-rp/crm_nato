@@ -1,20 +1,4 @@
-
-
-export const SeteDataRelacionamento = (data: any) => {
-   
-}
-
-const 
-const InputRelacionamento = () => {
-    
-    return (
-        <>
-        
-        </>
-    )
-}
-
-
+import { chakra } from "@chakra-ui/react";
 
 
 
@@ -22,7 +6,10 @@ export default function AddRelacionamento() {
 
     return(
         <>
-        <InputRelacionamento />
+        <chakra.form>
+            <chakra.label htmlFor="email">Email</chakra.label>
+            <chakra.input name="email" type="text" />
+        </chakra.form>
         </>
     )
 }

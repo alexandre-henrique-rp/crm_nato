@@ -25,7 +25,6 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { FormEventHandler, use, useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
@@ -35,7 +34,7 @@ import VerificadorFileComponent from "@/app/componentes/file";
 import DistratoAlertPrint from "@/app/componentes/Distrato_alert_print";
 import BtRemoverDistrato from "@/app/componentes/bt_Remover_Distrato";
 import { MdSimCardAlert } from "react-icons/md";
-import { SeteDataRelacionamento } from "@/app/componentes/addRelacionamento";
+
 
 interface DadosPessoaisProps {
   SetData: solictacao.SolicitacaoGetType;
@@ -140,7 +139,6 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setCnhFile64(SetData.uploadCnh);
       setRgFile64(SetData.uploadRg);
       RequesteAlert();
-      SeteDataRelacionamento(SetData);
     }
   }, [Name, SetData]);
 
@@ -377,7 +375,48 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
         </Box>
         <Divider borderColor="#00713D" my={4} />
         <Stack spacing={6}>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
+          <chakra.form>
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
+              <GridItem>
+                <FormLabel fontSize="sm" fontWeight="md">
+                  CPF
+                </FormLabel>
+                {input === "USER" && <Text pt={3}>{Cpf}</Text>}
+                {input !== "USER" && (
+                  <Input
+                    type="text"
+                    value={Cpf}
+                    variant="flushed"
+                    onChange={(e) => setCpf(e.target.value)}
+                  />
+                )}
+              </GridItem>
+              <GridItem>
+                <FormLabel fontSize="sm" fontWeight="md">
+                  Nome Completo
+                </FormLabel>
+                <Input
+                  type="text"
+                  value={Name}
+                  variant="flushed"
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </GridItem>
+
+              <GridItem>
+                <FormLabel fontSize="sm" fontWeight="md">
+                  Data de Nascimento
+                </FormLabel>
+                <Input
+                  variant="flushed"
+                  value={DataNascimento}
+                  onChange={(e) => setDataNascimento(e.target.value)}
+                  type="date"
+                />
+              </GridItem>
+            </SimpleGrid>
+          </chakra.form>
+          {/* <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
             <GridItem>
               <FormLabel fontSize="sm" fontWeight="md">
                 CPF
@@ -415,7 +454,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 type="date"
               />
             </GridItem>
-          </SimpleGrid>
+          </SimpleGrid> */}
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
             <GridItem>
               <FormLabel fontSize="sm" fontWeight="md">

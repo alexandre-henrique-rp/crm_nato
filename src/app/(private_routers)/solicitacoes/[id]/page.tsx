@@ -2,6 +2,8 @@ import { Flex } from "@chakra-ui/react";
 import { DadosPessoaisComponent } from "./components/dados-pessoais";
 import { getServerSession } from "next-auth";
 import { auth } from "@/lib/auth_confg";
+import { revalidateTag } from "next/cache";
+import { CardUpdateSolicitacao } from "@/app/componentes/card_Update_solicitacao";
 
 const Requestes = async (id: string) => {
   try {
@@ -14,6 +16,11 @@ const Requestes = async (id: string) => {
         Authorization: `Bearer ${session?.token}`,
       },
       cache: "no-store",
+      next: {
+        tags: ["get_solicitacao_id"],
+      },
+
+      // para atualizar essa requisição utilize o método -revalidateTag()- passando o nome da tag e o nome da requisição (ex:  "revalidateTag('get_solicitacao_id')")
     });
     if (!request.ok) {
       throw new Error("Erro");
@@ -24,6 +31,7 @@ const Requestes = async (id: string) => {
     console.log(error);
     return error;
   }
+  
 };
 
 export default async function perfilPage({
@@ -45,7 +53,8 @@ export default async function perfilPage({
       overflowX="auto"
       flexDir={{ base: "column", md: "row" }}
     >
-      <DadosPessoaisComponent SetData={data} />
+      {/* <DadosPessoaisComponent SetData={data} /> */}
+      <CardUpdateSolicitacao setDadosCard={data} />
     </Flex>
   );
 }
