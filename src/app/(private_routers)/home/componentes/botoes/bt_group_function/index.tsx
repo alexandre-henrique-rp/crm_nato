@@ -21,6 +21,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { revalidateTag } from "next/cache";
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
@@ -28,12 +29,11 @@ import { IoIosArrowBack } from "react-icons/io";
 
 interface BotoesFunctionProps {
   id: number;
-  onUpdate: any;
   distrato: boolean;
   exclude?: boolean;
 }
 
-export const BotoesFunction = ({ id, onUpdate, distrato, exclude }: BotoesFunctionProps) => {
+export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) => {
   const route = useRouter();
   const { data: session } = useSession();
   const toast = useToast();
@@ -51,7 +51,6 @@ export const BotoesFunction = ({ id, onUpdate, distrato, exclude }: BotoesFuncti
       });
 
       if (res.ok) {
-        onUpdate(id);
         toast({
           title: "Solicitação deletada",
           description: "Solicitação deletada com sucesso",
@@ -59,6 +58,7 @@ export const BotoesFunction = ({ id, onUpdate, distrato, exclude }: BotoesFuncti
           duration: 3000,
           isClosable: true,
         });
+        revalidateTag("get_solicitacao_all");
       }
     } catch (error) {
       toast({

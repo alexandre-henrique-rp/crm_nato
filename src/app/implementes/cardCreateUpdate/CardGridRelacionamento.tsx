@@ -18,7 +18,7 @@ export default function CardGridRelacionamento({
         <InputRelacionamento
         //   name="relacionamento"
           variant="flushed"
-          setValueRelacionamento={DataSolicitacao.relacionamento}
+          setValueRelacionamento={DataSolicitacao}
         />
       </Box>
     </>

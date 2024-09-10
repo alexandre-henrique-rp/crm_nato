@@ -36,6 +36,12 @@ declare module solictacao {
     cpf: string;
     email: string;
     dt_solicitacao: Date | string | any;
+    Andamento: string;
+    dt_aprovacao: string; 
+    dt_agendamento: string;
+    distrato_dt: string;
+    distrato_id: number;
+    hr_agendamento: string;
     corretor: {
       id: number;
       nome: string;

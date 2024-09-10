@@ -1,11 +1,9 @@
 "use client";
 
 import { FiltroComponent } from "../filtro_geral";
-import { Box, CircularProgress, Flex, useToast } from "@chakra-ui/react";
-import { Suspense, useEffect, useState } from "react";
+import { Box, CircularProgress, Flex} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { Tabela } from "../../tabela";
-import Loading from "@/app/loading";
-
 interface FiltroData {
   id: number | null;
   nome: string;
@@ -20,16 +18,27 @@ export const FilterRoute = () => {
   const [Dados, setDados] = useState<solictacao.SolicitacaoGetType[]>(
     [] as any
   );
-  const [Pages, setPages] = useState(1);
   const [Total, setTotal] = useState<number | null>(null);
+  const [PagAtual, setPagAtual] = useState<number>(0);
   const [Load, setLoad] = useState<boolean>(false);
+
+  
 
   useEffect(() => {
     (async () => {
-      const req = await fetch("/api/solicitacao/getall");
+      const req = await fetch("/api/solicitacao/getall", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        next: {
+          tags: ["get_solicitacao_all"],
+        },
+      });
       const data = await req.json();
       req.ok && setDados(data.data);
       req.ok && setTotal(data.total);
+      req.ok && setPagAtual(data.page);
     })();
   }, []);
 
@@ -59,8 +68,8 @@ export const FilterRoute = () => {
       if (DataFilter.id) {
         Filter += `id=${DataFilter.id}&`;
       }
-      if (Pages) {
-        Filter += `pagina=${Pages}`;
+      if (PagAtual > 0) {
+        Filter += `pagina=${PagAtual}&`;
       }
       const Url = Filter
         ? `/api/solicitacao/getall?${Filter}`
@@ -74,11 +83,17 @@ export const FilterRoute = () => {
         cache: "no-store",
       });
       const data = await req.json();
+      console.log("🚀 ~ data:", data)
+      console.log("🚀 ~ datafiltro:", PagAtual);
       req.ok && setDados(data.data);
       req.ok && setTotal(data.total);
       setLoad(false);
     })();
-  }, [DataFilter, Pages]);
+  }, [DataFilter, PagAtual]);
+
+  const NewPageFunction = (e: any) => {
+    setPagAtual(e);
+  };
 
   if (Load) {
     return (
@@ -105,8 +120,8 @@ export const FilterRoute = () => {
       <Flex justifyContent="center" alignItems="center">
         <Tabela
           ClientData={Dados}
-          Pages={setPages}
-          AtualPage={Pages}
+          AtualPage={PagAtual}
+          SetVewPage={NewPageFunction}
           total={Total}
         />
       </Flex>

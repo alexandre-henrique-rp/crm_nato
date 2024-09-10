@@ -93,15 +93,16 @@ export default function BtmDistrato({ id, distrato, exclude }: BotoesFunctionPro
     <>
       <Tooltip label="Distrato">
         <Box
-          p={"0.2rem"}
+          p={"3.2px"}
           border={"1px solid gray"}
           borderRadius={"6px"}
           cursor={"pointer"}
           onClick={onOpen}
           _hover={{ bg: "gray.300" }}
           hidden={distrato || exclude}
+          w={"30px"}
         >
-          <Image src="/rasgado.png" alt="distrato" boxSize={"1.5rem"} />
+          <Image src="/rasgado.png" alt="distrato" boxSize={"24px"} />
         </Box>
       </Tooltip>
 
