@@ -10,6 +10,7 @@ export function CardUpdateSolicitacao({ setDadosCard }: Props) {
     "use server";
     console.log(data);
   }
+  
   return (
     <>
       <CardCreateUpdate.Root>

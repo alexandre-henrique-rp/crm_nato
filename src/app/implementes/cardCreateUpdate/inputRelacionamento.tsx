@@ -18,9 +18,7 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { revalidateTag } from "next/cache";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { FaPlus } from "react-icons/fa";
 import { mask, unMask } from "remask";
 
@@ -36,27 +34,6 @@ export function InputRelacionamento({
   const [RelacionamentoMask, setRelacionamentoMask] = useState<string>("");
   const [RelacionamentoData, setRelacionamentoData] = useState<any>([]);
   const Toast = useToast();
-
-  async function UpdateRelacionamento(id: number, dados: any) {
-    const upDate = await fetch(`/api/solicitacao/update/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(dados),
-    });
-    const data = await upDate.json();
-    if (upDate.ok) {
-      return data;
-    }
-  }
-
-  async function GetDadosCpf(cpf: string) {
-    const request = await fetch(`/api/consulta/cpf/${cpf}`);
-    const data = await request.json();
-    if (request.ok) return data;
-    else return null;
-  }
 
   useEffect(() => {
     setRelacionamentoData(setValueRelacionamento.relacionamento);
@@ -87,46 +64,15 @@ export function InputRelacionamento({
         },
       ];
       setRelacionamentoData(ArrayData);
-      const ArrayAtual = ArrayData.map((item: any) => item.cpf);
 
-      const relacionamentoAtual = [...ArrayAtual, setValueRelacionamento.cpf];
-
-      const processo = await Promise.all(
-        relacionamentoAtual.map(async (r: any) => {
-          const request = await fetch(`/api/consulta/cpf/${r}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          const data = await request.json();
-          const filtro = relacionamentoAtual.filter((item: any) => item !== r);
-
-          if (request.ok) {
-            const retorno = await UpdateRelacionamento(
-              data.solicitacoes[0].id,
-              {
-                relacionamento: JSON.stringify(filtro),
-              }
-            );
-            return retorno;
-          }
-        })
-      );
-
-      if (processo.length > 0) {
-        Toast({
-          title: "Relacionamento adicionado",
-          description: "Relacionamento adicionado com sucesso",
-          status: "success",
-          duration: 3000,
-          isClosable: true,
-        });
-        // revalidateTag("get_solicitacao_id");
-      }
+      Toast({
+        title: "Relacionamento adicionado",
+        description: "Relacionamento adicionado com sucesso",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       setRelacionamento("");
-      //setar o valor RelacionamentoData para ser resgatado no FormData quando o submit for realizado
     } else {
       Toast({
         title: "cpf não encontrado",
@@ -139,42 +85,15 @@ export function InputRelacionamento({
   };
 
   const handleDelete = async (cpf: string) => {
-    const filtro = RelacionamentoData.filter((item: any) => item.cpf !== cpf);
-    const ArrayExclude = RelacionamentoData.filter(
-      (item: any) => item.cpf === cpf
-    );
-
-    const dados = {
-      ...(filtro.length > 0 && {
-        relacionamento: JSON.stringify(filtro.map((item: any) => item.cpf)),
-      }),
-      ...(filtro.length == 0 && { relacionamento: [] }),
-    };
-    const upDate = await fetch(
-      `/api/solicitacao/update/${setValueRelacionamento.id}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dados),
-      }
-    );
-
-    if (upDate.ok) {
-      const request = await GetDadosCpf(cpf);
-      const UpateExclude = await UpdateRelacionamento(ArrayExclude[0].id, {});
-
-      Toast({
-        title: "Relacionamento Removido",
-        description: "Relacionamento Removido da lista com sucesso",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-      setRelacionamentoData(filtro);
-      revalidateTag("get_solicitacao_id");
-    }
+   const Filer = RelacionamentoData.filter((item: any) => item.cpf !== cpf);
+   setRelacionamentoData(Filer);
+   Toast({
+    title: "Relacionamento excluído",
+    description: "Relacionamento excluído com sucesso",
+    status: "success",
+    duration: 3000,
+    isClosable: true,
+   })
   };
 
   const MaskCpf = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -249,15 +168,15 @@ export function InputRelacionamento({
           </PopoverContent>
         </Popover>
       </Flex>
-      {/* <Box hidden>
+      <Box hidden>
         <Input
           value={JSON.stringify(
             RelacionamentoData.map((item: any) => item.cpf)
           )}
-          name="relacionamentoDb"
+          name="Relacionamento"
           hidden
         />
-      </Box> */}
+      </Box>
     </>
   );
 }
