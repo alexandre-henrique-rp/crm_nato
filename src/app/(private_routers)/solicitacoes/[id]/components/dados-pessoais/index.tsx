@@ -117,7 +117,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       if (Ficha) {
         setsetIdFcweb(Ficha.id);
       }
-      setCreatedDate(new Date(SetData.createdAt).toLocaleDateString("pt-BR"));
+      setCreatedDate(new Date(SetData.createdAt).toLocaleString("pt-BR"));
       setDataAprovacao(
         SetData.fcweb?.dt_aprovacao
           ? new Date(SetData.fcweb?.dt_aprovacao).toLocaleDateString("pt-BR")
@@ -571,7 +571,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             {input !== "USER" && (
               <GridItem>
                 <FormLabel fontSize="sm" fontWeight="md">
-                  LINK FICHA
+                  LINK CONTRATO
                 </FormLabel>
                 <Flex gap={3}>
                   <Input
@@ -588,7 +588,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                 </Flex>
               </GridItem>
             )}
-            {input !== "USER" && (
+            {/* {input !== "USER" && (
               <GridItem>
                 <FormLabel fontSize="sm" fontWeight="md">
                   LINK CONTRATO
@@ -607,7 +607,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
                   />
                 </Flex>
               </GridItem>
-            )}
+            )} */}
           </SimpleGrid>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
             <GridItem>
