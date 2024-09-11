@@ -142,6 +142,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
     }
   }, [Name, SetData]);
 
+
   console.log("SetData", SetData);
 
   const handleCreateFC = async () => {
@@ -521,21 +522,21 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
               <FormLabel fontSize="sm" fontWeight="md">
                 Construtora
               </FormLabel>
-              <Text pt={3}>{SetData.construtora.fantasia}</Text>
+              <Text pt={3}>{SetData.construtora?.fantasia}</Text>
             </GridItem>
 
             <GridItem>
               <FormLabel fontSize="sm" fontWeight="md">
                 Empreendimento
               </FormLabel>
-              <Text pt={3}>{SetData.empreedimento.nome}</Text>
+              <Text pt={3}>{SetData.empreedimento?.nome}</Text>
             </GridItem>
 
             <GridItem>
               <FormLabel fontSize="sm" fontWeight="md">
                 Financeira
               </FormLabel>
-              <Text pt={3}>{SetData.financeiro.fantasia}</Text>
+              <Text pt={3}>{SetData.financeiro?.fantasia}</Text>
             </GridItem>
           </SimpleGrid>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
