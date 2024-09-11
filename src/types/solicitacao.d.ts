@@ -42,6 +42,7 @@ declare module solictacao {
     distrato_dt: string;
     distrato_id: number;
     hr_agendamento: string;
+    type_validacao: string;
     corretor: {
       id: number;
       nome: string;

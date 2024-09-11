@@ -46,8 +46,8 @@ export function Tabela({
     if (!item || !item.dt_solicitacao) return null;
 
     const dtSolicitacao = new Date(item.dt_solicitacao).getTime();
-    const dtAprovacao = item.fcweb?.dt_aprovacao
-      ? new Date(item.fcweb.dt_aprovacao).getTime()
+    const dtAprovacao = item.dt_aprovacao
+      ? new Date(item.dt_aprovacao).getTime()
       : Date.now();
 
     const diffInMs = dtAprovacao - dtSolicitacao;
@@ -102,7 +102,7 @@ export function Tabela({
         <Td>
           <Box>{dtAgenda}</Box>
           <Box>{horaAgenda}</Box>
-          <Box>{item.fcweb?.validacao}</Box>
+          <Box>{item.type_validacao}</Box>
         </Td>
         <Td>{andamento}</Td>
         <Td>{item.ativo && downTimeInDays(item)}</Td>

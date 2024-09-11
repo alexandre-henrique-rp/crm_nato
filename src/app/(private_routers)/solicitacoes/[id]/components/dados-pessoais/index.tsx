@@ -114,9 +114,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setCorretorId(SetData.corretor && SetData.corretor.id);
       setObs(SetData.obs);
       const Ficha: any = SetData.fcweb;
-      if (Ficha) {
-        setsetIdFcweb(Ficha.id);
-      }
+      setsetIdFcweb(SetData.id_fcw);
       setCreatedDate(new Date(SetData.createdAt).toLocaleString("pt-BR"));
       setDataAprovacao(
         SetData.fcweb?.dt_aprovacao
@@ -135,7 +133,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
           ? SetData.link_doc.slice(0, 45) + "........"
           : SetData.link_doc;
       setAssDocMask(AssDocmask);
-      setVoucher(SetData.fcweb?.vouchersoluti);
+      setVoucher(SetData.Andamento ? SetData.Andamento : "");
       setCnhFile64(SetData.uploadCnh);
       setRgFile64(SetData.uploadRg);
       RequesteAlert();
@@ -560,7 +558,7 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
             {input !== "USER" && (
               <GridItem>
                 <FormLabel fontSize="sm" fontWeight="md">
-                  VOUCHER
+                  STATUS ATENDIMENTO
                 </FormLabel>
                 <Text ps={3} fontSize={{ base: "sm", md: "md", lg: "md" }}>
                   {Voucher}
