@@ -117,8 +117,8 @@ export const DadosPessoaisComponent = ({ SetData }: DadosPessoaisProps) => {
       setsetIdFcweb(SetData.id_fcw);
       setCreatedDate(new Date(SetData.createdAt).toLocaleString("pt-BR"));
       setDataAprovacao(
-        SetData.fcweb?.dt_aprovacao
-          ? new Date(SetData.fcweb?.dt_aprovacao).toLocaleDateString("pt-BR")
+        SetData.dt_aprovacao
+          ? new Date(SetData.dt_aprovacao).toLocaleDateString("pt-BR")
           : ""
       );
       setAssDoc(SetData.ass_doc);
