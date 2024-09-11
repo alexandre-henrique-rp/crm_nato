@@ -31,7 +31,6 @@ const Requestes = async (id: string) => {
     console.log(error);
     return error;
   }
-  
 };
 
 export default async function perfilPage({
@@ -53,8 +52,9 @@ export default async function perfilPage({
       overflowX="auto"
       flexDir={{ base: "column", md: "row" }}
     >
-      {/* <DadosPessoaisComponent SetData={data} /> */}
-      <CardUpdateSolicitacao setDadosCard={data} />
+      <DadosPessoaisComponent SetData={data} />
+      {/* <CardUpdateSolicitacao setDadosCard={data} /> */}
+      
     </Flex>
   );
 }
