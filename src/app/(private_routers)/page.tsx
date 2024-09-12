@@ -2,6 +2,7 @@ import { Box, Flex, Stack } from "@chakra-ui/react";
 import { ModalPrimeAsses } from "@/app/componentes/prime_asses";
 import PerfilHome from "./home/componentes/perfil_home";
 import { FilterRoute } from "./home/componentes/filter/filtro_route";
+import { BugReport } from "../componentes/bug";
 
 export default async function HomePage() {
 
@@ -15,6 +16,7 @@ export default async function HomePage() {
       bg="#F8F8F8"
       py="2rem"
     >
+      <BugReport />
       <ModalPrimeAsses />
       <Box
         w={{ base: "90%", md: "80%", lg: "70%" }}

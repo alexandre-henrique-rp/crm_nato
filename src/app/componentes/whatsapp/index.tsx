@@ -5,7 +5,6 @@ import { mask, unMask } from "remask";
 interface WhatsAppProps {
   onValue: any;
   setValue: string;
-  
 }
 
 export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
@@ -23,7 +22,6 @@ export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
       } else {
         onValue(valor);
         setIsvalideTel(false);
-        
       }
       setTel(masked);
     }
@@ -40,20 +38,28 @@ export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
   };
 
   const checkwhatsapp = async (whatsapp: string): Promise<boolean> => {
-    const request = await fetch("/api/verificador/whatsapp", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        telefone: whatsapp,
-      }),
-    });
-    const data = await request.json();
-    if (data.status !== "VALID_WA_NUMBER") {
-      return false;
+    const response = await fetch(`/api/bug_report`);
+    const Dados = await response.json();
+    if (Dados.length > 0) {
+      console.log("🚀 ~ checkwhatsapp ~ Dados:", Dados);
+      return true;
+    } else {
+      const request = await fetch("/api/verificador/whatsapp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          telefone: whatsapp,
+        }),
+      });
+      const data = await request.json();
+      console.log("🚀 ~ checkwhatsapp ~ data:", data);
+      if (data.status !== "VALID_WA_NUMBER") {
+        return false;
+      }
+      return true;
     }
-    return true;
   };
 
   return (

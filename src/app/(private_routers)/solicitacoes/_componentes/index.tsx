@@ -71,6 +71,11 @@ export default function SolicitacaoForm({
   const user = session?.user;
 
   const handlesubmit = async () => {
+     
+    console.log("nome", !nome);
+    console.log("cpf", !cpf);
+    console.log("email", !email);
+    console.log("tel", !tel);
     if (!codigo) {
       toast({
         title: "Erro",
