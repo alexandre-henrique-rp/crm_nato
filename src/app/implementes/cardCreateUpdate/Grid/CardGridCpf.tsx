@@ -1,7 +1,7 @@
 import { auth } from "@/lib/auth_confg";
 import { Box, BoxProps, FormLabel, Text } from "@chakra-ui/react";
 import { getServerSession } from "next-auth";
-import InputCpf from "./inputCpf";
+import InputCpf from "../imputs/inputCpf";
 
 interface CardGridCpfProps extends BoxProps {
   CpfSolicitacao: solictacao.SolicitacaoGetType;

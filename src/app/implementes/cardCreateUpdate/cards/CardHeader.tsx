@@ -17,12 +17,12 @@ export async function CardHeader({ SetDados }: CardHeaderProps) {
           <BotaoRetorno rota="/" />
           <Box>
             <Text fontSize={{ base: "sm", md: "md" }}>
-              Criado: {new Date(SetDados.createdAt).toLocaleDateString("pt-BR")}
+              Criado: {new Date(SetDados.createdAt).toLocaleString("pt-BR")}
             </Text>
             <Text fontSize={{ base: "sm", md: "md" }}>
               Aprovação:
-              {SetDados.fcweb?.dt_aprovacao &&
-                new Date(SetDados.fcweb?.dt_aprovacao).toLocaleDateString(
+              {SetDados.dt_aprovacao &&
+                new Date(SetDados.dt_aprovacao).toLocaleDateString(
                   "pt-BR"
                 )}
             </Text>

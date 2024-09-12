@@ -1,5 +1,4 @@
 import { CardCreateUpdate } from "@/app/implementes/cardCreateUpdate";
-import CardGridRelacionamento from "@/app/implementes/cardCreateUpdate/CardGridRelacionamento";
 import { Divider, Flex, SimpleGrid } from "@chakra-ui/react";
 
 type Props = {
@@ -32,7 +31,15 @@ export function CardUpdateSolicitacao({ setDadosCard }: Props) {
             />
           </Flex>
           <Flex flexDir={{ base: "column", md: "row" }} gap={10} px={4}>
-            <CardGridRelacionamento
+            <CardCreateUpdate.GridRelacionamento
+              DataSolicitacao={setDadosCard}
+              w={{ base: "100%", md: "15rem" }}
+            />
+            <CardCreateUpdate.GridTel1
+              DataSolicitacao={setDadosCard}
+              w={{ base: "100%", md: "15rem" }}
+            />
+            <CardCreateUpdate.GridTel2
               DataSolicitacao={setDadosCard}
               w={{ base: "100%", md: "15rem" }}
             />

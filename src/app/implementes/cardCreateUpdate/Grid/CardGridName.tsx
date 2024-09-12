@@ -1,5 +1,5 @@
 import { Box, BoxProps, FormLabel, GridItem } from "@chakra-ui/react";
-import InputName from "./inputName";
+import InputName from "../imputs/inputName";
 
 
 interface CardGridNameProps extends BoxProps {

@@ -131,7 +131,7 @@ export function InputRelacionamento({
               mt={2}
               _hover={{ color: "teal.700" }}
             >
-              Relacionamentos
+              Relacionamentos ({RelacionamentoData.length > 0 && RelacionamentoData.length})
             </Button>
           </PopoverTrigger>
           <PopoverContent>
