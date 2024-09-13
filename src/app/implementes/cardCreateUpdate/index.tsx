@@ -5,11 +5,26 @@ import { CardRoot } from "./cards/CardRoot";
 import CardGridCpf from "./Grid/CardGridCpf";
 import CardGridName from "./Grid/CardGridName";
 import CardGridRelacionamento from "./Grid/CardGridRelacionamento";
-import CardGridTel1 from "./Grid/CardGridTel1";
-import CardGridTel2 from "./Grid/CardGridTel2";
+import CardGridRegisterTel from "./Grid/CardGridRegiterTel";
+import CardGridTel from "./Grid/CardGridTel";
+import CardGridRegisterEmail from "./Grid/CardGridEmail";
+import CardGridConstrutora from "./Grid/CardGridConstrutora";
 
 
 
+/**
+ * @name CardCreateUpdate
+ * @description Componente que renderiza o card de criação e atualização de um registro
+ * @property {CardRoot} Root - Componente que renderiza o card de criação e atualização de um registro
+ * @property {CardHeader} Headers - Componente que renderiza o cabeçalho do card de criação e atualização de um registro
+ * @property {CardFormComponent} Form - Componente que renderiza o formulário do card de criação e atualização de um registro
+ * @property {CardGridCpf} GridCpf - Componente que renderiza a grid de CPF do card de criação e atualização de um registro
+ * @property {CardGridName} GridName - Componente que renderiza a grid de nome do card de criação e atualização de um registro
+ * @property {CardGridDateNasc} GridDateNasc - Componente que renderiza a grid de data de nascimento do card de criação e atualização de um registro
+ * @property {CardGridRelacionamento} GridRelacionamento - Componente que renderiza a grid de relacionamento do card de criação e atualização de um registro
+ * @property {CardGridRegisterTel} GridRegiterTel - Componente que renderiza a grid de registro de telefone do card de criação e atualização de um registro
+ * @property {CardGridTel} GridTel - Componente que renderiza a grid de telefone do card de criação e atualização de um registro
+ */
 export const CardCreateUpdate = {
   Root: CardRoot,
   Headers: CardHeader,
@@ -18,6 +33,8 @@ export const CardCreateUpdate = {
   GridName: CardGridName,
   GridDateNasc: CardGridDateNascimento,
   GridRelacionamento: CardGridRelacionamento,
-  GridTel1: CardGridTel1,
-  GridTel2: CardGridTel2,
+  GridRegisterTel: CardGridRegisterTel,
+  GridTel: CardGridTel,
+  GridEmail: CardGridRegisterEmail,
+  GridConstrutora: CardGridConstrutora,
 };

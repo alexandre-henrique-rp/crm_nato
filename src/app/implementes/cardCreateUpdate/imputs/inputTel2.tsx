@@ -5,15 +5,16 @@ import InputMask from "react-input-mask";
 
 // Definindo o tipo para SetValue, ajuste conforme necessário para o tipo correto da sua aplicação
 interface InputTel1Props extends InputProps {
-  SetValue: solictacao.SolicitacaoGetType;
+  SetValue: string;
+  index: number;
 }
 
-export const InputTel2 = ({ SetValue, ...props }: InputTel1Props) => {
+export const InputTel2 = ({ index, SetValue, ...props }: InputTel1Props) => {
   const [tel1, setTel1] = useState<string>("");
 
   useEffect(() => {
-    if (SetValue && SetValue.telefone2) {
-      setTel1(SetValue.telefone2); // Atribuindo o valor inicial do telefone
+    if (SetValue && !tel1) {
+      setTel1(SetValue); // Atribuindo o valor inicial do telefone
     }
   }, [SetValue]);
 
@@ -33,7 +34,7 @@ export const InputTel2 = ({ SetValue, ...props }: InputTel1Props) => {
       <Input
         type="tel"
         placeholder="(__) _____-____"
-        name="telefone2"
+        name={`telefone${index > 0 && index}`}
         variant="flushed"
         {...props} // Spread dos props adicionais do Chakra UI
       />
