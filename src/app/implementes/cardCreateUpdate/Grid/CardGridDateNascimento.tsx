@@ -15,7 +15,7 @@ export default function CardGridDateNascimento({ DataSolicitacao, ...props }: Ca
           type="date"
           name="DataNascimento"
           variant="flushed"
-          value={DataSolicitacao.dt_nascimento}
+          value={DataSolicitacao.dt_nascimento.split("T")[0]}
         />
       </Box>
     </>

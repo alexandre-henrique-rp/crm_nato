@@ -1,5 +1,7 @@
 import type { ConfigRoutes } from "@/types/route";
 import { NextRequest } from "next/server";
+;
+
 
 /**
  * função responsável por fazer um match de rotas, retornando se a rota é pública ou privada

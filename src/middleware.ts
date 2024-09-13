@@ -1,11 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { APP_ROUTES } from "./constants/app-routes";
 import { createRouteMatch } from "./lib/route";
+import { auth } from "./lib/auth_confg";
+import { getServerSession } from "next-auth";
+import { getSession } from "next-auth/react";
 
-export default function middleware(req: NextRequest) {
-    const cookiesAll = req.cookies.getAll();
-    const filtro = cookiesAll.filter((cookie) => cookie.name.includes("next-auth.session-token"));
-    const session = filtro[0]?.value;
+export async function middleware(req: NextRequest, ev: NextFetchEvent) {
+    // const cookiesAll = req.cookies.getAll();
+    // const filtro = cookiesAll.filter((cookie) => cookie.name.includes("next-auth.session-token"));
+    // // const session = filtro[0]?.value;
+
+    const requestForNextAuth = {
+        headers: {
+            cookie: req.headers.get('cookie'),
+        },
+    };
+
+    const session = await getSession({ req: requestForNextAuth });
 
 
     const { pathname } = req.nextUrl;
@@ -15,12 +26,11 @@ export default function middleware(req: NextRequest) {
         req
     );
 
-    console.log(isPrivateRoute);
-
     if (pathname === "/") {
         if (!session) {
             return NextResponse.redirect(new URL("/login", req.url));
         }
+
 
         return NextResponse.next();
     }
@@ -49,11 +59,11 @@ export default function middleware(req: NextRequest) {
         }
     }
 
-    if (session) {
-        if (isPlublicRoute) {
-            return NextResponse.redirect(new URL("/", req.url));
-        }
-    }
+    // if (session) {
+    //     if (isPlublicRoute) {
+    //         return NextResponse.redirect(new URL("/", req.url));
+    //     }
+    // }
 }
 
 export const config = {

@@ -9,6 +9,9 @@ import CardGridRegisterTel from "./Grid/CardGridRegiterTel";
 import CardGridTel from "./Grid/CardGridTel";
 import CardGridRegisterEmail from "./Grid/CardGridEmail";
 import CardGridConstrutora from "./Grid/CardGridConstrutora";
+import CardGridEmpreedimentoCliente from "./Grid/CardGridEmpreedimentoCliente";
+import CardGridFinanceiraCliente from "./Grid/CardGridFinanceiraCliente";
+import CardGridUpdateCnh from "./Grid/CardGridUpdateCnh";
 
 
 
@@ -37,4 +40,7 @@ export const CardCreateUpdate = {
   GridTel: CardGridTel,
   GridEmail: CardGridRegisterEmail,
   GridConstrutora: CardGridConstrutora,
+  GridEmpreedimentoCL: CardGridEmpreedimentoCliente,
+  GridFinanceiraCl: CardGridFinanceiraCliente,
+  GridUpdateCnh: CardGridUpdateCnh,
 };

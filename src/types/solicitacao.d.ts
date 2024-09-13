@@ -48,6 +48,7 @@ declare module solictacao {
       nome: string;
     };
     construtora: {
+      length: number;
       id: number;
       fantasia: string;
     };

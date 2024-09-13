@@ -70,13 +70,31 @@ export function CardUpdateSolicitacao({ setDadosCard }: Props) {
               />
               <CardCreateUpdate.GridConstrutora
                 DataSolicitacao={setDadosCard}
+                w={{ base: "100%", md: "16rem" }}
+              />
+              <CardCreateUpdate.GridEmpreedimentoCL
+                DataSolicitacao={setDadosCard}
                 w={{ base: "100%", md: "15rem" }}
               />
-              <CardCreateUpdate.GridTel
-                index={2}
-                DataSolicitacao={setDadosCard.telefone2}
-                w={{ base: "100%", md: "15rem" }}
+            </Flex>
+            <Flex
+              flexDir={{ base: "column", md: "row" }}
+              gap={10}
+              px={4}
+              justifyContent={{ base: "center", md: "space-between" }}
+            >
+              <CardCreateUpdate.GridFinanceiraCl
+                DataSolicitacao={setDadosCard}
+                w={{ base: "100%", md: "25rem" }}
               />
+              <CardCreateUpdate.GridUpdateCnh
+                DataSolicitacao={setDadosCard}
+                w={{ base: "100%", md: "16rem" }}
+              />
+              {/* <CardCreateUpdate.GridEmpreedimentoCL
+                DataSolicitacao={setDadosCard}
+                w={{ base: "100%", md: "15rem" }}
+              /> */}
             </Flex>
           </Flex>
           <button type="submit">Submit</button>

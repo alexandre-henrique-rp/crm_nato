@@ -2,7 +2,6 @@
 import {
   Box,
   Button,
-  FormLabel,
   IconButton,
   Popover,
   PopoverArrow,
@@ -17,12 +16,11 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 
-interface DropConstrutoraProps {
+interface DropFinanceiroProps {
   value: number;
 }
-
-export default function DropConstrutora({
-  value}: DropConstrutoraProps) {
+export default function DropFinanceiro({
+  value}: DropFinanceiroProps) {
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
@@ -30,13 +28,13 @@ export default function DropConstrutora({
   useEffect(() => {
     if (hierarquia === "ADM") {
       (async () => {
-        const req = await fetch("/api/construtora/getall");
+        const req = await fetch("/api/financeira/getall");
         const res = await req.json();
         setData(res);
       })();
     } else {
-      const construtora = user?.construtora;
-      setData(construtora);
+      const data = user?.Financeira;
+      setData(data);
     }
   }, []);
 
@@ -47,19 +45,19 @@ export default function DropConstrutora({
           <Popover>
             <PopoverTrigger>
               <Button variant="link" colorScheme="gray" pt={3}>
-                Alterar Construtora
+                Alterar Financeira
               </Button>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />
               <PopoverCloseButton />
-              <PopoverHeader>Alterar Construtora</PopoverHeader>
+              <PopoverHeader>Alterar Financeira</PopoverHeader>
               <PopoverBody display={"flex"} gap={3} alignItems={"center"}>
                 <Select
                   size={"sm"}
                   borderRadius={"10px"}
                   placeholder="Selecione"
-                  name="construtora"
+                  name="financeiro"
                   value={value}
                 >
                   {Data.map((item: any) => (

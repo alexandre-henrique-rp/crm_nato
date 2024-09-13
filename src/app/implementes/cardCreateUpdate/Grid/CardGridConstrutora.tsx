@@ -1,5 +1,6 @@
 import { Box, BoxProps, FormLabel, Text } from "@chakra-ui/react";
 import DropConstrutora from "../dropdow/dropConstrutora";
+import SelectConstrutora from "../dropdow/selectConstrutora";
 
 
 interface CardGridConstrutoraProps extends BoxProps {
@@ -16,9 +17,11 @@ export default function CardGridConstrutora({
         <FormLabel fontSize="sm" fontWeight="md">
           Construtora
         </FormLabel>
-        {DataSolicitacao.construtora && <Text pt={3}>{DataSolicitacao.construtora.fantasia}</Text>}
-        {DataSolicitacao.construtora && <DropConstrutora />}
-
+        {DataSolicitacao.construtora && (
+          <Text pt={3}>{DataSolicitacao.construtora.fantasia}</Text>
+        )}
+        {DataSolicitacao.construtora && <DropConstrutora value={DataSolicitacao.construtora.id} />}
+        {!DataSolicitacao && <SelectConstrutora />}
       </Box>
     </>
   );

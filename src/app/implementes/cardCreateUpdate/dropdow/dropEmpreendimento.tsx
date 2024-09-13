@@ -2,7 +2,6 @@
 import {
   Box,
   Button,
-  FormLabel,
   IconButton,
   Popover,
   PopoverArrow,
@@ -17,12 +16,10 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 
-interface DropConstrutoraProps {
+interface DropEmpreendimentoProps {
   value: number;
 }
-
-export default function DropConstrutora({
-  value}: DropConstrutoraProps) {
+export default function DropEmpreendimento({ value }: DropEmpreendimentoProps) {
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
@@ -30,13 +27,13 @@ export default function DropConstrutora({
   useEffect(() => {
     if (hierarquia === "ADM") {
       (async () => {
-        const req = await fetch("/api/construtora/getall");
+        const req = await fetch("/api/empreendimento/getall");
         const res = await req.json();
         setData(res);
       })();
     } else {
-      const construtora = user?.construtora;
-      setData(construtora);
+      const Empreedimento = user?.empreendimento;
+      setData(Empreedimento);
     }
   }, []);
 
@@ -47,24 +44,24 @@ export default function DropConstrutora({
           <Popover>
             <PopoverTrigger>
               <Button variant="link" colorScheme="gray" pt={3}>
-                Alterar Construtora
+                Alterar Empreendimento
               </Button>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />
               <PopoverCloseButton />
-              <PopoverHeader>Alterar Construtora</PopoverHeader>
+              <PopoverHeader>Alterar Empreendimento</PopoverHeader>
               <PopoverBody display={"flex"} gap={3} alignItems={"center"}>
                 <Select
                   size={"sm"}
                   borderRadius={"10px"}
                   placeholder="Selecione"
-                  name="construtora"
+                  name="empreendimento"
                   value={value}
                 >
                   {Data.map((item: any) => (
                     <option key={item.id} value={item.id}>
-                      {item.fantasia}
+                      {item.nome}
                     </option>
                   ))}
                 </Select>
