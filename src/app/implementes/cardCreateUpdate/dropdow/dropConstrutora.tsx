@@ -60,10 +60,10 @@ export default function DropConstrutora({
                   borderRadius={"10px"}
                   placeholder="Selecione"
                   name="construtora"
-                  value={value}
+                  value={Number(value)}
                 >
                   {Data.map((item: any) => (
-                    <option key={item.id} value={item.id}>
+                    <option key={item.id} value={Number(item.id)}>
                       {item.fantasia}
                     </option>
                   ))}
@@ -77,6 +77,7 @@ export default function DropConstrutora({
               </PopoverBody>
             </PopoverContent>
           </Popover>
+
         </Box>
       )}
     </>

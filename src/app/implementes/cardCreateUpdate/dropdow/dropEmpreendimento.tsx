@@ -57,10 +57,10 @@ export default function DropEmpreendimento({ value }: DropEmpreendimentoProps) {
                   borderRadius={"10px"}
                   placeholder="Selecione"
                   name="empreendimento"
-                  value={value}
+                  value={Number(value)}
                 >
                   {Data.map((item: any) => (
-                    <option key={item.id} value={item.id}>
+                    <option key={item.id} value={Number(item.id)}>
                       {item.nome}
                     </option>
                   ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Input, InputProps } from "@chakra-ui/react";
+import { Box, Input, InputProps } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { mask, unMask } from "remask";
 
@@ -34,11 +34,11 @@ export default function InputCpf({ setValueCpf, ...props }: InputCpfProps) {
   };
 
   return (
-    <Input
-      {...props}
-      value={cpf}
-      type="text"
-      onChange={handleChange}
-    />
+    <>
+      <Input {...props} value={cpf} type="text" onChange={handleChange} />
+      <Box hidden>
+        <Input value={unMask(cpf)} type="text" name="cpf" hidden />
+      </Box>
+    </>
   );
 }

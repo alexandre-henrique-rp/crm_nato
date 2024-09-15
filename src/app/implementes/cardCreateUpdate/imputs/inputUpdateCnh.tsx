@@ -1,17 +1,26 @@
 "use client";
 
-import { Input, InputProps, useToast } from "@chakra-ui/react";
+import { Box, Input, InputProps, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import { ChangeEvent } from "react";
+import { ChangeEvent, createContext, useState } from "react";
+
+// Crie um contexto para compartilhar dados entre componentes
+export const DataContext = createContext({
+  Data: "",
+  setData: (data: string) => {},
+});
 
 interface InputUpdateCnhProps extends InputProps {
-  onFileUploaded: (data: any) => string;
+  Url?: string;
+  tag?: string;
 }
 
 export default function InputUpdateCnh({
-  onFileUploaded,
+  Url,
+  tag,
   ...props
 }: InputUpdateCnhProps) {
+  const [Data, setData] = useState<string>("");
   const toast = useToast();
   const handleFileChange = async (
     event: ChangeEvent<HTMLInputElement | any>
@@ -27,7 +36,7 @@ export default function InputUpdateCnh({
           },
         })
         .then((response) => {
-          onFileUploaded(response.data.data);
+          setData(response.data.data);
           toast({
             title: "Arquivo salvo",
             description: response.data.message,
@@ -50,13 +59,18 @@ export default function InputUpdateCnh({
 
   return (
     <>
-      <Input
-        {...props}
-        type="file"
-        variant="flushed"
-        accept=".jpg, .png, .pdf"
-        onChange={handleFileChange}
-      />
+      <DataContext.Provider value={{ Data, setData }}>
+        <Input
+          {...props}
+          type="file"
+          variant="flushed"
+          accept=".jpg, .png, .pdf"
+          onChange={handleFileChange}
+        />
+        <Box hidden>
+          <Input value={Data ? Data : Url} name={`update_${tag}`} hidden />
+        </Box>
+      </DataContext.Provider>
     </>
   );
 }

@@ -58,10 +58,10 @@ export default function DropFinanceiro({
                   borderRadius={"10px"}
                   placeholder="Selecione"
                   name="financeiro"
-                  value={value}
+                  value={Number(value)}
                 >
                   {Data.map((item: any) => (
-                    <option key={item.id} value={item.id}>
+                    <option key={item.id} value={Number(item.id)}>
                       {item.fantasia}
                     </option>
                   ))}

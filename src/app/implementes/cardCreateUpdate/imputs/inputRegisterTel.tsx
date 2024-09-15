@@ -90,7 +90,7 @@ export const InputRegisterTel = ({ index, ...props }: InputTel1Props) => {
       )}
       {Error && (
         <Text color={"red"} fontSize="xs">
-          Telefone possui WhatsApp
+          Telefone não possui WhatsApp
         </Text>
       )}
       <Box hidden>

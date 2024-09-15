@@ -1,10 +1,13 @@
 import { Box, BoxProps, FormLabel, Input } from "@chakra-ui/react";
 
-interface CardGridDateNascimento extends BoxProps  {
+interface CardGridDateNascimento extends BoxProps {
   DataSolicitacao: solictacao.SolicitacaoGetType;
-};
+}
 
-export default function CardGridDateNascimento({ DataSolicitacao, ...props }: CardGridDateNascimento) {
+export default function CardGridDateNascimento({
+  DataSolicitacao,
+  ...props
+}: CardGridDateNascimento) {
   return (
     <>
       <Box {...props}>
@@ -15,7 +18,10 @@ export default function CardGridDateNascimento({ DataSolicitacao, ...props }: Ca
           type="date"
           name="DataNascimento"
           variant="flushed"
-          value={DataSolicitacao.dt_nascimento.split("T")[0]}
+          value={
+            DataSolicitacao?.dt_nascimento &&
+            DataSolicitacao?.dt_nascimento.split("T")[0]
+          }
         />
       </Box>
     </>

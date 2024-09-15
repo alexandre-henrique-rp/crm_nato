@@ -6,17 +6,9 @@ import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
-    // const cookiesAll = req.cookies.getAll();
-    // const filtro = cookiesAll.filter((cookie) => cookie.name.includes("next-auth.session-token"));
-    // // const session = filtro[0]?.value;
-
-    const requestForNextAuth = {
-        headers: {
-            cookie: req.headers.get('cookie'),
-        },
-    };
-
-    const session = await getSession({ req: requestForNextAuth });
+    const cookiesAll = req.cookies.getAll();
+    const filtro = cookiesAll.filter((cookie) => cookie.name.includes("next-auth.session-token"));
+    const session = filtro[0]?.value;
 
 
     const { pathname } = req.nextUrl;
@@ -58,12 +50,6 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent) {
             return NextResponse.next();
         }
     }
-
-    // if (session) {
-    //     if (isPlublicRoute) {
-    //         return NextResponse.redirect(new URL("/", req.url));
-    //     }
-    // }
 }
 
 export const config = {

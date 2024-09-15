@@ -23,7 +23,6 @@ export default async function CardGridCpf({ CpfSolicitacao, ...props }: CardGrid
           <InputCpf
             variant="flushed"
             setValueCpf={CpfSolicitacao.cpf}
-            name="cpf"
           />
         )}
       </Box>

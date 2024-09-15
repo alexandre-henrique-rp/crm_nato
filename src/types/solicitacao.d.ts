@@ -96,6 +96,9 @@ declare module solictacao {
     distrato_dt: Date | string | any;
     status_aprovacao: boolean;
     distrato_id: number;
+    mult_link: string[];
+    mult_ass_doc: string[];
+    hr_aprovacao: string;
   }
 
   /**

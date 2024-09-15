@@ -1,5 +1,5 @@
 "use client";
-import { Input, InputProps } from "@chakra-ui/react";
+import { Box, Input, InputProps } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
 
@@ -25,6 +25,7 @@ export const InputTel2 = ({ index, SetValue, ...props }: InputTel1Props) => {
   };
 
   return (
+    <>
     <InputMask
       mask="(99) 9 9999-9999"
       maskChar={null}
@@ -34,10 +35,18 @@ export const InputTel2 = ({ index, SetValue, ...props }: InputTel1Props) => {
       <Input
         type="tel"
         placeholder="(__) _____-____"
-        name={`telefone${index > 0 && index}`}
         variant="flushed"
         {...props} // Spread dos props adicionais do Chakra UI
       />
     </InputMask>
+    <Box hidden>
+      <Input
+        type="tel"
+        name={`telefones${index > 0 && index}`}
+        value={tel1.replace(/\D+/g, "")}
+        hidden
+      />
+    </Box>
+    </>
   );
 };

@@ -1,15 +1,23 @@
 "use client";
 import { Button, useToast } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { BeatLoader } from "react-spinners";
 
 interface BtRemoverDistratoProps {
   id: number;
 }
 export default function BtRemoverDistrato({ id }: BtRemoverDistratoProps) {
+  const [Loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
   const { data: session } = useSession();
   const User = session?.user;
+  const route = useRouter()
+
+ 
   const handleClick = async () => {
+    setLoading(true);
     try {
       const Get = await fetch(`/api/solicitacao/get/${id}`, {
         method: "GET",
@@ -47,7 +55,9 @@ export default function BtRemoverDistrato({ id }: BtRemoverDistratoProps) {
           duration: 3000,
           isClosable: true,
         });
-        window.location.reload();
+        // window.location.reload();
+        route.refresh()
+        setLoading(false);
       }
     } catch (error) {
       toast({
@@ -57,11 +67,19 @@ export default function BtRemoverDistrato({ id }: BtRemoverDistratoProps) {
         duration: 3000,
         isClosable: true,
       });
+
+      setLoading(false);
     }
   };
 
   return (
-    <Button colorScheme="cyan" variant="solid" onClick={handleClick}>
+    <Button
+      colorScheme="cyan"
+      variant="solid"
+      onClick={handleClick}
+      isLoading={Loading}
+      spinner={<BeatLoader size={8} color="white" />}
+    >
       Novo Acordo
     </Button>
   );
