@@ -23,7 +23,7 @@ interface DropEmpreendimentoProps {
   value: number;
   id: number;
 }
-export default function DropEmpreendimento({ value }: DropEmpreendimentoProps) {
+export default function DropEmpreendimento({ value, id }: DropEmpreendimentoProps) {
   const [Empreedimento, setEmpreedimento] = useState<number>(0);
   const [Loading, setLoading] = useState<boolean>(false);
   const { data: session } = useSession();
@@ -55,9 +55,7 @@ export default function DropEmpreendimento({ value }: DropEmpreendimentoProps) {
     setLoading(true);
     try {
       const response = await fetch(
-        `src/app/api/solicitacao/update/${
-          Empreedimento !== 0 ? Empreedimento : value
-        }`,
+        `src/app/api/solicitacao/update/${id}`,
         {
           method: "PUT",
           headers: {

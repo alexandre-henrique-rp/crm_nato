@@ -21,10 +21,11 @@ import { BeatLoader } from "react-spinners";
 
 interface DropConstrutoraProps {
   value: number;
+  Id: number;
 }
 
 export default function DropConstrutora({
-  value}: DropConstrutoraProps) {
+  value, Id}: DropConstrutoraProps) {
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
@@ -51,9 +52,7 @@ export default function DropConstrutora({
         setLoading(true);
         try {
           const response = await fetch(
-            `src/app/api/solicitacao/update/${
-              Construtora !== 0 ? Construtora : value
-            }`,
+            `src/app/api/solicitacao/update/${Id}`,
             {
               method: "PUT",
               headers: {

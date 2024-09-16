@@ -16,11 +16,16 @@ export default function CardGridEmpreedimentoCliente({
         <FormLabel fontSize="sm" fontWeight="md">
           Empreendimento
         </FormLabel>
-        {DataSolicitacao.empreedimento && (
+        {DataSolicitacao.empreedimento.nome && (
           <Text pt={3}>{DataSolicitacao.empreedimento.nome}</Text>
         )}
-        {DataSolicitacao.empreedimento && <DropEmpreendimento id={DataSolicitacao.id} value={DataSolicitacao.empreedimento.id}/>}
-        {!DataSolicitacao && <SelectEmpreedimento />}
+        {DataSolicitacao.empreedimento.id && (
+          <DropEmpreendimento
+            id={DataSolicitacao.id}
+            value={DataSolicitacao.empreedimento.id}
+          />
+        )}
+        {!DataSolicitacao.empreedimento && <SelectEmpreedimento />}
       </Box>
     </>
   );

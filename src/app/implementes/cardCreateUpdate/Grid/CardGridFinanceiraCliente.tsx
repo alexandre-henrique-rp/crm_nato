@@ -17,11 +17,14 @@ export default function CardGridFinanceiraCliente({
         <FormLabel fontSize="sm" fontWeight="md">
           Financeira
         </FormLabel>
-        {DataSolicitacao.financeiro && DataSolicitacao.financeiro?.fantasia && (
-          <Text pt={3}>{DataSolicitacao.financeiro?.fantasia}</Text>
-        )}
-        {DataSolicitacao.financeiro && DataSolicitacao.financeiro.id && (
-          <DropFinanceiro value={DataSolicitacao.financeiro.id} />
+        {DataSolicitacao.financeiro.fantasia && (
+            <Text pt={3}>{DataSolicitacao.financeiro.fantasia}</Text>
+          )}
+        {DataSolicitacao.financeiro.id && (
+          <DropFinanceiro
+            value={DataSolicitacao.financeiro.id}
+            Id={DataSolicitacao.id}
+          />
         )}
         {!DataSolicitacao.financeiro && <SelectFinanceiro />}
       </Box>

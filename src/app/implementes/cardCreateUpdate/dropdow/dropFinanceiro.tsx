@@ -21,8 +21,9 @@ import { BeatLoader } from "react-spinners";
 
 interface DropFinanceiroProps {
   value: number;
+  Id: number;
 }
-export default function DropFinanceiro({ value }: DropFinanceiroProps) {
+export default function DropFinanceiro({ value, Id }: DropFinanceiroProps) {
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
@@ -49,9 +50,7 @@ export default function DropFinanceiro({ value }: DropFinanceiroProps) {
     setLoading(true);
     try {
       const response = await fetch(
-        `src/app/api/solicitacao/update/${
-          Financeiro !== 0 ? Financeiro : value
-        }`,
+        `src/app/api/solicitacao/update/${Id}`,
         {
           method: "PUT",
           headers: {
