@@ -2,6 +2,7 @@
 import { Button, Flex } from "@chakra-ui/react";
 import { DataContext } from "../imputs/inputUpdateCnh";
 import { useContext, useEffect, useState } from "react";
+import { DownloadDoc } from "@/app/componentes/DowloadDoc";
 
 interface ButtonsDownloadsCnhProps {
   url?: string;
@@ -27,15 +28,16 @@ export function ButtonsDownloadsCnh({ url }: ButtonsDownloadsCnhProps) {
     if (Data) setUrlDownloads(Data);
   }, [url, Data]);
 
+
+
   return (
     <>
       <Flex gap={3} pt={3}>
-        {UrlDownloads && <Button size={"sm"} colorScheme="green">
+        {UrlDownloads && <Button size={"sm"} colorScheme="green"
+          onClick={() => window.open(UrlDownloads, "_blank") }>
           Download file
         </Button>}
-        {UrlBase64 && <Button size={"sm"} colorScheme="green">
-          Download Base64
-        </Button>}
+        {UrlBase64 && <DownloadDoc base64={UrlBase64}  />}
       </Flex>
     </>
   );
