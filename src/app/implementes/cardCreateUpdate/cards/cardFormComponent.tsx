@@ -1,6 +1,5 @@
 "use client";
 import { useToast } from "@chakra-ui/react";
-import { useRouter } from "next/navigation";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 
@@ -19,7 +18,6 @@ export function CardFormComponent(props: CardFormProps) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
   const toast = useToast();
-  const route = useRouter();
 
   const [state, formAction] = useFormState(props.action, { error: null });
 
@@ -40,8 +38,8 @@ export function CardFormComponent(props: CardFormProps) {
         status: "success",
         duration: 3000,
         isClosable: true,
+        position: "top-right",
       });
-      route.push("/");
       setIsSuccess(false); // Reset state after showing toast
     }
     if (isError) {
@@ -51,6 +49,7 @@ export function CardFormComponent(props: CardFormProps) {
         status: "error",
         duration: 3000,
         isClosable: true,
+        position: "top-right",
       });
       setIsError(false); // Reset state after showing toast
     }

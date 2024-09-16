@@ -7,6 +7,7 @@ import { BtCreateAlertCliente } from "../bt_create_alert_cliente";
 import { getServerSession } from "next-auth";
 import { auth } from "@/lib/auth_confg";
 import { redirect } from "next/navigation";
+import { ResendSms } from "@/app/implementes/cardCreateUpdate/butons/resendSms";
 
 type Props = {
   setDadosCard: solictacao.SolicitacaoGetType;
@@ -23,8 +24,8 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
         ...(!setDadosCard.ativo && { ativo: true }),
         cpf: data.get("cpf") || "",
         nome: data.get("nome") || "",
-        telefone: data.get("whatsapp") || "",
-        telefone2: data.get("whatsapp2") || "",
+        telefone: data.get("telefones1") || "",
+        telefone2: data.get("telefones2") || "",
         email: data.get("email") || "",
         uploadRg: data.get("update_RG") || "",
         uploadCnh: data.get("update_CNH") || "",
@@ -38,6 +39,7 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
         mult_link: data.get("links")
           ? data.get("links")?.toString().split(", ")
           : [],
+        relacionamento: data.get("Relacionamento")? JSON.parse(data.get("Relacionamento")?.toString() || "") : [],
       };
 
       const request = await fetch(
@@ -226,6 +228,7 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
             )}
             {!setDadosCard.id_fcw && <CriarFcweb Id={setDadosCard.id} />}
             <BtCreateAlertCliente DataSolicitacao={setDadosCard} />
+            <ResendSms id={setDadosCard.id} />
             <SaveBtm colorScheme="green" type="submit">
               Salvar
             </SaveBtm>

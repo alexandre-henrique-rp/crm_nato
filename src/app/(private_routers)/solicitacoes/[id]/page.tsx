@@ -1,7 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import { getServerSession } from "next-auth";
 import { auth } from "@/lib/auth_confg";
-import { revalidateTag } from "next/cache";
 import { CardUpdateSolicitacao } from "@/app/componentes/card_Update_solicitacao";
 import CardListAlertCliente from "@/app/componentes/card_list_alert_cliente";
 
