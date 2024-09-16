@@ -1,7 +1,6 @@
 "use client";
 
 import { Input, InputProps } from "@chakra-ui/react";
-import Box from "next-auth/providers/box";
 import { useEffect, useState } from "react";
 
 export interface InputEmailProps extends InputProps {
@@ -20,9 +19,7 @@ export default function InputEmail({ setValueEmail, ...props }: InputEmailProps)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const valor = e.target.value;
-    if (validateEmail(valor)) {
-      setEmail(valor);
-    }
+    setEmail(valor);
     props.onChange && props.onChange(e); // Mantém o evento original se passado
   };
 

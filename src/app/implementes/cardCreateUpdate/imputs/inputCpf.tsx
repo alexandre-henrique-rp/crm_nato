@@ -35,7 +35,12 @@ export default function InputCpf({ setValueCpf, ...props }: InputCpfProps) {
 
   return (
     <>
-      <Input {...props} value={cpf} type="text" onChange={handleChange} />
+      {setValueCpf && (
+        <Input {...props} value={cpf} type="text" color={"teal.500"} _hover={{color:"teal.500"}} _focus={{color:"teal.500", borderColor:"teal.500"}}/>
+      )}
+      {!setValueCpf && (
+        <Input {...props} value={cpf} type="text" onChange={handleChange} />
+      )}
       <Box hidden>
         <Input value={unMask(cpf)} type="text" name="cpf" hidden />
       </Box>

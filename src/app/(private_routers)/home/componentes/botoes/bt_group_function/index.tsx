@@ -39,6 +39,7 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+
   const HandleDelet = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
@@ -70,6 +71,11 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
       });
     }
   };
+
+  const HandleRedirect = () => {
+    window.open(`/solicitacoes/${id}`, "_blank");
+  }
+  
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <ButtonGroup variant="solid" size="sm" spacing={3}>
@@ -77,7 +83,7 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
           colorScheme="blue"
           icon={<BsBoxArrowUpRight />}
           aria-label="Up"
-          onClick={() => route.push(`/solicitacoes/${id}`)}
+          onClick={HandleRedirect}
         />
         <Box hidden={exclude}>
           <IconButton
@@ -92,7 +98,6 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
         <BtmDistrato id={id} distrato={distrato} exclude={exclude} />
       </ButtonGroup>
 
-      
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
 
@@ -105,16 +110,19 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
 
           <ModalFooter>
             <Flex gap={3}>
+              <Button
+                colorScheme="blue"
+                leftIcon={<IoIosArrowBack />}
+                onClick={onClose}
+              />
 
-            <Button colorScheme="blue" leftIcon={<IoIosArrowBack />} onClick={onClose} />
-
-            <Button
-              // leftIcon={<BsFillTrashFill />}
-              onClick={(e) => HandleDelet(e)}
-              colorScheme="red"
-            >
-              Confirmar Exclusão
-            </Button>
+              <Button
+                // leftIcon={<BsFillTrashFill />}
+                onClick={(e) => HandleDelet(e)}
+                colorScheme="red"
+              >
+                Confirmar Exclusão
+              </Button>
             </Flex>
           </ModalFooter>
         </ModalContent>

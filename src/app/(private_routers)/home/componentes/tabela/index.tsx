@@ -65,6 +65,9 @@ export function Tabela({
     const horaAgenda = item.hr_agendamento?.split("T")[1].split(".")[0];
     const andamento = item.Andamento;
     const statusPg = item.fcweb?.estatos_pgto;
+    console.log("🚀 ~ tabela ~ statusPg:", item)
+    console.log("🚀 ~ tabela ~ statusPg:", statusPg)
+    console.log("🚀 ~ tabela ~ statusPg:", item.id)
     const colors = !item.ativo
       ? "red.400"
       : item.distrato && user?.hierarquia === "ADM"

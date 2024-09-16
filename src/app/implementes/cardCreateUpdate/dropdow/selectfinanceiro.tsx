@@ -16,7 +16,7 @@ export default function SelectFinanceiro({
   useEffect(() => {
     if (hierarquia === "ADM") {
       (async () => {
-        const req = await fetch("/api/empreendimento/getall");
+        const req = await fetch("/api/financeira/getall");
         const res = await req.json();
         setData(res);
       })();
@@ -25,6 +25,8 @@ export default function SelectFinanceiro({
       setData(data);
     }
   }, []);
+
+  console.log(Data);
 
   return (
     <>

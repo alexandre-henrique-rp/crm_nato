@@ -11,19 +11,28 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
+import { BeatLoader } from "react-spinners";
 
 interface DropEmpreendimentoProps {
   value: number;
+  id: number;
 }
 export default function DropEmpreendimento({ value }: DropEmpreendimentoProps) {
+  const [Empreedimento, setEmpreedimento] = useState<number>(0);
+  const [Loading, setLoading] = useState<boolean>(false);
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
   const [Data, setData] = useState<any>([]);
+  const toast = useToast();
+  const route = useRouter();
+
   useEffect(() => {
     if (hierarquia === "ADM") {
       (async () => {
@@ -35,10 +44,56 @@ export default function DropEmpreendimento({ value }: DropEmpreendimentoProps) {
       const Empreedimento = user?.empreendimento;
       setData(Empreedimento);
     }
+
+    if (value) {
+      setEmpreedimento(value);
+    }
   }, []);
+
+  const handleUpdate = async(e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `src/app/api/solicitacao/update/${
+          Empreedimento !== 0 ? Empreedimento : value
+        }`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            empreedimento: Number(Empreedimento),
+          }),
+        }
+      );
+
+      if(response.ok){
+        toast({
+          title: "Empreendimento alterado com sucesso",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setLoading(false);
+        route.refresh();
+      }
+    } catch (error) {
+      toast({
+        title: "Erro ao alterar o empreendimento",
+        description: JSON.stringify(error),
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      setLoading(false);
+    }
+  };
 
   return (
     <>
+      {Loading && <BeatLoader color="green.500" />}
       {Data.length > 1 && (
         <Box>
           <Popover>
@@ -57,7 +112,8 @@ export default function DropEmpreendimento({ value }: DropEmpreendimentoProps) {
                   borderRadius={"10px"}
                   placeholder="Selecione"
                   name="empreendimento"
-                  value={Number(value)}
+                  value={Empreedimento}
+                  onChange={(e) => setEmpreedimento(Number(e.target.value))}
                 >
                   {Data.map((item: any) => (
                     <option key={item.id} value={Number(item.id)}>
@@ -70,6 +126,7 @@ export default function DropEmpreendimento({ value }: DropEmpreendimentoProps) {
                   aria-label={"substituir"}
                   colorScheme={"teal"}
                   size={"sm"}
+                  onClick={handleUpdate}
                 />
               </PopoverBody>
             </PopoverContent>

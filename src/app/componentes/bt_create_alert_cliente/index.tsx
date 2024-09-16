@@ -166,7 +166,7 @@ export function BtCreateAlertCliente({
             <ModalContent>
               <ModalHeader>
                 {Data?.nome &&
-                  `Criar Alerta para ${Data?.nome} vendedor ${Data?.corretor.nome}`}
+                  `Criar Alerta para ${Data?.nome} vendedor ${Data?.corretor?.nome}`}
               </ModalHeader>
               <ModalCloseButton />
               <FormControl>

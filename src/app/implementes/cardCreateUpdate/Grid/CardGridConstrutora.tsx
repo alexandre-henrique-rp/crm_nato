@@ -17,11 +17,16 @@ export default function CardGridConstrutora({
         <FormLabel fontSize="sm" fontWeight="md">
           Construtora
         </FormLabel>
-        {DataSolicitacao.construtora && (
-          <Text pt={3}>{DataSolicitacao.construtora.fantasia}</Text>
-        )}
-        {DataSolicitacao.construtora && <DropConstrutora value={DataSolicitacao.construtora.id} />}
-        {!DataSolicitacao && <SelectConstrutora />}
+        {DataSolicitacao.construtora &&
+          DataSolicitacao.construtora !== 0 && (
+            <Text pt={3}>{DataSolicitacao.construtora.fantasia}</Text>
+          )}
+        {DataSolicitacao.construtora &&
+          DataSolicitacao.construtora !== 0 && (
+            <DropConstrutora value={DataSolicitacao.construtora.id} />
+          )}
+        {!DataSolicitacao.construtora && <SelectConstrutora />}
+        {DataSolicitacao.construtora === 0 && <SelectConstrutora />}
       </Box>
     </>
   );

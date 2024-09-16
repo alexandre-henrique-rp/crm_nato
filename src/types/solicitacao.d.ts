@@ -51,11 +51,11 @@ declare module solictacao {
       length: number;
       id: number;
       fantasia: string;
-    };
+    } | any;
     financeiro: {
       id: number;
       fantasia: string;
-    };
+    } | any;
     telefone: string;
     dt_nascimento: Date | string | any;
     ass_doc?: string | any;
@@ -80,7 +80,7 @@ declare module solictacao {
       cidade: string;
       uf: string;
       tag: string;
-    };
+    } | any;
     cnh: string;
     ativo: boolean;
     distrato: boolean;

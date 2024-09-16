@@ -28,16 +28,20 @@ export function ButtonsDownloadsCnh({ url }: ButtonsDownloadsCnhProps) {
     if (Data) setUrlDownloads(Data);
   }, [url, Data]);
 
-
+const HandleDownloads = async () => {
+    if (!url) return;
+    window.open(url, "_blank");
+  };
 
   return (
     <>
       <Flex gap={3} pt={3}>
-        {UrlDownloads && <Button size={"sm"} colorScheme="green"
-          onClick={() => window.open(UrlDownloads, "_blank") }>
-          Download file
-        </Button>}
-        {UrlBase64 && <DownloadDoc base64={UrlBase64}  />}
+        {UrlDownloads && (
+          <Button size={"sm"} colorScheme="green" onClick={HandleDownloads}>
+            Download file
+          </Button>
+        )}
+        {UrlBase64 && <DownloadDoc base64={UrlBase64} />}
       </Flex>
     </>
   );

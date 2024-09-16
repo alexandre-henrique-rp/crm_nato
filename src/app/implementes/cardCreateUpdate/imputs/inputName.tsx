@@ -32,7 +32,7 @@ export default function InputName({ setValueName, ...props }: InputCpfProps) {
 
   return (
     <>
-  <Input {...props} value={Nome} type="text" onChange={handleChange} />
+      <Input {...props} value={Nome} type="text" onChange={handleChange} />
     </>
-);
+  );
 }

@@ -131,7 +131,8 @@ export function InputRelacionamento({
               mt={2}
               _hover={{ color: "teal.700" }}
             >
-              Relacionamentos ({RelacionamentoData.length > 0 && RelacionamentoData.length})
+              Relacionamentos (
+              {RelacionamentoData.length > 0 && RelacionamentoData.length})
             </Button>
           </PopoverTrigger>
           <PopoverContent>
@@ -141,19 +142,19 @@ export function InputRelacionamento({
             <PopoverBody>
               {RelacionamentoData.length > 0 &&
                 RelacionamentoData.map((item: any) => (
-                  <Flex justifyContent={"space-between"} key={item.id}>
+                  <Flex justifyContent={"space-between"} key={item?.id}>
                     <Link
-                      key={item.id}
-                      href={`/solicitacoes/${item.id}`}
+                      key={item?.id}
+                      href={item?.id ? `/solicitacoes/${item.id}` : "#"}
                       color="teal.600"
                       fontWeight="bold"
                     >
-                      {item.cpf}
+                      {item?.cpf}
                     </Link>
                     <IconButton
                       icon={<FaPlus />}
                       aria-label={"remover"}
-                      onClick={() => handleDelete(item.cpf)}
+                      onClick={() => handleDelete(item?.cpf)}
                       colorScheme={"cyan"}
                       size={"xs"}
                     />
@@ -171,7 +172,7 @@ export function InputRelacionamento({
       <Box hidden>
         <Input
           value={JSON.stringify(
-            RelacionamentoData.map((item: any) => item.cpf)
+            RelacionamentoData.map((item: any) => item?.cpf)
           )}
           name="Relacionamento"
           hidden
