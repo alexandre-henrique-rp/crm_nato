@@ -1,13 +1,12 @@
-"use client";
+"use server";
 
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
+import { auth } from "@/lib/auth_confg";
 import {
   Box,
   Button,
   ButtonGroup,
-  Container,
   Flex,
-  Heading,
   IconButton,
   Modal,
   ModalBody,
@@ -15,40 +14,40 @@ import {
   ModalFooter,
   ModalOverlay,
   Stack,
-  Table,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
-  useColorModeValue,
   useDisclosure,
   useToast,
-  useBreakpointValue,
 } from "@chakra-ui/react";
-import { METHODS } from "http";
-import { useRouter } from "next/navigation";
+import { getServerSession } from "next-auth";
 import {
-  AwaitedReactNode,
-  JSXElementConstructor,
-  Key,
-  ReactElement,
-  ReactNode,
-  ReactPortal,
   useEffect,
   useState,
 } from "react";
-import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
-import { FaCheck, FaTimes } from "react-icons/fa";
+import { BsFillTrashFill } from "react-icons/bs";
 import { IoIosArrowBack } from "react-icons/io";
 
-export default function Usuarios({ onDados }: any) {
-  const [Usuarios, setUsuarios] = useState<any>([]);
-  const [refresh, setRefresh] = useState<number>(0);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
-  const router = useRouter();
+export default async function Usuarios() {
+  const session = await getServerSession(auth);
+ 
+async function GetUser() {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/user`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    return { status: 'failed', message: 'Invalid credentials', data: [] };
+  }
+  const data = await response.json();
+
+  return { status: 'success', message: 'Data fetched successfully', data: data };
+}
 
   useEffect(() => {
     (async () => {

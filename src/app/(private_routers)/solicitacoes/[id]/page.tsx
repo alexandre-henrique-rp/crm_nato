@@ -17,6 +17,7 @@ const Requestes = async (id: string) => {
       cache: "no-store",
       next: {
         tags: ["get_solicitacao_id"],
+        revalidate: 5,
       },
 
       // para atualizar essa requisição utilize o método -revalidateTag()- passando o nome da tag e o nome da requisição (ex:  "revalidateTag('get_solicitacao_id')")
@@ -45,6 +46,7 @@ const RequestAlert = async (id: string) => {
       cache: "no-store",
       next: {
         tags: ["get_Alert"],
+        revalidate: 5,
       },
     });
     if (!request.ok) {

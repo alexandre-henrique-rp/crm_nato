@@ -24,8 +24,7 @@ interface DropConstrutoraProps {
   Id: number;
 }
 
-export default function DropConstrutora({
-  value, Id}: DropConstrutoraProps) {
+export default function DropConstrutora({ value, Id }: DropConstrutoraProps) {
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
@@ -45,46 +44,47 @@ export default function DropConstrutora({
       const construtora = user?.construtora;
       setData(construtora);
     }
+    if(value){
+      setConstrutora(value);
+    }
   }, []);
 
-      const handleUpdate = async (e: any) => {
-        e.preventDefault();
-        setLoading(true);
-        try {
-          const response = await fetch(
-            `src/app/api/solicitacao/update/${Id}`,
-            {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                construtora: Number(Construtora),
-              }),
-            }
-          );
+  const handleUpdate = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch(`src/app/api/solicitacao/update/${Id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          construtora: Number(Construtora),
+        }),
+      });
 
-          if (response.ok) {
-            toast({
-              title: "Financeira alterado com sucesso",
-              status: "success",
-              duration: 3000,
-              isClosable: true,
-            });
-            setLoading(false);
-            route.refresh();
-          }
-        } catch (error) {
-          toast({
-            title: "Erro ao alterar o Financeira",
-            description: JSON.stringify(error),
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
-          setLoading(false);
-        }
-      };
+      if (response.ok) {
+        toast({
+          title: "Financeira alterado com sucesso",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setLoading(false);
+        route.refresh();
+      }
+    } catch (error) {
+      toast({
+        title: "Erro ao alterar o Financeira",
+        description: JSON.stringify(error),
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      setLoading(false);
+    }
+  };
+
 
   return (
     <>
