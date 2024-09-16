@@ -36,8 +36,6 @@ interface relacionamentoProps {
   ishidden: any;
 }
 
-
-
 export default function SolicitacaoForm({
   onvalue,
   ishidden,
@@ -50,9 +48,7 @@ export default function SolicitacaoForm({
   const [empreendimento, setempreendimento] = useState(0);
   const [CorretorId, setCorretorId] = useState(0);
   const [email, setemail] = useState("");
-  const [uploadCnh, setCnhFile] = useState<any>();
   const [UploadCnhUrl, setUploadCnhUrl] = useState<string>("");
-  const [uploadRg, setRgFile] = useState<any>();
   const [UploadRgUrl, setUploadRgUrl] = useState<string>("");
   const [relacionamento, setrelacionamento] = useState<string>("nao");
   const [Voucher, setVoucher] = useState<string>("");
@@ -60,8 +56,6 @@ export default function SolicitacaoForm({
   const [teldois, SetTeldois] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
-  const [checkEmailString, setcheckEmailString] = useState<string>("");
-  const [codigo, setcodigo] = useState<boolean>(false);
   const [Whatappdois, setWhatappdois] = useState<string>("");
   const [VendedorName, setVendedorName] = useState<string>("");
   const [Sms, setSms] = useState<boolean>(true);
@@ -71,21 +65,58 @@ export default function SolicitacaoForm({
   const user = session?.user;
 
   const handlesubmit = async () => {
-    if (!codigo) {
+    // if (!codigo) {
+    //   toast({
+    //     title: "Erro",
+    //     description: "Falha na verificação de Email",
+    //     status: "error",
+    //     duration: 3000,
+    //     isClosable: true,
+    //   });
+    // }
+     if (
+      !nome ||
+      !cpf ||
+      !email ||
+      !tel ||
+      ConstrutoraID === 0 ||
+      empreendimento === 0 ||
+      FinanceiraID === 0 ||
+      !email ||
+      !DataNascimento
+    ) {
+      const capos = [];
+      if (!nome) {
+        capos.push("Nome");
+      }
+      if (!cpf) {
+        capos.push("CPF");
+      }
+      if (!email) {
+        capos.push("Email");
+      }
+      if (!tel) {
+        capos.push("Telefone");
+      }
+      if (ConstrutoraID === 0) {
+        capos.push("Construtora");
+      }
+      if (empreendimento === 0) {
+        capos.push("Empreendimento");
+      }
+      if (FinanceiraID === 0) {
+        capos.push("Financeira");
+      }
+      if (!DataNascimento) {
+        capos.push("Data de Nascimento");
+      }
       toast({
-        title: "Erro",
-        description: "Falha na verificação de Email",
+        title: "Preencha todos os campos",
+        description: "os seguintes campos não foram preenchidos:" + capos.join(", "),
         status: "error",
-        duration: 3000,
+        duration: 15000,
         isClosable: true,
-      });
-    } else if (!nome || !cpf || !email) {
-      toast({
-        title: "Erro",
-        description: "Preencha todos os campos",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+        position: "top-right",
       });
     } else {
       const data: solictacao.SolicitacaoPost = {
@@ -163,21 +194,20 @@ export default function SolicitacaoForm({
     setFinanceiraID(user.Financeira[0].id);
   }
 
-  const VerificadorEmail = () => {
-
-    if ( email === checkEmailString) {
-      setcodigo(true);
-    } else {
-      setcodigo(false);
-      toast({
-        title: "Erro",
-        description: "Falha na verificação de Email",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
+  // const VerificadorEmail = () => {
+  //   if (email === checkEmailString) {
+  //     setcodigo(true);
+  //   } else {
+  //     setcodigo(false);
+  //     toast({
+  //       title: "Erro",
+  //       description: "Falha na verificação de Email",
+  //       status: "error",
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
 
   const handleCpfChange = (cpf: string) => {
     setCpf(cpf);
@@ -186,21 +216,53 @@ export default function SolicitacaoForm({
   useEffect(() => {
     if (
       relacionamento === "sim" &&
-      cpfdois.length === 11 &&
-      nome &&
-      cpf &&
-      email &&
-      DataNascimento
+      cpfdois.length === 11
     ) {
-      if (!codigo) {
-        toast({
-          title: "Erro",
-          description: "Falha na verificação de Email",
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-        });
-      } else {
+         if (
+      !nome ||
+      !cpf ||
+      !email ||
+      !tel ||
+      ConstrutoraID === 0 ||
+      empreendimento === 0 ||
+      FinanceiraID === 0 ||
+      !email ||
+      !DataNascimento
+    ) {
+      const capos = [];
+      if (!nome) {
+        capos.push("Nome");
+      }
+      if (!cpf) {
+        capos.push("CPF");
+      }
+      if (!email) {
+        capos.push("Email");
+      }
+      if (!tel) {
+        capos.push("Telefone");
+      }
+      if (ConstrutoraID === 0) {
+        capos.push("Construtora");
+      }
+      if (empreendimento === 0) {
+        capos.push("Empreendimento");
+      }
+      if (FinanceiraID === 0) {
+        capos.push("Financeira");
+      }
+      if (!DataNascimento) {
+        capos.push("Data de Nascimento");
+      }
+      toast({
+        title: "Preencha todos os campos",
+        description: "os seguintes campos não foram preenchidos:" + capos.join(", "),
+        status: "error",
+        duration: 15000,
+        isClosable: true,
+        position: "top-right",
+      });
+    }  else {
         ishidden("sim");
         const data: solictacao.SolicitacaoPost = {
           nome: nome.toUpperCase(),
@@ -233,7 +295,6 @@ export default function SolicitacaoForm({
     CorretorId,
     DataNascimento,
     Voucher,
-    codigo,
     cpf,
     cpfdois,
     email,
@@ -245,12 +306,9 @@ export default function SolicitacaoForm({
     tel,
     teldois,
     toast,
-    uploadCnh,
-    uploadRg,
     user?.hierarquia,
     user?.id,
   ]);
-
 
   if (Load) {
     return <Loading />;
@@ -264,12 +322,12 @@ export default function SolicitacaoForm({
     setWhatappdois(masked);
   };
 
-   const handleFileUploadedRg = (result: any) => {
-     setUploadRgUrl(result.url);
-   };
-   const handleFileUploadedCnh = (result: any) => {
-     setUploadCnhUrl(result.url);
-   };
+  const handleFileUploadedRg = (result: any) => {
+    setUploadRgUrl(result.url);
+  };
+  const handleFileUploadedCnh = (result: any) => {
+    setUploadCnhUrl(result.url);
+  };
 
   return (
     <Stack spacing={4} p={4} maxWidth="900px" mx="auto">
@@ -361,7 +419,7 @@ export default function SolicitacaoForm({
             />
           </InputGroup>
         </GridItem>
-        <GridItem>
+        {/* <GridItem>
           <FormLabel>
             Confirme o email{" "}
             <chakra.p color={"red"} fontSize={"9px"}>
@@ -381,7 +439,7 @@ export default function SolicitacaoForm({
               onBlur={VerificadorEmail}
             />
           </InputGroup>
-        </GridItem>
+        </GridItem> */}
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={6}>
@@ -459,7 +517,8 @@ export default function SolicitacaoForm({
       <SimpleGrid columns={{ base: 1 }} spacing={6} mt={6}>
         <Alert status="warning" variant="left-accent">
           <AlertIcon />
-          Ao subir os arquivos, de preferencia a cnh exportado da app CNH Digital ou foto da CNH totalmente aberta.
+          Ao subir os arquivos, de preferencia a cnh exportado da app CNH
+          Digital ou foto da CNH totalmente aberta.
         </Alert>
       </SimpleGrid>
 

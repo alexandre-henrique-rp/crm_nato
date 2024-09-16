@@ -1,20 +1,16 @@
 "use client";
 
 import BtmDistrato from "@/app/componentes/btm_distra";
-import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 import {
   Box,
   Button,
   ButtonGroup,
   Flex,
   IconButton,
-  Image,
   Modal,
   ModalBody,
-  ModalCloseButton,
   ModalContent,
   ModalFooter,
-  ModalHeader,
   ModalOverlay,
   Text,
   useDisclosure,
@@ -75,7 +71,7 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
   const HandleRedirect = () => {
     window.open(`/solicitacoes/${id}`, "_blank");
   }
-  
+
   return (
     <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <ButtonGroup variant="solid" size="sm" spacing={3}>

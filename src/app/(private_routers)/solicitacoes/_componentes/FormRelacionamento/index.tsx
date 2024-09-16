@@ -57,8 +57,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const [Voucher, setVoucher] = useState<string>("");
   const [DataNascimento, setDataNascimento] = useState<Date | string | any>();
   const [Load, setLoad] = useState<boolean>(false);
-  const [checkEmail, setcheckEmail] = useState<string>("");
-  const [codigo, setcodigo] = useState<boolean>(false);
   const [Sms, setSms] = useState<boolean>(true);
    const [UploadRgUrl, setUploadRgUrl] = useState<string>("");
   const [UploadCnhUrl, setUploadCnhUrl] = useState<string>("");
@@ -69,21 +67,38 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
 
 
   const handlesubmit = () => {
-    if (!codigo) {
+    if (
+      !nome ||
+      !cpf ||
+      !email ||
+      !tel ||
+      !email ||
+      !DataNascimento
+    ) {
+      const capos = [];
+      if (!nome) {
+        capos.push("Nome");
+      }
+      if (!cpf) {
+        capos.push("CPF");
+      }
+      if (!email) {
+        capos.push("Email");
+      }
+      if (!tel) {
+        capos.push("Telefone");
+      }
+      if (!DataNascimento) {
+        capos.push("Data de Nascimento");
+      }
       toast({
-        title: "Erro",
-        description: "Falha na verificação de Email",
+        title: "Preencha todos os campos",
+        description:
+          "os seguintes campos não foram preenchidos:" + capos.join(", "),
         status: "error",
-        duration: 3000,
+        duration: 15000,
         isClosable: true,
-      });
-    } else if (!nome || !email) {
-      toast({
-        title: "Erro",
-        description: "Preencha todos os campos",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
+        position: "top-right",
       });
     } else {
       const dadossuperior: solictacao.SolicitacaoPost = {
@@ -126,7 +141,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       const data = [dados, dadossuperior];
       setLoad(true);
       data.map(async (item: any, index: number) => {
-
         const response = await fetch(
           `/api/solicitacao?sms=${Sms}&vendedor=${SetValue.vendedorName}`,
           {
@@ -150,7 +164,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             router.push("/home");
             setLoad(false);
           }
-        }else {
+        } else {
           toast({
             title: "Erro",
             description: "Erro ao enviar solicitacao",
@@ -176,20 +190,20 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
     setFinanceiraID(user.Financeira[0].id);
   }
 
-  const VerificadorEmail = () => {
-    if (email === checkEmail) {
-      setcodigo(true);
-    } else {
-      setcodigo(false);
-      toast({
-        title: "Erro",
-        description: "Falha na verificação de Email",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
+  // const VerificadorEmail = () => {
+  //   if (email === checkEmail) {
+  //     setcodigo(true);
+  //   } else {
+  //     setcodigo(false);
+  //     toast({
+  //       title: "Erro",
+  //       description: "Falha na verificação de Email",
+  //       status: "error",
+  //       duration: 3000,
+  //       isClosable: true,
+  //     });
+  //   }
+  // };
 
   if (Load) {
     return <Loading />;
@@ -294,7 +308,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
           </InputGroup>
         </GridItem>
 
-        <GridItem>
+        {/* <GridItem>
           <FormLabel>
             Confirme o email{" "}
             <chakra.p color={"red"} fontSize={"9px"}>
@@ -312,7 +326,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
               onBlur={VerificadorEmail}
             />
           </InputGroup>
-        </GridItem>
+        </GridItem> */}
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={6}>

@@ -41,7 +41,6 @@ export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
     const response = await fetch(`/api/bug_report`);
     const Dados = await response.json();
     if (Dados.length > 0) {
-      console.log("🚀 ~ checkwhatsapp ~ Dados:", Dados);
       return true;
     } else {
       const request = await fetch("/api/verificador/whatsapp", {
@@ -54,8 +53,7 @@ export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
         }),
       });
       const data = await request.json();
-      console.log("🚀 ~ checkwhatsapp ~ data:", data);
-      if (data.status !== "VALID_WA_NUMBER") {
+      if (!data.exists) {
         return false;
       }
       return true;
@@ -70,7 +68,7 @@ export const Whatsapp = ({ onValue, setValue }: WhatsAppProps) => {
         onChange={WhatsAppMask}
         onBlur={async (e) => {
           const valor = unMask(e.target.value);
-          if (valor.length === 10) {
+          if (valor.length > 9) {
             const check = await checkwhatsapp(valor);
             if (!check) {
               setIsvalideTel(true);
