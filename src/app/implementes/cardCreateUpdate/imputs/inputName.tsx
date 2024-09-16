@@ -24,7 +24,7 @@ export default function InputName({ setValueName, ...props }: InputCpfProps) {
     const ValorSemAcentos = valor.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const removeCaracteresEspeciais = ValorSemAcentos.replace(/[^a-zA-Z\s]/g, "");
     const Linite1EspacoEntre = removeCaracteresEspeciais.replace(/\s+/g, " ");
-    const RemosEspacosExtras = Linite1EspacoEntre.trim();
+    const RemosEspacosExtras = Linite1EspacoEntre;
     const UpCase = RemosEspacosExtras.toUpperCase();
     setNome(UpCase);
     props.onChange && props.onChange(e); // Mantém o evento original se passado

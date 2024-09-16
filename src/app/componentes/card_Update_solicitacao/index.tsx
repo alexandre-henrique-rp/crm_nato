@@ -206,7 +206,7 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
               )}
             </Flex>
             <Flex>
-              {setDadosCard.distrato && (
+              {setDadosCard.logDelete && (
                 <CardCreateUpdate.GridHistorico
                   DataSolicitacao={setDadosCard}
                   w={"100%"}

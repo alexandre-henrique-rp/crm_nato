@@ -1,4 +1,13 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, BoxProps, Flex, FormLabel, Link, Text } from "@chakra-ui/react";
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  BoxProps,
+  Text,
+} from "@chakra-ui/react";
 import { getServerSession } from "next-auth";
 import { auth } from "@/lib/auth_confg";
 
@@ -13,6 +22,7 @@ export default async function CardGridHistorico({
   const session = await getServerSession(auth);
   const user = session?.user;
   const Hierarquia = user?.hierarquia;
+  const log = DataSolicitacao.logDelete.split("\n");
   return (
     <>
       {Hierarquia === "ADM" && DataSolicitacao.logDelete && (
@@ -20,7 +30,7 @@ export default async function CardGridHistorico({
           <Accordion allowToggle>
             <AccordionItem>
               <h2>
-                <AccordionButton border={'none'}>
+                <AccordionButton border={"none"}>
                   <Box as="span" flex="1" textAlign="left">
                     Historico
                   </Box>
@@ -28,7 +38,9 @@ export default async function CardGridHistorico({
                 </AccordionButton>
               </h2>
               <AccordionPanel pb={4}>
-                {DataSolicitacao.logDelete}
+                {log.map((item, index) => (
+                  <Text key={index}>{item}</Text>
+                ))}
               </AccordionPanel>
             </AccordionItem>
           </Accordion>
