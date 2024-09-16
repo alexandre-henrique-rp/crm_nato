@@ -11,20 +11,26 @@ import {
   PopoverHeader,
   PopoverTrigger,
   Select,
+  useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa6";
+import { BeatLoader } from "react-spinners";
 
 interface DropFinanceiroProps {
   value: number;
 }
-export default function DropFinanceiro({
-  value}: DropFinanceiroProps) {
+export default function DropFinanceiro({ value }: DropFinanceiroProps) {
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
   const [Data, setData] = useState<any>([]);
+  const [Financeiro, setFinanceiro] = useState<number>(0);
+  const [Loading, setLoading] = useState<boolean>(false);
+  const toast = useToast();
+  const route = useRouter();
   useEffect(() => {
     if (hierarquia === "ADM") {
       (async () => {
@@ -38,8 +44,56 @@ export default function DropFinanceiro({
     }
   }, []);
 
+  const handleUpdate = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `src/app/api/solicitacao/update/${
+          Financeiro !== 0 ? Financeiro : value
+        }`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            financeiro: Number(Financeiro),
+          }),
+        }
+      );
+
+      if (response.ok) {
+        toast({
+          title: "Financeira alterado com sucesso",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+        setLoading(false);
+        route.refresh();
+      }
+    } catch (error) {
+      toast({
+        title: "Erro ao alterar o Financeira",
+        description: JSON.stringify(error),
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (value) {
+      setFinanceiro(value);
+    }
+  }, []);
+
   return (
     <>
+      {Loading && <BeatLoader color="#36d7b7" />}
       {Data.length > 1 && (
         <Box>
           <Popover>
@@ -58,7 +112,8 @@ export default function DropFinanceiro({
                   borderRadius={"10px"}
                   placeholder="Selecione"
                   name="financeiro"
-                  value={Number(value)}
+                  value={Financeiro}
+                  onChange={(e) => setFinanceiro(Number(e.target.value))}
                 >
                   {Data.map((item: any) => (
                     <option key={item.id} value={Number(item.id)}>
@@ -71,6 +126,7 @@ export default function DropFinanceiro({
                   aria-label={"substituir"}
                   colorScheme={"teal"}
                   size={"sm"}
+                  onClick={handleUpdate}
                 />
               </PopoverBody>
             </PopoverContent>

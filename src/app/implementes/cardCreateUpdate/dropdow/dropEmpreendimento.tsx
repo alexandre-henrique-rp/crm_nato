@@ -93,7 +93,7 @@ export default function DropEmpreendimento({ value }: DropEmpreendimentoProps) {
 
   return (
     <>
-      {Loading && <BeatLoader color="green.500" />}
+      {Loading && <BeatLoader color="#36d7b7" />}
       {Data.length > 1 && (
         <Box>
           <Popover>
