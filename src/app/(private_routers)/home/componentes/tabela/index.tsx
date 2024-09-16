@@ -65,9 +65,6 @@ export function Tabela({
     const horaAgenda = item.hr_agendamento?.split("T")[1].split(".")[0];
     const andamento = item.Andamento;
     const statusPg = item.fcweb?.estatos_pgto;
-    console.log("🚀 ~ tabela ~ statusPg:", item)
-    console.log("🚀 ~ tabela ~ statusPg:", statusPg)
-    console.log("🚀 ~ tabela ~ statusPg:", item.id)
     const colors = !item.ativo
       ? "red.400"
       : item.distrato && user?.hierarquia === "ADM"
@@ -150,9 +147,7 @@ export function Tabela({
 
   const OptionsSelect = () => {
     if (!total || !ClientData.length) return null; // Verifica se total e ClientData.length existem
-
     const TotalPages = Math.ceil(total / ClientData.length);
-    // Armazena as opções em um array
     const options = [];
     for (let i = 1; i <= TotalPages; i++) {
       options.push(
@@ -161,8 +156,6 @@ export function Tabela({
         </option>
       );
     }
-
-    // Retorna as opções acumuladas
     return options;
   };
 
