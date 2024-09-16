@@ -1,4 +1,6 @@
+'use client';
 import { Box, BoxProps, FormLabel, Input } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 
 interface CardGridDateNascimento extends BoxProps {
   DataSolicitacao: solictacao.SolicitacaoGetType;
@@ -8,6 +10,14 @@ export default function CardGridDateNascimento({
   DataSolicitacao,
   ...props
 }: CardGridDateNascimento) {
+  const [Date, setDate] = useState<string>("");
+
+  useEffect(() => {
+    if (DataSolicitacao?.dt_nascimento) {
+      setDate(DataSolicitacao?.dt_nascimento.split("T")[0]);
+    }
+  }, [DataSolicitacao]);
+  
   return (
     <>
       <Box {...props}>
@@ -18,10 +28,8 @@ export default function CardGridDateNascimento({
           type="date"
           name="DataNascimento"
           variant="flushed"
-          value={
-            DataSolicitacao?.dt_nascimento &&
-            DataSolicitacao?.dt_nascimento.split("T")[0]
-          }
+          value={Date}
+          onChange={(e) => setDate(e.target.value)}
         />
       </Box>
     </>
