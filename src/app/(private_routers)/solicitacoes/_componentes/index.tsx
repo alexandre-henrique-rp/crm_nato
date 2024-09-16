@@ -71,11 +71,6 @@ export default function SolicitacaoForm({
   const user = session?.user;
 
   const handlesubmit = async () => {
-     
-    console.log("nome", !nome);
-    console.log("cpf", !cpf);
-    console.log("email", !email);
-    console.log("tel", !tel);
     if (!codigo) {
       toast({
         title: "Erro",
@@ -84,7 +79,7 @@ export default function SolicitacaoForm({
         duration: 3000,
         isClosable: true,
       });
-    } else if (!nome || !cpf || !email || !tel) {
+    } else if (!nome || !cpf || !email) {
       toast({
         title: "Erro",
         description: "Preencha todos os campos",
@@ -195,7 +190,6 @@ export default function SolicitacaoForm({
       nome &&
       cpf &&
       email &&
-      tel &&
       DataNascimento
     ) {
       if (!codigo) {
