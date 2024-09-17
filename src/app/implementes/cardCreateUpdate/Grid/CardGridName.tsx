@@ -3,10 +3,10 @@ import InputName from "../imputs/inputName";
 
 
 interface CardGridNameProps extends BoxProps {
-  DataSolicitacao: solictacao.SolicitacaoGetType;
+  Nome?: string;
 };
 
-export default function CardGridName({ DataSolicitacao, ...props }: CardGridNameProps) {
+export default function CardGridName({ Nome, ...props }: CardGridNameProps) {
     return (
       <>
         <Box {...props}>
@@ -16,7 +16,7 @@ export default function CardGridName({ DataSolicitacao, ...props }: CardGridName
           <InputName
             name="nome"
             variant="flushed"
-            setValueName={DataSolicitacao.nome}
+            setValueName={Nome }
           />
         </Box>
       </>

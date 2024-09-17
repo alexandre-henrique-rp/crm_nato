@@ -62,6 +62,9 @@ export const config = {
         "/login",
         "/register",
         "/reset-password",
-        "/termos/uso"
+        "/termos/uso",
+        "/usuario",
+        "/usuario/cadastrar",
+        "/usuario/:path*"
     ]
 };

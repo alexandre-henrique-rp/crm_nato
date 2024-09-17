@@ -65,15 +65,6 @@ export default function SolicitacaoForm({
   const user = session?.user;
 
   const handlesubmit = async () => {
-    // if (!codigo) {
-    //   toast({
-    //     title: "Erro",
-    //     description: "Falha na verificação de Email",
-    //     status: "error",
-    //     duration: 3000,
-    //     isClosable: true,
-    //   });
-    // }
      if (
       !nome ||
       !cpf ||

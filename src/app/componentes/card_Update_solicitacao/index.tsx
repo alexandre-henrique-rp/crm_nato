@@ -94,11 +94,11 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
               justifyContent={{ base: "center", md: "space-between" }}
             >
               <CardCreateUpdate.GridCpf
-                CpfSolicitacao={setDadosCard}
+                CPF={setDadosCard?.cpf}
                 w={{ base: "100%", md: "13rem" }}
               />
               <CardCreateUpdate.GridName
-                DataSolicitacao={setDadosCard}
+                Nome={setDadosCard.nome}
                 w={{ base: "100%", md: "30rem" }}
               />
               <CardCreateUpdate.GridDateNasc

@@ -1,16 +1,27 @@
 "use client";
 
 import { Box, Input, InputProps } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export interface InputCpfProps extends InputProps {
-  setValueName: string;
+  setValueName?: string;
 }
+
+type InputNameType = {
+  NameContex: string;
+  setNameContex: React.Dispatch<React.SetStateAction<string>>;
+};
+
+export const InputNameContext = createContext<InputNameType>({
+  NameContex: "",
+  setNameContex: () => "",
+});
 
 export default function InputName({ setValueName, ...props }: InputCpfProps) {
   const [Nome, setNome] = useState<string>("");
 
   useEffect(() => {
+    if (!setValueName) return;
     const ValorSemAcentos = setValueName.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     const removeCaracteresEspeciais = ValorSemAcentos.replace(/[^a-zA-Z\s]/g, "");
     const Linite1EspacoEntre = removeCaracteresEspeciais.replace(/\s+/g, " ");
@@ -32,7 +43,11 @@ export default function InputName({ setValueName, ...props }: InputCpfProps) {
 
   return (
     <>
-      <Input {...props} value={Nome} type="text" onChange={handleChange} />
+      <InputNameContext.Provider value={{ NameContex: Nome, setNameContex: setNome }}>
+        <Box>
+          <Input {...props} value={Nome} type="text" onChange={handleChange} />
+        </Box>
+      </InputNameContext.Provider>
     </>
   );
 }
