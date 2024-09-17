@@ -17,29 +17,41 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
   async function handleSubmit(prevState: any, data: FormData) {
     "use server";
 
-    console.log(data);
+    // console.log(data);
     try {
       const DateNascimento = data.get("DataNascimento")?.toString() || "";
       const Dados = {
         ...(!setDadosCard.ativo && { ativo: true }),
-        ...(data.get("cpf") && {cpf: data.get("cpf")}),
-        ...(data.get("nome") && {nome: data.get("nome")}),
-        ...(data.get("telefones1") && {telefone: data.get("telefones1")}),
-        ...(data.get("telefones2") &&{telefone2: data.get("telefones2")}),
-        ...(data.get("email") &&{email: data.get("email")}),
-        ...(data.get("update_RG") && {uploadRg: data.get("update_RG")}),
-        ...(data.get("update_CNH") && {uploadCnh: data.get("update_CNH")}),
-        ...(DateNascimento && {
+        ...(data.get("cpf") && { cpf: data.get("cpf") }),
+        ...(data.get("nome") && { nome: data.get("nome") }),
+        ...(data.get("telefones1") && { telefone: data.get("telefones1") }),
+        ...(data.get("telefones2") && { telefone2: data.get("telefones2") }),
+        ...(data.get("email") && { email: data.get("email") }),
+        ...(data.get("update_RG") && { uploadRg: data.get("update_RG") }),
+        ...(data.get("update_CNH") && { uploadCnh: data.get("update_CNH") }),
+        ...(data.get("DataNascimento") && {
           dt_nascimento: DateNascimento,
         }),
-        ...(data.get("Obs") && {obs: data.get("Obs")}),
-        ...(data.get("empreendimento") &&{empreedimento: Number(data.get("empreendimento"))}),
-        ...(data.get("construtora") && {construtora: Number(data.get("construtora"))}),
-        ...(data.get("financeiro") && {financeiro: Number(data.get("financeiro"))}),
-       ...(data.get("links") && { mult_link: data.get("links")
-          ? data.get("links")?.toString().split(", ")
-          : []}),
-        ...(data.get("Relacionamento") && {relacionamento: data.get("Relacionamento")? JSON.parse(data.get("Relacionamento")?.toString() || "") : []}),
+        ...(data.get("Obs") && { obs: data.get("Obs") }),
+        ...(data.get("empreendimento") && {
+          empreedimento: Number(data.get("empreendimento")),
+        }),
+        ...(data.get("construtora") && {
+          construtora: Number(data.get("construtora")),
+        }),
+        ...(data.get("financeiro") && {
+          financeiro: Number(data.get("financeiro")),
+        }),
+        ...(data.get("links") && {
+          mult_link: data.get("links")
+            ? data.get("links")?.toString().split(", ")
+            : [],
+        }),
+        ...(data.get("Relacionamento") && {
+          relacionamento: data.get("Relacionamento")
+            ? JSON.parse(data.get("Relacionamento")?.toString() || "")
+            : [],
+        }),
       };
 
       const request = await fetch(
