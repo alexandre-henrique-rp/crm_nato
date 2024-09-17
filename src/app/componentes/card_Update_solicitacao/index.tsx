@@ -22,24 +22,24 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
       const DateNascimento = data.get("DataNascimento")?.toString() || "";
       const Dados = {
         ...(!setDadosCard.ativo && { ativo: true }),
-        cpf: data.get("cpf") || "",
-        nome: data.get("nome") || "",
-        telefone: data.get("telefones1") || "",
-        telefone2: data.get("telefones2") || "",
-        email: data.get("email") || "",
-        uploadRg: data.get("update_RG") || "",
-        uploadCnh: data.get("update_CNH") || "",
+        ...(data.get("cpf") && {cpf: data.get("cpf")}),
+        ...(data.get("nome") && {nome: data.get("nome")}),
+        ...(data.get("telefones1") && {telefone: data.get("telefones1")}),
+        ...(data.get("telefones2") &&{telefone2: data.get("telefones2")}),
+        ...(data.get("email") &&{email: data.get("email")}),
+        ...(data.get("update_RG") && {uploadRg: data.get("update_RG")}),
+        ...(data.get("update_CNH") && {uploadCnh: data.get("update_CNH")}),
         ...(DateNascimento && {
           dt_nascimento: DateNascimento,
         }),
-        obs: data.get("Obs") || "",
-        empreedimento: Number(data.get("empreendimento")),
-        construtora: Number(data.get("construtora")),
-        financeiro: Number(data.get("financeiro")),
-        mult_link: data.get("links")
+        ...(data.get("Obs") && {obs: data.get("Obs")}),
+        ...(data.get("empreendimento") &&{empreedimento: Number(data.get("empreendimento"))}),
+        ...(data.get("construtora") && {construtora: Number(data.get("construtora"))}),
+        ...(data.get("financeiro") && {financeiro: Number(data.get("financeiro"))}),
+       ...(data.get("links") && { mult_link: data.get("links")
           ? data.get("links")?.toString().split(", ")
-          : [],
-        relacionamento: data.get("Relacionamento")? JSON.parse(data.get("Relacionamento")?.toString() || "") : [],
+          : []}),
+        ...(data.get("Relacionamento") && {relacionamento: data.get("Relacionamento")? JSON.parse(data.get("Relacionamento")?.toString() || "") : []}),
       };
 
       const request = await fetch(

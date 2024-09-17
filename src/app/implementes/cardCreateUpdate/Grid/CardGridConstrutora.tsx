@@ -17,10 +17,10 @@ export default function CardGridConstrutora({
         <FormLabel fontSize="sm" fontWeight="md">
           Construtora
         </FormLabel>
-        {DataSolicitacao.construtora.fantasia && (
+        {DataSolicitacao.construtora?.fantasia && (
           <Text pt={3}>{DataSolicitacao.construtora.fantasia}</Text>
         )}
-        {DataSolicitacao.construtora.id && (
+        {DataSolicitacao.construtora?.id && (
           <DropConstrutora
             value={DataSolicitacao.construtora.id}
             Id={DataSolicitacao.id}

@@ -16,10 +16,10 @@ export default function CardGridEmpreedimentoCliente({
         <FormLabel fontSize="sm" fontWeight="md">
           Empreendimento
         </FormLabel>
-        {DataSolicitacao.empreedimento.nome && (
+        {DataSolicitacao.empreedimento?.nome && (
           <Text pt={3}>{DataSolicitacao.empreedimento.nome}</Text>
         )}
-        {DataSolicitacao.empreedimento.id && (
+        {DataSolicitacao.empreedimento?.id && (
           <DropEmpreendimento
             id={DataSolicitacao.id}
             value={DataSolicitacao.empreedimento.id}
