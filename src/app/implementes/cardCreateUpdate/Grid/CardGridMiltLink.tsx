@@ -1,4 +1,4 @@
-import { Box, BoxProps, FormLabel, Text } from "@chakra-ui/react";
+import { Box, BoxProps, Flex, FormLabel, Text } from "@chakra-ui/react";
 import DropMultiLink from "../dropdow/dropMultiLink";
 
 interface CardGridUpdateCnhProps extends BoxProps {
@@ -14,7 +14,9 @@ export default function CardGridMultLink({
       <FormLabel fontSize="sm" fontWeight="md">
         DOCUMENTOS A SER ASSINADOS
       </FormLabel>
+      <Flex w={"100%"}>
       <DropMultiLink value={DataSolicitacao.mult_link} />
+      </Flex>
     </Box>
   );
 }

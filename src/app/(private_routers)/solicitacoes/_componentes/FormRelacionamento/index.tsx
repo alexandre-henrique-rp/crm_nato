@@ -13,14 +13,10 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  Grid,
   GridItem,
   Icon,
   Input,
   InputGroup,
-  InputLeftAddon,
-  InputRightElement,
-  Select,
   chakra,
   SimpleGrid,
   Stack,
@@ -32,7 +28,7 @@ import {
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 import { mask, unMask } from "remask";
@@ -65,11 +61,15 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   const { data: session } = useSession();
   const user = session?.user;
 
+  useEffect(() => {
+    if (SetValue.cpfdois) {
+      setCpf(SetValue.cpfdois.replace(/\W+/g, ""));
+    }
+  }, [SetValue]);
 
   const handlesubmit = () => {
     if (
       !nome ||
-      !cpf ||
       !email ||
       !tel ||
       !email ||
@@ -78,9 +78,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       const capos = [];
       if (!nome) {
         capos.push("Nome");
-      }
-      if (!cpf) {
-        capos.push("CPF");
       }
       if (!email) {
         capos.push("Email");
@@ -121,9 +118,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
       const dados: solictacao.SolicitacaoPost = {
         nome: nome.toUpperCase(),
         telefone: tel.replace(/\W+/g, ""),
-        cpf: SetValue.cpfdois
-          ? SetValue.cpfdois.replace(/\W+/g, "")
-          : cpf.replace(/\W+/g, ""),
+        cpf: cpf.replace(/\W+/g, ""),
         telefone2: teldois.replace(/\W+/g, ""),
         email: email,
         uploadRg: UploadRgUrl,
@@ -189,21 +184,6 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
   if (user?.Financeira?.length === 1 && !FinanceiraID) {
     setFinanceiraID(user.Financeira[0].id);
   }
-
-  // const VerificadorEmail = () => {
-  //   if (email === checkEmail) {
-  //     setcodigo(true);
-  //   } else {
-  //     setcodigo(false);
-  //     toast({
-  //       title: "Erro",
-  //       description: "Falha na verificação de Email",
-  //       status: "error",
-  //       duration: 3000,
-  //       isClosable: true,
-  //     });
-  //   }
-  // };
 
   if (Load) {
     return <Loading />;
@@ -338,7 +318,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
               tag="construtora"
               SetValue={user.construtora.map((item: any) => ({
                 id: item.id,
-                nome: item.razaosocial,
+                nome: item.fantasia,
               }))}
               onValue={(e: any) => setConstrutoraID(e)}
               DefaultValue={SetValue.construtora}

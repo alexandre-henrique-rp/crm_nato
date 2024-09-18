@@ -1,14 +1,12 @@
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { APP_ROUTES } from "./constants/app-routes";
 import { createRouteMatch } from "./lib/route";
-import { auth } from "./lib/auth_confg";
-import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 
 export async function middleware(req: NextRequest, ev: NextFetchEvent) {
     const cookiesAll = req.cookies.getAll();
     const filtro = cookiesAll.filter((cookie) => cookie.name.includes("next-auth.session-token"));
     const session = filtro[0]?.value;
+
 
 
     const { pathname } = req.nextUrl;

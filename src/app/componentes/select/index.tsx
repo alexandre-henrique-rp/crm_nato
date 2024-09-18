@@ -25,6 +25,7 @@ export const SelectComponent = ({
       setValor(DefaultValue);
     }
     if (SetValue && Data.length < 1) {
+      console.log(Data);
       setData(SetValue);
       onValue(Number(SetValue));
     }
@@ -52,6 +53,7 @@ export const SelectComponent = ({
     }
   }, [Data.length, SetValue, onValue]);
 
+
   return (
     <Flex w={"full"} py={"0.5rem"}>
       <Select
@@ -63,8 +65,8 @@ export const SelectComponent = ({
         }`}
         value={Valor}
       >
-        {Data &&
-          Data.map((item: any) => {
+        {Data.length > 0 &&
+          Data?.map((item: any) => {
             return (
               <option key={item.id} value={item.id}>
                 {!item.nome ? item.fantasia : item.nome}

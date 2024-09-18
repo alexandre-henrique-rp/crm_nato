@@ -17,7 +17,7 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
   async function handleSubmit(prevState: any, data: FormData) {
     "use server";
 
-    // console.log(data);
+    console.log(data);
     try {
       const DateNascimento = data.get("DataNascimento")?.toString() || "";
       const Dados = {
@@ -52,6 +52,7 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
             ? JSON.parse(data.get("Relacionamento")?.toString() || "")
             : [],
         }),
+        ...(data.get("Relacionamento") && { rela_quest: true }),
       };
 
       const request = await fetch(
@@ -76,7 +77,7 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
       }
     } catch (error) {
       console.error("Erro no envio do formulário:", error);
-      return error
+      return error;
     }
   }
 
@@ -85,7 +86,7 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
       <CardCreateUpdate.Root>
         <CardCreateUpdate.Headers SetDados={setDadosCard} />
         <Divider borderColor="#00713D" my={4} />
-        <CardCreateUpdate.Form action={handleSubmit} >
+        <CardCreateUpdate.Form action={handleSubmit}>
           <Flex flexDir={"column"} gap={6} w={"100%"} h={"100%"} py={10}>
             <Flex
               flexDir={{ base: "column", md: "row" }}

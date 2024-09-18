@@ -18,6 +18,7 @@ import CardGridMultLink from "./Grid/CardGridMiltLink";
 import CardGridObs from "./Grid/CardGridObs";
 import CardGridHistorico from "./Grid/CardGridHistorico";
 import CardGridDistrato from "./Grid/CardGridDistrato";
+import CardGridUsuario from "./Grid/CardGridRegisterUsuario";
 
 
 
@@ -44,7 +45,8 @@ import CardGridDistrato from "./Grid/CardGridDistrato";
  * @property {CardGridObs} GridObs - Componente que renderiza a grid de observação do card de criação e atualização de um registro
  * @property {CardGridHistorico} GridHistorico - Componente que renderiza a grid de Historico do card de criação e atualização de um registro
  * @property {CardGridDistrato} GridDistrato - Componente que renderiza a grid de Distrato do card de criação e atualização de um registro
- * 
+ * @property {CardGridUsuario} GridUser - criar e receber usuario
+  * 
  */
 export const CardCreateUpdate = {
   Root: CardRoot,
@@ -67,4 +69,5 @@ export const CardCreateUpdate = {
   GridObs: CardGridObs,
   GridHistorico: CardGridHistorico,
   GridDistrato: CardGridDistrato,
+  GridUser: CardGridUsuario,
 };

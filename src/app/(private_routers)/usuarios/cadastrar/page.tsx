@@ -28,12 +28,9 @@ export default function CadastrarUsuario() {
           <Divider my={4} borderColor="gray.300" />
           <Flex w={"full"} flexWrap={"wrap"} gap={5}>
             <CardCreateUpdate.GridCpf w={"15rem"} />
-            <CardCreateUpdate.GridName w={"45rem"} />
-
-            <Box w={"16rem"}>
-              usuario
-              <Input type="text" />
-            </Box>
+            <CardCreateUpdate.GridName w={"35rem"} />
+            <CardCreateUpdate.GridUser w={"15rem"} />
+            
             <Box w={"15rem"}>
               telefone
               <Input type="text" />

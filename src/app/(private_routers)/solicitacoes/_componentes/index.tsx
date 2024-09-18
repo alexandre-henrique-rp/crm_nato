@@ -185,21 +185,6 @@ export default function SolicitacaoForm({
     setFinanceiraID(user.Financeira[0].id);
   }
 
-  // const VerificadorEmail = () => {
-  //   if (email === checkEmailString) {
-  //     setcodigo(true);
-  //   } else {
-  //     setcodigo(false);
-  //     toast({
-  //       title: "Erro",
-  //       description: "Falha na verificação de Email",
-  //       status: "error",
-  //       duration: 3000,
-  //       isClosable: true,
-  //     });
-  //   }
-  // };
-
   const handleCpfChange = (cpf: string) => {
     setCpf(cpf);
   };
@@ -410,27 +395,7 @@ export default function SolicitacaoForm({
             />
           </InputGroup>
         </GridItem>
-        {/* <GridItem>
-          <FormLabel>
-            Confirme o email{" "}
-            <chakra.p color={"red"} fontSize={"9px"}>
-              (Obrigatório)
-            </chakra.p>
-          </FormLabel>
-          <InputGroup>
-            <Input
-              type="text"
-              border="1px solid #b8b8b8cc"
-              onChange={(e: any) =>
-                setcheckEmailString(
-                  e.target.value.replace(/\s+/g, "").toLowerCase()
-                )
-              }
-              value={checkEmailString}
-              onBlur={VerificadorEmail}
-            />
-          </InputGroup>
-        </GridItem> */}
+        
       </SimpleGrid>
 
       <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={6}>
@@ -441,6 +406,7 @@ export default function SolicitacaoForm({
               hierarquia={user.hierarquia}
               tag="construtora"
               SetValue={user.construtora.map((item: any) => ({
+
                 id: item.id,
                 nome: item.fantasia,
               }))}
