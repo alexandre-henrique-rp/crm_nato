@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { auth } from "@/lib/auth_confg";
 import { CardUpdateSolicitacao } from "@/app/componentes/card_Update_solicitacao";
 import CardListAlertCliente from "@/app/componentes/card_list_alert_cliente";
+import AlertProvider from "@/provider/AlertProvider";
 
 const Requestes = async (id: string) => {
   try {
@@ -14,13 +15,6 @@ const Requestes = async (id: string) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${session?.token}`,
       },
-      cache: "no-store",
-      next: {
-        tags: ["get_solicitacao_id"],
-        revalidate: 3,
-      },
-
-      // para atualizar essa requisição utilize o método -revalidateTag()- passando o nome da tag e o nome da requisição (ex:  "revalidateTag('get_solicitacao_id')")
     });
     if (!request.ok) {
       throw new Error("Erro");
@@ -46,7 +40,6 @@ const RequestAlert = async (id: string) => {
       cache: "no-store",
       next: {
         tags: ["get_Alert"],
-        revalidate: 3,
       },
     });
     if (!request.ok) {
@@ -70,7 +63,6 @@ export default async function perfilPage({
   const data = await Requestes(id);
   const dataAlert = await RequestAlert(id);
 
-
   return (
     <Flex
       alignItems={{ base: "center", md: "start" }}
@@ -83,8 +75,10 @@ export default async function perfilPage({
       gap={{ base: 5, md: 10 }}
     >
       <Flex w={"100%"} alignItems="center" flexDir="column" minH="100vh" p={4}>
+        <AlertProvider>
         <CardUpdateSolicitacao setDadosCard={data} />
         <CardListAlertCliente Id={Number(id)} DataAlert={dataAlert} />
+        </AlertProvider>
       </Flex>
     </Flex>
   );

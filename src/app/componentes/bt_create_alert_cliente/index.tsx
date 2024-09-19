@@ -18,33 +18,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
+import { AlertContext } from "@/context/AlertContext";
+import useAlertContext from "@/hook/useAlertContext";
 
 interface BtCreateAlertClienteProps {
   DataSolicitacao: solictacao.SolicitacaoGetType;
 }
-
-interface AlertType {
-  id: number;
-  titulo: string;
-  texto: string;
-  tipo: string;
-  corretor: number;
-  empreendimento: number;
-  solicitacao_id: number;
-  tag: string;
-}
-
-interface AlertContextType {
-  Alert: AlertType[];
-  setAlert: (data: AlertType[]) => void;
-}
-
-export const AlertContext = createContext<AlertContextType>({
-  Alert: [],
-  setAlert: () => {},
-});
 
 export function BtCreateAlertCliente({
   DataSolicitacao,
@@ -53,12 +34,13 @@ export function BtCreateAlertCliente({
   const user = session?.user;
   const hierarquia = user?.hierarquia;
   const [Data, setData] = useState<any>();
-  const [Update, setUpdate] = useState<any>([]);
+  // const [Alert, setAlert] = useState<boolean>(false); // Tipado corretamente
   const [Loading, setLoading] = useState(false);
   const [Titulo, setTitulo] = useState("");
   const [Descricao, setDescricao] = useState("");
   const toast = useToast();
 
+  const { setAlert } = useAlertContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const OverlayTwo = () => (
@@ -68,25 +50,6 @@ export function BtCreateAlertCliente({
   useEffect(() => {
     if (DataSolicitacao) setData(DataSolicitacao);
   }, [DataSolicitacao]);
-
-  const HandleUpdateAlert = async () => {
-    try {
-      const request = await fetch(`/api/alerts/solicitacao/${Data.id}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (request.ok) {
-        const response = await request.json();
-        return response;
-      }
-    } catch (error) {
-      console.error("Erro ao buscar alertas atualizados:", error);
-    }
-
-    return [];
-  };
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -123,11 +86,11 @@ export function BtCreateAlertCliente({
           isClosable: true,
         });
 
-        const response = await HandleUpdateAlert();
-        if (response) {
-          setUpdate(response);
-        }
+        setAlert(true);
         setLoading(false);
+        setTimeout(() => {
+          setAlert(false);
+        }, 100);
         onClose();
       }
 
@@ -148,7 +111,7 @@ export function BtCreateAlertCliente({
   return (
     <>
       {hierarquia === "ADM" && (
-        <AlertContext.Provider value={{ Alert: Update, setAlert: setUpdate }}>
+        <>
           <Button
             colorScheme="yellow"
             variant="solid"
@@ -212,7 +175,7 @@ export function BtCreateAlertCliente({
               </FormControl>
             </ModalContent>
           </Modal>
-        </AlertContext.Provider>
+        </>
       )}
     </>
   );

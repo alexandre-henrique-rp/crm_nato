@@ -32,7 +32,7 @@ export async function CardHeader({ SetDados }: CardHeaderProps) {
             <Text fontSize={{ base: "lg", md: "2xl" }}>Dados Pessoais</Text>
             {input !== "USER" && (
               <Text fontSize={{ base: "sm", md: "md" }}>
-                Corretor: {SetDados.corretor && SetDados.corretor.nome}
+                Corretor: {SetDados.corretor && SetDados.corretor?.nome}
               </Text>
             )}
           </Box>

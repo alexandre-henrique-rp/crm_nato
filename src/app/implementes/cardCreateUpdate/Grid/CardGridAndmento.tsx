@@ -27,7 +27,7 @@ export default function CardGridAndamento({
 
   return (
     <Box {...props}>
-      <FormLabel fontSize="sm" fontWeight="md">
+      <FormLabel fontSize="sm" fontWeight="md" m={0}>
         Status de Atendimento
       </FormLabel>
       <Text>{Msg}</Text>

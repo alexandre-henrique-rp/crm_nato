@@ -1,7 +1,9 @@
 "use client";
+import useUserCompraContext from "@/hook/useUserCompraContext";
 import { Select, SelectProps } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { BeatLoader } from "react-spinners";
 
 interface SelectEmpreedimentoProps extends SelectProps {}
 
@@ -12,6 +14,8 @@ export default function SelectFinanceiro({
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
+
+  const { EmpreedimentoCX, ContrutoraCX } = useUserCompraContext();
 
   useEffect(() => {
     if (hierarquia === "ADM") {
@@ -26,21 +30,26 @@ export default function SelectFinanceiro({
     }
   }, []);
 
-  console.log(Data);
+  console.log(ContrutoraCX, EmpreedimentoCX);
 
   return (
     <>
-      <Select
-        {...props}
-        name="financeiro"
-        placeholder="Selecione uma empreendimento"
-      >
-        {Data.map((item: any) => (
-          <option key={item.id} value={item.id}>
-            {item.fantasia}
-          </option>
-        ))}
-      </Select>
+      {ContrutoraCX === 0 || EmpreedimentoCX === 0 && (
+        <BeatLoader color="#36d7b7" />
+      )}
+      {ContrutoraCX > 0 && EmpreedimentoCX > 0 && (
+        <Select
+          {...props}
+          name="financeiro"
+          placeholder="Selecione uma empreendimento"
+        >
+          {Data.map((item: any) => (
+            <option key={item.id} value={item.id}>
+              {item.fantasia}
+            </option>
+          ))}
+        </Select>
+      )}
     </>
   );
 }

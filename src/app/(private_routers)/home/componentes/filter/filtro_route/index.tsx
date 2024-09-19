@@ -83,8 +83,6 @@ export const FilterRoute = () => {
         cache: "no-store",
       });
       const data = await req.json();
-      console.log("🚀 ~ data:", data)
-      console.log("🚀 ~ datafiltro:", PagAtual);
       req.ok && setDados(data.data);
       req.ok && setTotal(data.total);
       setLoad(false);

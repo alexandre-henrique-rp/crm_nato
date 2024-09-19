@@ -15,7 +15,9 @@ export default function CardGridObs({
       <FormLabel fontSize="sm" fontWeight="md">
         Observações
       </FormLabel>
-      <InputTextObs DataSolicitacao={DataSolicitacao} />
+      <InputTextObs
+        DataSolicitacao={DataSolicitacao}
+      />
     </Box>
   );
 }

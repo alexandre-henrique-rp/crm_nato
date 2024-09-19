@@ -93,7 +93,8 @@ export const FiltroComponent = ({ onData }: FiltroGeralProps) => {
     onData(data);
   };
 
-  const HandleFilterBlank = () => {
+  const HandleFilterBlank = (e: React.FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setFilterId(0);
     setFilterNome("");
     setFilterAndamento("");

@@ -9,10 +9,17 @@ export default function CardGridUsuario({ Usuario, ...props }: CardGridUsuarioPr
   return (
     <>
       <Box {...props}>
-        <FormLabel fontSize="sm" fontWeight="md">
+        <FormLabel fontSize="sm" fontWeight="md" m={0}>
           Usuario
         </FormLabel>
-        <InputUser name="usuario" variant="flushed" setValueUser={Usuario} />
+        <InputUser
+          name="usuario"
+          variant="flushed"
+          setValueUser={Usuario}
+          px={1}
+          bg={"gray.100"}
+          borderColor={"gray.400"}
+        />
       </Box>
     </>
   );

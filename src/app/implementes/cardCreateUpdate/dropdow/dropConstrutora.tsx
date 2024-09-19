@@ -1,4 +1,5 @@
 "use client";
+import useUserCompraContext from "@/hook/useUserCompraContext";
 import {
   Box,
   Button,
@@ -33,6 +34,7 @@ export default function DropConstrutora({ value, Id }: DropConstrutoraProps) {
   const [Loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
   const route = useRouter();
+  const { setContrutoraCX } = useUserCompraContext();
   useEffect(() => {
     if (hierarquia === "ADM") {
       (async () => {
@@ -46,14 +48,15 @@ export default function DropConstrutora({ value, Id }: DropConstrutoraProps) {
     }
     if(value){
       setConstrutora(value);
-    }
+      setContrutoraCX(value);
+    };
   }, []);
 
   const handleUpdate = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`src/app/api/solicitacao/update/${Id}`, {
+      const response = await fetch(`/api/solicitacao/update/${Id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +96,7 @@ export default function DropConstrutora({ value, Id }: DropConstrutoraProps) {
         <Box>
           <Popover>
             <PopoverTrigger>
-              <Button variant="link" colorScheme="gray" pt={3}>
+              <Button variant="link" colorScheme="gray">
                 Alterar Construtora
               </Button>
             </PopoverTrigger>

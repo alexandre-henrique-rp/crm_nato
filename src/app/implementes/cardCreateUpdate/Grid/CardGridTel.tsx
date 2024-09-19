@@ -13,10 +13,16 @@ export default function CardGridTel({
   return (
     <>
       <Box {...props}>
-        <FormLabel fontSize="sm" fontWeight="md">
+        <FormLabel fontSize="sm" fontWeight="md" m={0}>
           Telefone {index > 0 && index}
         </FormLabel>
-        <InputTel2 index={index > 0 ? index : 0} SetValue={DataSolicitacao} />
+        <InputTel2
+          index={index > 0 ? index : 0}
+          SetValue={DataSolicitacao}
+          px={1}
+          bg={"gray.100"}
+          borderColor={"gray.400"}
+        />
       </Box>
     </>
   );

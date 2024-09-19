@@ -49,18 +49,15 @@ export default function DropFinanceiro({ value, Id }: DropFinanceiroProps) {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(
-        `src/app/api/solicitacao/update/${Id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            financeiro: Number(Financeiro),
-          }),
-        }
-      );
+      const response = await fetch(`/api/solicitacao/update/${Id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          financeiro: Number(Financeiro),
+        }),
+      });
 
       if (response.ok) {
         toast({
@@ -97,7 +94,7 @@ export default function DropFinanceiro({ value, Id }: DropFinanceiroProps) {
         <Box>
           <Popover>
             <PopoverTrigger>
-              <Button variant="link" colorScheme="gray" pt={3}>
+              <Button variant="link" colorScheme="gray">
                 Alterar Financeira
               </Button>
             </PopoverTrigger>

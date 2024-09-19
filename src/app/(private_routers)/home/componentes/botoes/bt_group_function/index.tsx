@@ -17,11 +17,12 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
-import { revalidateTag } from "next/cache";
 import { useRouter } from "next/navigation";
 import { MouseEvent } from "react";
 import { BsBoxArrowUpRight, BsFillTrashFill } from "react-icons/bs";
 import { IoIosArrowBack } from "react-icons/io";
+import revalidateSolicitacao from "./revalodate";
+
 
 interface BotoesFunctionProps {
   id: number;
@@ -36,6 +37,7 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
   const { isOpen, onOpen, onClose } = useDisclosure();
 
 
+
   const HandleDelet = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
@@ -44,7 +46,6 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ token: session?.token }),
       });
 
       if (res.ok) {
@@ -55,7 +56,7 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
           duration: 3000,
           isClosable: true,
         });
-        revalidateTag("get_solicitacao_all");
+        revalidateSolicitacao();
       }
     } catch (error) {
       toast({

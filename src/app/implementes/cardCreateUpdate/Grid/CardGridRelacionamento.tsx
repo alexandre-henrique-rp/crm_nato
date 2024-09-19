@@ -12,11 +12,14 @@ export default function CardGridRelacionamento({
   return (
     <>
       <Box {...props}>
-        <FormLabel fontSize="sm" fontWeight="md">
+        <FormLabel fontSize="sm" fontWeight="md" m={0}>
           Relacionamento
         </FormLabel>
         <InputRelacionamento
-        //   name="relacionamento"
+          //   name="relacionamento"
+          px={1}
+          bg={"gray.100"}
+          borderColor={"gray.400"}
           variant="flushed"
           setValueRelacionamento={DataSolicitacao}
         />

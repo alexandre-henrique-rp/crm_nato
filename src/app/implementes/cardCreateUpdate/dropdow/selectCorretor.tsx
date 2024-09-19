@@ -1,3 +1,4 @@
+
 "use client";
 import useUserCompraContext from "@/hook/useUserCompraContext";
 import { Select, SelectProps } from "@chakra-ui/react";
@@ -5,50 +6,40 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { BeatLoader } from "react-spinners";
 
-interface SelectEmpreedimentoProps extends SelectProps {}
+interface SelectCorretorProps extends SelectProps {}
 
-export default function SelectEmpreedimento({
+export default function SelectCorretor({
   ...props
-}: SelectEmpreedimentoProps) {
+}: SelectCorretorProps) {
   const [Data, setData] = useState<any>([]);
   const [Loading, setLoading] = useState<boolean>(false);
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
 
-  const { ContrutoraCX, setEmpreedimentoCX } = useUserCompraContext();
-
-   useEffect(() => {
-     if (hierarquia === "ADM") {
-       setLoading(true);
-       if (ContrutoraCX > 0) {
-         (async () => {
-           const req = await fetch(
-             `/api/empreendimento/getall/filter/${ContrutoraCX}`
-           );
-           const res = await req.json();
-           setData(res);
-
-           setLoading(false);
-         })();
-       }
-     }
-   }, [ContrutoraCX]);
+  const { ContrutoraCX, EmpreedimentoCX, setCorretorCx } = useUserCompraContext();
+  console.log("🚀 ~ EmpreedimentoCX:", EmpreedimentoCX)
+  console.log("🚀 ~ ContrutoraCX:", ContrutoraCX > 0);
 
   useEffect(() => {
     if (hierarquia === "ADM") {
+        if (ContrutoraCX > 0) {
+          setLoading(true);
         (async () => {
           const req = await fetch(
-            `/api/empreendimento/getall`
+            `/api/usuario/search?construtora=${ContrutoraCX}&empreedimento=${EmpreedimentoCX}`
           );
           const res = await req.json();
+          console.log("🚀 ~ res:", res)
           setData(res);
+
+          setLoading(false);
         })();
-    } else {
-      const empreedimento = user?.empreendimento;
-      setData(empreedimento);
+      }
     }
-  }, []);
+  }, [ContrutoraCX, EmpreedimentoCX]);
+
+
 
   return (
     <>
@@ -56,9 +47,9 @@ export default function SelectEmpreedimento({
       {!Loading && (
         <Select
           {...props}
-          name="empreendimento"
-          placeholder="Selecione uma empreendimento"
-          onChange={(e) => setEmpreedimentoCX(Number(e.target.value))}
+          name="corretor"
+          placeholder="Selecione um Corretor"
+          onChange={(e) => setCorretorCx(Number(e.target.value))}
         >
           {Data.map((item: any) => (
             <option key={item.id} value={item.id}>

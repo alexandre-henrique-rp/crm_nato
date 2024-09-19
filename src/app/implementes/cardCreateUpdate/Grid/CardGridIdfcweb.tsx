@@ -17,19 +17,19 @@ export default async function CardGridIdfcweb({
     <>
       <Box {...props}>
         {Hierarquia !== "ADM" && (
-          <FormLabel fontSize="sm" fontWeight="md">
+          <FormLabel fontSize="sm" fontWeight="md" m={0}>
             Protocolo
           </FormLabel>
         )}
         {Hierarquia === "ADM" && (
-          <FormLabel fontSize="sm" fontWeight="md">
+          <FormLabel fontSize="sm" fontWeight="md" m={0}>
             Protocolo/IDFcweb
           </FormLabel>
         )}
-        {Hierarquia !== "ADM" && <Text pt={3}>{DataSolicitacao.id_fcw}</Text>}
+        {Hierarquia !== "ADM" && <Text>{DataSolicitacao.id_fcw}</Text>}
         {Hierarquia === "ADM" && (
           <Link
-            ps={3}
+            ps={1}
             href={`https://redebrasilrp.com.br/fcw2/abrir_ficha.php?fc=${DataSolicitacao.id_fcw}`}
             target="_blank"
             fontWeight={"bold"}

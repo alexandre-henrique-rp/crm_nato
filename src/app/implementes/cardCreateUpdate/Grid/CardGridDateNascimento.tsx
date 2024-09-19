@@ -21,7 +21,7 @@ export default function CardGridDateNascimento({
   return (
     <>
       <Box {...props}>
-        <FormLabel fontSize="sm" fontWeight="md">
+        <FormLabel fontSize="sm" fontWeight="md" m={0}>
           Data de Nascimento
         </FormLabel>
         <Input
@@ -30,6 +30,9 @@ export default function CardGridDateNascimento({
           variant="flushed"
           value={Date}
           onChange={(e) => setDate(e.target.value)}
+          px={1}
+          bg={"gray.100"}
+          borderColor={"gray.400"}
         />
       </Box>
     </>

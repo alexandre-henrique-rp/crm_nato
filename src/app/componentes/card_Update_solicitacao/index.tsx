@@ -6,8 +6,8 @@ import { CriarFcweb } from "../Btn/criarFcweb";
 import { BtCreateAlertCliente } from "../bt_create_alert_cliente";
 import { getServerSession } from "next-auth";
 import { auth } from "@/lib/auth_confg";
-import { redirect } from "next/navigation";
 import { ResendSms } from "@/app/implementes/cardCreateUpdate/butons/resendSms";
+import UserCompraProvider from "@/provider/UserCompra";
 
 type Props = {
   setDadosCard: solictacao.SolicitacaoGetType;
@@ -22,6 +22,14 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
       const DateNascimento = data.get("DataNascimento")?.toString() || "";
       const Dados = {
         ...(!setDadosCard.ativo && { ativo: true }),
+        ...(!setDadosCard.ativo &&
+          session?.user.hierarquia !== "ADM" && {
+            corretor: Number(session?.user?.id),
+          }),
+        ...(!setDadosCard.ativo &&
+          session?.user.hierarquia === "ADM" && {
+            corretor: Number(data.get("corretor")),
+          }),
         ...(data.get("cpf") && { cpf: data.get("cpf") }),
         ...(data.get("nome") && { nome: data.get("nome") }),
         ...(data.get("telefones1") && { telefone: data.get("telefones1") }),
@@ -55,6 +63,8 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
         ...(data.get("Relacionamento") && { rela_quest: true }),
       };
 
+      console.log(Dados);
+
       const request = await fetch(
         `${process.env.NEXT_PUBLIC_STRAPI_API_URL}/solicitacao/update/${setDadosCard.id}`,
         {
@@ -69,9 +79,16 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
 
       if (request.ok) {
         const response = await request.json();
+
+        if (response.name === "PrismaClientValidationError") {
+          return {
+            name: "PrismaClientValidationError",
+            message: "Erro ao atualizar o registro",
+            error: response,};
+        }
+        
         console.log("Atualização bem-sucedida:", response);
         return response;
-        // redirect("/");
       } else {
         console.error("Erro ao atualizar:", request.statusText);
       }
@@ -80,155 +97,154 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
       return error;
     }
   }
-
+  console.log(setDadosCard);
   return (
     <>
       <CardCreateUpdate.Root>
         <CardCreateUpdate.Headers SetDados={setDadosCard} />
         <Divider borderColor="#00713D" my={4} />
         <CardCreateUpdate.Form action={handleSubmit}>
-          <Flex flexDir={"column"} gap={6} w={"100%"} h={"100%"} py={10}>
-            <Flex
-              flexDir={{ base: "column", md: "row" }}
-              gap={10}
-              px={4}
-              justifyContent={{ base: "center", md: "space-between" }}
-            >
-              <CardCreateUpdate.GridCpf
-                CPF={setDadosCard?.cpf}
-                w={{ base: "100%", md: "13rem" }}
-              />
-              <CardCreateUpdate.GridName
-                Nome={setDadosCard.nome}
-                w={{ base: "100%", md: "30rem" }}
-              />
-              <CardCreateUpdate.GridDateNasc
-                DataSolicitacao={setDadosCard}
-                w={{ base: "100%", md: "15rem" }}
-              />
-            </Flex>
-            <Flex
-              flexDir={{ base: "column", md: "row" }}
-              gap={10}
-              px={4}
-              justifyContent={{ base: "center", md: "space-between" }}
-            >
-              <CardCreateUpdate.GridRelacionamento
-                DataSolicitacao={setDadosCard}
-                w={{ base: "100%", md: "15rem" }}
-              />
-              <CardCreateUpdate.GridTel
-                index={1}
-                DataSolicitacao={setDadosCard.telefone}
-                w={{ base: "100%", md: "15rem" }}
-              />
-              <CardCreateUpdate.GridTel
-                index={2}
-                DataSolicitacao={setDadosCard.telefone2}
-                w={{ base: "100%", md: "15rem" }}
-              />
-            </Flex>
-            <Flex
-              flexDir={{ base: "column", md: "row" }}
-              gap={10}
-              px={4}
-              justifyContent={{ base: "center", md: "space-between" }}
-            >
-              <CardCreateUpdate.GridEmail
-                type="register"
-                DataSolicitacao={setDadosCard}
-                w={{ base: "100%", md: "25rem" }}
-              />
-              <CardCreateUpdate.GridConstrutora
-                DataSolicitacao={setDadosCard}
-                w={{ base: "100%", md: "16rem" }}
-              />
-              <CardCreateUpdate.GridEmpreedimentoCL
-                DataSolicitacao={setDadosCard}
-                w={{ base: "100%", md: "15rem" }}
-              />
-            </Flex>
-            <Flex
-              flexDir={{ base: "column", md: "row" }}
-              gap={10}
-              px={4}
-              justifyContent={{ base: "center", md: "space-between" }}
-            >
-              <CardCreateUpdate.GridFinanceiraCl
-                DataSolicitacao={setDadosCard}
-                w={{ base: "100%", md: "25rem" }}
-              />
-              <CardCreateUpdate.GridProtocolo
-                DataSolicitacao={setDadosCard}
-                w={{ base: "100%", md: "15rem" }}
-              />
-              <CardCreateUpdate.GridStatus
-                DataSolicitacao={setDadosCard}
-                w={{ base: "100%", md: "15rem" }}
-              />
-            </Flex>
-            <Flex
-              flexDir={{ base: "column", md: "row" }}
-              gap={10}
-              px={4}
-              justifyContent={{ base: "center", md: "space-between" }}
-            >
-              <CardCreateUpdate.GridLink
-                DataSolicitacao={setDadosCard}
-                w={{ base: "100%", md: "25rem" }}
-              />
-            </Flex>
-            <Box>
-              <Alert status="info" variant="left-accent">
-                <AlertIcon />
-                Os processos com CNH anexada terão prioridade no atendimento.
-              </Alert>
-            </Box>
-            <Flex
-              flexDir={{ base: "column", md: "row" }}
-              gap={10}
-              px={4}
-              justifyContent={{ base: "center", md: "space-between" }}
-            >
-              <CardCreateUpdate.GridUpdateDocument
-                tag="CNH"
-                Url={setDadosCard.uploadCnh}
-                w={{ base: "100%", md: "19rem" }}
-              />
-              <CardCreateUpdate.GridUpdateDocument
-                tag="RG"
-                Url={setDadosCard.uploadRg}
-                w={{ base: "100%", md: "19rem" }}
-              />
-            </Flex>
-            <Flex
-              flexDir={{ base: "column", md: "row" }}
-              gap={10}
-              px={4}
-              justifyContent={{ base: "center", md: "space-between" }}
-            >
-              <CardCreateUpdate.GridObs
-                DataSolicitacao={setDadosCard}
-                w={"100%"}
-              />
-            </Flex>
-            <Flex w={"100%"}>
-              {setDadosCard.distrato && (
-                <DistratoAlertPrint
-                  userId={setDadosCard.distrato_id}
-                  userDateTime={setDadosCard.distrato_dt}
+          <UserCompraProvider>
+            <Flex flexDir={"column"} gap={6} w={"100%"} h={"100%"} py={10}>
+              <Flex
+                flexDir={{ base: "column", md: "row" }}
+                gap={5}
+                px={4}
+                justifyContent={{ base: "center", md: "space-between" }}
+              >
+                <CardCreateUpdate.GridCpf
+                  CPF={setDadosCard?.cpf}
+                  w={{ base: "100%", md: "10rem" }}
                 />
-              )}
-            </Flex>
-            <Flex>
-              {setDadosCard.logDelete && (
-                <CardCreateUpdate.GridHistorico
+                <CardCreateUpdate.GridName
+                  Nome={setDadosCard.nome}
+                  w={{ base: "100%", md: "33rem" }}
+                />
+                <CardCreateUpdate.GridDateNasc
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "10rem" }}
+                />
+                <CardCreateUpdate.GridRelacionamento
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "13rem" }}
+                />
+              </Flex>
+              <Flex
+                flexDir={{ base: "column", md: "row" }}
+                gap={4}
+                px={4}
+                justifyContent={{ base: "center", md: "space-between" }}
+              >
+                <CardCreateUpdate.GridEmail
+                  type="register"
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "25rem" }}
+                />
+                <CardCreateUpdate.GridTel
+                  index={1}
+                  DataSolicitacao={setDadosCard.telefone}
+                  w={{ base: "100%", md: "10rem" }}
+                />
+                <CardCreateUpdate.GridTel
+                  index={2}
+                  DataSolicitacao={setDadosCard.telefone2}
+                  w={{ base: "100%", md: "10rem" }}
+                />
+                <CardCreateUpdate.GridConstrutora
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "12rem" }}
+                />
+              </Flex>
+              <Flex
+                flexDir={{ base: "column", md: "row" }}
+                gap={10}
+                px={4}
+                justifyContent={{ base: "center", md: "space-between" }}
+              >
+                <CardCreateUpdate.GridEmpreedimentoCL
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "12rem" }}
+                />
+                <CardCreateUpdate.GridFinanceiraCl
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "10rem" }}
+                />
+                <CardCreateUpdate.GridCorretor
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "15rem" }}
+                />
+                <CardCreateUpdate.GridProtocolo
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "8rem" }}
+                />
+                <CardCreateUpdate.GridStatus
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "15rem" }}
+                />
+              </Flex>
+              <Flex
+                flexDir={{ base: "column", md: "row" }}
+                gap={10}
+                px={4}
+                justifyContent={{ base: "center", md: "space-between" }}
+              >
+                <CardCreateUpdate.GridLink
+                  DataSolicitacao={setDadosCard}
+                  w={{ base: "100%", md: "15rem" }}
+                />
+              </Flex>
+              <Box>
+                <Alert status="info" variant="left-accent">
+                  <AlertIcon />
+                  Os processos com CNH anexada terão prioridade no atendimento.
+                </Alert>
+              </Box>
+              <Flex
+                flexDir={{ base: "column", md: "row" }}
+                gap={10}
+                px={4}
+                justifyContent={{ base: "center", md: "space-evenly" }}
+              >
+                <CardCreateUpdate.GridUpdateDocument
+                  tag="CNH"
+                  Url={setDadosCard.uploadCnh}
+                  w={{ base: "100%", md: "19rem" }}
+                />
+                <CardCreateUpdate.GridUpdateDocument
+                  tag="RG"
+                  Url={setDadosCard.uploadRg}
+                  w={{ base: "100%", md: "19rem" }}
+                />
+              </Flex>
+              <Flex
+                flexDir={{ base: "column", md: "row" }}
+                gap={10}
+                px={4}
+                justifyContent={{ base: "center", md: "space-between" }}
+              >
+                <CardCreateUpdate.GridObs
                   DataSolicitacao={setDadosCard}
                   w={"100%"}
                 />
-              )}
+              </Flex>
+              <Flex w={"100%"}>
+                {setDadosCard.distrato && (
+                  <DistratoAlertPrint
+                    userId={setDadosCard.distrato_id}
+                    userDateTime={setDadosCard.distrato_dt}
+                  />
+                )}
+              </Flex>
+              <Flex>
+                {setDadosCard.logDelete && (
+                  <CardCreateUpdate.GridHistorico
+                    DataSolicitacao={setDadosCard}
+                    w={"100%"}
+                  />
+                )}
+              </Flex>
             </Flex>
-          </Flex>
+          </UserCompraProvider>
           <Flex
             w={"100%"}
             justifyContent={"end"}

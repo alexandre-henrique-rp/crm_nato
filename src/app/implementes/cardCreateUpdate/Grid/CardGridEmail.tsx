@@ -22,13 +22,16 @@ export default function CardGridRegisterEmail({
   return (
     <>
       <Box {...props}>
-        <FormLabel fontSize="sm" fontWeight="md">
+        <FormLabel fontSize="sm" fontWeight="md" m={0}>
           {type === "confirm" ? "Confirmar Email" : "Email"}
         </FormLabel>
         <InputEmail
           setValueEmail={DataSolicitacao.email}
           name={type === "confirm" ? "confirmEmail" : "email"}
           variant="flushed"
+          px={1}
+          bg={"gray.100"}
+          borderColor={"gray.400"}
         />
       </Box>
     </>

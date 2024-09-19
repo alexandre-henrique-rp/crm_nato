@@ -1,4 +1,6 @@
 'use client';
+import { UserCompraContext } from "@/context/UserCompraContext";
+import useUserCompraContext from "@/hook/useUserCompraContext";
 import { Select, SelectProps } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -11,7 +13,7 @@ export default function SelectConstrutora({ ...props }: DropConstrutoraProps) {
     const {data: session} = useSession();
     const user = session?.user;
     const hierarquia  = user?.hierarquia;
-
+    const { setContrutoraCX } = useUserCompraContext();
 
     useEffect(() => {
         if (hierarquia === "ADM") {
@@ -29,10 +31,11 @@ export default function SelectConstrutora({ ...props }: DropConstrutoraProps) {
 
     return (
       <>
-        <Select 
-        {...props}
-        name="construtora"
-        placeholder="Selecione uma Construtora"
+        <Select
+          {...props}
+          name="construtora"
+          placeholder="Selecione uma Construtora"
+          onChange={(e) => setContrutoraCX(Number(e.target.value))}
         >
           {Data.map((item: any) => (
             <option key={item.id} value={item.id}>

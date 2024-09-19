@@ -10,13 +10,16 @@ export default function CardGridName({ Nome, ...props }: CardGridNameProps) {
     return (
       <>
         <Box {...props}>
-          <FormLabel fontSize="sm" fontWeight="md">
+          <FormLabel fontSize="sm" fontWeight="md" m={0}>
             Nome Completo
           </FormLabel>
           <InputName
             name="nome"
             variant="flushed"
-            setValueName={Nome }
+            setValueName={Nome}
+            px={1}
+            bg={"gray.100"}
+            py={0}
           />
         </Box>
       </>

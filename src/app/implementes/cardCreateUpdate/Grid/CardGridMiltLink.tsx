@@ -11,7 +11,7 @@ export default function CardGridMultLink({
 }: CardGridUpdateCnhProps) {
   return (
     <Box {...props}>
-      <FormLabel fontSize="sm" fontWeight="md">
+      <FormLabel fontSize="sm" fontWeight="md" m={0}>
         DOCUMENTOS A SER ASSINADOS
       </FormLabel>
       <Flex w={"100%"}>

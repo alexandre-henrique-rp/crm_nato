@@ -21,7 +21,8 @@ export function InputTextObs({ DataSolicitacao }: imputTextObsProps) {
         h={"10rem"}
         resize={"none"}
         name="Obs"
-        pt={3}
+        ps={3}
+        bg={"gray.100"}
         boxShadow="lg"
         onChange={(e) => setObs(e.target.value)}
       />

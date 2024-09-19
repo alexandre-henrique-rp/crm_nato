@@ -17,90 +17,70 @@ import {
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { set } from "react-hook-form";
 import { FaPlus } from "react-icons/fa6";
 import { BeatLoader } from "react-spinners";
 
-interface DropEmpreendimentoProps {
+interface DropCorretorProps {
   value: number;
-  id: number;
+  Id: number;
 }
-export default function DropEmpreendimento({
-  value,
-  id,
-}: DropEmpreendimentoProps) {
-  const [Empreedimento, setEmpreedimento] = useState<number>(0);
-  const [Loading, setLoading] = useState<boolean>(false);
-  const [Load, setLoad] = useState<boolean>(false);
+
+export default function DropCorretor({ value, Id }: DropCorretorProps) {
   const { data: session } = useSession();
   const user = session?.user;
   const hierarquia = user?.hierarquia;
   const [Data, setData] = useState<any>([]);
+  const [Corretor, setCorretor] = useState<number>(0);
+  const [Loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
   const route = useRouter();
-
-  const { ContrutoraCX, setEmpreedimentoCX } = useUserCompraContext();
-
+  const { ContrutoraCX, EmpreedimentoCX } = useUserCompraContext();
+  console.log("🚀 ~ DropCorretor ~ ContrutoraCX:", ContrutoraCX)
   useEffect(() => {
     if (hierarquia === "ADM") {
-      setLoad(true);
-      if (ContrutoraCX) {
+      if (ContrutoraCX > 0 && EmpreedimentoCX > 0) {
         (async () => {
           const req = await fetch(
-            `/api/empreendimento/getall/filter/${ContrutoraCX}`
+            `/api/usuario/search?construtora=${ContrutoraCX}&empreedimento=${EmpreedimentoCX}`
           );
           const res = await req.json();
-          setData(res);
-        })();
-      } else {
-        (async () => {
-          const req = await fetch("/api/empreendimento/getall");
-          const res = await req.json();
+          console.log("🚀 ~ res:", res);
           setData(res);
         })();
       }
-
-      setLoad(false);
-    } else {
-      const Empreedimento = user?.empreendimento;
-      setData(Empreedimento);
     }
-
     if (value) {
-      setEmpreedimento(value);
-      setEmpreedimentoCX(value);
+      setCorretor(value);
     }
-
-  }, []);
+  }, [ContrutoraCX, EmpreedimentoCX]);
 
   const handleUpdate = async (e: any) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`/api/solicitacao/update/${id}`, {
+      const response = await fetch(`/api/solicitacao/update/${Id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          empreedimento: Number(Empreedimento),
+          corretor: Number(Corretor),
         }),
       });
 
       if (response.ok) {
         toast({
-          title: "Empreendimento alterado com sucesso",
+          title: "Financeira alterado com sucesso",
           status: "success",
           duration: 3000,
           isClosable: true,
         });
-        setEmpreedimentoCX(Number(Empreedimento));
         setLoading(false);
         route.refresh();
       }
     } catch (error) {
       toast({
-        title: "Erro ao alterar o empreendimento",
+        title: "Erro ao alterar o Financeira",
         description: JSON.stringify(error),
         status: "error",
         duration: 3000,
@@ -112,27 +92,26 @@ export default function DropEmpreendimento({
 
   return (
     <>
-      {Loading || Load && <BeatLoader color="#36d7b7" />}
-      {Data.length > 1 && (
+ 
         <Box>
           <Popover>
             <PopoverTrigger>
               <Button variant="link" colorScheme="gray">
-                Alterar Empreendimento
+                Alterar Corretor
               </Button>
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />
               <PopoverCloseButton />
-              <PopoverHeader>Alterar Empreendimento</PopoverHeader>
+              <PopoverHeader>Alterar Corretor</PopoverHeader>
               <PopoverBody display={"flex"} gap={3} alignItems={"center"}>
                 <Select
                   size={"sm"}
                   borderRadius={"10px"}
                   placeholder="Selecione"
-                  name="empreendimento"
-                  value={Empreedimento}
-                  onChange={(e) => setEmpreedimento(Number(e.target.value))}
+                  name="corretor"
+                  value={Corretor}
+                  onChange={(e) => setCorretor(Number(e.target.value))}
                 >
                   {Data.map((item: any) => (
                     <option key={item.id} value={Number(item.id)}>
@@ -151,7 +130,6 @@ export default function DropEmpreendimento({
             </PopoverContent>
           </Popover>
         </Box>
-      )}
     </>
   );
 }

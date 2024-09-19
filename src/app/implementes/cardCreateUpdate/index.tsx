@@ -19,6 +19,8 @@ import CardGridObs from "./Grid/CardGridObs";
 import CardGridHistorico from "./Grid/CardGridHistorico";
 import CardGridDistrato from "./Grid/CardGridDistrato";
 import CardGridUsuario from "./Grid/CardGridRegisterUsuario";
+import { Grid } from "@chakra-ui/react";
+import CardGridCorretor from "./Grid/CardGridCorreto";
 
 
 
@@ -46,6 +48,7 @@ import CardGridUsuario from "./Grid/CardGridRegisterUsuario";
  * @property {CardGridHistorico} GridHistorico - Componente que renderiza a grid de Historico do card de criação e atualização de um registro
  * @property {CardGridDistrato} GridDistrato - Componente que renderiza a grid de Distrato do card de criação e atualização de um registro
  * @property {CardGridUsuario} GridUser - criar e receber usuario
+ * @property {CardGridCorretor} GridCorretor - criar e receber corretor
   * 
  */
 export const CardCreateUpdate = {
@@ -70,4 +73,5 @@ export const CardCreateUpdate = {
   GridHistorico: CardGridHistorico,
   GridDistrato: CardGridDistrato,
   GridUser: CardGridUsuario,
+  GridCorretor: CardGridCorretor,
 };

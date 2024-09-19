@@ -35,7 +35,7 @@ const HandleDownloads = async () => {
 
   return (
     <>
-      <Flex gap={3} pt={3}>
+      <Flex gap={3} pt={1}>
         {UrlDownloads && (
           <Button size={"sm"} colorScheme="green" onClick={HandleDownloads}>
             Download file

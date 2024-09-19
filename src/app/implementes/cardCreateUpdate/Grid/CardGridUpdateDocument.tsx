@@ -26,17 +26,20 @@ export default async function CardGridUpdateDocument({
   return (
     <>
       <Box {...props}>
-        <FormLabel fontSize="sm" fontWeight="md">
-          {tag}
-        </FormLabel>
-        {Url && (
+        <FormLabel fontSize="sm" fontWeight="md" m={0}>
           <Flex>
-            <Text pt={3}>
-              {tag} ja esta adicionado
-            </Text>
+          {tag} {Url && (
+            <Text ms={3} color={"green.400"} fontSize={"0.7rem"}>{tag} ja esta adicionado</Text>
+          )}
           </Flex>
-        )}
-        <InputUpdateCnh  Url={Url} tag={tag}/>
+        </FormLabel>
+        <InputUpdateCnh
+          Url={Url}
+          tag={tag}
+          px={1}
+          bg={"gray.100"}
+          borderColor={"gray.400"}
+        />
         {Hierarquia !== "USER" && <ButtonsDownloadsCnh url={Url} />}
       </Box>
     </>

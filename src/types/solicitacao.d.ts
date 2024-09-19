@@ -125,24 +125,27 @@ declare module solictacao {
    *
    */
   interface SolicitacaoPutType {
-    nome: string;
-    cpf: string;
-    email: string;
-    corretor: number;
-    construtora: number;
-    Financeira: number;
-    telefone: string;
-    dt_nascimento: Date | string | any;
-    ass_doc: boolean;
-    link_doc: string;
-    id_fcw: number | null;
-    obs: string;
-    empreedimento: number;
-    cnh: string;
-    uploadCnh: string;
-    relacionamento: string[];
-    telefone2: string;
-    uploadRg: string;
+    nome?: string;
+    cpf?: string;
+    email?: string;
+    corretor?: number;
+    construtora?: number;
+    Financeira?: number;
+    telefone?: string;
+    dt_nascimento?: Date | string | any;
+    ass_doc?: boolean;
+    link_doc?: string;
+    id_fcw?: number | null;
+    obs?: string;
+    empreedimento?: number;
+    cnh?: string;
+    uploadCnh?: string;
+    relacionamento?: string[];
+    telefone2?: string;
+    uploadRg?: string;
+    mult_link?: string[];
+    mult_ass_doc?: string[];
+    rela_quest?: boolean;
   }
   /**
    * AlertProps
