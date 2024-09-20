@@ -18,8 +18,6 @@ export default function SelectCorretor({
   const hierarquia = user?.hierarquia;
 
   const { ContrutoraCX, EmpreedimentoCX, setCorretorCx } = useUserCompraContext();
-  console.log("🚀 ~ EmpreedimentoCX:", EmpreedimentoCX)
-  console.log("🚀 ~ ContrutoraCX:", ContrutoraCX > 0);
 
   useEffect(() => {
     if (hierarquia === "ADM") {
@@ -30,7 +28,6 @@ export default function SelectCorretor({
             `/api/usuario/search?construtora=${ContrutoraCX}&empreedimento=${EmpreedimentoCX}`
           );
           const res = await req.json();
-          console.log("🚀 ~ res:", res)
           setData(res);
 
           setLoading(false);

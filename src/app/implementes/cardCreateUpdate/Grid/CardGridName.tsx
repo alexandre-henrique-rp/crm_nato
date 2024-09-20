@@ -17,9 +17,9 @@ export default function CardGridName({ Nome, ...props }: CardGridNameProps) {
             name="nome"
             variant="flushed"
             setValueName={Nome}
+            borderColor={"gray.400"}
             px={1}
             bg={"gray.100"}
-            py={0}
           />
         </Box>
       </>

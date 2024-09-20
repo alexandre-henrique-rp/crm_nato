@@ -35,7 +35,6 @@ export default function DropCorretor({ value, Id }: DropCorretorProps) {
   const toast = useToast();
   const route = useRouter();
   const { ContrutoraCX, EmpreedimentoCX } = useUserCompraContext();
-  console.log("🚀 ~ DropCorretor ~ ContrutoraCX:", ContrutoraCX)
   useEffect(() => {
     if (hierarquia === "ADM") {
       if (ContrutoraCX > 0 && EmpreedimentoCX > 0) {
@@ -44,7 +43,6 @@ export default function DropCorretor({ value, Id }: DropCorretorProps) {
             `/api/usuario/search?construtora=${ContrutoraCX}&empreedimento=${EmpreedimentoCX}`
           );
           const res = await req.json();
-          console.log("🚀 ~ res:", res);
           setData(res);
         })();
       }

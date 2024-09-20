@@ -2,8 +2,8 @@ import { Box, BoxProps, FormLabel } from "@chakra-ui/react";
 import InputEmail from "../imputs/inpuEmail";
 
 interface CardGridEmailProps extends BoxProps {
-  DataSolicitacao: solictacao.SolicitacaoGetType;
-  type: string;
+  DataSolicitacao?: solictacao.SolicitacaoGetType;
+  type?: string;
 }
 
 /**
@@ -26,7 +26,7 @@ export default function CardGridRegisterEmail({
           {type === "confirm" ? "Confirmar Email" : "Email"}
         </FormLabel>
         <InputEmail
-          setValueEmail={DataSolicitacao.email}
+          setValueEmail={DataSolicitacao?.email}
           name={type === "confirm" ? "confirmEmail" : "email"}
           variant="flushed"
           px={1}

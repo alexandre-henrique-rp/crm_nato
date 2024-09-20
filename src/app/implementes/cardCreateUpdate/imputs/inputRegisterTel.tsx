@@ -7,10 +7,10 @@ import { PropagateLoader, PulseLoader } from "react-spinners";
 
 // Definindo o tipo para SetValue, ajuste conforme necessário para o tipo correto da sua aplicação
 interface InputTel1Props extends InputProps {
-  index: number;
+  Index?: number|any;
 }
 
-export const InputRegisterTel = ({ index, ...props }: InputTel1Props) => {
+export const InputRegisterTel = ({ Index, ...props }: InputTel1Props) => {
   const [tel1, setTel1] = useState<string>("");
   const [Teste, setTeste] = useState<boolean>(false);
   const [Error, setError] = useState<boolean>(false);
@@ -83,7 +83,7 @@ export const InputRegisterTel = ({ index, ...props }: InputTel1Props) => {
           onChange={handleChange}
           onBlur={HandleChekTel}
           placeholder="(__) _____-____"
-          name={`telefone${index > 0 && index}`}
+          name={`telefone${Index && Index > 0 && Index}`}
           variant="flushed"
           {...props} // Spread dos props adicionais do Chakra UI
         />
@@ -97,7 +97,7 @@ export const InputRegisterTel = ({ index, ...props }: InputTel1Props) => {
         <input
           type="checkbox"
           checked={Teste}
-          name={`whatCheck${index > 0 && index}`}
+          name={`whatCheck${Index && Index > 0 && Index}`}
           onChange={(e) => console.log(e.target.checked)}
           hidden
         />

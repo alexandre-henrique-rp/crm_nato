@@ -30,8 +30,6 @@ export async function GET(request: Request) {
         if (searchParams.get("hierarquia")) {
             Busca.push(`hierarquia=${searchParams.get("hierarquia")}`);
         }
-        
-        console.log(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/user/Busca?${Busca.join("&")}`);
 
         if (!session) {
             return new NextResponse("Unauthorized", { status: 401 });

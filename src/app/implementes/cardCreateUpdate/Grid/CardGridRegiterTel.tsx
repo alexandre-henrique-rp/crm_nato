@@ -2,7 +2,7 @@ import { Box, BoxProps, FormLabel } from "@chakra-ui/react";
 import { InputRegisterTel } from "../imputs/inputRegisterTel";
 
 interface CardGridTel1Props extends BoxProps {
-  index: number;
+  index?: number;
 }
 export default function CardGridRegisterTel({
   index,
@@ -12,10 +12,11 @@ export default function CardGridRegisterTel({
     <>
       <Box {...props}>
         <FormLabel fontSize="sm" fontWeight="md" m={0}>
-          Telefone {index > 0 && index}
+          Telefone {index && index > 0 && index}
         </FormLabel>
         <InputRegisterTel
-          index={index > 0 ? index : 0}
+
+          Index={index && index > 0 && index}
           px={1}
           bg={"gray.100"}
           borderColor={"gray.400"}

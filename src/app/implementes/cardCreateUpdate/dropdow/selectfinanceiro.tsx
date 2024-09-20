@@ -30,8 +30,6 @@ export default function SelectFinanceiro({
     }
   }, []);
 
-  console.log(ContrutoraCX, EmpreedimentoCX);
-
   return (
     <>
       {ContrutoraCX === 0 || EmpreedimentoCX === 0 && (

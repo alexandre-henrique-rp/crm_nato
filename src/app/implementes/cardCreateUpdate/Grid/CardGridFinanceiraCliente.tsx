@@ -1,7 +1,6 @@
 import { Box, BoxProps, FormLabel, Text } from "@chakra-ui/react";
 import DropFinanceiro from "../dropdow/dropFinanceiro";
 import SelectFinanceiro from "../dropdow/selectfinanceiro";
-import UserCompraProvider from "@/provider/UserCompra";
 
 interface CardGridFinanceiraProps extends BoxProps {
   DataSolicitacao: solictacao.SolicitacaoGetType;
@@ -11,7 +10,6 @@ export default function CardGridFinanceiraCliente({
   DataSolicitacao,
   ...props
 }: CardGridFinanceiraProps): JSX.Element {
-  console.log("financeiro", DataSolicitacao);
   return (
     <>
       <Box {...props}>

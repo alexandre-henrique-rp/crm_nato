@@ -21,6 +21,7 @@ import CardGridDistrato from "./Grid/CardGridDistrato";
 import CardGridUsuario from "./Grid/CardGridRegisterUsuario";
 import { Grid } from "@chakra-ui/react";
 import CardGridCorretor from "./Grid/CardGridCorreto";
+import { CardGridUserConstrutora } from "./Grid/CardGridUserConstrutora";
 
 
 
@@ -74,4 +75,5 @@ export const CardCreateUpdate = {
   GridDistrato: CardGridDistrato,
   GridUser: CardGridUsuario,
   GridCorretor: CardGridCorretor,
+  GridUserConstrutora: CardGridUserConstrutora,
 };

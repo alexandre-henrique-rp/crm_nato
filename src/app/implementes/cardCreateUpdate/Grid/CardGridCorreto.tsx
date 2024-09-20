@@ -15,7 +15,6 @@ export default async function CardGridCorretor({
   const session = await getServerSession(auth);
   const user = session?.user;
   const Hierarquia = user?.hierarquia;
-  console.log("🚀 ~ Hierarquia:", DataSolicitacao.corretor?.id);
   return (
     <>{
       Hierarquia === "ADM" && (

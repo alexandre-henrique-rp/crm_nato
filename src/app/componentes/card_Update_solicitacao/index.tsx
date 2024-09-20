@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { auth } from "@/lib/auth_confg";
 import { ResendSms } from "@/app/implementes/cardCreateUpdate/butons/resendSms";
 import UserCompraProvider from "@/provider/UserCompra";
+import { set } from "react-hook-form";
 
 type Props = {
   setDadosCard: solictacao.SolicitacaoGetType;
@@ -17,7 +18,7 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
   async function handleSubmit(prevState: any, data: FormData) {
     "use server";
 
-    console.log(data);
+    // console.log(data);
     try {
       const DateNascimento = data.get("DataNascimento")?.toString() || "";
       const Dados = {
@@ -97,7 +98,6 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
       return error;
     }
   }
-  console.log(setDadosCard);
   return (
     <>
       <CardCreateUpdate.Root>
@@ -228,11 +228,17 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
                 />
               </Flex>
               <Flex w={"100%"}>
-                {setDadosCard.distrato && (
+                {setDadosCard.distrato && setDadosCard.ativo && (
                   <DistratoAlertPrint
                     userId={setDadosCard.distrato_id}
                     userDateTime={setDadosCard.distrato_dt}
                   />
+                )}
+                {!setDadosCard.ativo  && (
+                  <Alert status="error" variant="left-accent">
+                    <AlertIcon />
+                    Solicitação excluída
+                  </Alert>
                 )}
               </Flex>
               <Flex>
@@ -252,12 +258,16 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
             gap={3}
             px={4}
           >
-            {setDadosCard.distrato && (
+            {setDadosCard.distrato && setDadosCard.ativo && (
               <CardCreateUpdate.GridDistrato Id={setDadosCard.id} />
             )}
-            {!setDadosCard.id_fcw && <CriarFcweb Id={setDadosCard.id} />}
-            <BtCreateAlertCliente DataSolicitacao={setDadosCard} />
-            <ResendSms id={setDadosCard.id} />
+            {!setDadosCard.id_fcw && setDadosCard.ativo && (
+              <CriarFcweb Id={setDadosCard.id} />
+            )}
+            {setDadosCard.ativo && (
+              <BtCreateAlertCliente DataSolicitacao={setDadosCard} />
+            )}
+            {setDadosCard.ativo && <ResendSms id={setDadosCard.id} />}
             <SaveBtm colorScheme="green" type="submit">
               Salvar
             </SaveBtm>

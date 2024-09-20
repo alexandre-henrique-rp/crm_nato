@@ -4,13 +4,14 @@ import { Input, InputProps } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 export interface InputEmailProps extends InputProps {
-  setValueEmail: string;
+  setValueEmail?: string;
 }
 
 export default function InputEmail({ setValueEmail, ...props }: InputEmailProps) {
   const [email, setEmail] = useState<string>("");
 
   useEffect(() => {
+    if(!setValueEmail) return;
     const isValidEmail = validateEmail(setValueEmail);
     if (isValidEmail) {
       setEmail(setValueEmail);
