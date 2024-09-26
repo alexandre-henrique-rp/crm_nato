@@ -20,18 +20,27 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
   async function handleSubmit(prevState: any, data: FormData) {
     "use server";
 
-    console.log(data);
-
     try {
       const tags: TagsProps = JSON.parse(data.get("Tags") as any);
       for (let i = 0; i < tags.length; i++) {
         const tag: Tag = tags[i];
-        await prisma.nato_tags.create({
-          data: {
-            descricao: tag.label,
-            solicitacao: Number(setDadosCard.id),
-          },
-        });
+        if (tag.label && session?.user.hierarquia === "ADM") {
+          const verifique = await prisma.nato_tags.findFirst({
+            where: {
+              descricao: tag.label,
+              solicitacao: Number(setDadosCard.id),
+            },
+          })
+          const filtro = verifique ? false : true
+          if (filtro) {
+            await prisma.nato_tags.create({
+              data: {
+                descricao: tag.label,
+                solicitacao: Number(setDadosCard.id),
+              },
+            });
+          }
+        }
       }
       const DateNascimento = data.get("DataNascimento")?.toString() || "";
       const Dados = {

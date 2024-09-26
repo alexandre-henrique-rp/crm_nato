@@ -68,6 +68,7 @@ export function SelectTagsAlerta({
         });
       }
     };
+
     return (
       <>
         <Flex
@@ -94,7 +95,14 @@ export function SelectTagsAlerta({
     (async () => {
       const request = await fetch(`/api/tags/getallid/${setValue}`);
       const response = await request.json();
-      setTags(response);
+      console.log(response);
+      if (!request.ok) {
+        setTags([]);
+      }
+      const data = response.map((item: any) => {
+        return { id: item.id, label: item.descricao };
+      });
+      setTags(data);
     })();
   }, [setValue]);
 

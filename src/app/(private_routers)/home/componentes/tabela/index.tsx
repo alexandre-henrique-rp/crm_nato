@@ -13,6 +13,16 @@ import {
   Select,
   IconButton,
   Icon,
+  Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
+  PopoverFooter,
+  Portal,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { use, useEffect, useState } from "react";
@@ -20,6 +30,7 @@ import { BotoesFunction } from "../botoes/bt_group_function";
 import { ImClock } from "react-icons/im";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaFileSignature } from "react-icons/fa6";
+import { GrAlert } from "react-icons/gr";
 
 interface TabelaProps {
   ClientData: solictacao.SolicitacaoGetType[];
@@ -87,15 +98,49 @@ export function Tabela({
 
     const regexExpirado = new RegExp("\\bexpirado\\b");
     const AssDocExp = regexExpirado.test(item.ass_doc);
+    console.log(item.tag);
+    console.log(item.ativo);
+    console.log(item.distrato);
 
     return (
       <Tr key={item.id} bg={colors} color={fontColor}>
         <Td>
-          <BotoesFunction
-            id={item.id}
-            distrato={item.distrato ? true : false}
-            exclude={!item.ativo ? true : false}
-          />
+          <Flex>
+            <BotoesFunction
+              id={item.id}
+              distrato={item.distrato ? true : false}
+              exclude={!item.ativo ? true : false}
+            />
+            {item.tag.length > 0 && item.ativo && !item.distrato && (
+              <>
+                <Popover>
+                  <PopoverTrigger>
+                    <IconButton
+                      bg={"yellow"}
+                      ml={"0.7rem"}
+                      icon={<GrAlert />}
+                      aria-label={"Alert"}
+                      fontSize={"1.3rem"}
+                      border={"1px solid black"}
+                    />
+                  </PopoverTrigger>
+                  <Portal>
+                    <PopoverContent>
+                      <PopoverArrow />
+                      <PopoverHeader>
+                        Atenção
+                      </PopoverHeader>
+                      <PopoverCloseButton />
+                      <PopoverBody>
+                        {item.tag.map((item) => item.descricao).join(",\n")}
+                      </PopoverBody>
+                      <PopoverFooter></PopoverFooter>
+                    </PopoverContent>
+                  </Portal>
+                </Popover>
+              </>
+            )}
+          </Flex>
         </Td>
         <Td>{item.id}</Td>
         <Td>{item.nome}</Td>
@@ -170,6 +215,7 @@ export function Tabela({
           p={{ base: "10px", md: "20px" }}
           alignContent={"center"}
           justifyContent={"space-evenly"}
+          flexDir={'column'}
           overflowX={{ base: "auto", md: "hidden" }}
         >
           <Table variant="simple" size="sm">
@@ -199,41 +245,39 @@ export function Tabela({
               </Tr>
             </Thead>
             <Tbody>{tabela}</Tbody>
-            <Tfoot>
-              <Tr>
-                <Td>
-                  Total de registros: {total} / {ClientData.length}
-                </Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-                <Td></Td>
-                <Td>paginas:</Td>
-                <Td>
-                  <Select
-                    size={"xs"}
-                    borderRadius={"5px"}
-                    value={SelectPage}
-                    name="SelectedPage"
-                    onChange={(e) => {
-                      setSelectPage(Number(e.target.value));
-                    }}
-                  >
-                    <OptionsSelect />
-                  </Select>
-                </Td>
-                <Td>
-                  <IconButton
-                    icon={<IoIosArrowForward />}
-                    size={"xs"}
-                    colorScheme="green"
-                    aria-label={""}
-                    onClick={() => SetVewPage(SelectPage)}
-                  />
-                </Td>
-              </Tr>
-            </Tfoot>
           </Table>
+          <Flex
+            w={"full"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
+            pt={3}
+          >
+            <Box>
+              Total de registros: {total} / {ClientData.length}
+            </Box>
+              <Flex gap={2}>
+              paginas:
+                <Select
+                  size={"xs"}
+                  borderRadius={"5px"}
+                  value={SelectPage}
+                  name="SelectedPage"
+                  onChange={(e) => {
+                    setSelectPage(Number(e.target.value));
+                  }}
+                >
+                  <OptionsSelect />
+                </Select>
+                <IconButton
+                  icon={<IoIosArrowForward />}
+                  size={"xs"}
+                  colorScheme="green"
+                  aria-label={""}
+                  onClick={() => SetVewPage(SelectPage)}
+                />
+              </Flex>
+
+          </Flex>
         </Flex>
       )}
     </>

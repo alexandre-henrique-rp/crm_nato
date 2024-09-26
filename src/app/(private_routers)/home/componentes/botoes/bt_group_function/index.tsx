@@ -74,7 +74,7 @@ export const BotoesFunction = ({ id, distrato, exclude }: BotoesFunctionProps) =
   }
 
   return (
-    <Flex w={"100%"} justifyContent={"start"} alignItems={"center"} gap={"5px"}>
+    <Flex justifyContent={"start"} alignItems={"center"} gap={"5px"}>
       <ButtonGroup variant="solid" size="sm" spacing={3}>
         <IconButton
           colorScheme="blue"

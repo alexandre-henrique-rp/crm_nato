@@ -62,12 +62,24 @@ export default function CardListAlertCliente({ Id, DataAlert }: SetDataProps) {
           {Data &&
             Data.map((item: solictacao.AlertProps) => {
               const fakeStatus = true;
+              const datacriate = new Date(item.createdAt).toLocaleDateString(
+                "pt-BR",
+                {
+                  day: "numeric",
+                  month: "numeric",
+                  year: "numeric",
+                  hour: "numeric",
+                  minute: "numeric",
+                }
+              );
+              console.log(item);
+              console.log(datacriate);
               return (
                 <AlertComponent
                   atualizar={AtualizarAlert}
                   key={item.id}
                   msg={item.texto}
-                  titulo={item.titulo}
+                  titulo={`${datacriate} - ${item.titulo}`}
                   status={item.tag}
                   ID={item.id}
                   DeleteAlertStatus={

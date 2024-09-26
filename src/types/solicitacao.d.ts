@@ -99,6 +99,10 @@ declare module solictacao {
     mult_link: string[];
     mult_ass_doc: string[];
     hr_aprovacao: string;
+    tag: {
+      id: number;
+      descricao: string;
+    }[];
   }
 
   /**
@@ -169,6 +173,7 @@ declare module solictacao {
     tag: string;
     empreendimento: number;
     rela_quest: boolean;
+    createdAt: Date | string | any;
   }
 
   interface SolicitacaoPost {
