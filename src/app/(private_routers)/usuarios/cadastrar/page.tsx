@@ -1,3 +1,4 @@
+import UserCreate from "@/actions/user/create";
 import { BotaoRetorno } from "@/app/componentes/btm_retorno";
 import { CardCreateUpdate } from "@/app/implementes/cardCreateUpdate";
 import UserRegisterProvider from "@/provider/UserRegister";
@@ -27,7 +28,7 @@ export default function CadastrarUsuario() {
             <Box> </Box>
           </Flex>
           <Divider my={4} borderColor="gray.300" />
-          <CardCreateUpdate.Form action={""}>
+          <CardCreateUpdate.Form action={UserCreate}>
             <Flex w={"full"} flexWrap={"wrap"} gap={5}>
               <UserRegisterProvider>
                 <CardCreateUpdate.GridCpf w={"15rem"} />
