@@ -123,14 +123,14 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         email: email,
         uploadRg: UploadRgUrl,
         uploadCnh: UploadCnhUrl,
-        corretor: user?.hierarquia === "ADM" ? CorretorId : Number(user?.id),
-        construtora: Number(ConstrutoraID),
-        empreedimento: Number(empreendimento),
+        corretor: SetValue.corretor,
+        construtora: SetValue.construtora,
+        empreedimento: SetValue.empreedimento,
         dt_nascimento: DataNascimento,
         relacionamento: SetValue.cpf ? [SetValue.cpf] : [],
         rela_quest: SetValue.rela_quest ? true : false,
         voucher: Voucher,
-        financeiro: FinanceiraID,
+        financeiro: SetValue.financeiro,
       };
 
       const data = [dados, dadossuperior];
@@ -309,7 +309,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
         </GridItem> */}
       </SimpleGrid>
 
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={6}>
+      {/* <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={6}>
         {user?.construtora && (
           <Box>
             <FormLabel>Construtora</FormLabel>
@@ -358,7 +358,7 @@ export default function RelacionadoForm({ SetValue }: RelacionadoProps) {
             />
           </Box>
         )}
-      </SimpleGrid>
+      </SimpleGrid> */}
 
       <SimpleGrid columns={{ base: 1 }} spacing={6} mt={6}>
         <Alert status="warning" variant="left-accent">

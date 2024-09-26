@@ -8,8 +8,10 @@ import { getServerSession } from "next-auth";
 import { auth } from "@/lib/auth_confg";
 import { ResendSms } from "@/app/implementes/cardCreateUpdate/butons/resendSms";
 import UserCompraProvider from "@/provider/UserCompra";
-import { set } from "react-hook-form";
+import { PrismaClient } from "@prisma/client";
+import { Tag, TagsProps } from "@/data/tags";
 
+const prisma = new PrismaClient();
 type Props = {
   setDadosCard: solictacao.SolicitacaoGetType;
 };
@@ -18,8 +20,19 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
   async function handleSubmit(prevState: any, data: FormData) {
     "use server";
 
-    // console.log(data);
+    console.log(data);
+
     try {
+      const tags: TagsProps = JSON.parse(data.get("Tags") as any);
+      for (let i = 0; i < tags.length; i++) {
+        const tag: Tag = tags[i];
+        await prisma.nato_tags.create({
+          data: {
+            descricao: tag.label,
+            solicitacao: Number(setDadosCard.id),
+          },
+        });
+      }
       const DateNascimento = data.get("DataNascimento")?.toString() || "";
       const Dados = {
         ...(!setDadosCard.ativo && { ativo: true }),
@@ -85,9 +98,10 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
           return {
             name: "PrismaClientValidationError",
             message: "Erro ao atualizar o registro",
-            error: response,};
+            error: response,
+          };
         }
-        
+
         console.log("Atualização bem-sucedida:", response);
         return response;
       } else {
@@ -157,42 +171,41 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
               </Flex>
               <Flex
                 flexDir={{ base: "column", md: "row" }}
+                flexWrap={{ base: "nowrap", md: "wrap" }}
                 gap={10}
                 px={4}
                 justifyContent={{ base: "center", md: "space-between" }}
               >
                 <CardCreateUpdate.GridEmpreedimentoCL
                   DataSolicitacao={setDadosCard}
-                  w={{ base: "100%", md: "12rem" }}
+                  w={{ base: "100%", md: "16rem" }}
                 />
                 <CardCreateUpdate.GridFinanceiraCl
                   DataSolicitacao={setDadosCard}
-                  w={{ base: "100%", md: "10rem" }}
+                  w={{ base: "100%", md: "16rem" }}
                 />
                 <CardCreateUpdate.GridCorretor
                   DataSolicitacao={setDadosCard}
-                  w={{ base: "100%", md: "15rem" }}
+                  w={{ base: "100%", md: "16rem" }}
                 />
                 <CardCreateUpdate.GridProtocolo
                   DataSolicitacao={setDadosCard}
-                  w={{ base: "100%", md: "8rem" }}
+                  w={{ base: "100%", md: "10rem" }}
                 />
                 <CardCreateUpdate.GridStatus
                   DataSolicitacao={setDadosCard}
-                  w={{ base: "100%", md: "15rem" }}
+                  w={{ base: "100%", md: "10rem" }}
                 />
-              </Flex>
-              <Flex
-                flexDir={{ base: "column", md: "row" }}
-                gap={10}
-                px={4}
-                justifyContent={{ base: "center", md: "space-between" }}
-              >
+                <CardCreateUpdate.GridTagsAlert
+                  ID={setDadosCard.id}
+                  w={{ base: "100%", md: "18rem" }}
+                />
                 <CardCreateUpdate.GridLink
                   DataSolicitacao={setDadosCard}
-                  w={{ base: "100%", md: "15rem" }}
+                  w={{ base: "100%", md: "16rem" }}
                 />
               </Flex>
+
               <Box>
                 <Alert status="info" variant="left-accent">
                   <AlertIcon />
@@ -234,7 +247,7 @@ export async function CardUpdateSolicitacao({ setDadosCard }: Props) {
                     userDateTime={setDadosCard.distrato_dt}
                   />
                 )}
-                {!setDadosCard.ativo  && (
+                {!setDadosCard.ativo && (
                   <Alert status="error" variant="left-accent">
                     <AlertIcon />
                     Solicitação excluída

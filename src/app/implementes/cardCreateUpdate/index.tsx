@@ -22,6 +22,7 @@ import CardGridUsuario from "./Grid/CardGridRegisterUsuario";
 import { Grid } from "@chakra-ui/react";
 import CardGridCorretor from "./Grid/CardGridCorreto";
 import { CardGridUserConstrutora } from "./Grid/CardGridUserConstrutora";
+import { CardGridTagsAlert } from "./Grid/CardGridTagsAlert";
 
 
 
@@ -50,6 +51,9 @@ import { CardGridUserConstrutora } from "./Grid/CardGridUserConstrutora";
  * @property {CardGridDistrato} GridDistrato - Componente que renderiza a grid de Distrato do card de criação e atualização de um registro
  * @property {CardGridUsuario} GridUser - criar e receber usuario
  * @property {CardGridCorretor} GridCorretor - criar e receber corretor
+ * @property {CardGridUserConstrutora} GridUserConstrutora - criar e receber usuario construtora
+ * @property {CardGridUserCorretor} GridUserCorretor - criar e receber usuario corretor
+ * @property {CardGridTagsAlert} GridTagsAlert - criar e receber tags
   * 
  */
 export const CardCreateUpdate = {
@@ -76,4 +80,5 @@ export const CardCreateUpdate = {
   GridUser: CardGridUsuario,
   GridCorretor: CardGridCorretor,
   GridUserConstrutora: CardGridUserConstrutora,
+  GridTagsAlert: CardGridTagsAlert,
 };

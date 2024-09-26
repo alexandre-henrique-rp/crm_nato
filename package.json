@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@prisma/client": "5.20.0",
     "axios": "^1.7.4",
     "consultar-cnpj": "^1.0.19",
     "cpf-cnpj-validator": "^1.0.3",
@@ -37,6 +38,7 @@
     "@types/react-input-mask": "^3.0.2",
     "eslint": "^9.9.0",
     "eslint-config-next": "14.2.5",
+    "prisma": "^5.20.0",
     "typescript": "^5.5.4"
   }
 }
