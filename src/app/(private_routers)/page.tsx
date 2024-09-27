@@ -19,7 +19,7 @@ export default async function HomePage() {
       <BugReport />
       <ModalPrimeAsses />
       <Box
-        w={{ base: "90%", md: "80%", lg: "70%" }}
+        w={{ base: "98%", xl: "80%" }}
         alignItems="center"
         justifyContent="space-between"
       >
