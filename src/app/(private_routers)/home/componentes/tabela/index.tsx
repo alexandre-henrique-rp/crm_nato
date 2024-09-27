@@ -61,14 +61,14 @@ export function Tabela({
       return null;
     }
 
-    console.log(item);
+    // console.log(item);
 
     // Data de criação (createdAt) em UTC
     const dtSolicitacao = new Date(item.createdAt).getTime();
-    console.log(
-      "🚀 ~ downTimeInDays ~ new Date(item.createdAt):",
-      new Date(item.createdAt).toISOString()
-    );
+    // console.log(
+    //   "🚀 ~ downTimeInDays ~ new Date(item.createdAt):",
+    //   new Date(item.createdAt).toISOString()
+    // );
 
     let dtAprovacao: number;
 
@@ -81,10 +81,10 @@ export function Tabela({
       // Combinar data e hora em UTC
       const dataHoraAprovacao = new Date(`${dataAprovacao}T${horaAprovacao}Z`); // Adicionando "Z" para garantir que seja UTC
 
-      console.log(
-        "🚀 ~ downTimeInDays ~ dataHoraAprovacao:",
-        dataHoraAprovacao.toISOString()
-      );
+      // console.log(
+      //   "🚀 ~ downTimeInDays ~ dataHoraAprovacao:",
+      //   dataHoraAprovacao.toISOString()
+      // );
 
       // Obter o timestamp
       dtAprovacao = dataHoraAprovacao.getTime();
@@ -95,7 +95,7 @@ export function Tabela({
 
     // Calcula a diferença entre as datas
     let diffInMs = dtAprovacao - dtSolicitacao;
-    console.log("🚀 ~ downTimeInDays ~ diffInMs:", diffInMs);
+    // console.log("🚀 ~ downTimeInDays ~ diffInMs:", diffInMs);
 
     // Verificação se a diferença é negativa
     if (diffInMs < 0) {
@@ -105,7 +105,7 @@ export function Tabela({
 
     // Converte a diferença de milissegundos para horas
     const diffInHours = diffInMs / (1000 * 60 * 60);
-    console.log("🚀 ~ downTimeInDays ~ diffInHours:", diffInHours);
+    // console.log("🚀 ~ downTimeInDays ~ diffInHours:", diffInHours);
 
     // Se a diferença for menor que 48 horas, retorna em horas
     if (diffInHours < 48) {
@@ -157,7 +157,10 @@ export function Tabela({
       <Tr key={item.id} bg={colors} color={fontColor}>
         <Td>
           <Flex>
-            {item.tag.length > 0 && item.ativo && !item.distrato ? (
+            {item.tag.length > 0 &&
+            item.ativo &&
+            !item.distrato &&
+            item.Andamento !== "EMITIDO" ? (
               <>
                 <ButtonGroup variant="solid" size="sm" me={2}>
                   <Popover>

@@ -3,7 +3,12 @@ import { ModalPrimeAsses } from "@/app/componentes/prime_asses";
 import PerfilHome from "./home/componentes/perfil_home";
 import { FilterRoute } from "./home/componentes/filter/filtro_route";
 import { BugReport } from "../componentes/bug";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "HOME",
+  description: "sistema de gestão de vendas de imóveis",
+};
 export default async function HomePage() {
 
   return (

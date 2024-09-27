@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth_confg";
 import { CardUpdateSolicitacao } from "@/app/componentes/card_Update_solicitacao";
 import CardListAlertCliente from "@/app/componentes/card_list_alert_cliente";
 import AlertProvider from "@/provider/AlertProvider";
+import { Metadata, ResolvingMetadata } from "next";
 
 const Requestes = async (id: string) => {
   try {
@@ -51,6 +52,19 @@ const RequestAlert = async (id: string) => {
     console.log(error);
     return error;
   }
+};
+
+type Props = {
+  params: { id: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // read route params
+  const id = params.id;
+  const request = await Requestes(id);
+  return {
+    title: `Cliente - ${request.nome}`,
+  };
 }
 
 export default async function perfilPage({
@@ -76,8 +90,8 @@ export default async function perfilPage({
     >
       <Flex w={"100%"} alignItems="center" flexDir="column" minH="100vh" p={4}>
         <AlertProvider>
-        <CardUpdateSolicitacao setDadosCard={data} />
-        <CardListAlertCliente Id={Number(id)} DataAlert={dataAlert} />
+          <CardUpdateSolicitacao setDadosCard={data} />
+          <CardListAlertCliente Id={Number(id)} DataAlert={dataAlert} />
         </AlertProvider>
       </Flex>
     </Flex>
