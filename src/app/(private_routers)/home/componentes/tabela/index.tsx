@@ -23,6 +23,7 @@ import {
   PopoverBody,
   PopoverFooter,
   Portal,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { useSession } from "next-auth/react";
 import { use, useEffect, useState } from "react";
@@ -30,7 +31,7 @@ import { BotoesFunction } from "../botoes/bt_group_function";
 import { ImClock } from "react-icons/im";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaFileSignature } from "react-icons/fa6";
-import { GrAlert } from "react-icons/gr";
+import { LuAlertTriangle } from "react-icons/lu";
 
 interface TabelaProps {
   ClientData: solictacao.SolicitacaoGetType[];
@@ -54,16 +55,69 @@ export function Tabela({
   }, [AtualPage]);
 
   const downTimeInDays = (item: solictacao.SolicitacaoGetType) => {
-    if (!item || !item.dt_solicitacao) return null;
+    if (!item || !item.createdAt) return null;
 
-    const dtSolicitacao = new Date(item.dt_solicitacao).getTime();
-    const dtAprovacao = item.dt_aprovacao
-      ? new Date(item.dt_aprovacao).getTime()
-      : Date.now();
+    if (item.distrato || !item.ativo) {
+      return null;
+    }
 
-    const diffInMs = dtAprovacao - dtSolicitacao;
-    return Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+    // console.log(item);
+
+    // Data de criação (createdAt) em UTC
+    const dtSolicitacao = new Date(item.createdAt).getTime();
+    // console.log(
+    //   "🚀 ~ downTimeInDays ~ new Date(item.createdAt):",
+    //   new Date(item.createdAt).toISOString()
+    // );
+
+    let dtAprovacao: number;
+
+    // Se temos data e hora de aprovação, combinamos ambas
+    if (item.dt_aprovacao && item.hr_aprovacao) {
+      // Separando a data e a hora
+      const dataAprovacao = item.dt_aprovacao.split("T")[0]; // Pegando apenas a parte da data
+      const horaAprovacao = item.hr_aprovacao.split("T")[1].split("Z")[0]; // Pegando apenas a parte da hora, removendo o "Z"
+
+      // Combinar data e hora em UTC
+      const dataHoraAprovacao = new Date(`${dataAprovacao}T${horaAprovacao}Z`); // Adicionando "Z" para garantir que seja UTC
+
+      // console.log(
+      //   "🚀 ~ downTimeInDays ~ dataHoraAprovacao:",
+      //   dataHoraAprovacao.toISOString()
+      // );
+
+      // Obter o timestamp
+      dtAprovacao = dataHoraAprovacao.getTime();
+    } else {
+      // Se não houver aprovação, consideramos o tempo atual
+      dtAprovacao = Date.now();
+    }
+
+    // Calcula a diferença entre as datas
+    let diffInMs = dtAprovacao - dtSolicitacao;
+    // console.log("🚀 ~ downTimeInDays ~ diffInMs:", diffInMs);
+
+    // Verificação se a diferença é negativa
+    if (diffInMs < 0) {
+      // Inverte os valores
+      diffInMs = dtSolicitacao - dtAprovacao;
+    }
+
+    // Converte a diferença de milissegundos para horas
+    const diffInHours = diffInMs / (1000 * 60 * 60);
+    // console.log("🚀 ~ downTimeInDays ~ diffInHours:", diffInHours);
+
+    // Se a diferença for menor que 48 horas, retorna em horas
+    if (diffInHours < 48) {
+      return `${Math.floor(diffInHours)} horas`;
+    }
+
+    // Caso contrário, retorna em dias
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays} dias`;
   };
+
+
 
   const tabela = ClientData.map((item) => {
     const ano = item.dt_agendamento?.split("-")[0];
@@ -98,14 +152,47 @@ export function Tabela({
 
     const regexExpirado = new RegExp("\\bexpirado\\b");
     const AssDocExp = regexExpirado.test(item.ass_doc);
-    console.log(item.tag);
-    console.log(item.ativo);
-    console.log(item.distrato);
 
     return (
       <Tr key={item.id} bg={colors} color={fontColor}>
         <Td>
           <Flex>
+            {item.tag.length > 0 &&
+            item.ativo &&
+            !item.distrato &&
+            item.Andamento !== "EMITIDO" ? (
+              <>
+                <ButtonGroup variant="solid" size="sm" me={2}>
+                  <Popover>
+                    <PopoverTrigger>
+                      <IconButton
+                        variant={"outline"}
+                        color={"red"}
+                        icon={<LuAlertTriangle style={{ fontWeight: "900" }} />}
+                        aria-label={"Alert"}
+                        fontSize={"1.7rem"}
+                        fontWeight={"900"}
+                        _hover={{ bg: "red", color: "white" }}
+                        border={"none"}
+                      />
+                    </PopoverTrigger>
+                    <Portal>
+                      <PopoverContent>
+                        <PopoverArrow />
+                        <PopoverHeader>Atenção</PopoverHeader>
+                        <PopoverCloseButton />
+                        <PopoverBody>
+                          {item.tag.map((item) => item.descricao).join(",\n")}
+                        </PopoverBody>
+                        <PopoverFooter></PopoverFooter>
+                      </PopoverContent>
+                    </Portal>
+                  </Popover>
+                </ButtonGroup>
+              </>
+            ) : (
+              <Box ms={10}></Box>
+            )}
             <BotoesFunction
               id={item.id}
               distrato={item.distrato ? true : false}
@@ -187,7 +274,7 @@ export function Tabela({
           p={{ base: "10px", md: "20px" }}
           alignContent={"center"}
           justifyContent={"space-evenly"}
-          flexDir={'column'}
+          flexDir={"column"}
           overflowX={{ base: "auto", md: "hidden" }}
         >
           <Table variant="simple" size="sm">
@@ -258,32 +345,3 @@ export function Tabela({
 
 
 
-// {item.tag.length > 0 && item.ativo && !item.distrato && (
-//   <>
-//     <Popover>
-//       <PopoverTrigger>
-//         <IconButton
-//           bg={"yellow"}
-//           ml={"0.7rem"}
-//           icon={<GrAlert />}
-//           aria-label={"Alert"}
-//           fontSize={"1.3rem"}
-//           border={"1px solid black"}
-//         />
-//       </PopoverTrigger>
-//       <Portal>
-//         <PopoverContent>
-//           <PopoverArrow />
-//           <PopoverHeader>
-//             Atenção
-//           </PopoverHeader>
-//           <PopoverCloseButton />
-//           <PopoverBody>
-//             {item.tag.map((item) => item.descricao).join(",\n")}
-//           </PopoverBody>
-//           <PopoverFooter></PopoverFooter>
-//         </PopoverContent>
-//       </Portal>
-//     </Popover>
-//   </>
-// )}
