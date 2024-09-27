@@ -79,19 +79,19 @@ export function Tabela({
     const colors = !item.ativo
       ? "red.400"
       : item.distrato && user?.hierarquia === "ADM"
-      ? "gray.600"
-      : item.distrato && user?.hierarquia === "CONST"
-      ? "gray.600"
-      : item.distrato && user?.hierarquia === "GRT"
-      ? "gray.600"
-      : "transparent";
+        ? "gray.600"
+        : item.distrato && user?.hierarquia === "CONST"
+          ? "gray.600"
+          : item.distrato && user?.hierarquia === "GRT"
+            ? "gray.600"
+            : "transparent";
 
     const fontColor =
       colors === "red.400"
         ? "white"
         : colors === "gray.600"
-        ? "white"
-        : "black";
+          ? "white"
+          : "black";
 
     const regexAssinado = new RegExp("\\bAssinado\\b");
     const AssDocAss = regexAssinado.test(item.ass_doc);
@@ -111,35 +111,7 @@ export function Tabela({
               distrato={item.distrato ? true : false}
               exclude={!item.ativo ? true : false}
             />
-            {item.tag.length > 0 && item.ativo && !item.distrato && (
-              <>
-                <Popover>
-                  <PopoverTrigger>
-                    <IconButton
-                      bg={"yellow"}
-                      ml={"0.7rem"}
-                      icon={<GrAlert />}
-                      aria-label={"Alert"}
-                      fontSize={"1.3rem"}
-                      border={"1px solid black"}
-                    />
-                  </PopoverTrigger>
-                  <Portal>
-                    <PopoverContent>
-                      <PopoverArrow />
-                      <PopoverHeader>
-                        Atenção
-                      </PopoverHeader>
-                      <PopoverCloseButton />
-                      <PopoverBody>
-                        {item.tag.map((item) => item.descricao).join(",\n")}
-                      </PopoverBody>
-                      <PopoverFooter></PopoverFooter>
-                    </PopoverContent>
-                  </Portal>
-                </Popover>
-              </>
-            )}
+
           </Flex>
         </Td>
         <Td>{item.id}</Td>
@@ -255,27 +227,27 @@ export function Tabela({
             <Box>
               Total de registros: {total} / {ClientData.length}
             </Box>
-              <Flex gap={2}>
+            <Flex gap={2}>
               paginas:
-                <Select
-                  size={"xs"}
-                  borderRadius={"5px"}
-                  value={SelectPage}
-                  name="SelectedPage"
-                  onChange={(e) => {
-                    setSelectPage(Number(e.target.value));
-                  }}
-                >
-                  <OptionsSelect />
-                </Select>
-                <IconButton
-                  icon={<IoIosArrowForward />}
-                  size={"xs"}
-                  colorScheme="green"
-                  aria-label={""}
-                  onClick={() => SetVewPage(SelectPage)}
-                />
-              </Flex>
+              <Select
+                size={"xs"}
+                borderRadius={"5px"}
+                value={SelectPage}
+                name="SelectedPage"
+                onChange={(e) => {
+                  setSelectPage(Number(e.target.value));
+                }}
+              >
+                <OptionsSelect />
+              </Select>
+              <IconButton
+                icon={<IoIosArrowForward />}
+                size={"xs"}
+                colorScheme="green"
+                aria-label={""}
+                onClick={() => SetVewPage(SelectPage)}
+              />
+            </Flex>
 
           </Flex>
         </Flex>
@@ -283,3 +255,35 @@ export function Tabela({
     </>
   );
 }
+
+
+
+// {item.tag.length > 0 && item.ativo && !item.distrato && (
+//   <>
+//     <Popover>
+//       <PopoverTrigger>
+//         <IconButton
+//           bg={"yellow"}
+//           ml={"0.7rem"}
+//           icon={<GrAlert />}
+//           aria-label={"Alert"}
+//           fontSize={"1.3rem"}
+//           border={"1px solid black"}
+//         />
+//       </PopoverTrigger>
+//       <Portal>
+//         <PopoverContent>
+//           <PopoverArrow />
+//           <PopoverHeader>
+//             Atenção
+//           </PopoverHeader>
+//           <PopoverCloseButton />
+//           <PopoverBody>
+//             {item.tag.map((item) => item.descricao).join(",\n")}
+//           </PopoverBody>
+//           <PopoverFooter></PopoverFooter>
+//         </PopoverContent>
+//       </Portal>
+//     </Popover>
+//   </>
+// )}

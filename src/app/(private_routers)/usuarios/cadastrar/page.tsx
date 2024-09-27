@@ -37,19 +37,8 @@ export default function CadastrarUsuario() {
                 <CardCreateUpdate.GridRegisterTel w={"10rem"} />
                 <CardCreateUpdate.GridEmail w={"25rem"} />
                 <CardCreateUpdate.GridUserConstrutora w={"23rem"} />
-
-                <Box>
-                  construtora
-                  <Input type="text" />
-                </Box>
-                <Box>
-                  empreendimento
-                  <Input type="text" />
-                </Box>
-                <Box>
-                  financeiro
-                  <Input type="text" />
-                </Box>
+                <CardCreateUpdate.GridUserEmpreendimento w={"23rem"} />
+                <CardCreateUpdate.GridUserFinanceiro w={"23rem"} />
                 <Box>
                   cargo
                   <Input type="text" />

@@ -23,6 +23,8 @@ import { Grid } from "@chakra-ui/react";
 import CardGridCorretor from "./Grid/CardGridCorreto";
 import { CardGridUserConstrutora } from "./Grid/CardGridUserConstrutora";
 import { CardGridTagsAlert } from "./Grid/CardGridTagsAlert";
+import { CardGridUserEmpreedimento } from "./Grid/CardGridUserEmpreedimento";
+import { CardGridUserFinanceira} from "./Grid/CardGridUserFinanceira";
 
 
 
@@ -54,6 +56,7 @@ import { CardGridTagsAlert } from "./Grid/CardGridTagsAlert";
  * @property {CardGridUserConstrutora} GridUserConstrutora - criar e receber usuario construtora
  * @property {CardGridUserCorretor} GridUserCorretor - criar e receber usuario corretor
  * @property {CardGridTagsAlert} GridTagsAlert - criar e receber tags
+ * @property {CardGridUserEmpreedimento} GridUserEmpreedimento - criar e receber usuario empreendimento
   * 
  */
 export const CardCreateUpdate = {
@@ -81,4 +84,7 @@ export const CardCreateUpdate = {
   GridCorretor: CardGridCorretor,
   GridUserConstrutora: CardGridUserConstrutora,
   GridTagsAlert: CardGridTagsAlert,
+  GridUserEmpreendimento: CardGridUserEmpreedimento,
+  GridUserFinanceiro: CardGridUserFinanceira,
+
 };
