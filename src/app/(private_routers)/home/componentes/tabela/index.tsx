@@ -57,12 +57,18 @@ export function Tabela({
   const downTimeInDays = (item: solictacao.SolicitacaoGetType) => {
     if (!item || !item.createdAt) return null;
 
+    if (item.distrato || !item.ativo) {
+      return null;
+    }
+
     console.log(item);
 
-    // Data de criação (createdAt) com correção de fuso
-    const dtSolicitacao =
-      new Date(item.createdAt).getTime();
-      console.log("🚀 ~ downTimeInDays ~ new Date(item.createdAt):", new Date(item.createdAt).toISOString())
+    // Data de criação (createdAt) em UTC
+    const dtSolicitacao = new Date(item.createdAt).getTime();
+    console.log(
+      "🚀 ~ downTimeInDays ~ new Date(item.createdAt):",
+      new Date(item.createdAt).toISOString()
+    );
 
     let dtAprovacao: number;
 
@@ -70,13 +76,17 @@ export function Tabela({
     if (item.dt_aprovacao && item.hr_aprovacao) {
       // Separando a data e a hora
       const dataAprovacao = item.dt_aprovacao.split("T")[0]; // Pegando apenas a parte da data
-      const horaAprovacao= item.hr_aprovacao.split("T")[1]; // Pegando apenas a parte da hora
+      const horaAprovacao = item.hr_aprovacao.split("T")[1].split("Z")[0]; // Pegando apenas a parte da hora, removendo o "Z"
 
-      // Combinamos data e hora manualmente
-      const dataHoraAprovacao = new Date(`${dataAprovacao}T${horaAprovacao}`);
+      // Combinar data e hora em UTC
+      const dataHoraAprovacao = new Date(`${dataAprovacao}T${horaAprovacao}Z`); // Adicionando "Z" para garantir que seja UTC
 
-      console.log("🚀 ~ downTimeInDays ~ dataHoraAprovacao:", dataHoraAprovacao.toISOString())
-      // Ajuste de fuso horário (+3 horas)
+      console.log(
+        "🚀 ~ downTimeInDays ~ dataHoraAprovacao:",
+        dataHoraAprovacao.toISOString()
+      );
+
+      // Obter o timestamp
       dtAprovacao = dataHoraAprovacao.getTime();
     } else {
       // Se não houver aprovação, consideramos o tempo atual
@@ -84,13 +94,18 @@ export function Tabela({
     }
 
     // Calcula a diferença entre as datas
-    const diffInMs = dtAprovacao - dtSolicitacao;
-    console.log("🚀 ~ downTimeInDays ~ diffInMs:", diffInMs)
+    let diffInMs = dtAprovacao - dtSolicitacao;
+    console.log("🚀 ~ downTimeInDays ~ diffInMs:", diffInMs);
 
+    // Verificação se a diferença é negativa
+    if (diffInMs < 0) {
+      // Inverte os valores
+      diffInMs = dtSolicitacao - dtAprovacao;
+    }
 
     // Converte a diferença de milissegundos para horas
     const diffInHours = diffInMs / (1000 * 60 * 60);
-    console.log("🚀 ~ downTimeInDays ~ diffInHours:", diffInHours)
+    console.log("🚀 ~ downTimeInDays ~ diffInHours:", diffInHours);
 
     // Se a diferença for menor que 48 horas, retorna em horas
     if (diffInHours < 48) {
@@ -101,6 +116,8 @@ export function Tabela({
     const diffInDays = Math.floor(diffInHours / 24);
     return `${diffInDays} dias`;
   };
+
+
 
   const tabela = ClientData.map((item) => {
     const ano = item.dt_agendamento?.split("-")[0];
