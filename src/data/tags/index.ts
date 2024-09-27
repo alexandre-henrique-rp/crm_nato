@@ -33,4 +33,12 @@ export const TagsOptions: TagsProps = [
         id: 6,
         label: 'Sem retorno do cliente',
     },
+    {
+        id: 7,
+        label: 'Cliente providenciando novo documento',
+    },
+    {
+        id: 8,
+        label: 'Cliente confuso',
+    },
 ]
