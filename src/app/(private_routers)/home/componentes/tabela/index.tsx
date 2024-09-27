@@ -133,19 +133,19 @@ export function Tabela({
     const colors = !item.ativo
       ? "red.400"
       : item.distrato && user?.hierarquia === "ADM"
-      ? "gray.600"
-      : item.distrato && user?.hierarquia === "CONST"
-      ? "gray.600"
-      : item.distrato && user?.hierarquia === "GRT"
-      ? "gray.600"
-      : "transparent";
+        ? "gray.600"
+        : item.distrato && user?.hierarquia === "CONST"
+          ? "gray.600"
+          : item.distrato && user?.hierarquia === "GRT"
+            ? "gray.600"
+            : "transparent";
 
     const fontColor =
       colors === "red.400"
         ? "white"
         : colors === "gray.600"
-        ? "white"
-        : "black";
+          ? "white"
+          : "black";
 
     const regexAssinado = new RegExp("\\bAssinado\\b");
     const AssDocAss = regexAssinado.test(item.ass_doc);
@@ -198,6 +198,7 @@ export function Tabela({
               distrato={item.distrato ? true : false}
               exclude={!item.ativo ? true : false}
             />
+
           </Flex>
         </Td>
         <Td>{item.id}</Td>
@@ -334,9 +335,13 @@ export function Tabela({
                 onClick={() => SetVewPage(SelectPage)}
               />
             </Flex>
+
           </Flex>
         </Flex>
       )}
     </>
   );
 }
+
+
+

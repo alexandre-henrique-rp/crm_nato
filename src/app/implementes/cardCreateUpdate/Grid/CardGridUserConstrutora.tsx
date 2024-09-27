@@ -13,7 +13,7 @@ export function CardGridUserConstrutora({
     <>
       <Box {...props}>
         <FormLabel fontSize="sm" fontWeight="md" m={0}>
-          Usuário
+          Construtora
         </FormLabel>
         <SelectUserconstrutora setValue={UserConstrutora} />
       </Box>
