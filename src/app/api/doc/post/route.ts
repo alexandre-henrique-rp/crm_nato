@@ -8,11 +8,12 @@ export async function POST(request: Request) {
         const File = await request.formData();
         if (!File) throw { message: "Arquivo não informado, por favor entre em contato com o Suporte" };
 
-        const Envio = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_API_URL}/file`, {
+        const Envio = await fetch(`${process.env.FILE_DNS_PUBLIC_STRAPI_API_URL}/file`, {
             method: 'POST',
             body: File,
             cache: 'no-store'
         });
+        console.log("🚀 ~ POST ~ Envio:", Envio)
         const retornoArquivo = await Envio.json();
         if (retornoArquivo.error) throw retornoArquivo.error;
 
