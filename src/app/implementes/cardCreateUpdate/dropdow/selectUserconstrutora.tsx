@@ -70,7 +70,7 @@ export function SelectUserconstrutora({
           borderRadius={9}
           bg={"blue.200"}
         >
-          <Text fontSize={"0.6rem"}>{e.nome}</Text>
+          <Text fontSize={"0.6rem"}>{e.fantasia}</Text>
           <Icon
             as={RxCross2}
             fontSize={"0.8rem"}
@@ -136,7 +136,7 @@ export function SelectUserconstrutora({
       <Flex gap={2} mt={3} flexWrap="wrap">
         {RendBoard}
       </Flex>
-      <Box>
+      <Box hidden>
         <Input name="construtora" value={ConstrutoraArray} />
       </Box>
     </>
